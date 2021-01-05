@@ -1,12 +1,17 @@
 {
   "name": "turbowarp-desktop",
+  "description": "Desktop app for TurboWarp",
   "version": "0.0.1",
   "license": "GPL-3.0",
+  "author": {
+    "email": "contact@turbowarp.org",
+    "name": "Thomas Weber"
+  },
   "scripts": {
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
     "dist": "npm run compile && electron-builder",
-    "dist:dir": "npm run dist -- --dir -c.compression=store -c.mac.identity=null"
+    "dist:dir": "npm run compile && electron-builder --dir"
   },
   "dependencies": {
     "scratch-gui": "0.1.0-prerelease.20210101040933",
@@ -17,6 +22,19 @@
     "electron-builder": "^22.4.1",
     "electron-webpack": "^2.8.2",
     "webpack": "~4.42.1"
+  },
+  "homepage": "https://desktop.turbowarp.org/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TurboWarp/turbowarp-desktop.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TurboWarp/turbowarp-desktop/issues",
+    "email": "contact@turbowarp.org"
+  },
+  "build": {
+    "appId": "org.turbowarp.desktop",
+    "productName": "TurboWarp Desktop"
   },
   "electronWebpack": {
     "renderer": {
