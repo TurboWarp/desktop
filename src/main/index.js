@@ -13,6 +13,7 @@ function createMainWindow() {
   const window = new BrowserWindow({
     width: 1280,
     height: 800,
+    title: 'TurboWarp Desktop',
     webPreferences: {
       nodeIntegration: true
     }
