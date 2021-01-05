@@ -3,33 +3,60 @@
   <head>
     <title>TurboWarp Desktop</title>
     <style>
-      main {
-        width: 480px;
-        margin: auto;
+      body {
         font-family: sans-serif;
+        border-top: 5px solid #ff4d4d;
+        padding: 0;
+        margin: 0;
+      }
+      .header {
+        text-align: center;
+      }
+      .cover {
+        text-align: center;
+      }
+      .content {
+        display: flex;
+        justify-content: center;
+      }
+      .box {
+        width: 300px;
+      }
+      .box h2 {
+        text-align: center;
       }
     </style>
   </head>
 
   <body>
-
-    <main>
+    <div class="header">
       <h1>TurboWarp Desktop App</h1>
-      <p>Very early prototype. Lots of things don't work.</p>
 
-      <h2>Downloads</h2>
+      <p>Early prototype. A lot of things don't quite work yet.</p>
+    </div>
 
-      <ul>
-        <li><a href="https://github.com/TurboWarp/turbowarp-desktop/releases/latest">Windows</a></li>
-        <li><s>Mac</s> (Maybe eventually)</li>
-        <li><s>Linux</s> (Maybe eventually)</li>
-      </ul>
+    <div class="content">
+      <div class="box">
+        <h2>Downloads</h2>
+        <ul>
+          <li><a href="https://github.com/TurboWarp/turbowarp-desktop/releases/latest">Windows</a></li>
+          <li><s>Mac</s> (Maybe eventually)</li>
+          <li><s>Linux</s> (Maybe eventually)</li>
+        </ul>
+      </div>
 
-      <h2>Source Code</h2>
+      <div class="box">
+        <h2>Source Code</h2>
+        <ul>
+          <li><a href="https://github.com/TurboWarp/turbowarp-desktop">TurboWarp/turbowarp-desktop</a></li>
+          <li><a href="https://github.com/TurboWarp/turbowarp-desktop/blob/master/LICENSE">GPLv3</a></li>
+        </ul>
+      </div>
+    </div>
 
-      <p><a href="https://github.com/TurboWarp/turbowarp-desktop">TurboWarp/turbowarp-desktop</a>. <a href="https://github.com/TurboWarp/turbowarp-desktop/blob/master/LICENSE">GPLv3</a>.</p>
-
-    </main>
-
+    <div class="cover">
+      <img src="https://user-images.githubusercontent.com/33787854/103602523-d98d9c80-4ed1-11eb-9d5f-6ebb38e42975.png" width="1266" height="793">
+      <p>Project pictured: <a href="https://scratch.mit.edu/projects/396320314/">Mandlebrot Set by njdavison</a></p>
+    </div>
   </body>
 </html>
