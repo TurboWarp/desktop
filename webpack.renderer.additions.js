@@ -1,6 +1,7 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
+  devtool: '',
   plugins: [
     new CopyWebpackPlugin([
       {
