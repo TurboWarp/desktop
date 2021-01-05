@@ -11,5 +11,4 @@ for (const addonId of addons) {
     for (const userscript of manifest.userscripts) {
         require(`./addons/${addonId}/${userscript.url}`).default(api);
     }
-    // module.default(api);
 }
