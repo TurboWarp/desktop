@@ -6,6 +6,8 @@ const {compose} = require('redux');
 const AppStateHOC = ScratchGUI.AppStateHOC;
 const GUI = ScratchGUI.default;
 
+require('./filesystem-api-impl');
+
 const target = document.createElement('div');
 target.style.position = 'absolute';
 target.style.top = '0';
