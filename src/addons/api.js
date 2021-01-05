@@ -1,4 +1,7 @@
 import translations from './l10n/en.json';
+import IntlMessageFormat from 'intl-messageformat';
+
+const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
 class Tab extends EventTarget {
     constructor () {
@@ -104,17 +107,26 @@ class API {
         this.safeMsg = this.safeMsg.bind(this);
     }
 
-    msg (key) {
+    _msg(key, vars, handler) {
         const namespacedKey = `${this._id}/${key}`;
-        if (translations[namespacedKey]) {
-            return translations[namespacedKey];
+        let translation = translations[namespacedKey];
+        if (!translation) {
+            return key;
         }
-        return key;
+        if (handler) {
+            translation = handler(translation);
+        }
+        // TODO: probably a good idea to cache these?
+        const messageFormat = new IntlMessageFormat(translation, 'en-US');
+        return messageFormat.format(vars);
     }
 
-    safeMsg (key) {
-        // TODO
-        return this.msg(key);
+    msg (key, vars) {
+        return this._msg(key, vars, null);
+    }
+
+    safeMsg (key, vars) {
+        return this._msg(key, vars, escapeHTML);
     }
 }
 
