@@ -4,8 +4,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   // Scratch Addons: do not run if extension is already enabled
   if (window.initGUI) return;
 
-  // tw: disabled until more API is implemented
-  // const showBroadcastSingleton = new ShowBroadcast(addon);
+  const showBroadcastSingleton = new ShowBroadcast(addon);
 
   // 0-indexed 6 = July
   const releaseDate = new Date(2020, 6, 4);
@@ -1705,7 +1704,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
               let isFlyOut = block.workspace.isFlyout;
 
               const BROADCAST_BLOCKS = ["event_whenbroadcastreceived", "event_broadcast", "event_broadcastandwait"];
-              if (/* tw: disabled until more API is implemented */false && BROADCAST_BLOCKS.includes(block.type)) {
+              if (BROADCAST_BLOCKS.includes(block.type)) {
                 // Show Broadcast
                 const broadcastId = showBroadcastSingleton.getAssociatedBroadcastId(dataId);
                 if (broadcastId) {
