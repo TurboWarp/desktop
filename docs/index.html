@@ -11,8 +11,14 @@
       }
       .header {
         text-align: center;
+        width: 600px;
+        margin: auto;
       }
-      .cover {
+      .version {
+        font-style: italic;
+        font-size: small;
+      }
+      .image {
         text-align: center;
       }
       .content {
@@ -32,7 +38,20 @@
     <div class="header">
       <h1>TurboWarp Desktop App</h1>
 
-      <p>Early prototype. A lot of things don't quite work yet.</p>
+      <div class="version">v0.0.1 - <span title="YYYY-MM-DD">2021-01-05</span></div>
+
+      <p>Use TurboWarp from an app on your desktop because that's something people asked for. It also has some addons.</p>
+      <p>Please remember to save your project often.</p>
+
+      <details>
+        <summary>This is an early prototype. A lot of things don't quite work yet.</summary>
+        <p>Change Username is broken.</p>
+        <p>It has that Scratch issue where "Load from your computer" is incredibly inconsistent.</p>
+        <p>The web version can actually have better native filesystem integration.</p>
+        <p>Builtin sprite and sound libraries won't work offline.</p>
+        <p>Definitely some other things.</p>
+        <p>I'll try to fix these eventually -- it takes time.</p>
+      </details>
     </div>
 
     <div class="content">
@@ -54,7 +73,7 @@
       </div>
     </div>
 
-    <div class="cover">
+    <div class="image">
       <img src="https://user-images.githubusercontent.com/33787854/103602523-d98d9c80-4ed1-11eb-9d5f-6ebb38e42975.png" width="1266" height="793">
       <p>Project pictured: <a href="https://scratch.mit.edu/projects/396320314/">Mandlebrot Set by njdavison</a></p>
     </div>
