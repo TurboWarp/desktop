@@ -12,6 +12,8 @@ window.prompt = (message, defaultValue) => new Promise((resolve, reject) => {
     cancelButton.click();
   }
 
+  // TODO: dark mode
+
   const container = document.createElement('div');
   container.style.position = 'absolute';
   container.style.top = '0';

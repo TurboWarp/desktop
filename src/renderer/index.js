@@ -17,6 +17,10 @@ target.style.width = '100%';
 target.style.height = '100%';
 document.body.appendChild(target);
 
+const darkModeMedia = window.matchMedia('(prefers-color-scheme: dark)');
+darkModeMedia.onchange = () => document.body.setAttribute('theme', darkModeMedia.matches ? 'dark' : 'light');
+darkModeMedia.onchange();
+
 const WrappedGUI = compose(
   AppStateHOC
 )(GUI);
