@@ -15,7 +15,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "scratch-gui": "0.1.0-prerelease.20210101040933",
+    "scratch-gui": "github:TurboWarp/scratch-gui#desktop",
     "electron": "8.2.0",
     "electron-builder": "^22.4.1",
     "electron-webpack": "^2.8.2",
