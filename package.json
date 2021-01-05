@@ -14,7 +14,8 @@
     "dist:dir": "npm run compile && electron-builder --dir"
   },
   "dependencies": {
-    "intl-messageformat": "^9.4.3"
+    "intl-messageformat": "^9.4.3",
+    "source-map-support": "^0.5.19"
   },
   "devDependencies": {
     "scratch-gui": "github:TurboWarp/scratch-gui#desktop",
