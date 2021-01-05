@@ -19,7 +19,7 @@ const WrappedGUI = compose(
 )(GUI);
 
 ReactDOM.render(React.createElement(WrappedGUI, {
-  projectId: "0",
+  projectId: '0',
   isPlayerOnly: false,
   canEditTitle: true
 }, null), target);
