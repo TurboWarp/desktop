@@ -1,4 +1,6 @@
-# turbowarp-desktop
+# TurboWarp Desktop
+
+https://desktop.turbowarp.org/
 
 TurboWarp as a desktop app.
 
