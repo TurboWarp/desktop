@@ -14,7 +14,6 @@ function createMainWindow() {
     width: 1280,
     height: 800,
     title: 'TurboWarp Desktop',
-    autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: true
     }
@@ -34,6 +33,8 @@ function createMainWindow() {
       slashes: true
     }))
   }
+
+  window.setMenu(null);
 
   window.on('close', (e) => {
     const choice = require('electron').dialog.showMessageBoxSync(window, {
