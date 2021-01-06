@@ -32,3 +32,4 @@ ReactDOM.render(React.createElement(WrappedGUI, {
 }, null), target);
 
 require('../addons/index');
+require('./update-checker');
