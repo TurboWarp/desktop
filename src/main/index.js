@@ -3,6 +3,7 @@
 import { app, BrowserWindow } from 'electron'
 import * as path from 'path'
 import { format as formatUrl } from 'url'
+import { version } from '../../package.json';
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -13,7 +14,7 @@ function createMainWindow() {
   const window = new BrowserWindow({
     width: 1280,
     height: 800,
-    title: 'TurboWarp Desktop',
+    title: `TurboWarp Desktop v${version}`,
     webPreferences: {
       nodeIntegration: true
     }
