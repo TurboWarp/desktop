@@ -2,6 +2,8 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const merge = require('webpack-merge');
 
+const addonFolder = path.resolve(__dirname, 'src', 'addons', 'addons');
+
 module.exports = defaultConfig => {
     defaultConfig.module.rules = [];
     return merge.smart(defaultConfig, {
@@ -18,21 +20,17 @@ module.exports = defaultConfig => {
                 {
                     test: /\.(svg|png|wav|gif|jpg|mp3)$/,
                     loader: 'file-loader',
+                    exclude: [
+                        addonFolder
+                    ],
                     options: {
                         outputPath: 'static/assets/'
                     }
                 },
                 {
                     test: /\.css$/,
-                    include: [
-                        path.resolve(__dirname, 'src', 'addons')
-                    ],
-                    loader: 'raw-loader'
-                },
-                {
-                    test: /\.css$/,
                     exclude: [
-                        path.resolve(__dirname, 'src', 'addons')
+                        addonFolder
                     ],
                     use: [
                         {
@@ -61,6 +59,25 @@ module.exports = defaultConfig => {
                             }
                         }
                     ]
+                },
+                {
+                    test: /\.css$/,
+                    include: [
+                        addonFolder
+                    ],
+                    loader: 'raw-loader'
+                },
+                {
+                    test: /\.svg$/,
+                    include: [
+                        addonFolder
+                    ],
+                    loader: 'file-loader',
+                    options: {
+                        name: '[path][name].[ext]',
+                        context: addonFolder,
+                        outputPath: 'addon-files'
+                    }
                 }
             ],
         },
@@ -70,18 +87,10 @@ module.exports = defaultConfig => {
                     from: 'node_modules/scratch-blocks/media',
                     to: 'static/blocks-media'
                 },
-                // TODO: don't copy everything, only images, svg, etc.
-                // TODO: use file-loader?
-                {
-                    from: 'src/addons/addons',
-                    to: 'addon-files',
-                },
                 // TODO: copy extension worker?
             ])
         ],
         resolve: {
-            // cacheWithContext: false,
-            // symlinks: false,
             alias: {
                 'scratch-gui$': path.resolve(__dirname, 'node_modules', 'scratch-gui', 'src', 'index.js')
             }
