@@ -8,7 +8,19 @@ for (const addonId of addons) {
     const manifest = require(`./addons/${addonId}/addon.json`);
     const api = new API(addonId, manifest);
 
-    for (const userscript of manifest.userscripts) {
-        require(`./addons/${addonId}/${userscript.url}`).default(api);
+    if (manifest.userscripts) {
+        for (const userscript of manifest.userscripts) {
+            require(`./addons/${addonId}/${userscript.url}`).default(api);
+        }
+    }
+
+    if (manifest.userstyles) {
+        for (const userstyle of manifest.userstyles) {
+            const source = require(`./addons/${addonId}/${userstyle.url}`);
+            console.log(source);
+            const style = document.createElement('style');
+            style.innerText = source;
+            document.head.appendChild(style);
+        }
     }
 }
