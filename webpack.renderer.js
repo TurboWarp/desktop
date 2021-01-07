@@ -94,6 +94,10 @@ module.exports = defaultConfig => {
                 {
                     from: rawLibrariesFolder,
                     to: 'addon-files/libraries-raw'
+                },
+                {
+                    from: 'library-files',
+                    to: 'library-files'
                 }
                 // TODO: copy extension worker?
             ])

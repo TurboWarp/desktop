@@ -23,6 +23,13 @@ const darkModeMedia = window.matchMedia('(prefers-color-scheme: dark)');
 darkModeMedia.onchange = () => document.body.setAttribute('theme', darkModeMedia.matches ? 'dark' : 'light');
 darkModeMedia.onchange();
 
+const onStorageInit = (storage) => {
+  storage.addWebStore(
+    [storage.AssetType.ImageVector, storage.AssetType.ImageBitmap, storage.AssetType.Sound],
+    asset => `library-files/${asset.assetId}.${asset.dataFormat}`
+  );
+};
+
 const WrappedGUI = compose(
   AppStateHOC
 )(GUI);
@@ -30,5 +37,8 @@ const WrappedGUI = compose(
 ReactDOM.render(React.createElement(WrappedGUI, {
   projectId: '0',
   isPlayerOnly: false,
-  canEditTitle: true
+  canEditTitle: true,
+  isScratchDesktop: true,
+  canModifyCloudData: false, // just here to remove warnings
+  onStorageInit
 }, null), target);
