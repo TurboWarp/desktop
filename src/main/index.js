@@ -1,20 +1,23 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, Menu } from 'electron'
 import * as path from 'path'
 import { format as formatUrl } from 'url'
 import { version } from '../../package.json';
 
-const isDevelopment = process.env.NODE_ENV !== 'production'
+const isDevelopment = process.env.NODE_ENV !== 'production';
+
+const isMac = process.platform === 'darwin';
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
-let mainWindow
+let mainWindow;
 
 function createMainWindow() {
   const window = new BrowserWindow({
     width: 1280,
     height: 800,
     title: `TurboWarp Desktop v${version}`,
+    autoHideMenuBar: true,
     webPreferences: {
       enableRemoteModule: true,
       nodeIntegration: true
@@ -27,16 +30,13 @@ function createMainWindow() {
 
   if (isDevelopment) {
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
-  }
-  else {
+  } else {
     window.loadURL(formatUrl({
       pathname: path.join(__dirname, 'index.html'),
       protocol: 'file',
       slashes: true
     }))
   }
-
-  window.setMenu(null);
 
   window.on('close', (e) => {
     const choice = require('electron').dialog.showMessageBoxSync(window, {
@@ -60,6 +60,27 @@ function createMainWindow() {
       window.focus()
     })
   })
+
+  window.setMenu(Menu.buildFromTemplate([
+      ...(isMac ? [{ role: 'appMenu' }] : []),
+      { role: 'fileMenu' },
+      { role: 'editMenu' },
+      { role: 'viewMenu' },
+      { role: 'windowMenu' },
+      {
+        role: 'help',
+        submenu: [
+          {
+            label: 'Learn more',
+            click: async () => {
+              const { shell } = require('electron')
+              await shell.openExternal('https://desktop.turbowarp.org/')
+            }
+          }
+        ]
+      }
+    ]
+  ));
 
   window.webContents.on('new-window', (e, url) => {
     e.preventDefault();
