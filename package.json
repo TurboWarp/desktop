@@ -43,7 +43,25 @@
   },
   "build": {
     "appId": "org.turbowarp.desktop",
-    "productName": "TurboWarp Desktop"
+    "productName": "TurboWarp Desktop",
+    "mac": {
+      "category": "public.app-category.education",
+      "darkModeSupport": true,
+      "gatekeeperAssess": false,
+      "hardenedRuntime": true,
+      "entitlements": "entitlements.mac.plist",
+      "entitlementsInherit": "entitlements.mac.plist",
+      "extendInfo": {
+        "NSCameraUsageDescription": "This app requires camera access when taking a photo in the paint editor or using the video sensing blocks.",
+        "NSMicrophoneUsageDescription": "This app requires microphone access when recording sounds or detecting loudness."
+      },
+      "target": [
+        {
+          "arch": "universal",
+          "target": "dmg"
+        }
+      ]
+    }
   },
   "electronWebpack": {
     "renderer": {
