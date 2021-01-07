@@ -38,8 +38,11 @@ const httpsAgent = new https.Agent({
 	keepAlive: true
 });
 
+const usedFiles = new Set();
+
 const downloadAsset = async (asset) => {
   const md5ext = asset.md5ext;
+  usedFiles.add(md5ext);
   const path = pathUtil.join(libraryFiles, md5ext);
   if (fs.existsSync(path)) {
     console.log(`Already exists: ${md5ext}`);
@@ -61,7 +64,13 @@ const limiter = new Limiter({
 });
 
 const queueDownloadAsset = (asset) => {
-  limiter.push((done) => downloadAsset(asset).then(done).catch(done));
+  limiter.push((done) => downloadAsset(asset)
+    .then(done)
+    .catch((error) => {
+      console.error(error);
+      process.exit(1);
+    })
+  );
 };
 
 for (const asset of [...costumes, ...backdrops, ...sounds]) {
@@ -74,5 +83,10 @@ for (const sprite of sprites) {
 }
 
 limiter.onDone(() => {
+  for (const file of fs.readdirSync(libraryFiles)) {
+    if (!usedFiles.has(file)) {
+      console.warn(`Extraneous: ${file}`);
+    }
+  }
   console.log('Done');
 });
