@@ -35,10 +35,10 @@
   "homepage": "https://desktop.turbowarp.org/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/TurboWarp/turbowarp-desktop.git"
+    "url": "https://github.com/TurboWarp/desktop.git"
   },
   "bugs": {
-    "url": "https://github.com/TurboWarp/turbowarp-desktop/issues",
+    "url": "https://github.com/TurboWarp/desktop/issues",
     "email": "contact@turbowarp.org"
   },
   "build": {
