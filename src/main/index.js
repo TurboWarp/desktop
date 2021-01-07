@@ -16,6 +16,7 @@ function createMainWindow() {
     height: 800,
     title: `TurboWarp Desktop v${version}`,
     webPreferences: {
+      enableRemoteModule: true,
       nodeIntegration: true
     }
   })
