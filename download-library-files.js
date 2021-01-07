@@ -18,16 +18,16 @@ const backdropManifest = pathUtil.join(__dirname, 'node_modules', 'scratch-gui',
 const spriteManifest = pathUtil.join(__dirname, 'node_modules', 'scratch-gui', 'src', 'lib', 'libraries', 'sprites.json');
 const soundManifest = pathUtil.join(__dirname, 'node_modules', 'scratch-gui', 'src', 'lib', 'libraries', 'sounds.json');
 if (!fs.existsSync(costumesManifest)) {
-  throw new Error('costumes.json does not exist -- did you forget to `npm install`?');
+  throw new Error('costumes.json does not exist -- did you forget a step?');
 }
 if (!fs.existsSync(backdropManifest)) {
-  throw new Error('backdrops.json does not exist -- did you forget to `npm install`?');
+  throw new Error('backdrops.json does not exist -- did you forget a step?');
 }
 if (!fs.existsSync(spriteManifest)) {
-  throw new Error('sprites.json does not exist -- did you forget to `npm install`?');
+  throw new Error('sprites.json does not exist -- did you forget a step?');
 }
 if (!fs.existsSync(soundManifest)) {
-  throw new Error('sounds.json does not exist -- did you forget to `npm install`?');
+  throw new Error('sounds.json does not exist -- did you forget a step?');
 }
 
 const costumes = JSON.parse(fs.readFileSync(costumesManifest));
