@@ -44,6 +44,13 @@
   "build": {
     "appId": "org.turbowarp.desktop",
     "productName": "TurboWarp Desktop",
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "deleteAppDataOnUninstall": true
+    },
     "mac": {
       "category": "public.app-category.education",
       "darkModeSupport": true,
@@ -61,6 +68,9 @@
           "target": "dmg"
         }
       ]
+    },
+    "linux": {
+      "target": "tar.gz"
     }
   },
   "electronWebpack": {
