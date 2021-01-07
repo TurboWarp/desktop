@@ -3,6 +3,7 @@ const pathUtil = require('path');
 const fetch = require('node-fetch');
 const Limiter = require('async-limiter');
 const https = require('https');
+const crypto = require('crypto');
 const promisify = require('util').promisify;
 const writeFile = promisify(fs.writeFile);
 
@@ -48,19 +49,27 @@ const downloadAsset = async (asset) => {
     console.log(`Already exists: ${md5ext}`);
     return;
   }
+
   console.log(`Downloading: ${md5ext}`);
   const response = await fetch(`https://assets.scratch.mit.edu/${md5ext}`, {
     agent: httpsAgent
   });
   if (response.status !== 200) {
-    throw new Error(`Unexpected status code: ${response.status}`);
+    throw new Error(`${md5ext}: Unexpected status code: ${response.status}`);
   }
   const arrayBuffer = await response.buffer();
+
+  const expectedHash = asset.assetId;
+  const hash = crypto.createHash('md5').update(new Uint8Array(arrayBuffer)).digest("hex")
+  if (hash !== expectedHash) {
+    throw new Error(`${md5ext}: Hash mismatch; expected ${expectedHash} but found ${hash}`);
+  }
+
   await writeFile(path, Buffer.from(arrayBuffer));
 };
 
 const limiter = new Limiter({
-  concurrency: 5
+  concurrency: 10
 });
 
 const queueDownloadAsset = (asset) => {
