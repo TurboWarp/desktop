@@ -11,13 +11,12 @@ const {compose} = require('redux');
 const AppStateHOC = ScratchGUI.AppStateHOC;
 const GUI = ScratchGUI.default;
 
-const target = document.createElement('div');
+const target = document.getElementById('app');
 target.style.position = 'absolute';
 target.style.top = '0';
 target.style.left = '0';
 target.style.width = '100%';
 target.style.height = '100%';
-document.body.appendChild(target);
 
 const darkModeMedia = window.matchMedia('(prefers-color-scheme: dark)');
 darkModeMedia.onchange = () => document.body.setAttribute('theme', darkModeMedia.matches ? 'dark' : 'light');
@@ -42,3 +41,5 @@ ReactDOM.render(React.createElement(WrappedGUI, {
   canModifyCloudData: false, // just here to remove warnings
   onStorageInit
 }, null), target);
+
+document.body.classList.add('tw-loaded');

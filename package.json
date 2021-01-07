@@ -75,7 +75,8 @@
   },
   "electronWebpack": {
     "renderer": {
-      "webpackConfig": "webpack.renderer.js"
+      "webpackConfig": "webpack.renderer.js",
+      "template": "src/renderer/template.html"
     }
   },
   "private": true
