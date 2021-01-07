@@ -17,7 +17,6 @@ for (const addonId of addons) {
     if (manifest.userstyles) {
         for (const userstyle of manifest.userstyles) {
             const source = require(`./addons/${addonId}/${userstyle.url}`);
-            console.log(source);
             const style = document.createElement('style');
             style.innerText = source;
             document.head.appendChild(style);
