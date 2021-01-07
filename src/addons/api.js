@@ -9,10 +9,26 @@ class Tab extends EventTarget {
         this._seenElements = new WeakSet();
         this.traps = {
             onceValues: {
-                // We put vm on window
-                vm: window.vm
+                get vm () {
+                    // We expose VM on window
+                    return window.vm;
+                }
             }
+        };
+        this.redux = {
+            // TODO: implement
+            state: null
         }
+    }
+
+    loadScript (src) {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.onload = () => resolve();
+            script.onerror = () => reject(new Error('Cannot load script'));
+            script.src = src;
+            document.body.appendChild(script);
+        });
     }
 
     waitForElement (selector, { markAsSeen = false } = {}) {
@@ -65,6 +81,7 @@ class Settings {
 class Self {
     constructor (id) {
         this.dir = `addon-files/${id}`;
+        this.lib = 'addon-files/libraries-raw';
     }
 }
 
@@ -111,7 +128,7 @@ class API {
         const namespacedKey = `${this._id}/${key}`;
         let translation = translations[namespacedKey];
         if (!translation) {
-            return key;
+            return namespacedKey;
         }
         if (handler) {
             translation = handler(translation);

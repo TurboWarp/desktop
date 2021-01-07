@@ -3,6 +3,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const merge = require('webpack-merge');
 
 const addonFolder = path.resolve(__dirname, 'src', 'addons', 'addons');
+const rawLibrariesFolder = path.resolve(__dirname, 'src', 'addons', 'libraries-raw');
 
 module.exports = defaultConfig => {
     defaultConfig.module.rules = [];
@@ -13,6 +14,9 @@ module.exports = defaultConfig => {
                 {
                     test: /\.jsx?$/,
                     loader: 'babel-loader',
+                    exclude: [
+                        rawLibrariesFolder
+                    ],
                     options: {
                         presets: ['@babel/preset-env', '@babel/preset-react']
                     }
@@ -87,6 +91,10 @@ module.exports = defaultConfig => {
                     from: 'node_modules/scratch-blocks/media',
                     to: 'static/blocks-media'
                 },
+                {
+                    from: rawLibrariesFolder,
+                    to: 'addon-files/libraries-raw'
+                }
                 // TODO: copy extension worker?
             ])
         ],

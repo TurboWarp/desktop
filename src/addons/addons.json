@@ -2,5 +2,9 @@
     "block-switching",
     "editor-devtools",
     "editor-searchable-dropdowns",
-    "onion-skinning"
+    "onion-skinning",
+    "// bitmap-copy",
+    "// color-picker",
+    "fix-uploaded-svgs",
+    "// mediarecorder"
 ]

@@ -1,3 +1,8 @@
+require('./update-checker');
+require('./filesystem-api-impl');
+require('./prompt-impl');
+require('../addons/index');
+
 const React = require('react');
 const ReactDOM = require('react-dom');
 const ScratchGUI = require('scratch-gui');
@@ -5,9 +10,6 @@ const {compose} = require('redux');
 
 const AppStateHOC = ScratchGUI.AppStateHOC;
 const GUI = ScratchGUI.default;
-
-require('./filesystem-api-impl');
-require('./prompt-impl');
 
 const target = document.createElement('div');
 target.style.position = 'absolute';
@@ -30,6 +32,3 @@ ReactDOM.render(React.createElement(WrappedGUI, {
   isPlayerOnly: false,
   canEditTitle: true
 }, null), target);
-
-require('../addons/index');
-require('./update-checker');
