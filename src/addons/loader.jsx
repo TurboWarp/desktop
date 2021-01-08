@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
+let didLoadAddons = false;
+
 const AddonLoaderHOC = function (WrappedComponent) {
   class AddonLoaderComponent extends React.Component {
     componentDidMount () {
@@ -15,10 +17,10 @@ const AddonLoaderHOC = function (WrappedComponent) {
       }
     }
     loadAddons () {
-      if (this.didLoadAddons) {
+      if (didLoadAddons) {
         return;
       }
-      this.didLoadAddons = true;
+      didLoadAddons = true;
       this.props.onLoadAddons();
     }
     render() {
@@ -39,7 +41,7 @@ const AddonLoaderHOC = function (WrappedComponent) {
     onLoadAddons: PropTypes.func
   };
   AddonLoaderComponent.defaultProps = {
-    onLoadAddons: () => import('./index')
+    onLoadAddons: () => {}
   };
   const mapStateToProps = state => ({
     isPlayerOnly: state.scratchGui.mode.isPlayerOnly,

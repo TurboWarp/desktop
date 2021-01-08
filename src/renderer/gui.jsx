@@ -12,6 +12,10 @@ const onStorageInit = (storage) => {
   );
 };
 
+const onLoadAddons = () => {
+  require('../addons/index');
+};
+
 const DesktopHOC = function (WrappedComponent) {
   class DesktopComponent extends React.Component {
     render() {
@@ -22,6 +26,7 @@ const DesktopHOC = function (WrappedComponent) {
           isScratchDesktop
           canModifyCloudData={false}
           onStorageInit={onStorageInit}
+          onLoadAddons={onLoadAddons}
         />
       );
     }
