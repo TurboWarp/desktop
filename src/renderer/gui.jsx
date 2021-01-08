@@ -1,9 +1,9 @@
-const React = require('react');
-const ScratchGUI = require('scratch-gui');
-const { compose } = require('redux');
+import React from 'react';
+import {compose} from 'redux';
+import GUI from 'scratch-gui';
+import {AppStateHOC} from 'scratch-gui';
 
-const AppStateHOC = ScratchGUI.AppStateHOC;
-const GUI = ScratchGUI.default;
+import AddonLoaderHOC from '../addons/loader.jsx';
 
 const onStorageInit = (storage) => {
   storage.addWebStore(
@@ -12,11 +12,11 @@ const onStorageInit = (storage) => {
   );
 };
 
-const DesktopHOC = function (WrappedGUI) {
+const DesktopHOC = function (WrappedComponent) {
   class DesktopComponent extends React.Component {
     render() {
       return (
-        <WrappedGUI
+        <WrappedComponent
           projectId="0"
           canEditTitle
           isScratchDesktop
@@ -31,7 +31,8 @@ const DesktopHOC = function (WrappedGUI) {
 
 const WrappedGUI = compose(
   AppStateHOC,
-  DesktopHOC
+  DesktopHOC,
+  AddonLoaderHOC
 )(GUI);
 
-module.exports = WrappedGUI;
+export default WrappedGUI;

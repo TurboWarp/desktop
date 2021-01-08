@@ -1,12 +1,11 @@
 require('./update-checker');
 require('./filesystem-api-impl');
 require('./prompt-impl');
-require('../addons/index');
 
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-const GUI = require('./gui.jsx');
+const GUI = require('./gui.jsx').default;
 
 const darkModeMedia = window.matchMedia('(prefers-color-scheme: dark)');
 darkModeMedia.onchange = () => document.body.setAttribute('theme', darkModeMedia.matches ? 'dark' : 'light');
