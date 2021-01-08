@@ -1,7 +1,7 @@
 const {remote} = require('electron');
 const dialog = remote.dialog;
 
-const currentVersion = require('../../../package.json').version + 'a';
+const currentVersion = require('../../../package.json').version;
 
 fetch('https://desktop.turbowarp.org/latest.txt')
   .then((res) => {
