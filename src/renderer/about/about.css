@@ -11,5 +11,5 @@ main {
 .license-text {
   height: 200px;
   overflow-y: scroll;
-  width: fit-content;
+  width: 100%;
 }
