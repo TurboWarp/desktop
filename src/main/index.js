@@ -19,6 +19,7 @@ function createMainWindow() {
     title: `TurboWarp Desktop v${version}`,
     autoHideMenuBar: true,
     webPreferences: {
+      contextIsolation: false,
       enableRemoteModule: true,
       nodeIntegration: true
     }
