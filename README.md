@@ -27,6 +27,7 @@ cd turbowarp-desktop
 Install dependencies:
 
 ```bash
+# This will take a while and it may seem to get stuck at some point.
 npm ci
 ```
 
