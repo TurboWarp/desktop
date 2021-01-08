@@ -107,6 +107,7 @@ ipcMain.on('about', () => {
   if (windows.about === null) {
     windows.about = createAboutWindow();
   }
+  windows.about.focus();
 });
 
 app.on('window-all-closed', () => {
