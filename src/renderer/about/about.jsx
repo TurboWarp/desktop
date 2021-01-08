@@ -21,8 +21,6 @@ ReactDOM.render((
         <p>All addons are licensed under the GPLv3.0 which can be read above.</p>
         <ul>
           {addons.map((id) => {
-            if (id.startsWith('//')) return null;
-
             const manifest = require(`../../addons/addons/${id}/addon.json`);
             const name = manifest.name;
             const authors = manifest.credits ? manifest.credits.map((author, index) => {

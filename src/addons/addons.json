@@ -3,8 +3,5 @@
     "editor-devtools",
     "editor-searchable-dropdowns",
     "onion-skinning",
-    "// bitmap-copy",
-    "// color-picker",
-    "fix-uploaded-svgs",
-    "// mediarecorder"
+    "fix-uploaded-svgs"
 ]

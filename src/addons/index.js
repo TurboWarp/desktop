@@ -3,9 +3,6 @@ import addons from './addons.json';
 
 try {
     for (const addonId of addons) {
-        if (addonId.startsWith('//')) {
-            continue;
-        }
         const manifest = require(`./addons/${addonId}/addon.json`);
         const api = new API(addonId, manifest);
 
