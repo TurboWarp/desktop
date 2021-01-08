@@ -1,0 +1,15 @@
+body {
+  font-family: sans-serif;
+  background-color: white;
+  color: black;
+}
+
+main {
+  margin: 4px;
+}
+
+.license-text {
+  height: 200px;
+  overflow-y: scroll;
+  width: fit-content;
+}

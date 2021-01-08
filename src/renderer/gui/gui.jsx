@@ -1,9 +1,14 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+import {ipcRenderer} from 'electron';
 import {compose} from 'redux';
 import GUI from 'scratch-gui';
 import {AppStateHOC} from 'scratch-gui';
+import AddonLoaderHOC from '../../addons/loader.jsx';
 
-import AddonLoaderHOC from '../addons/loader.jsx';
+require('./update-checker');
+require('./filesystem-api-impl');
+require('./prompt-impl');
 
 const onStorageInit = (storage) => {
   storage.addWebStore(
@@ -13,8 +18,16 @@ const onStorageInit = (storage) => {
 };
 
 const onLoadAddons = () => {
-  require('../addons/index');
+  require('../../addons/index');
 };
+
+const onClickLogo = () => {
+  ipcRenderer.send('about');
+};
+
+const darkModeMedia = window.matchMedia('(prefers-color-scheme: dark)');
+darkModeMedia.onchange = () => document.body.setAttribute('theme', darkModeMedia.matches ? 'dark' : 'light');
+darkModeMedia.onchange();
 
 const DesktopHOC = function (WrappedComponent) {
   class DesktopComponent extends React.Component {
@@ -27,6 +40,7 @@ const DesktopHOC = function (WrappedComponent) {
           canModifyCloudData={false}
           onStorageInit={onStorageInit}
           onLoadAddons={onLoadAddons}
+          onClickLogo={onClickLogo}
         />
       );
     }
@@ -39,5 +53,7 @@ const WrappedGUI = compose(
   DesktopHOC,
   AddonLoaderHOC
 )(GUI);
+
+ReactDOM.render(<WrappedGUI />, require('../app-target'));
 
 export default WrappedGUI;
