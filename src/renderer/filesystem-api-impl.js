@@ -111,7 +111,18 @@ window.showSaveFilePicker = async (options) => {
     throw new AbortError('Operation was cancelled by user.');
   }
 
-  const filePath = result.filePath;
+  let filePath = result.filePath;
+
+  if (process.platform === 'linux') {
+    // Some linux distros have weird file pickers that don't put the file extension at the end.
+    // To fix this, we'll implicitly add the proper file extension if:
+    // a) none was specified, and
+    // b) this file does not already exist
+    if (!filePath.includes('.') && !fs.existsSync(filePath)) {
+      filePath = `${filePath}.sb3`;
+    }
+  }
+
   return new WrappedFileHandle(filePath);
 };
 
