@@ -1,9 +1,15 @@
+const fs = require('fs');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const merge = require('webpack-merge');
 
 const addonFolder = path.resolve(__dirname, 'src', 'addons', 'addons');
 const rawLibrariesFolder = path.resolve(__dirname, 'src', 'addons', 'libraries-raw');
+const libraryFilesFolder = path.resolve(__dirname, 'library-files');
+
+if (!fs.existsSync(libraryFilesFolder)) {
+    fs.mkdirSync(libraryFilesFolder);
+}
 
 module.exports = defaultConfig => {
     defaultConfig.module.rules = [];
@@ -96,7 +102,7 @@ module.exports = defaultConfig => {
                     to: 'addon-files/libraries-raw'
                 },
                 {
-                    from: 'library-files',
+                    from: libraryFilesFolder,
                     to: 'library-files'
                 }
                 // TODO: copy extension worker?
