@@ -31,7 +31,7 @@ Install dependencies:
 npm ci
 ```
 
-Download library files: (Technically optional, but if you don't do this then the libraries won't work)
+Download library files:
 
 ```
 node download-library-files.js
