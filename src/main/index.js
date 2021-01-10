@@ -9,15 +9,11 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
 const isWindows = process.platform === 'win32';
 
-// Used to keep global references to windows so that they don't get garbage collected
-const windows = {
-  main: null,
-  about: null
-};
-
-const mainWindowTitle = `TurboWarp Desktop v${version}`;
-
+const editorWindows = new Set();
+const editorWindowTitle = `TurboWarp Desktop v${version}`;
 let fileToOpen = null;
+
+let aboutWindow = null;
 
 const menu = Menu.buildFromTemplate([
   ...(isMac ? [{ role: 'appMenu' }] : []),
@@ -72,7 +68,7 @@ function createWindow(title, width, height, url) {
   return window;
 }
 
-function createMainWindow() {
+function createEditorWindow() {
   // Note: the route for this must be `editor`, otherwise the dev tools keyboard shortcuts will not work.
   let url = getURL('editor');
   if (fileToOpen !== null) {
@@ -80,7 +76,7 @@ function createMainWindow() {
     fileToOpen = null;
   }
 
-  const window = createWindow(mainWindowTitle, 1280, 800, url);
+  const window = createWindow(editorWindowTitle, 1280, 800, url);
 
   if (isDevelopment) {
     window.webContents.openDevTools();
@@ -89,15 +85,17 @@ function createMainWindow() {
   window.on('page-title-updated', (event, title, explicitSet) => {
     event.preventDefault();
     if (explicitSet && title) {
-      window.setTitle(`${title} - ${mainWindowTitle}`);
+      window.setTitle(`${title} - ${editorWindowTitle}`);
     } else {
-      window.setTitle(mainWindowTitle);
+      window.setTitle(editorWindowTitle);
     }
   });
 
   window.on('closed', () => {
-    windows.main = null;
+    editorWindows.delete(window);
   });
+
+  editorWindows.add(window);
 
   return window;
 }
@@ -106,17 +104,17 @@ function createAboutWindow() {
   const window = createWindow('About', 700, 450, getURL('about'));
 
   window.on('closed', () => {
-    windows.about = null;
+    aboutWindow = null;
   });
 
   return window;
 }
 
 ipcMain.on('about', () => {
-  if (windows.about === null) {
-    windows.about = createAboutWindow();
+  if (aboutWindow === null) {
+    aboutWindow = createAboutWindow();
   }
-  windows.about.focus();
+  aboutWindow.focus();
 });
 
 app.on('window-all-closed', () => {
@@ -125,7 +123,12 @@ app.on('window-all-closed', () => {
 
 // Handle file opening on macOS
 app.on('open-file', (event, path) => {
+  event.preventDefault();
   fileToOpen = path;
+  // This event can be emitted before we create the main window or while we're already running.
+  if (editorWindows.size > 0) {
+    createEditorWindow();
+  }
 });
 
 // On windows, parse argv to figure out which file to open.
@@ -147,11 +150,11 @@ if (isWindows) {
 // TODO: figure out what to do for linux, probably just use the windows logic?
 
 app.on('activate', () => {
-  if (windows.main === null) {
-    windows.main = createMainWindow();
+  if (editorWindows.size === 0) {
+    createEditorWindow();
   }
 });
 
 app.on('ready', () => {
-  windows.main = createMainWindow();
+  createEditorWindow();
 });
