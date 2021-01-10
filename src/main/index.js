@@ -142,7 +142,7 @@ ipcMain.on('update-available', async (event, currentVersion, latestVersion) => {
     detail: 'Updating is highly recommended as TurboWarp Desktop is in a very early state.'
   });
   if (choice.response === 0) {
-    shell.openExternal('https://desktop.turbowarp.org');
+    shell.openExternal(`https://desktop.turbowarp.org/update_available.html?from=${encodeURIComponent(currentVersion)}&to=${encodeURIComponent(latestVersion)}`);
   }
 });
 

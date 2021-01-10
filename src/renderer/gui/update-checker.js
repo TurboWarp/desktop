@@ -9,7 +9,8 @@ fetch('https://desktop.turbowarp.org/latest.txt')
     return res.text();
   })
   .then((latestVersion) => {
-    if (latestVersion.trim() !== version.trim()) {
+    latestVersion = latestVersion.trim();
+    if (latestVersion !== version) {
       ipcRenderer.send('update-available', version, latestVersion);
     }
   })
