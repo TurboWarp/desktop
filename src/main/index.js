@@ -68,7 +68,8 @@ function createWindow(title, width, height, route) {
 }
 
 function createMainWindow() {
-  const window = createWindow(`TurboWarp Desktop v${version}`, 1280, 800, 'gui');
+  // Note: the route for this must be `editor`, otherwise the dev tools keyboard shortcuts will not work.
+  const window = createWindow(`TurboWarp Desktop v${version}`, 1280, 800, 'editor');
 
   if (isDevelopment) {
     window.webContents.openDevTools();
