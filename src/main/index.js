@@ -44,17 +44,10 @@ function getURL(route) {
   });
 }
 
-function createWindow(title, width, height, url) {
+function createWindow(url, options) {
   const window = new BrowserWindow({
-    width,
-    height,
-    title,
     autoHideMenuBar: true,
-    webPreferences: {
-      contextIsolation: false,
-      enableRemoteModule: true,
-      nodeIntegration: true
-    }
+    ...options
   });
 
   window.setMenu(menu);
@@ -76,7 +69,16 @@ function createEditorWindow() {
     fileToOpen = null;
   }
 
-  const window = createWindow(editorWindowTitle, 1280, 800, url);
+  const window = createWindow(url, {
+    title: editorWindowTitle,
+    width: 1280,
+    height: 800,
+    webPreferences: {
+      contextIsolation: false,
+      enableRemoteModule: true,
+      nodeIntegration: true
+    }
+  });
 
   if (isDevelopment) {
     window.webContents.openDevTools();
@@ -101,7 +103,18 @@ function createEditorWindow() {
 }
 
 function createAboutWindow() {
-  const window = createWindow('About', 700, 450, getURL('about'));
+  const window = createWindow(getURL('about'), {
+    title: 'About',
+    width: 700,
+    height: 450,
+    parent: BrowserWindow.getFocusedWindow(),
+    modal: true,
+    webPreferences: {
+      contextIsolation: false,
+      enableRemoteModule: true,
+      nodeIntegration: true
+    }
+  });
 
   window.on('closed', () => {
     aboutWindow = null;
