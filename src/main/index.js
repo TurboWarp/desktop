@@ -79,7 +79,7 @@ function createMainWindow() {
 
   window.on('page-title-updated', (event, title, explicitSet) => {
     event.preventDefault();
-    if (title) {
+    if (explicitSet && title) {
       window.setTitle(`${title} - ${mainWindowTitle}`);
     } else {
       window.setTitle(mainWindowTitle);
