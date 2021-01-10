@@ -131,7 +131,7 @@ ipcMain.on('about', () => {
 });
 
 ipcMain.on('update-available', async (event, currentVersion, latestVersion) => {
-  const choice = await dialog.showMessageBox({
+  const choice = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
     type: 'info',
     buttons: [
       'Download Update',
