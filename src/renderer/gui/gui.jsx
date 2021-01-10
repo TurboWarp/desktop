@@ -50,12 +50,25 @@ const getFileFromArgv = () => {
   return argv[0] || null;
 };
 
+const getProjectTitle = (file) => {
+  const name = pathUtil.basename(file);
+  const match = name.match(/^(.*)\.sb[2|3]?$/);
+  if (!match) return null;
+  return match[1];
+};
+
 const darkModeMedia = window.matchMedia('(prefers-color-scheme: dark)');
 darkModeMedia.onchange = () => document.body.setAttribute('theme', darkModeMedia.matches ? 'dark' : 'light');
 darkModeMedia.onchange();
 
 const DesktopHOC = function (WrappedComponent) {
   class DesktopComponent extends React.Component {
+    constructor (props) {
+      super(props);
+      this.state = {
+        title: null
+      };
+    }
     componentDidMount () {
       const file = getFileFromArgv();
       if (file !== null) {
@@ -63,6 +76,13 @@ const DesktopHOC = function (WrappedComponent) {
         readFile(file)
           .then((buffer) => this.props.vm.loadProject(buffer.buffer))
           .then(() => {
+            const title = getProjectTitle(file);
+            if (title) {
+              this.setState({
+                title
+              });
+              onUpdateProjectTitle(title);
+            }
             this.props.onSetFileHandle(new WrappedFileHandle(file));
           })
           .catch((err) => {
@@ -84,6 +104,7 @@ const DesktopHOC = function (WrappedComponent) {
       } = this.props;
       return (
         <WrappedComponent
+          projectTitle={this.state.title}
           {...props}
         />
       );
