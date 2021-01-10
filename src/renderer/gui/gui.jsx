@@ -1,14 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {ipcRenderer} from 'electron';
 import {compose} from 'redux';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import {ipcRenderer, remote} from 'electron';
+import fs from 'fs';
+import {promisify} from 'util';
 import GUI from 'scratch-gui';
-import {AppStateHOC} from 'scratch-gui';
-import AddonLoaderHOC from '../../addons/loader.jsx';
+import {AppStateHOC, setFileHandle, openLoadingProject, closeLoadingProject} from 'scratch-gui';
+import VM from 'scratch-vm';
 
-require('./update-checker');
-require('./filesystem-api-impl');
-require('./prompt-impl');
+import AddonLoaderHOC from '../../addons/loader.jsx';
+import {WrappedFileHandle} from './filesystem-api-impl';
+import './update-checker';
+import './prompt-impl';
+
+const readFile = promisify(fs.readFile);
 
 const onStorageInit = (storage) => {
   storage.addWebStore(
@@ -25,15 +32,54 @@ const onClickLogo = () => {
   ipcRenderer.send('about');
 };
 
+const getFileFromArgv = () => {
+  const argv = remote.process.argv.slice();
+  // argv in production: ["turbowarp.exe", "..."]
+  // argv in dev: ["electron.exe", "--inspect=", "main.js", "..."]
+  if (process.env.NODE_ENV !== 'production') {
+    argv.shift();
+    argv.shift();
+    argv.shift();
+  } else {
+    argv.shift();
+  }
+  // Ignore arguments
+  while (argv.length > 0 && argv[0].startsWith('--')) {
+    argv.shift();
+  }
+  return argv[0] || null;
+};
+
 const darkModeMedia = window.matchMedia('(prefers-color-scheme: dark)');
 darkModeMedia.onchange = () => document.body.setAttribute('theme', darkModeMedia.matches ? 'dark' : 'light');
 darkModeMedia.onchange();
 
 const DesktopHOC = function (WrappedComponent) {
   class DesktopComponent extends React.Component {
-    // TODO: use this HOC to implement file loading
+    componentDidMount () {
+      const file = getFileFromArgv();
+      if (file !== null) {
+        this.props.onLoadingStarted();
+        readFile(file)
+          .then((buffer) => this.props.vm.loadProject(buffer.buffer))
+          .then(() => {
+            this.props.onSetFileHandle(new WrappedFileHandle(file));
+          })
+          .catch((err) => {
+            console.error(err);
+            alert(`Could not load project file: ${err}`);
+          })
+          .finally(() => {
+            this.props.onLoadingFinished();
+          });
+      }
+    }
     render() {
       const {
+        onLoadingStarted,
+        onLoadingFinished,
+        onSetFileHandle,
+        vm,
         ...props
       } = this.props;
       return (
@@ -43,7 +89,24 @@ const DesktopHOC = function (WrappedComponent) {
       );
     }
   }
-  return DesktopComponent;
+  DesktopComponent.propTypes = {
+    onLoadingStarted: PropTypes.func,
+    onLoadingFinished: PropTypes.func,
+    onSetFileHandle: PropTypes.func,
+    vm: PropTypes.instanceOf(VM)
+  };
+  const mapStateToProps = state => ({
+    vm: state.scratchGui.vm
+  });
+  const mapDispatchToProps = dispatch => ({
+    onLoadingStarted: () => dispatch(openLoadingProject()),
+    onLoadingFinished: () => dispatch(closeLoadingProject()),
+    onSetFileHandle: fileHandle => dispatch(setFileHandle(fileHandle))
+  });
+  return connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(DesktopComponent);
 };
 
 const WrappedGUI = compose(

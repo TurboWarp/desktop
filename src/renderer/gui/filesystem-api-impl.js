@@ -35,7 +35,7 @@ class WrappedFileWritable {
   }
 }
 
-class WrappedFileHandle {
+export class WrappedFileHandle {
   constructor (path) {
     this._path = path;
     // part of public API
