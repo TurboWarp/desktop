@@ -138,7 +138,7 @@ ipcMain.on('update-available', async (event, currentVersion, latestVersion) => {
       'Later'
     ],
     cancelId: 1,
-    message: 'An update is available',
+    message: `An update is available: v${latestVersion}`,
     detail: 'Updating is highly recommended as TurboWarp Desktop is in a very early state.'
   });
   if (choice.response === 0) {
