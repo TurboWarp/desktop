@@ -1,6 +1,4 @@
-const {remote} = require('electron');
-const dialog = remote.dialog;
-
+const {ipcRenderer} = require('electron');
 const currentVersion = require('../../../package.json').version;
 
 fetch('https://desktop.turbowarp.org/latest.txt')
@@ -10,20 +8,9 @@ fetch('https://desktop.turbowarp.org/latest.txt')
     }
     return res.text();
   })
-  .then(async (latestVersion) => {
+  .then((latestVersion) => {
     if (latestVersion.trim() !== currentVersion.trim()) {
-      const choice = await dialog.showMessageBox({
-        type: 'info',
-        buttons: [
-          'Download Update',
-          'Later'
-        ],
-        message: 'An update is available',
-        detail: 'Updating is highly recommended as TurboWarp Desktop is in a very early state.'
-      });
-      if (choice.response === 0) {
-        require('electron').shell.openExternal('https://desktop.turbowarp.org');
-      }
+      ipcRenderer.send('update-available', currentVersion, latestVersion);
     }
   })
   .catch((err) => {

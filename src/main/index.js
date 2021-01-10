@@ -1,6 +1,6 @@
 'use strict'
 
-import {app, BrowserWindow, Menu, ipcMain, shell} from 'electron'
+import {app, BrowserWindow, Menu, ipcMain, shell, dialog} from 'electron'
 import * as pathUtil from 'path'
 import {format as formatUrl} from 'url'
 import {version} from '../../package.json';
@@ -115,6 +115,21 @@ ipcMain.on('about', () => {
     aboutWindow = createAboutWindow();
   }
   aboutWindow.focus();
+});
+
+ipcMain.on('update-available', async (event, currentVersion, latestVersion) => {
+  const choice = await dialog.showMessageBox({
+    type: 'info',
+    buttons: [
+      'Download Update',
+      'Later'
+    ],
+    message: 'An update is available',
+    detail: 'Updating is highly recommended as TurboWarp Desktop is in a very early state.'
+  });
+  if (choice.response === 0) {
+    shell.openExternal('https://desktop.turbowarp.org');
+  }
 });
 
 app.on('window-all-closed', () => {
