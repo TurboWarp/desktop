@@ -31,16 +31,14 @@ darkModeMedia.onchange();
 
 const DesktopHOC = function (WrappedComponent) {
   class DesktopComponent extends React.Component {
+    // TODO: use this HOC to implement file loading
     render() {
+      const {
+        ...props
+      } = this.props;
       return (
         <WrappedComponent
-          projectId="0"
-          canEditTitle
-          isScratchDesktop
-          canModifyCloudData={false}
-          onStorageInit={onStorageInit}
-          onLoadAddons={onLoadAddons}
-          onClickLogo={onClickLogo}
+          {...props}
         />
       );
     }
@@ -50,10 +48,19 @@ const DesktopHOC = function (WrappedComponent) {
 
 const WrappedGUI = compose(
   AppStateHOC,
-  DesktopHOC,
-  AddonLoaderHOC
+  AddonLoaderHOC,
+  DesktopHOC
 )(GUI);
 
-ReactDOM.render(<WrappedGUI />, require('../app-target'));
+ReactDOM.render(<WrappedGUI
+  projectId="0"
+  canEditTitle
+  isScratchDesktop
+  canModifyCloudData={false}
+  onStorageInit={onStorageInit}
+  onLoadAddons={onLoadAddons}
+  onClickLogo={onClickLogo}
+/>, require('../app-target'));
+// TODO: showTelemetryModal?
 
 export default WrappedGUI;
