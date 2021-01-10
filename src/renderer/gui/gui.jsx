@@ -80,11 +80,13 @@ const DesktopHOC = function (WrappedComponent) {
   class DesktopComponent extends React.Component {
     constructor (props) {
       super(props);
+      this.handleBeforeUnload = this.handleBeforeUnload.bind(this);
       this.state = {
         title: null
       };
     }
     componentDidMount () {
+      window.addEventListener('beforeunload', this.handleBeforeUnload);
       const file = getFileFromArgv();
       if (file !== null) {
         this.props.onLoadingStarted();
@@ -109,11 +111,34 @@ const DesktopHOC = function (WrappedComponent) {
           });
       }
     }
+    componentWillUnmount () {
+      window.removeEventListener('beforeunload', this.handleBeforeUnload);
+    }
+    handleBeforeUnload (e) {
+      if (this.props.projectChanged) {
+        const choice = remote.dialog.showMessageBoxSync({
+          type: 'info',
+          buttons: [
+            'Stay',
+            'Leave'
+          ],
+          cancelId: 0,
+          defaultId: 0,
+          message: 'Are you sure you want to quit?',
+          detail: 'Any unsaved changes will be lost.'
+        });
+        if (choice === 0) {
+          e.preventDefault();
+          e.returnValue = true;
+        }
+      }
+    }
     render() {
       const {
         onLoadingStarted,
         onLoadingFinished,
         onSetFileHandle,
+        projectChanged,
         vm,
         ...props
       } = this.props;
@@ -129,9 +154,11 @@ const DesktopHOC = function (WrappedComponent) {
     onLoadingStarted: PropTypes.func,
     onLoadingFinished: PropTypes.func,
     onSetFileHandle: PropTypes.func,
+    projectChanged: PropTypes.bool,
     vm: PropTypes.instanceOf(VM)
   };
   const mapStateToProps = state => ({
+    projectChanged: state.scratchGui.projectChanged,
     vm: state.scratchGui.vm
   });
   const mapDispatchToProps = dispatch => ({

@@ -86,18 +86,6 @@ function createMainWindow() {
     }
   });
 
-  window.on('close', (e) => {
-    const choice = require('electron').dialog.showMessageBoxSync(window, {
-      type: 'question',
-      buttons: ['Yes', 'No'],
-      title: 'Confirm',
-      message: 'Are you sure you want to quit?'
-    });
-    if (choice === 1) {
-      e.preventDefault();
-    }
-  });
-
   window.on('closed', () => {
     windows.main = null;
   });
