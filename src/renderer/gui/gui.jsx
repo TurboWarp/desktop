@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {ipcRenderer, remote} from 'electron';
 import fs from 'fs';
+import pathUtil from 'path';
 import {promisify} from 'util';
 import GUI from 'scratch-gui';
 import {AppStateHOC, setFileHandle, openLoadingProject, closeLoadingProject} from 'scratch-gui';
@@ -30,6 +31,20 @@ const onLoadAddons = () => {
 
 const onClickLogo = () => {
   ipcRenderer.send('about');
+};
+
+let defaultTitle = null;
+const onUpdateProjectTitle = (title) => {
+  // The first project title update will always be the default title eg. "Project"
+  // This might not work properly if the user changes language.
+  if (defaultTitle === null) {
+    defaultTitle = title;
+  }
+  if (title === defaultTitle) {
+    document.title = '';
+  } else {
+    document.title = title;
+  }
 };
 
 const getFileFromArgv = () => {
@@ -144,6 +159,7 @@ ReactDOM.render(<WrappedGUI
   onStorageInit={onStorageInit}
   onLoadAddons={onLoadAddons}
   onClickLogo={onClickLogo}
+  onUpdateProjectTitle={onUpdateProjectTitle}
 />, require('../app-target'));
 // TODO: showTelemetryModal?
 

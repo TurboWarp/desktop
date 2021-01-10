@@ -14,6 +14,8 @@ const windows = {
   about: null
 };
 
+const mainWindowTitle = `TurboWarp Desktop v${version}`;
+
 const menu = Menu.buildFromTemplate([
   ...(isMac ? [{ role: 'appMenu' }] : []),
   { role: 'fileMenu' },
@@ -69,11 +71,20 @@ function createWindow(title, width, height, route) {
 
 function createMainWindow() {
   // Note: the route for this must be `editor`, otherwise the dev tools keyboard shortcuts will not work.
-  const window = createWindow(`TurboWarp Desktop v${version}`, 1280, 800, 'editor');
+  const window = createWindow(mainWindowTitle, 1280, 800, 'editor');
 
   if (isDevelopment) {
     window.webContents.openDevTools();
   }
+
+  window.on('page-title-updated', (event, title, explicitSet) => {
+    event.preventDefault();
+    if (title) {
+      window.setTitle(`${title} - ${mainWindowTitle}`);
+    } else {
+      window.setTitle(mainWindowTitle);
+    }
+  });
 
   window.on('close', (e) => {
     const choice = require('electron').dialog.showMessageBoxSync(window, {
