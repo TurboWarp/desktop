@@ -47,24 +47,6 @@ const onUpdateProjectTitle = (title) => {
   }
 };
 
-const getFileFromArgv = () => {
-  const argv = remote.process.argv.slice();
-  // argv in production: ["turbowarp.exe", "..."]
-  // argv in dev: ["electron.exe", "--inspect=", "main.js", "..."]
-  if (process.env.NODE_ENV !== 'production') {
-    argv.shift();
-    argv.shift();
-    argv.shift();
-  } else {
-    argv.shift();
-  }
-  // Ignore arguments
-  while (argv.length > 0 && argv[0].startsWith('--')) {
-    argv.shift();
-  }
-  return argv[0] || null;
-};
-
 const getProjectTitle = (file) => {
   const name = pathUtil.basename(file);
   const match = name.match(/^(.*)\.sb[2|3]?$/);
@@ -87,7 +69,8 @@ const DesktopHOC = function (WrappedComponent) {
     }
     componentDidMount () {
       window.addEventListener('beforeunload', this.handleBeforeUnload);
-      const file = getFileFromArgv();
+      const urlSearchParams = new URLSearchParams(location.search);
+      const file = urlSearchParams.get("file");
       if (file !== null) {
         this.props.onLoadingStarted();
         readFile(file)

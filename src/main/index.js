@@ -7,6 +7,7 @@ import {version} from '../../package.json';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
+const isWindows = process.platform === 'win32';
 
 // Used to keep global references to windows so that they don't get garbage collected
 const windows = {
@@ -15,6 +16,8 @@ const windows = {
 };
 
 const mainWindowTitle = `TurboWarp Desktop v${version}`;
+
+let fileToOpen = null;
 
 const menu = Menu.buildFromTemplate([
   ...(isMac ? [{ role: 'appMenu' }] : []),
@@ -45,7 +48,7 @@ function getURL(route) {
   });
 }
 
-function createWindow(title, width, height, route) {
+function createWindow(title, width, height, url) {
   const window = new BrowserWindow({
     width,
     height,
@@ -59,7 +62,7 @@ function createWindow(title, width, height, route) {
   });
 
   window.setMenu(menu);
-  window.loadURL(getURL(route));
+  window.loadURL(url);
 
   window.webContents.on('new-window', (e, url) => {
     e.preventDefault();
@@ -71,7 +74,13 @@ function createWindow(title, width, height, route) {
 
 function createMainWindow() {
   // Note: the route for this must be `editor`, otherwise the dev tools keyboard shortcuts will not work.
-  const window = createWindow(mainWindowTitle, 1280, 800, 'editor');
+  let url = getURL('editor');
+  if (fileToOpen !== null) {
+    url += `&file=${encodeURIComponent(fileToOpen)}`;
+    fileToOpen = null;
+  }
+
+  const window = createWindow(mainWindowTitle, 1280, 800, url);
 
   if (isDevelopment) {
     window.webContents.openDevTools();
@@ -94,7 +103,7 @@ function createMainWindow() {
 }
 
 function createAboutWindow() {
-  const window = createWindow('About', 700, 450, 'about');
+  const window = createWindow('About', 700, 450, getURL('about'));
 
   window.on('closed', () => {
     windows.about = null;
@@ -113,6 +122,29 @@ ipcMain.on('about', () => {
 app.on('window-all-closed', () => {
   app.quit();
 });
+
+// Handle file opening on macOS
+app.on('open-file', (event, path) => {
+  fileToOpen = path;
+});
+
+// On windows, parse argv to figure out which file to open.
+if (isWindows) {
+  // argv in production: ["turbowarp.exe", "..."]
+  // argv in dev: ["electron.exe", "--inspect=", "main.js", "..."] (--inspect will be gone after removing arguments)
+  const argv = process.argv.slice().filter((i) => !i.startsWith('--'));
+  if (isDevelopment) {
+    argv.shift();
+    argv.shift();
+  } else {
+    argv.shift();
+  }
+  if (argv[0]) {
+    fileToOpen = argv[0];
+  }
+}
+
+// TODO: figure out what to do for linux, probably just use the windows logic?
 
 app.on('activate', () => {
   if (windows.main === null) {
