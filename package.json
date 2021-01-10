@@ -74,7 +74,9 @@
     },
     "fileAssociations": [
       {
-        "ext": "sb3"
+        "ext": "sb3",
+        "name": "Scratch 3 Project",
+        "role": "Editor"
       }
     ]
   },
