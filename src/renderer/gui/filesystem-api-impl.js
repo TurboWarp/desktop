@@ -87,26 +87,10 @@ const typesToFilterList = (types) => types.map((type) => ({
     .map((i) => i.substr(1))
 }));
 
-let isDialogShown = false;
-
-const onlyOne = async callback => {
-  if (isDialogShown) {
-    throw new AbortError('Dialog is already visible');
-  }
-  isDialogShown = true;
-  try {
-    return await callback();
-  } catch (e) {
-    throw e;
-  } finally {
-    isDialogShown = false;
-  }
-};
-
 window.showSaveFilePicker = async (options) => {
-  const result = await onlyOne(() => dialog.showSaveDialog({
+  const result = await dialog.showSaveDialog(remote.getCurrentWindow(), {
     filters: typesToFilterList(options.types)
-  }));
+  });
 
   if (result.canceled) {
     throw new AbortError('Operation was cancelled by user.');
@@ -128,10 +112,10 @@ window.showSaveFilePicker = async (options) => {
 };
 
 window.showOpenFilePicker = async (options) => {
-  const result = await onlyOne(() => dialog.showOpenDialog({
+  const result = await dialog.showOpenDialog(remote.getCurrentWindow(), {
     properties: ['openFile'],
     filters: typesToFilterList(options.types)
-  }));
+  });
 
   if (result.canceled) {
     throw new AbortError('Operation was cancelled by user.');
