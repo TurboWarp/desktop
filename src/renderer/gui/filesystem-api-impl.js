@@ -3,11 +3,12 @@
  * https://web.dev/file-system-access/
  */
 
-const {remote} = require('electron');
+import {remote} from 'electron';
+import fs from 'fs';
+import pathUtil from 'path';
+import {promisify} from 'util';
+
 const dialog = remote.dialog;
-const fs = require('fs');
-const pathUtil = require('path');
-const promisify = require('util').promisify;
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 

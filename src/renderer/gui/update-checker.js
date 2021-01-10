@@ -1,5 +1,5 @@
-const {ipcRenderer} = require('electron');
-const currentVersion = require('../../../package.json').version;
+import {ipcRenderer} from 'electron';
+import {version} from '../../../package.json';
 
 fetch('https://desktop.turbowarp.org/latest.txt')
   .then((res) => {
@@ -9,8 +9,8 @@ fetch('https://desktop.turbowarp.org/latest.txt')
     return res.text();
   })
   .then((latestVersion) => {
-    if (latestVersion.trim() !== currentVersion.trim()) {
-      ipcRenderer.send('update-available', currentVersion, latestVersion);
+    if (latestVersion.trim() !== version.trim()) {
+      ipcRenderer.send('update-available', version, latestVersion);
     }
   })
   .catch((err) => {
