@@ -9,7 +9,6 @@ import pathUtil from 'path';
 import {promisify} from 'util';
 import GUI from 'scratch-gui';
 import {AppStateHOC, setFileHandle, openLoadingProject, closeLoadingProject} from 'scratch-gui';
-import VM from 'scratch-vm';
 
 import AddonLoaderHOC from '../../addons/loader.jsx';
 import {WrappedFileHandle} from './filesystem-api-impl';
@@ -138,7 +137,9 @@ const DesktopHOC = function (WrappedComponent) {
     onLoadingFinished: PropTypes.func,
     onSetFileHandle: PropTypes.func,
     projectChanged: PropTypes.bool,
-    vm: PropTypes.instanceOf(VM)
+    vm: PropTypes.shape({
+      loadProject: PropTypes.func
+    })
   };
   const mapStateToProps = state => ({
     projectChanged: state.scratchGui.projectChanged,
