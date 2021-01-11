@@ -16,7 +16,7 @@ let fileToOpen = null;
 
 let aboutWindow = null;
 
-const menu = Menu.buildFromTemplate([
+Menu.setApplicationMenu(Menu.buildFromTemplate([
   ...(isMac ? [{ role: 'appMenu' }] : []),
   { role: 'fileMenu' },
   { role: 'editMenu' },
@@ -31,7 +31,7 @@ const menu = Menu.buildFromTemplate([
       }
     ]
   }
-]);
+]));
 
 function getURL(route) {
   if (isDevelopment) {
@@ -51,7 +51,6 @@ function createWindow(url, options) {
     ...options
   });
 
-  window.setMenu(menu);
   window.loadURL(url);
 
   window.webContents.on('new-window', (e, url) => {
