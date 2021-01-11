@@ -109,7 +109,6 @@ function createAboutWindow() {
     width: 700,
     height: 450,
     parent: BrowserWindow.getFocusedWindow(),
-    modal: true,
     webPreferences: {
       contextIsolation: false,
       enableRemoteModule: true,
