@@ -12,7 +12,6 @@ import {AppStateHOC, setFileHandle, openLoadingProject, closeLoadingProject} fro
 
 import AddonLoaderHOC from '../../addons/loader.jsx';
 import {WrappedFileHandle} from './filesystem-api-impl';
-import './update-checker';
 import './prompt-impl';
 
 const readFile = promisify(fs.readFile);

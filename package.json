@@ -30,6 +30,7 @@
     "postcss-loader": "^4.1.0",
     "postcss-simple-vars": "^6.0.2",
     "scratch-gui": "github:TurboWarp/scratch-gui#desktop",
+    "semver": "^7.3.4",
     "webpack": "~4.42.1"
   },
   "homepage": "https://desktop.turbowarp.org/",

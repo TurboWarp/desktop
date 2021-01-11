@@ -4,6 +4,7 @@ import {app, BrowserWindow, Menu, ipcMain, shell, dialog} from 'electron'
 import * as pathUtil from 'path'
 import {format as formatUrl} from 'url'
 import {version} from '../../package.json';
+import checkForUpdate from './update-checker';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
@@ -130,22 +131,6 @@ ipcMain.on('about', () => {
   aboutWindow.focus();
 });
 
-ipcMain.on('update-available', async (event, currentVersion, latestVersion) => {
-  const choice = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
-    type: 'info',
-    buttons: [
-      'Download Update',
-      'Later'
-    ],
-    cancelId: 1,
-    message: `An update is available: v${latestVersion}`,
-    detail: 'Updating is highly recommended as TurboWarp Desktop is in a very early state.'
-  });
-  if (choice.response === 0) {
-    shell.openExternal(`https://desktop.turbowarp.org/update_available.html?from=${encodeURIComponent(currentVersion)}&to=${encodeURIComponent(latestVersion)}`);
-  }
-});
-
 app.on('window-all-closed', () => {
   app.quit();
 });
@@ -185,5 +170,6 @@ app.on('activate', () => {
 });
 
 app.on('ready', () => {
+  checkForUpdate();
   createEditorWindow();
 });
