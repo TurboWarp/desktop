@@ -10,6 +10,10 @@ const FORCE_UPDATE = false;
 
 const IGNORE_UPDATE_KEY = 'ignore_update';
 
+function log(...args) {
+  console.log('update checker:', ...args);
+}
+
 function getLatestVersions() {
   return new Promise((resolve, reject) => {
     const request = net.request('https://desktop.turbowarp.org/version.json');
@@ -28,9 +32,12 @@ function getLatestVersions() {
       response.on('end', () => {
         try {
           const parsedData = JSON.parse(data);
+          const latest = parsedData.latest;
+          const oldestSafe = parsedData.oldest_safe;
+          log(`update checker: latest is ${latest}, oldest safe is ${oldestSafe}, current is ${version}`);
           resolve({
-            latest: parsedData.latest,
-            oldestSafe: parsedData.oldest_safe
+            latest,
+            oldestSafe
           });
         } catch (e) {
           reject(new Error('Could not parse'));
@@ -53,6 +60,7 @@ function getUpdateURL(current, latest) {
 async function updateAvailable(latestVersion) {
   const ignoredUpdate = await get(IGNORE_UPDATE_KEY);
   if (ignoredUpdate !== null && ignoredUpdate === latestVersion) {
+    log('not showing update message: ignored by user');
     return;
   }
 
