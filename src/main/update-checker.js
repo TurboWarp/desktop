@@ -34,7 +34,7 @@ function getLatestVersions() {
           const parsedData = JSON.parse(data);
           const latest = parsedData.latest;
           const oldestSafe = parsedData.oldest_safe;
-          log(`update checker: latest is ${latest}, oldest safe is ${oldestSafe}, current is ${version}`);
+          log(`latest is ${latest}, oldest safe is ${oldestSafe}, current is ${version}`);
           resolve({
             latest,
             oldestSafe
