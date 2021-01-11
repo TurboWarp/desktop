@@ -70,7 +70,7 @@ async function updateAvailable(latestVersion) {
   });
 
   if (choice.response === 0) {
-    shell.openExternal(getUpdateURL(currentVersion, latestVersion));
+    shell.openExternal(getUpdateURL(version, latestVersion));
   } else if (choice.checkboxChecked) {
     await set(IGNORE_UPDATE_KEY, latestVersion);
   }
