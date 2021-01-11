@@ -8,8 +8,7 @@ import {get, set} from './store';
 const FORCE_URGENT_UPDATE = false;
 const FORCE_UPDATE = false;
 
-const IGNORE_UPDATE_LENGTH = 1000 * 60 * 60 * 24; // 1 day
-const IGNORE_UPDATE_KEY = 'ignore_update_until';
+const IGNORE_UPDATE_KEY = 'ignore_update';
 
 function getLatestVersions() {
   return new Promise((resolve, reject) => {
@@ -52,8 +51,8 @@ function getUpdateURL(current, latest) {
 }
 
 async function updateAvailable(latestVersion) {
-  const ignoreUpdateUntil = get(IGNORE_UPDATE_KEY);
-  if (ignoreUpdateUntil !== null && Date.now() < ignoreUpdateUntil) {
+  const ignoredUpdate = get(IGNORE_UPDATE_KEY);
+  if (ignoredUpdate !== null && ignoredUpdate === latestVersion) {
     return;
   }
 
@@ -63,18 +62,17 @@ async function updateAvailable(latestVersion) {
       'Download Update',
       'Remind me later'
     ],
-    cancelId: 2,
+    cancelId: 1,
     message: `An update is available: v${latestVersion}`,
-    detail: 'This update may contain new features or bug fixes.'
+    detail: 'This update may contain new features or bug fixes.',
+    checkboxLabel: 'Don\'t remind me again for this update',
+    checkboxChecked: false
   });
 
   if (choice.response === 0) {
     shell.openExternal(getUpdateURL(currentVersion, latestVersion));
-  } else if (choice.response === 1) {
-    const until = Date.now() + IGNORE_UPDATE_LENGTH;
-    set(IGNORE_UPDATE_KEY, until);
-  } else {
-    // Dialog was closed w/o choosing a specific button
+  } else if (choice.checkboxChecked) {
+    set(IGNORE_UPDATE_KEY, latestVersion);
   }
 }
 
