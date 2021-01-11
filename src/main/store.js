@@ -1,25 +1,29 @@
 import {app} from 'electron';
 import fs from 'fs';
+import {promisify} from 'util';
 import pathUtil from 'path';
+
+const readFile = promisify(fs.readFile);
+const writeFile = promisify(fs.writeFile);
 
 /**
  * @fileoverview Simple persistent key/value JSON data store.
- * Initialized lazily. Files written immediately upon change, but may not be actually flushed to disk.
+ * Initialized lazily. Async. Files written immediately upon change, but may not be actually flushed to disk.
  */
 
 const STORE_PATH = pathUtil.join(app.getPath('userData'), 'tw_config.json');
 
 let store = null;
 
-function initStore() {
+async function initStore() {
   if (store === null) {
-    store = readStore();
+    store = await readStore();
   }
 }
 
-function readStore() {
+async function readStore() {
   try {
-    const file = fs.readFileSync(STORE_PATH, {
+    const file = await readFile(STORE_PATH, {
       encoding: 'utf8'
     });
     const parsedData = JSON.parse(file);
@@ -30,22 +34,22 @@ function readStore() {
   }
 }
 
-function writeStore() {
+async function writeStore() {
   try {
-    fs.writeFileSync(STORE_PATH, JSON.stringify(store));
+    await writeFile(STORE_PATH, JSON.stringify(store));
   } catch (e) {
     console.error('could not write store', e);
   }
 }
 
-export function set(key, value) {
-  initStore();
+export async function set(key, value) {
+  await initStore();
   store[key] = value;
-  writeStore();
+  await writeStore();
 }
 
-export function get(key) {
-  initStore();
+export async function get(key) {
+  await initStore();
   if (Object.prototype.hasOwnProperty.call(store, key)) {
     return store[key];
   }

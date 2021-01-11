@@ -51,7 +51,7 @@ function getUpdateURL(current, latest) {
 }
 
 async function updateAvailable(latestVersion) {
-  const ignoredUpdate = get(IGNORE_UPDATE_KEY);
+  const ignoredUpdate = await get(IGNORE_UPDATE_KEY);
   if (ignoredUpdate !== null && ignoredUpdate === latestVersion) {
     return;
   }
@@ -72,7 +72,7 @@ async function updateAvailable(latestVersion) {
   if (choice.response === 0) {
     shell.openExternal(getUpdateURL(currentVersion, latestVersion));
   } else if (choice.checkboxChecked) {
-    set(IGNORE_UPDATE_KEY, latestVersion);
+    await set(IGNORE_UPDATE_KEY, latestVersion);
   }
 }
 
