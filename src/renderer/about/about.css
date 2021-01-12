@@ -7,9 +7,3 @@ body {
 main {
   margin: 4px;
 }
-
-.license-text {
-  height: 200px;
-  overflow-y: scroll;
-  width: 100%;
-}

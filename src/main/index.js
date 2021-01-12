@@ -108,9 +108,10 @@ function createAboutWindow() {
     width: 700,
     height: 450,
     parent: BrowserWindow.getFocusedWindow(),
+    minimizable: false,
+    maximizable: false,
     webPreferences: {
       contextIsolation: false,
-      enableRemoteModule: true,
       nodeIntegration: true
     }
   });
