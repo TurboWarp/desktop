@@ -44,7 +44,7 @@ const AddonLoaderHOC = function (WrappedComponent) {
     onLoadAddons: () => {}
   };
   const mapStateToProps = state => ({
-    isPlayerOnly: state.scratchGui.mode.isPlayerOnly,
+    isPlayerOnly: state.scratchGui.mode.isPlayerOnly
   });
   const mapDispatchToProps = dispatch => ({});
   return connect(

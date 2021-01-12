@@ -3,6 +3,33 @@ import IntlMessageFormat from 'intl-messageformat';
 
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
+class Redux extends EventTarget {
+    constructor () {
+        super();
+        this.initialized = false;
+    }
+
+    initialize () {
+        if (!this.initialized) {
+            window.__APP_STATE_REDUCER__ = (s) => {
+                this.dispatchEvent(new CustomEvent('statechanged', {detail: {action: s}}));
+            };
+
+            this.initialized = true;
+        }
+    }
+
+    dispatch (m) {
+        return __APP_STATE_STORE__.dispatch(m);
+    }
+
+    get state () {
+        return __APP_STATE_STORE__.getState();
+    }
+}
+
+const tabReduxInstance = new Redux();
+
 class Tab extends EventTarget {
     constructor () {
         super();
@@ -15,10 +42,10 @@ class Tab extends EventTarget {
                 }
             }
         };
-        this.redux = {
-            // TODO: implement
-            state: null
-        }
+    }
+
+    get redux () {
+        return tabReduxInstance;
     }
 
     loadScript (src) {
