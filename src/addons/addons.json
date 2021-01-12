@@ -3,5 +3,6 @@
     "editor-devtools",
     "editor-searchable-dropdowns",
     "onion-skinning",
-    "fix-uploaded-svgs"
+    "fix-uploaded-svgs",
+    "color-picker"
 ]
