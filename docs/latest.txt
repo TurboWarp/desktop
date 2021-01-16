@@ -1,1 +1,2 @@
-0.0.2
+As long as this file exists and doesn't return just the content "0.0.1", people running that version will get an update notification.
+This can be removed when it's assumed that no one is running that version anymore.
