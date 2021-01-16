@@ -141,10 +141,14 @@ class API {
         this.addon = new Addon(id, manifest);
         this.msg = this.msg.bind(this);
         this.safeMsg = this.safeMsg.bind(this);
+        this._messageCache = {};
     }
 
     _msg (key, vars, handler) {
         const namespacedKey = `${this._id}/${key}`;
+        if (this._messageCache[namespacedKey]) {
+            return this._messageCache[namespacedKey].format(vars);
+        }
         let translation = translations[namespacedKey];
         if (!translation) {
             return namespacedKey;
@@ -152,8 +156,8 @@ class API {
         if (handler) {
             translation = handler(translation);
         }
-        // TODO: probably a good idea to cache these?
         const messageFormat = new IntlMessageFormat(translation, language);
+        this._messageCache[namespacedKey] = messageFormat;
         return messageFormat.format(vars);
     }
 
