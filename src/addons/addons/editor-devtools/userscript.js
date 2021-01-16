@@ -8,7 +8,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
   // 0-indexed 6 = July
   const releaseDate = new Date(2020, 6, 4);
-  const releaseDateLocalized = new Intl.DateTimeFormat(/* tw: stub until more API is implemented */ 'en').format(releaseDate);
+  const releaseDateLocalized = new Intl.DateTimeFormat(scratchAddons.l10n.locale).format(releaseDate);
 
   const helpHTML = `
 <div id="s3devHelpPop">
@@ -633,10 +633,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
    * @returns {boolean}
    */
   function isBlockAnOrphan(topBlock) {
-    if (topBlock.getOutputShape() && !topBlock.getSurroundParent()) {
-      return true;
-    }
-    return false;
+    return !!topBlock.outputConnection;
   }
 
   /**
@@ -1502,10 +1499,10 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     let wksp = getWorkspace();
     hidePopups(wksp);
 
-    setTimeout(async function () {
+    setTimeout(function () {
       let wksp = getWorkspace();
       let v = wksp.getVariableById(selVarID);
-      let varName = await window.prompt(msg("replace", { name: v.name }));
+      let varName = window.prompt(msg("replace", { name: v.name }));
       if (varName) {
         doReplaceVariable(selVarID, varName, v.type);
       }

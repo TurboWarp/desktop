@@ -1,5 +1,5 @@
-import translations from './l10n/en.json';
 import IntlMessageFormat from 'intl-messageformat';
+import getTranslations from './translations';
 
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
@@ -29,17 +29,17 @@ class Redux extends EventTarget {
 }
 
 const tabReduxInstance = new Redux();
+const language = tabReduxInstance.state.locales.locale.split('-')[0];
+const translations = getTranslations(language);
 
 class Tab extends EventTarget {
     constructor () {
         super();
         this._seenElements = new WeakSet();
         this.traps = {
-            onceValues: {
-                get vm () {
-                    // We expose VM on window
-                    return window.vm;
-                }
+            get vm () {
+                // We expose VM on window
+                return window.vm;
             }
         };
     }
@@ -85,7 +85,10 @@ class Tab extends EventTarget {
     }
 
     get editorMode () {
-        // stubbed
+        const mode = this.redux.state.scratchGui.mode;
+        if (mode.isEmbedded) return 'embed';
+        if (mode.isFullScreen) return 'fullscreen';
+        if (mode.isPlayerOnly) return 'projectpage';
         return 'editor';
     }
 }
@@ -112,18 +115,52 @@ class Self {
     }
 }
 
-const addonInstances = [];
 class Addon {
     constructor (addonId, manifest) {
         this.tab = new Tab();
         this.settings = new Settings(manifest);
         this.self = new Self(addonId);
+        Addon.instances.push(this);
+    }
+}
+Addon.instances = [];
+
+class API {
+    constructor (id, manifest) {
+        this._id = id;
+        this.global = global;
+        this.console = console;
+        this.addon = new Addon(id, manifest);
+        this.msg = this.msg.bind(this);
+        this.safeMsg = this.safeMsg.bind(this);
+    }
+
+    _msg (key, vars, handler) {
+        const namespacedKey = `${this._id}/${key}`;
+        let translation = translations[namespacedKey];
+        if (!translation) {
+            return namespacedKey;
+        }
+        if (handler) {
+            translation = handler(translation);
+        }
+        // TODO: probably a good idea to cache these?
+        const messageFormat = new IntlMessageFormat(translation, language);
+        return messageFormat.format(vars);
+    }
+
+    msg (key, vars) {
+        return this._msg(key, vars, null);
+    }
+
+    safeMsg (key, vars) {
+        return this._msg(key, vars, escapeHTML);
     }
 }
 
 const emitUrlChange = () => {
     setTimeout(() => {
-        for (const addon of addonInstances) {
+        for (const addon of Addon.instances) {
             // TODO: event detail
             addon.tab.dispatchEvent(new CustomEvent('urlChange'));
         }
@@ -140,38 +177,5 @@ history.pushState = function (...args) {
     originalPushState.apply(this, args);
     emitUrlChange();
 };
-
-class API {
-    constructor (id, manifest) {
-        this._id = id;
-        this.global = global;
-        this.console = console;
-        this.addon = new Addon(id, manifest);
-        this.msg = this.msg.bind(this);
-        this.safeMsg = this.safeMsg.bind(this);
-    }
-
-    _msg(key, vars, handler) {
-        const namespacedKey = `${this._id}/${key}`;
-        let translation = translations[namespacedKey];
-        if (!translation) {
-            return namespacedKey;
-        }
-        if (handler) {
-            translation = handler(translation);
-        }
-        // TODO: probably a good idea to cache these?
-        const messageFormat = new IntlMessageFormat(translation, 'en-US');
-        return messageFormat.format(vars);
-    }
-
-    msg (key, vars) {
-        return this._msg(key, vars, null);
-    }
-
-    safeMsg (key, vars) {
-        return this._msg(key, vars, escapeHTML);
-    }
-}
 
 export default API;

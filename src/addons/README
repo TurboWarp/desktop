@@ -4,9 +4,10 @@ These addons are licensed under the GNU General Public License v3.0. See LICENSE
 
 Some of the addons have been modified to work properly in the TurboWarp environment.
 
-Any bugs found in these addons should be sent upstream. We attempt to maintain a minimal diff.
+Any bugs or feature requests in these addons should be sent upstream. We attempt to maintain a minimal diff.
 
 Folder structure:
  + addons - the addons
+ + addons-l10n - translations
  + libraries - libraries loaded with `import`
  + libraries-raw - libraries loaded with `addon.tab.loadScript`
