@@ -100,8 +100,9 @@ class Tab extends EventTarget {
     }
 }
 
-class Settings {
+class Settings extends EventTarget {
     constructor (manifest) {
+        super();
         this._settings = manifest.settings;
     }
 
