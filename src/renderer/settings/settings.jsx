@@ -112,6 +112,9 @@ const AddonComponent = ({
         <AddonCredits manifest={manifest} />
       </span>
     </label>
+    <div>
+      {translations[`${id}/@description`] || manifest.description}
+    </div>
     {settings.enabled && manifest.settings && (
       <div className={styles.settingContainer}>
         {manifest.settings.map((setting) => (
@@ -134,6 +137,7 @@ AddonComponent.propTypes = {
   onChange: PropTypes.func,
   manifest: PropTypes.shape({
     name: PropTypes.string,
+    description: PropTypes.string,
     settings: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string
     }))
