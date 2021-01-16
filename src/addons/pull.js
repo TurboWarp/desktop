@@ -3,10 +3,6 @@ const childProcess = require('child_process');
 const rimraf = require('rimraf');
 const pathUtil = require('path');
 
-const remove = dir => {
-  rimraf.sync(dir);
-};
-
 const walk = dir => {
   const children = fs.readdirSync(dir);
   const files = [];
@@ -25,24 +21,13 @@ const walk = dir => {
   return files;
 };
 
-const copyDirectory = (from, to) => {
-  const files = walk(from);
-  for (const file of files) {
-    const oldPath = pathUtil.join(from, file);
-    const newPath = pathUtil.join(to, file);
-    fs.mkdirSync(to, {recursive: true});
-    let contents = fs.readFileSync(from, 'utf-8');
-    fs.writeFileSync(to, contents);
-  }
-};
+rimraf.sync('ScratchAddons');
+rimraf.sync('addons');
+rimraf.sync('addons-l10n');
+rimraf.sync('libraries');
+rimraf.sync('libraries-raw');
 
-remove('ScratchAddons');
-remove('addons');
-remove('addons-l10n');
-remove('libraries');
-remove('libraries-raw');
-
-childProcess.execSync('git clone --depth=1 https://github.com/GarboMuffin/ScratchAddons -b tw ScratchAddons');
+childProcess.execSync('git clone --depth=1 -b tw https://github.com/GarboMuffin/ScratchAddons ScratchAddons');
 
 fs.mkdirSync('addons', {recursive: true});
 fs.mkdirSync('addons-l10n', {recursive: true});
