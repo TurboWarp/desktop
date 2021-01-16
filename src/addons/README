@@ -1,10 +1,10 @@
-Addons, translations, and libraries are based on the "Scratch Addons" browser extension and the source code available at https://github.com/ScratchAddons/ScratchAddons.
+Addons, translations, and libraries are based on the "Scratch Addons" browser extension.
 
 These addons are licensed under the GNU General Public License v3.0. See LICENSE in the root of this repository for more information.
 
-Some of the addons have been modified to work properly in the TurboWarp environment.
+Due to differences in environment, some patches are applied to the original source files. These patches are maintained in https://github.com/GarboMuffin/ScratchAddons/tree/tw. We attempt to maintain a minimal diff.
 
-Any bugs or feature requests in these addons should be sent upstream. We attempt to maintain a minimal diff.
+Any bugs or feature requests in these addons should be sent upstream.
 
 Folder structure:
  + addons - the addons
