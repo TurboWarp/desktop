@@ -11,7 +11,7 @@ const isMac = process.platform === 'darwin';
 const isWindows = process.platform === 'win32';
 
 const editorWindows = new Set();
-const editorWindowTitle = `TurboWarp Desktop v${version}`;
+const editorWindowTitle = `TurboWarp Desktop ${version}`;
 let fileToOpen = null;
 
 let aboutWindow = null;
