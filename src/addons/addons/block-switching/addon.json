@@ -83,5 +83,5 @@
   ],
   "libraries": ["scratch-blocks"],
   "l10n": true,
-  "enabledByDefault": false
+  "enabledByDefault": true
 }

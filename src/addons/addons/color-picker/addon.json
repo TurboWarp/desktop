@@ -24,6 +24,6 @@
     }
   ],
   "libraries": ["tinycolor2"],
-  "enabledByDefault": false,
+  "enabledByDefault": true,
   "l10n": true
 }
