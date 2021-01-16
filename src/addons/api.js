@@ -1,4 +1,5 @@
 import IntlMessageFormat from 'intl-messageformat';
+import AddonSettingsAPI from './settings-api';
 import getTranslations from './translations';
 
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
@@ -101,18 +102,14 @@ class Tab extends EventTarget {
 }
 
 class Settings extends EventTarget {
-    constructor (manifest) {
+    constructor (addonId, manifest) {
         super();
-        this._settings = manifest.settings;
+        this._addonId = addonId;
+        this._manifest = manifest;
     }
 
     get (id) {
-        for (const setting of this._settings) {
-            if (setting.id === id) {
-                return setting.default;
-            }
-        }
-        throw new Error('No setting: ' + id);
+        return AddonSettingsAPI.getSettingValue(this._addonId, this._manifest, id);
     }
 }
 
@@ -126,7 +123,7 @@ class Self {
 class Addon {
     constructor (addonId, manifest) {
         this.tab = new Tab();
-        this.settings = new Settings(manifest);
+        this.settings = new Settings(addonId, manifest);
         this.self = new Self(addonId);
         Addon.instances.push(this);
     }

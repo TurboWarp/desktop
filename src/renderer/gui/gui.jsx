@@ -27,6 +27,10 @@ const onLoadAddons = () => {
   require('../../addons/index');
 };
 
+const onClickAddonSettings = () => {
+  ipcRenderer.send('addon-settings');
+};
+
 const onClickLogo = () => {
   ipcRenderer.send('about');
 };
@@ -168,6 +172,7 @@ ReactDOM.render(<WrappedGUI
   canModifyCloudData={false}
   onStorageInit={onStorageInit}
   onLoadAddons={onLoadAddons}
+  onClickAddonSettings={onClickAddonSettings}
   onClickLogo={onClickLogo}
   onUpdateProjectTitle={onUpdateProjectTitle}
 />, require('../app-target'));

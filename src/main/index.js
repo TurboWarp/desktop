@@ -15,6 +15,7 @@ const editorWindowTitle = `TurboWarp Desktop v${version}`;
 let fileToOpen = null;
 
 let aboutWindow = null;
+let settingsWindow = null;
 
 Menu.setApplicationMenu(Menu.buildFromTemplate([
   ...(isMac ? [{ role: 'appMenu' }] : []),
@@ -123,11 +124,39 @@ function createAboutWindow() {
   return window;
 }
 
+function createSettingsWindow() {
+  const window = createWindow(getURL('settings'), {
+    title: 'Addon Settings',
+    width: 700,
+    height: 450,
+    parent: BrowserWindow.getFocusedWindow(),
+    minimizable: false,
+    maximizable: false,
+    webPreferences: {
+      contextIsolation: false,
+      nodeIntegration: true
+    }
+  });
+
+  window.on('closed', () => {
+    settingsWindow = null;
+  });
+
+  return window;
+}
+
 ipcMain.on('about', () => {
   if (aboutWindow === null) {
     aboutWindow = createAboutWindow();
   }
   aboutWindow.focus();
+});
+
+ipcMain.on('addon-settings', () => {
+  if (settingsWindow === null) {
+    settingsWindow = createSettingsWindow();
+  }
+  settingsWindow.focus();
 });
 
 app.on('window-all-closed', () => {

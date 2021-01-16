@@ -8,6 +8,8 @@ if (route === 'editor') {
   import('./gui/gui.jsx');
 } else if (route === 'about') {
   import('./about/about.jsx');
+} else if (route === 'settings') {
+  import('./settings/settings.jsx');
 } else {
   alert(`Invalid route: ${route}`);
 }
