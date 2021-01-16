@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import AddonCredits from '../addon-credits.jsx';
 import {version} from '../../../package.json';
 import licenseText from '!!raw-loader!../../../LICENSE';
-import addons from '../../addons/addons.json';
+import addons from '../../addons/addons';
 import styles from './about.css';
 
 ReactDOM.render((

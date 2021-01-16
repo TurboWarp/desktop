@@ -1,4 +1,4 @@
-import addons from './addons.json';
+import addons from './addons';
 
 export default function getTranslations (lang) {
   const result = {};

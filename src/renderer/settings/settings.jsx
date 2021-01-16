@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 import AddonCredits from '../addon-credits.jsx';
-import addons from '../../addons/addons.json';
+import addons from '../../addons/addons';
 import getTranslations from '../../addons/translations';
 import AddonSettingsAPI from '../../addons/settings-api';
 import styles from './settings.css';

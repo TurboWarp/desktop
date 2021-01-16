@@ -1,5 +1,5 @@
 import API from './api';
-import addons from './addons.json';
+import addons from './addons';
 import AddonSettingsAPI from './settings-api';
 
 try {

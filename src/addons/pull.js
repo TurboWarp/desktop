@@ -38,7 +38,7 @@ const HEADER = `/**!
  * @license GPLv3.0 (see LICENSE or https://www.gnu.org/licenses/ for more information)
  */\n\n`;
 
-const addons = require('./addons.json');
+const addons = require('./addons');
 for (const addon of addons) {
   const oldDirectory = pathUtil.join('ScratchAddons', 'addons', addon);
   const newDirectory = pathUtil.join('addons', addon);
