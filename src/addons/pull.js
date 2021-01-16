@@ -48,7 +48,8 @@ for (const addon of addons) {
     fs.mkdirSync(newDirectory, {recursive: true});
     let contents = fs.readFileSync(oldPath, 'utf-8');
 
-    if (file.endsWith('.js') || file.endsWith('.css')) {
+    // Add a license notice, unless one already exists.
+    if ((file.endsWith('.js') || file.endsWith('.css')) && !contents.includes('@license')) {
       contents = HEADER + contents;
     }
 

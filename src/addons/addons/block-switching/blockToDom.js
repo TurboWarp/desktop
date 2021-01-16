@@ -1,7 +1,3 @@
-/**!
- * @license GPLv3.0 (see LICENSE or https://www.gnu.org/licenses/ for more information)
- */
-
 /**
  * This file is imported from https://github.com/LLK/scratch-blocks/
  * It has been cleaned up and unnecessary functions have been removed.
