@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 
 const AddonCredits = ({manifest}) => (
   manifest.credits ? manifest.credits.map((author, index) => {
+    const isFirst = index === 0;
     const isLast = index === manifest.credits.length - 1;
     return (
       <span key={index}>
+        {!isFirst && isLast ? ' and ' : null}
         <a
           href={author.link}
           target="_blank"

@@ -4,11 +4,11 @@ import AddonSettingsAPI from './settings-api';
 
 try {
     for (const addonId of addons) {
-        if (!AddonSettingsAPI.getEnabled(addonId)) {
+        const manifest = require(`./addons/${addonId}/addon.json`);
+        if (!AddonSettingsAPI.getEnabled(addonId, manifest)) {
             continue;
         }
 
-        const manifest = require(`./addons/${addonId}/addon.json`);
         const api = new API(addonId, manifest);
 
         if (manifest.userscripts) {

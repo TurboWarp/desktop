@@ -13,11 +13,19 @@ main {
 }
 
 .addon {
+  padding-bottom: 10px;
+}
+
+.addon-title {
+  font-weight: bold;
+}
+
+.addon-credits {
 
 }
 
 .setting-container {
-
+  margin-left: 20px;
 }
 
 .setting {
