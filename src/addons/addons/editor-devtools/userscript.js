@@ -1499,10 +1499,10 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     let wksp = getWorkspace();
     hidePopups(wksp);
 
-    setTimeout(function () {
+    setTimeout(async function () {
       let wksp = getWorkspace();
       let v = wksp.getVariableById(selVarID);
-      let varName = window.prompt(msg("replace", { name: v.name }));
+      let varName = await window.prompt(msg("replace", { name: v.name }));
       if (varName) {
         doReplaceVariable(selVarID, varName, v.type);
       }

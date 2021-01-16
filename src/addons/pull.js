@@ -44,7 +44,7 @@ remove('ScratchAddons');
 remove('addons');
 remove('addons-l10n');
 
-childProcess.execSync('git clone --depth=1 https://github.com/ScratchAddons/ScratchAddons ScratchAddons');
+childProcess.execSync('git clone --depth=1 https://github.com/GarboMuffin/ScratchAddons -b tw ScratchAddons');
 
 fs.mkdirSync('addons', {recursive: true});
 fs.mkdirSync('addons-l10n', {recursive: true});
