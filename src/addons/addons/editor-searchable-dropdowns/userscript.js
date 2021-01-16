@@ -1,3 +1,7 @@
+/**!
+ * @license GPLv3.0 (see LICENSE or https://www.gnu.org/licenses/ for more information)
+ */
+
 export default async function ({ addon, global, console }) {
   // The hierarchy is:
   // blocklyDropDownDiv (position, background color, etc.) -> blocklyDropDownContent (scrollbar) -> blocklyDropdownMenu (items)

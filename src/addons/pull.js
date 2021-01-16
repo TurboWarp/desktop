@@ -25,18 +25,14 @@ const walk = dir => {
   return files;
 };
 
-const copyFile = (from, to) => {
-  const contents = fs.readFileSync(from, 'utf-8');
-  fs.writeFileSync(to, contents);
-};
-
 const copyDirectory = (from, to) => {
   const files = walk(from);
   for (const file of files) {
     const oldPath = pathUtil.join(from, file);
     const newPath = pathUtil.join(to, file);
     fs.mkdirSync(to, {recursive: true});
-    copyFile(oldPath, newPath);
+    let contents = fs.readFileSync(from, 'utf-8');
+    fs.writeFileSync(to, contents);
   }
 };
 
@@ -49,9 +45,26 @@ childProcess.execSync('git clone --depth=1 https://github.com/GarboMuffin/Scratc
 fs.mkdirSync('addons', {recursive: true});
 fs.mkdirSync('addons-l10n', {recursive: true});
 
+const HEADER = `/**!
+ * @license GPLv3.0 (see LICENSE or https://www.gnu.org/licenses/ for more information)
+ */\n\n`;
+
 const addons = require('./addons.json');
 for (const addon of addons) {
-  copyDirectory(pathUtil.join('ScratchAddons', 'addons', addon), pathUtil.join('addons', addon));
+  const oldDirectory = pathUtil.join('ScratchAddons', 'addons', addon);
+  const newDirectory = pathUtil.join('addons', addon);
+  for (const file of walk(oldDirectory)) {
+    const oldPath = pathUtil.join(oldDirectory, file);
+    const newPath = pathUtil.join(newDirectory, file);
+    fs.mkdirSync(newDirectory, {recursive: true});
+    let contents = fs.readFileSync(oldPath, 'utf-8');
+
+    if (file.endsWith('.js') || file.endsWith('.css')) {
+      contents = HEADER + contents;
+    }
+
+    fs.writeFileSync(newPath, contents);
+  }
 }
 
 const languages = fs.readdirSync(pathUtil.join('ScratchAddons', 'addons-l10n'));
@@ -66,9 +79,12 @@ for (const language of languages) {
     const oldFile = pathUtil.join(oldDirectory, `${addon}.json`);
     const newFile = pathUtil.join(newDirectory, `${addon}.json`);
     try {
-      copyFile(oldFile, newFile);
+      const contents = fs.readFileSync(oldFile, 'utf-8');
+      // Parse and stringify to minimize
+      const parsed = JSON.parse(contents);
+      fs.writeFileSync(newFile, JSON.stringify(parsed));
     } catch (e) {
-      // ignore
+      // Ignore
     }
   }
 }

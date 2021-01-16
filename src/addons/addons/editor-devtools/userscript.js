@@ -1,3 +1,7 @@
+/**!
+ * @license GPLv3.0 (see LICENSE or https://www.gnu.org/licenses/ for more information)
+ */
+
 import ShowBroadcast from "./show-broadcast.js";
 
 export default async function ({ addon, global, console, msg, safeMsg: m }) {

@@ -1,3 +1,7 @@
+/**!
+ * @license GPLv3.0 (see LICENSE or https://www.gnu.org/licenses/ for more information)
+ */
+
 import blockToDom from "./blockToDom.js";
 
 export default async function ({ addon, global, console, msg }) {

@@ -1,3 +1,7 @@
+/**!
+ * @license GPLv3.0 (see LICENSE or https://www.gnu.org/licenses/ for more information)
+ */
+
 // A file to split Editor Devtools by features.
 // Unlike userscript.js, this file mainly interacts with VM.
 export default class ShowBroadcast {
