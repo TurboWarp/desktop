@@ -32,6 +32,13 @@ const tabReduxInstance = new Redux();
 const language = tabReduxInstance.state.locales.locale.split('-')[0];
 const translations = getTranslations(language);
 
+// Temporary until upstream removes window.scratchAddons
+window.scratchAddons = {
+    l10n: {
+        locale: language
+    }
+};
+
 class Tab extends EventTarget {
     constructor () {
         super();
