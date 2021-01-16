@@ -39,11 +39,15 @@ const copyDirectory = (from, to) => {
 remove('ScratchAddons');
 remove('addons');
 remove('addons-l10n');
+remove('libraries');
+remove('libraries-raw');
 
 childProcess.execSync('git clone --depth=1 https://github.com/GarboMuffin/ScratchAddons -b tw ScratchAddons');
 
 fs.mkdirSync('addons', {recursive: true});
 fs.mkdirSync('addons-l10n', {recursive: true});
+fs.mkdirSync('libraries', {recursive: true});
+fs.mkdirSync('libraries-raw', {recursive: true});
 
 const HEADER = `/**!
  * @license GPLv3.0 (see LICENSE or https://www.gnu.org/licenses/ for more information)
@@ -61,6 +65,37 @@ for (const addon of addons) {
 
     if (file.endsWith('.js') || file.endsWith('.css')) {
       contents = HEADER + contents;
+    }
+
+    // They said not to parse HTML with regex, but I was never told anything about parsing JS with regex.
+    // This is horrible.
+    if (file.endsWith('.js')) {
+      {
+        // Parse things like:
+        // import { normalizeHex, getHexRegex } from "../../libraries/normalize-color.js";
+        // import RateLimiter from "../../libraries/rate-limiter.js";
+        const matches = [...contents.matchAll(/import +(?:{.*}|.*) +from +["']\.\.\/\.\.\/libraries\/([\w\d_-]+\.js)["'];/g)];
+        for (const match of matches) {
+          const libraryFile = match[1];
+          const oldLibraryPath = pathUtil.join('ScratchAddons', 'libraries', libraryFile);
+          const newLibraryPath = pathUtil.join('libraries', libraryFile);
+          const libraryContents = fs.readFileSync(oldLibraryPath, 'utf-8');
+          fs.writeFileSync(newLibraryPath, libraryContents);
+        }
+      }
+
+      {
+        // Parse things like:
+        // await addon.tab.loadScript(addon.self.lib + "/tinycolor-min.js");
+        const matches = [...contents.matchAll(/addon\.self\.lib *\+ *["']\/([\w\d_-]+\.js)["']/g)];
+        for (const match of matches) {
+          const libraryFile = match[1];
+          const oldLibraryPath = pathUtil.join('ScratchAddons', 'libraries', libraryFile);
+          const newLibraryPath = pathUtil.join('libraries-raw', libraryFile);
+          const libraryContents = fs.readFileSync(oldLibraryPath, 'utf-8');
+          fs.writeFileSync(newLibraryPath, libraryContents);
+        }
+      }
     }
 
     fs.writeFileSync(newPath, contents);

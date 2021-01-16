@@ -11,3 +11,5 @@ Folder structure:
  + addons-l10n - translations
  + libraries - libraries loaded with `import`
  + libraries-raw - libraries loaded with `addon.tab.loadScript`
+
+These folders are all managed by pull.js.
