@@ -7,12 +7,6 @@ import licenseText from '!!raw-loader!../../../LICENSE';
 import addons from '../../addons/addons';
 import styles from './about.css';
 
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    window.close();
-  }
-});
-
 ReactDOM.render((
   <main>
     <h1>TurboWarp Desktop v{version}</h1>

@@ -171,6 +171,22 @@ function createEditorWindow() {
   return window;
 }
 
+function closeWhenPressEscape(window) {
+  window.webContents.on('before-input-event', (e, input) => {
+    if (
+      input.type === 'keyDown' &&
+      input.key === 'Escape' &&
+      !input.control &&
+      !input.alt &&
+      !input.meta &&
+      !input.isAutoRepeat &&
+      !input.isComposing
+    ) {
+      window.close();
+    }
+  });
+}
+
 function createAboutWindow() {
   const window = createWindow(getURL('about'), {
     title: 'About',
@@ -189,6 +205,8 @@ function createAboutWindow() {
     aboutWindow = null;
   });
 
+  closeWhenPressEscape(window);
+
   return window;
 }
 
@@ -206,6 +224,8 @@ function createSettingsWindow() {
   window.on('closed', () => {
     settingsWindow = null;
   });
+
+  closeWhenPressEscape(window);
 
   return window;
 }
