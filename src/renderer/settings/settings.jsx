@@ -292,7 +292,10 @@ class AddonSettingsComponent extends React.Component {
   handleResetAll () {
     if (confirm('Are you sure you want to reset all addon settings?')) {
       AddonSettingsAPI.resetAll();
-      this.setState(this.getInitialState());
+      this.setState({
+        ...this.getInitialState(),
+        dirty: true
+      });
     }
   }
 
