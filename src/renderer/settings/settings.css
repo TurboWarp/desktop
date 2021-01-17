@@ -57,7 +57,7 @@ main {
 .dirty-outer {
   display: flex;
   position: fixed;
-  top: 4px;
+  top: 8px;
   left: 0;
   width: 100%;
   justify-content: center;
