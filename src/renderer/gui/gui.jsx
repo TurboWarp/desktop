@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {compose} from 'redux';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {ipcRenderer, remote} from 'electron';
+import {ipcRenderer} from 'electron';
 import fs from 'fs';
 import pathUtil from 'path';
 import {promisify} from 'util';
@@ -64,13 +64,11 @@ const DesktopHOC = function (WrappedComponent) {
   class DesktopComponent extends React.Component {
     constructor (props) {
       super(props);
-      this.handleBeforeUnload = this.handleBeforeUnload.bind(this);
       this.state = {
         title: null
       };
     }
     componentDidMount () {
-      window.addEventListener('beforeunload', this.handleBeforeUnload);
       const urlSearchParams = new URLSearchParams(location.search);
       const file = urlSearchParams.get("file");
       if (file !== null) {
@@ -96,28 +94,6 @@ const DesktopHOC = function (WrappedComponent) {
           .finally(() => {
             this.props.onLoadingFinished();
           });
-      }
-    }
-    componentWillUnmount () {
-      window.removeEventListener('beforeunload', this.handleBeforeUnload);
-    }
-    handleBeforeUnload (e) {
-      if (this.props.projectChanged) {
-        const choice = remote.dialog.showMessageBoxSync({
-          type: 'info',
-          buttons: [
-            'Stay',
-            'Leave'
-          ],
-          cancelId: 0,
-          defaultId: 0,
-          message: 'Are you sure you want to quit?',
-          detail: 'Any unsaved changes will be lost.'
-        });
-        if (choice === 0) {
-          e.preventDefault();
-          e.returnValue = true;
-        }
       }
     }
     render() {

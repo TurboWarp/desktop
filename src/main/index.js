@@ -130,6 +130,23 @@ function createEditorWindow() {
     editorWindows.delete(window);
   });
 
+  window.webContents.on('will-prevent-unload', (e) => {
+    const choice = dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
+      type: 'info',
+      buttons: [
+        'Stay',
+        'Leave'
+      ],
+      cancelId: 0,
+      defaultId: 0,
+      message: 'Are you sure you want to quit?',
+      detail: 'Any unsaved changes will be lost.'
+    });
+    if (choice === 1) {
+      e.preventDefault();
+    }
+  });
+
   editorWindows.add(window);
 
   return window;
