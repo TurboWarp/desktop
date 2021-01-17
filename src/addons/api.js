@@ -1,10 +1,10 @@
-import {ipcRenderer} from 'electron';
 import IntlMessageFormat from 'intl-messageformat';
 import AddonSettingsAPI from './settings-api';
 import getAddonTranslations from './get-addon-translations';
 import dataURLToBlob from './api-libraries/data-url-to-blob';
 
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
+const kebabCaseToCamelCase = (str) => str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
 
 class Redux extends EventTarget {
     constructor () {
@@ -144,26 +144,28 @@ class Addon {
         this.tab = new Tab();
         this.settings = new Settings(addonId, manifest);
         this.self = new Self(addonId);
-        Addon.instances.push(this);
     }
 }
-Addon.instances = [];
 
-class API {
+class AddonRunner {
     constructor (id, manifest) {
-        this._id = id;
-        this.global = global;
-        this.console = console;
-        this.addon = new Addon(id, manifest);
-        this.msg = this.msg.bind(this);
-        this.safeMsg = this.safeMsg.bind(this);
-        this._messageCache = {};
+        this.id = id;
+        this.manifest = manifest;
+        this.messageCache = {};
+
+        this.publicAPI = {
+            global,
+            console,
+            addon: new Addon(id, manifest),
+            msg: this.msg.bind(this),
+            safeMsg: this.safeMsg.bind(this)
+        };
     }
 
     _msg (key, vars, handler) {
-        const namespacedKey = `${this._id}/${key}`;
-        if (this._messageCache[namespacedKey]) {
-            return this._messageCache[namespacedKey].format(vars);
+        const namespacedKey = `${this.id}/${key}`;
+        if (this.messageCache[namespacedKey]) {
+            return this.messageCache[namespacedKey].format(vars);
         }
         let translation = translations[namespacedKey];
         if (!translation) {
@@ -173,7 +175,7 @@ class API {
             translation = handler(translation);
         }
         const messageFormat = new IntlMessageFormat(translation, language);
-        this._messageCache[namespacedKey] = messageFormat;
+        this.messageCache[namespacedKey] = messageFormat;
         return messageFormat.format(vars);
     }
 
@@ -184,11 +186,50 @@ class API {
     safeMsg (key, vars) {
         return this._msg(key, vars, escapeHTML);
     }
+
+    settingsChanged () {
+        this.publicAPI.addon.settings.dispatchEvent(new CustomEvent('change'));
+        this.updateCSSVariables();
+    }
+
+    updateCSSVariables () {
+        if (this.manifest.settings) {
+            const kebabCaseId = kebabCaseToCamelCase(this.id);
+            for (const setting of this.manifest.settings) {
+                const settingId = setting.id;
+                const variable = `--${kebabCaseId}-${kebabCaseToCamelCase(settingId)}`;
+                const value = this.publicAPI.addon.settings.get(settingId);
+                document.documentElement.style.setProperty(variable, value);
+            }
+        }
+    }
+
+    run () {
+        this.updateCSSVariables();
+
+        if (this.manifest.userstyles) {
+            for (const userstyle of this.manifest.userstyles) {
+                const source = require(`./addons/${this.id}/${userstyle.url}`);
+                const style = document.createElement('style');
+                style.className = 'scratch-addons-theme';
+                style.dataset.addonId = this.id;
+                style.innerText = source;
+                // Insert styles at the start of the body so that they have higher precedence than those in <head>
+                document.body.insertBefore(style, document.body.firstChild);
+            }
+        }
+
+        if (this.manifest.userscripts) {
+            for (const userscript of this.manifest.userscripts) {
+                require(`./addons/${this.id}/${userscript.url}`).default(this.publicAPI);
+            }
+        }
+    }
 }
 
 const emitUrlChange = () => {
     setTimeout(() => {
-        for (const addon of Addon.instances) {
+        for (const addon of AddonRunner.instances) {
             // TODO: event detail
             addon.tab.dispatchEvent(new CustomEvent('urlChange'));
         }
@@ -206,11 +247,4 @@ history.pushState = function (...args) {
     emitUrlChange();
 };
 
-ipcRenderer.on('addon-settings-changed', () => {
-    AddonSettingsAPI.reread();
-    for (const addon of Addon.instances) {
-        addon.settings.dispatchEvent(new CustomEvent('change'));
-    }
-});
-
-export default API;
+export default AddonRunner;
