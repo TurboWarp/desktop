@@ -10,5 +10,6 @@ module.exports = [
     "editor-stage-left",
     // "hide-flyout", (disabled until upstream fixes bugs)
     "remove-sprite-confirm",
-    "mediarecorder"
+    "mediarecorder",
+    "editor-theme3",
 ];
