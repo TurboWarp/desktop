@@ -292,7 +292,8 @@ div.s3devDDOut.vis ul.s3devDD {
   background-color: #ff4c4c;
   color: rgb(207, 139, 23);
 }
-.TurboWarp:hover, .TurboWarp.sel {
+.TurboWarp:hover,
+.TurboWarp.sel {
   background-color: #e64444;
 }
 
