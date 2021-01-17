@@ -149,6 +149,7 @@ const AddonComponent = ({
   id,
   settings,
   onChange,
+  onReset,
   manifest
 }) => (
   <div className={styles.addon}>
@@ -161,6 +162,9 @@ const AddonComponent = ({
       {nbsp}
       {translations[`${id}/@name`] || manifest.name}
     </label>
+    <div className={styles.reset}>
+      {settings.modified && <button onClick={onReset}>Reset</button>}
+    </div>
     <div className={styles.description}>
       {translations[`${id}/@description`] || manifest.description}
     </div>
@@ -204,6 +208,7 @@ AddonComponent.propTypes = {
   id: PropTypes.string,
   settings: PropTypes.object,
   onChange: PropTypes.func,
+  onReset: PropTypes.func,
   manifest: PropTypes.shape({
     name: PropTypes.string,
     description: PropTypes.string,
@@ -232,7 +237,7 @@ class AddonSettingsComponent extends React.Component {
   constructor (props) {
     super(props);
     this.state = this.getInitialState();
-    this.handleReset = this.handleReset.bind(this);
+    this.handleResetAll = this.handleResetAll.bind(this);
     this.handleReloadNow = this.handleReloadNow.bind(this);
   }
 
@@ -242,7 +247,8 @@ class AddonSettingsComponent extends React.Component {
     };
     for (const {id, manifest} of this.props.addons) {
       const addonState = {
-        enabled: AddonSettingsAPI.getEnabled(id, manifest)
+        enabled: AddonSettingsAPI.getEnabled(id, manifest),
+        modified: AddonSettingsAPI.hasSettingsForAddon(id)
       };
       if (manifest.settings) {
         for (const setting of manifest.settings) {
@@ -262,21 +268,30 @@ class AddonSettingsComponent extends React.Component {
         AddonSettingsAPI.setSettingValue(addonId, name, value);
         ipcRenderer.send('addon-settings-changed');
       }
-      this.setState({
-        dirty: true
-      });
-      this.setState((state, props) => ({
+      this.setState((state) => ({
+        dirty: true,
         [addonId]: {
           ...state[addonId],
+          modified: true,
           [name]: value
         }
       }));
     };
   }
 
-  handleReset () {
+  handleSettingReset (addonId) {
+    return () => {
+      AddonSettingsAPI.resetAddon(addonId);
+      this.setState({
+        dirty: true,
+        [addonId]: this.getInitialState()[addonId]
+      });
+    };
+  }
+
+  handleResetAll () {
     if (confirm('Are you sure you want to reset all addon settings?')) {
-      AddonSettingsAPI.reset();
+      AddonSettingsAPI.resetAll();
       this.setState(this.getInitialState());
     }
   }
@@ -307,11 +322,12 @@ class AddonSettingsComponent extends React.Component {
                 id={id}
                 settings={state}
                 onChange={this.handleSettingChange(id)}
+                onReset={this.handleSettingReset(id)}
                 manifest={manifest}
               />
             );
           })}
-          <button onClick={this.handleReset}>Reset</button>
+          <button onClick={this.handleResetAll}>Reset All</button>
         </div>
       </main>
     );

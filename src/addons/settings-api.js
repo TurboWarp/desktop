@@ -66,10 +66,20 @@ const setEnabled = (addonId, enabled) => {
     setSettingValue(addonId, 'enabled', enabled);
 };
 
-const reset = () => {
+const resetAll = () => {
     for (const key of Object.keys(storage)) {
         delete storage[key];
     }
+    saveToLocalStorage();
+};
+
+const hasSettingsForAddon = (addonId) => {
+    const storage = getAddonStorage(addonId);
+    return !!storage;
+};
+
+const resetAddon = (addonId) => {
+    delete storage[addonId];
     saveToLocalStorage();
 };
 
@@ -82,6 +92,8 @@ export default {
     getSettingValue,
     setSettingValue,
     setEnabled,
-    reset,
+    resetAll,
+    hasSettingsForAddon,
+    resetAddon,
     reread
 };

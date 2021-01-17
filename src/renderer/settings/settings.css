@@ -50,6 +50,10 @@ main {
 
 }
 
+.reset {
+  float: right;
+}
+
 .dirty-outer {
   display: flex;
   position: fixed;
