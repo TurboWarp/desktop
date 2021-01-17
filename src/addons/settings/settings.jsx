@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 import addons from '../addons';
@@ -10,6 +9,15 @@ import styles from './settings.css';
 const urlParameters = new URLSearchParams(location.search);
 const locale = urlParameters.get('locale') || 'en';
 const addonTranslations = getTranslations(locale);
+
+const settingsTranslations = require('../settings-l10n/en.json');
+if (locale !== 'en') {
+  try {
+    Object.assign(settingsTranslations, require(`../settings-l10n/${locale}.json`));
+  } catch (e) {
+    // ignore
+  }
+}
 
 const nbsp = '\u00a0';
 
@@ -131,7 +139,7 @@ const NoticeComponent = ({
       className={styles.notice}
       type={notice.type}
     >
-      {"Note: "}
+      {settingsTranslations["tw.addons.settings.notice.info"]}
       {text}
     </div>
   );
@@ -163,7 +171,14 @@ const AddonComponent = ({
       {addonTranslations[`${id}/@name`] || manifest.name}
     </label>
     <div className={styles.reset}>
-      {settings.modified && <button onClick={onReset}>Reset</button>}
+      {settings.modified && (
+        <button
+          className={styles.resetButton}
+          onClick={onReset}
+        >
+          {settingsTranslations['tw.addons.settings.reset']}
+        </button>
+      )}
     </div>
     <div className={styles.description}>
       {addonTranslations[`${id}/@description`] || manifest.description}
@@ -183,7 +198,7 @@ const AddonComponent = ({
         )}
         {manifest.credits && (
           <div className={styles.credits}>
-            {"Credits: "}
+            {settingsTranslations["tw.addons.settings.credits"]}
             <AddonCredits credits={manifest.credits} />
           </div>
         )}
@@ -224,12 +239,14 @@ AddonComponent.propTypes = {
 const DirtyComponent = (props) => (
   <div className={styles.dirtyOuter}>
     <div className={styles.dirtyInner}>
-      {"Some settings may need a reload to apply."}
+      {settingsTranslations["tw.addons.settings.dirty"]}
       {props.onReloadNow && (
-        <>
-          {" "}
-          <button onClick={props.onReloadNow}>Reload Now</button>
-        </>
+        <button
+          className={styles.dirtyButton}
+          onClick={props.onReloadNow}
+        >
+          {settingsTranslations["tw.addons.settings.dirtyButton"]}
+        </button>
       )}
     </div>
   </div>
@@ -311,7 +328,7 @@ class AddonSettingsComponent extends React.Component {
   }
 
   handleResetAll () {
-    if (confirm('Are you sure you want to reset all addon settings to their default values?')) {
+    if (confirm(settingsTranslations['tw.addons.settings.confirmResetAll'])) {
       AddonSettingsAPI.resetAll();
       this.setState({
         ...this.getInitialState(),
@@ -333,11 +350,9 @@ class AddonSettingsComponent extends React.Component {
     return (
       <main>
         {this.state.dirty && (
-          ReactDOM.createPortal((
-            <DirtyComponent
-              onReloadNow={this.props.onReloadNow && this.handleReloadNow}
-            />
-         ), document.body)
+          <DirtyComponent
+            onReloadNow={this.props.onReloadNow && this.handleReloadNow}
+          />
         )}
         <div className={styles.addonContainer}>
           {this.props.addons.map(({id, manifest}) => {
@@ -353,7 +368,12 @@ class AddonSettingsComponent extends React.Component {
               />
             );
           })}
-          <button onClick={this.handleResetAll}>Reset All</button>
+          <button
+            className={styles.resetAllButton}
+            onClick={this.handleResetAll}
+          >
+            {settingsTranslations["tw.addons.settings.resetAll"]}
+          </button>
         </div>
       </main>
     );

@@ -42,16 +42,24 @@ main {
 
 }
 
-.notice {
+.notice-container {
 
 }
 
-.notice-container {
+.notice {
 
 }
 
 .reset {
   float: right;
+}
+
+.reset-button {
+
+}
+
+.reset-all-button {
+
 }
 
 .dirty-outer {
@@ -70,6 +78,10 @@ main {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border: 1px solid #cfcfcf;
   border-radius: 4px;
+}
+
+.dirty-button {
+  margin-left: 4px;
 }
 
 @keyframes dirty-appear {
