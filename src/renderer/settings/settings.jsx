@@ -108,25 +108,29 @@ const AddonComponent = ({
         checked={settings.enabled}
       />
       {translations[`${id}/@name`] || manifest.name}
-      <span className={styles.addonCredits}>
-        {" by "}
-        <AddonCredits manifest={manifest} />
-      </span>
     </label>
-    <div>
+    <div className={styles.description}>
       {translations[`${id}/@description`] || manifest.description}
     </div>
-    {settings.enabled && manifest.settings && (
-      <div className={styles.settingContainer}>
-        {manifest.settings.map((setting) => (
-          <SettingComponent
-            key={setting.id}
-            addonId={id}
-            setting={setting}
-            onChange={onChange}
-            value={settings[setting.id]}
-          />
-        ))}
+    {settings.enabled && (
+      <div>
+        <div className={styles.credits}>
+          {"Credits: "}
+          <AddonCredits manifest={manifest} />
+        </div>
+        {manifest.settings && (
+          <div className={styles.settingContainer}>
+            {manifest.settings.map((setting) => (
+              <SettingComponent
+                key={setting.id}
+                addonId={id}
+                setting={setting}
+                onChange={onChange}
+                value={settings[setting.id]}
+              />
+            ))}
+          </div>
+        )}
       </div>
     )}
   </div>
