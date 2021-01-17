@@ -85,7 +85,9 @@ const DesktopHOC = function (WrappedComponent) {
               });
               onUpdateProjectTitle(title);
             }
-            this.props.onSetFileHandle(new WrappedFileHandle(file));
+            if (file.endsWith('.sb3')) {
+              this.props.onSetFileHandle(new WrappedFileHandle(file));
+            }
           })
           .catch((err) => {
             console.error(err);
