@@ -74,7 +74,6 @@ function createWindow(url, options) {
   if (!isMac) {
     // On Mac, this is handled by the menu bar.
     window.webContents.on('before-input-event', (e, input) => {
-      console.log(input);
       if (
         input.type === 'keyDown' &&
         input.control &&
