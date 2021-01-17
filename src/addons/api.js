@@ -2,7 +2,7 @@ import {ipcRenderer} from 'electron';
 import IntlMessageFormat from 'intl-messageformat';
 import AddonSettingsAPI from './settings-api';
 import getTranslations from './translations';
-import dataURLToBlob from './libraries/data-url-to-blob';
+import dataURLToBlob from './api-libraries/data-url-to-blob';
 
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 

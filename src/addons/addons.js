@@ -9,5 +9,6 @@ module.exports = [
     "bitmap-copy",
     "editor-stage-left",
     // "hide-flyout", (disabled until upstream fixes bugs)
-    "remove-sprite-confirm"
+    "remove-sprite-confirm",
+    "mediarecorder"
 ];
