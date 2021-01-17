@@ -12,8 +12,13 @@ class Redux extends EventTarget {
 
     initialize () {
         if (!this.initialized) {
-            window.__APP_STATE_REDUCER__ = (s) => {
-                this.dispatchEvent(new CustomEvent('statechanged', {detail: {action: s}}));
+            window.__APP_STATE_REDUCER__ = (action, next) => {
+                this.dispatchEvent(new CustomEvent('statechanged', {
+                    detail: {
+                        action,
+                        next
+                    }
+                }));
             };
 
             this.initialized = true;
