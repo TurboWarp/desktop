@@ -348,7 +348,7 @@ class AddonSettingsComponent extends React.Component {
 
   render () {
     return (
-      <main>
+      <div>
         {this.state.dirty && (
           <DirtyComponent
             onReloadNow={this.props.onReloadNow && this.handleReloadNow}
@@ -375,7 +375,7 @@ class AddonSettingsComponent extends React.Component {
             {settingsTranslations["tw.addons.settings.resetAll"]}
           </button>
         </div>
-      </main>
+      </div>
     );
   }
 }
