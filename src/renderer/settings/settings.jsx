@@ -56,7 +56,7 @@ const SettingComponent = ({
           <input
             type="checkbox"
             checked={value}
-            onChange={(e) => onChange(settingId, e.target.checked)}
+            onChange={(e) => onChange(settingId, e.target.checked, setting)}
           />
           {nbsp}
           {settingName}
@@ -70,7 +70,7 @@ const SettingComponent = ({
             max={setting.max}
             step="1"
             value={value}
-            onChange={(e) => onChange(settingId, +e.target.value)}
+            onChange={(e) => onChange(settingId, +e.target.value, setting)}
           />
           {nbsp}
           {settingName}
@@ -81,7 +81,7 @@ const SettingComponent = ({
           <input
             type="color"
             value={value}
-            onChange={(e) => onChange(settingId, e.target.value)}
+            onChange={(e) => onChange(settingId, e.target.value, setting)}
           />
           {nbsp}
           {settingName}
@@ -89,7 +89,7 @@ const SettingComponent = ({
       )}
       {setting.type === 'select' && (
         <label>
-          <select onChange={(e) => onChange(settingId, e.target.value)}>
+          <select onChange={(e) => onChange(settingId, e.target.value, setting)}>
             {setting.potentialValues.map((value) => {
               const valueId = value.id;
               const valueName = translations[`${addonId}/@settings-select-${settingId}-${valueId}`] || value.name;
@@ -261,15 +261,26 @@ class AddonSettingsComponent extends React.Component {
   }
 
   handleSettingChange (addonId) {
-    return (name, value) => {
+    return (name, value, manifest) => {
       if (name === 'enabled') {
         AddonSettingsAPI.setEnabled(addonId, value);
+        // Changing enabled always requires a reload.
+        this.setState({
+          dirty: true
+        });
       } else {
         AddonSettingsAPI.setSettingValue(addonId, name, value);
-        ipcRenderer.send('addon-settings-changed');
+        // If the manifest explicitly sets reloadRequired to false, a reload is not required.
+        // Otherwise, a reload is required.
+        if (manifest && manifest.reloadRequired === false) {
+          ipcRenderer.send('addon-settings-changed');
+        } else {
+          this.setState({
+            dirty: true
+          });
+        }
       }
       this.setState((state) => ({
-        dirty: true,
         [addonId]: {
           ...state[addonId],
           modified: true,

@@ -18,19 +18,22 @@
       "name": "Separate List Category",
       "id": "separateListCategory",
       "type": "boolean",
-      "default": true
+      "default": true,
+      "reloadRequired": false
     },
     {
       "name": "Separate Sprite-only Variables",
       "id": "separateLocalVariables",
       "type": "boolean",
-      "default": false
+      "default": false,
+      "reloadRequired": false
     },
     {
       "name": "Move Reporters Under Operations",
       "id": "moveReportersDown",
       "type": "boolean",
-      "default": false
+      "default": false,
+      "reloadRequired": false
     }
   ],
   "tags": ["editor", "recommended"],
