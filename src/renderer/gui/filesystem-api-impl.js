@@ -122,5 +122,11 @@ window.showOpenFilePicker = async (options) => {
   }
 
   const [filePath] = result.filePaths;
+
+  // Store the file path in the URL so that it will be loaded if the window reloads.
+  const urlParameters = new URLSearchParams(location.search);
+  urlParameters.set('file', filePath);
+  history.replaceState('', '', '?' + urlParameters.toString());
+
   return [new WrappedFileHandle(filePath)];
 };
