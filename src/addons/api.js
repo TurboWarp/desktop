@@ -1,3 +1,4 @@
+import {ipcRenderer} from 'electron';
 import IntlMessageFormat from 'intl-messageformat';
 import AddonSettingsAPI from './settings-api';
 import getTranslations from './translations';
@@ -204,5 +205,12 @@ history.pushState = function (...args) {
     originalPushState.apply(this, args);
     emitUrlChange();
 };
+
+ipcRenderer.on('addon-settings-changed', () => {
+    AddonSettingsAPI.reread();
+    for (const addon of Addon.instances) {
+        addon.settings.dispatchEvent(new CustomEvent('change'));
+    }
+});
 
 export default API;

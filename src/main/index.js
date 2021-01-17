@@ -159,6 +159,12 @@ ipcMain.on('addon-settings', () => {
   settingsWindow.focus();
 });
 
+ipcMain.on('addon-settings-changed', () => {
+  for (const window of editorWindows) {
+    window.webContents.send('addon-settings-changed');
+  }
+});
+
 app.on('window-all-closed', () => {
   app.quit();
 });

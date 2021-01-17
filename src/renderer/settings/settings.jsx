@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import {ipcRenderer} from 'electron';
 
 import AddonCredits from '../addon-credits.jsx';
 import addons from '../../addons/addons';
@@ -152,7 +153,9 @@ class AddonSettingsComponent extends React.Component {
   }
 
   getInitialState () {
-    const initialState = {};
+    const initialState = {
+      dirty: false
+    };
     for (const {id, manifest} of this.props.addons) {
       const addonState = {
         enabled: AddonSettingsAPI.getEnabled(id, manifest)
@@ -174,7 +177,9 @@ class AddonSettingsComponent extends React.Component {
       } else {
         AddonSettingsAPI.setSettingValue(addonId, name, value);
       }
+      ipcRenderer.send('addon-settings-changed');
       this.setState((state, props) => ({
+        dirty: true,
         [addonId]: {
           ...state[addonId],
           [name]: value

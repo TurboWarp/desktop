@@ -20,7 +20,7 @@ const saveToLocalStorage = () => {
     }
 };
 
-const storage = readLocalStorage();
+let storage = readLocalStorage();
 
 const getAddonStorage = (addonId) => {
     return storage[addonId] || null;
@@ -73,10 +73,15 @@ const reset = () => {
     saveToLocalStorage();
 };
 
+const reread = () => {
+    storage = readLocalStorage();
+};
+
 export default {
     getEnabled,
     getSettingValue,
     setSettingValue,
     setEnabled,
-    reset
+    reset,
+    reread
 };
