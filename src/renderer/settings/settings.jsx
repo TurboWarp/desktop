@@ -307,6 +307,12 @@ const loadedAddons = addons.map((id) => ({
   manifest: require(`../../addons/addons/${id}/addon.json`)
 }));
 
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    window.close();
+  }
+});
+
 ReactDOM.render((
   <AddonSettingsComponent
     addons={loadedAddons}
