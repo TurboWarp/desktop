@@ -27,10 +27,6 @@ const onLoadAddons = () => {
   require('../../addons/index');
 };
 
-const onClickAddonSettings = () => {
-  ipcRenderer.send('addon-settings');
-};
-
 const onClickLogo = () => {
   ipcRenderer.send('about');
 };
@@ -67,7 +63,9 @@ const DesktopHOC = function (WrappedComponent) {
       this.state = {
         title: null
       };
+      this.handleClickAddonSettings =this.handleClickAddonSettings.bind(this);
     }
+
     componentDidMount () {
       const urlSearchParams = new URLSearchParams(location.search);
       const file = urlSearchParams.get("file");
@@ -96,8 +94,16 @@ const DesktopHOC = function (WrappedComponent) {
           });
       }
     }
+
+    handleClickAddonSettings() {
+      ipcRenderer.send('addon-settings', {
+        locale: this.props.locale.split('-')[0]
+      });
+    }
+
     render() {
       const {
+        locale,
         onLoadingStarted,
         onLoadingFinished,
         onSetFileHandle,
@@ -108,12 +114,14 @@ const DesktopHOC = function (WrappedComponent) {
       return (
         <WrappedComponent
           projectTitle={this.state.title}
+          onClickAddonSettings={this.handleClickAddonSettings}
           {...props}
         />
       );
     }
   }
   DesktopComponent.propTypes = {
+    locale: PropTypes.string,
     onLoadingStarted: PropTypes.func,
     onLoadingFinished: PropTypes.func,
     onSetFileHandle: PropTypes.func,
@@ -123,6 +131,7 @@ const DesktopHOC = function (WrappedComponent) {
     })
   };
   const mapStateToProps = state => ({
+    locale: state.locales.locale,
     projectChanged: state.scratchGui.projectChanged,
     vm: state.scratchGui.vm
   });
@@ -150,7 +159,6 @@ ReactDOM.render(<WrappedGUI
   canModifyCloudData={false}
   onStorageInit={onStorageInit}
   onLoadAddons={onLoadAddons}
-  onClickAddonSettings={onClickAddonSettings}
   onClickLogo={onClickLogo}
   onUpdateProjectTitle={onUpdateProjectTitle}
 />, require('../app-target'));

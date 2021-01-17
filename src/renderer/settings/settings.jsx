@@ -8,8 +8,8 @@ import getTranslations from '../../addons/translations';
 import AddonSettingsAPI from '../../addons/settings-api';
 import styles from './settings.css';
 
-// TODO: use the same language as scratch interface?
-const translations = getTranslations(navigator.language.split('-')[0]);
+const urlParameters = new URLSearchParams(location.search);
+const translations = getTranslations(urlParameters.get('locale') || 'en');
 
 const nbsp = '\u00a0';
 
