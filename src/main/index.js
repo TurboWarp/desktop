@@ -150,7 +150,7 @@ function createEditorWindow() {
   });
 
   window.webContents.on('will-prevent-unload', (e) => {
-    const choice = dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
+    const choice = dialog.showMessageBoxSync(window, {
       type: 'info',
       buttons: [
         'Stay',
