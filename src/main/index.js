@@ -196,8 +196,7 @@ function createSettingsWindow() {
   const window = createWindow(getURL('settings'), {
     title: 'Addon Settings',
     width: 700,
-    height: 450,
-    parent: BrowserWindow.getFocusedWindow(),
+    height: 600,
     webPreferences: {
       contextIsolation: false,
       nodeIntegration: true
