@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import {ipcRenderer} from 'electron';
 
-import AddonCredits from '../addon-credits.jsx';
 import addons from '../../addons/addons';
 import getTranslations from '../../addons/translations';
 import AddonSettingsAPI from '../../addons/settings-api';
@@ -13,6 +12,32 @@ import styles from './settings.css';
 const translations = getTranslations(navigator.language.split('-')[0]);
 
 const nbsp = '\u00a0';
+
+const AddonCredits = ({credits}) => (
+  credits.map((author, index) => {
+    const isFirst = index === 0;
+    const isLast = index === credits.length - 1;
+    return (
+      <span key={index}>
+        {!isFirst && isLast ? ' and ' : null}
+        <a
+          href={author.link}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {author.name}
+        </a>
+        {isLast ? null : ', '}
+      </span>
+    );
+  })
+);
+AddonCredits.propTypes = {
+  credits: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    link: PropTypes.string
+  }))
+};
 
 const SettingComponent = ({
   addonId,
@@ -155,7 +180,7 @@ const AddonComponent = ({
         {manifest.credits && (
           <div className={styles.credits}>
             {"Credits: "}
-            <AddonCredits manifest={manifest} />
+            <AddonCredits credits={manifest.credits} />
           </div>
         )}
         {manifest.settings && (
