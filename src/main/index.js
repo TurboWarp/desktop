@@ -283,11 +283,10 @@ app.on('open-file', (event, path) => {
   }
 });
 
-// On windows, parse argv to figure out which file to open.
-if (isWindows) {
+function parseArgv(argv) {
   // argv in production: ["turbowarp.exe", "..."]
   // argv in dev: ["electron.exe", "--inspect=", "main.js", "..."] (--inspect will be gone after removing arguments)
-  const argv = process.argv.slice().filter((i) => !i.startsWith('--'));
+  argv = argv.slice().filter((i) => !i.startsWith('--'));
   if (isDevelopment) {
     argv.shift();
     argv.shift();
@@ -295,19 +294,39 @@ if (isWindows) {
     argv.shift();
   }
   if (argv[0]) {
-    fileToOpen = argv[0];
+    return argv[0];
+  }
+  return null;
+}
+
+// On windows and linux, parse argv to figure out which file to open.
+if (!isMac) {
+  const parsedArgv = parseArgv(process.argv);
+  if (parsedArgv) {
+    fileToOpen = pathUtil.resolve(parsedArgv);
   }
 }
 
-// TODO: figure out what to do for linux, probably just use the windows logic?
-
-app.on('activate', () => {
-  if (editorWindows.size === 0) {
+const acquiredLock = app.requestSingleInstanceLock();
+if (acquiredLock) {
+  app.on('second-instance', (event, argv, workingDirectory) => {
+    const parsedArgv = parseArgv(argv);
+    if (parsedArgv) {
+      fileToOpen = pathUtil.resolve(workingDirectory, parsedArgv);
+    }
     createEditorWindow();
-  }
-});
-
-app.on('ready', () => {
-  checkForUpdate();
-  createEditorWindow();
-});
+  });
+  
+  app.on('activate', () => {
+    if (editorWindows.size === 0) {
+      createEditorWindow();
+    }
+  });
+  
+  app.on('ready', () => {
+    checkForUpdate();
+    createEditorWindow();
+  });  
+} else {
+  app.quit();
+}
