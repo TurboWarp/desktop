@@ -147,6 +147,10 @@ function createEditorWindow() {
 
   window.on('closed', () => {
     editorWindows.delete(window);
+    if (editorWindows.size === 0) {
+      if (aboutWindow) aboutWindow.close();
+      if (settingsWindow) settingsWindow.close();
+    }
   });
 
   window.webContents.on('will-prevent-unload', (e) => {
