@@ -1,6 +1,7 @@
 import IntlMessageFormat from 'intl-messageformat';
 import AddonSettingsAPI from './settings-api';
 import getTranslations from './translations';
+import dataURLToBlob from './libraries/data-url-to-blob';
 
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
@@ -95,6 +96,18 @@ class Tab extends EventTarget {
                 subtree: true,
             })
         );
+    }
+
+    copyImage (dataURL) {
+        if (!navigator.clipboard.write) {
+            return Promise.reject(new Error('Clipboard API not supported'));
+        }
+        const items = [
+            new ClipboardItem({
+                "image/png": dataURLToBlob(dataURL),
+            })
+        ];
+        return navigator.clipboard.write(items);
     }
 
     get editorMode () {
