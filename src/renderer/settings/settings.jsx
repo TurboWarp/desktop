@@ -116,10 +116,12 @@ const AddonComponent = ({
     </div>
     {settings.enabled && (
       <div>
-        <div className={styles.credits}>
-          {"Credits: "}
-          <AddonCredits manifest={manifest} />
-        </div>
+        {manifest.credits && (
+          <div className={styles.credits}>
+            {"Credits: "}
+            <AddonCredits manifest={manifest} />
+          </div>
+        )}
         {manifest.settings && (
           <div className={styles.settingContainer}>
             {manifest.settings.map((setting) => (
