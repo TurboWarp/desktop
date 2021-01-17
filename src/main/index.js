@@ -247,6 +247,7 @@ ipcMain.on('about', () => {
   if (aboutWindow === null) {
     aboutWindow = createAboutWindow();
   }
+  aboutWindow.show();
   aboutWindow.focus();
 });
 
@@ -254,6 +255,7 @@ ipcMain.on('addon-settings', (event, {locale}) => {
   if (settingsWindow === null) {
     settingsWindow = createSettingsWindow(locale);
   }
+  settingsWindow.show();
   settingsWindow.focus();
 });
 
