@@ -5,5 +5,6 @@
   "tw.addons.settings.confirmResetAll": "Are you sure you want to reset all addon settings to their default values?",
   "tw.addons.settings.notice.info": "Note: ",
   "tw.addons.settings.dirty": "Some settings may need a reload to apply.",
-  "tw.addons.settings.dirtyButton": "Reload now"
+  "tw.addons.settings.dirtyButton": "Reload now",
+  "tw.addons.settings.presets": "Presets"
 }

@@ -153,10 +153,55 @@ NoticeComponent.propTypes = {
   })
 };
 
+const PresetComponent = ({
+  addonId,
+  onSelectPreset,
+  manifest
+}) => (
+  <select
+    className={styles.presets}
+    onChange={(e) => onSelectPreset(manifest, e.target.value)}
+    value="_presets"
+  >
+    <option
+      disabled
+      value="_presets"
+    >
+      {settingsTranslations['tw.addons.settings.presets']}
+    </option>
+    {manifest.presets.map((preset) => {
+      const presetId = preset.id;
+      const name = addonTranslations[`${addonId}/@preset-name-${presetId}`] || preset.name;
+      const description = addonTranslations[`${addonId}/@preset-name-${presetId}`] || preset.name;
+      return (
+        <option
+          key={presetId}
+          value={presetId}
+        >
+          {name}
+        </option>
+      );
+    })}
+  </select>
+);
+PresetComponent.propTypes = {
+  addonId: PropTypes.string,
+  onSelectPreset: PropTypes.func,
+  manifest: PropTypes.shape({
+    presets: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+      id: PropTypes.string,
+      description: PropTypes.string,
+      values: PropTypes.object
+    }))
+  })
+};
+
 const AddonComponent = ({
   id,
   settings,
   onChange,
+  onSelectPreset,
   onReset,
   manifest
 }) => (
@@ -170,7 +215,14 @@ const AddonComponent = ({
       {nbsp}
       {addonTranslations[`${id}/@name`] || manifest.name}
     </label>
-    <div className={styles.reset}>
+    <div className={styles.side}>
+      {settings.enabled && manifest.presets && (
+        <PresetComponent
+          addonId={id}
+          onSelectPreset={onSelectPreset}
+          manifest={manifest}
+        />
+      )}
       {settings.modified && (
         <button
           className={styles.resetButton}
@@ -223,6 +275,7 @@ AddonComponent.propTypes = {
   id: PropTypes.string,
   settings: PropTypes.object,
   onChange: PropTypes.func,
+  onSelectPreset: PropTypes.func,
   onReset: PropTypes.func,
   manifest: PropTypes.shape({
     name: PropTypes.string,
@@ -232,7 +285,8 @@ AddonComponent.propTypes = {
     })),
     settings: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string
-    }))
+    })),
+    presets: PropTypes.array
   })
 };
 
@@ -317,6 +371,54 @@ class AddonSettingsComponent extends React.Component {
     };
   }
 
+  handleSelectPreset (addonId) {
+    return (manifest, presetId) => {
+      for (const preset of manifest.presets) {
+        if (preset.id === presetId) {
+          const settingsThatRequireReload = [];
+          const values = {};
+          let reloadRequired = false;
+          for (const setting of manifest.settings) {
+            const key = setting.id;
+            const value = setting.default;
+            if (setting.reloadRequired !== false) {
+              settingsThatRequireReload.push(key);
+            }
+            values[key] = value;
+          }
+          for (const key of Object.keys(preset.values)) {
+            if (settingsThatRequireReload.includes(key)) {
+              reloadRequired = true;
+            }
+            const value = preset.values[key];
+            values[key] = value;
+          }
+
+          for (const key of Object.keys(values)) {
+            const value = values[key];
+            AddonSettingsAPI.setSettingValue(addonId, key, value);
+          }
+          if (reloadRequired) {
+            this.setState({
+              dirty: true
+            });
+          }
+          this.setState((state) => ({
+            [addonId]: {
+              ...state[addonId],
+              ...values,
+              modified: true
+            }
+          }));
+          if (this.props.onSettingsChanged) {
+            this.props.onSettingsChanged();
+          }
+          break;
+        }
+      }
+    };
+  }
+
   handleSettingReset (addonId) {
     return () => {
       AddonSettingsAPI.resetAddon(addonId);
@@ -363,6 +465,7 @@ class AddonSettingsComponent extends React.Component {
                 id={id}
                 settings={state}
                 onChange={this.handleSettingChange(id)}
+                onSelectPreset={this.handleSelectPreset(id)}
                 onReset={this.handleSettingReset(id)}
                 manifest={manifest}
               />

@@ -50,8 +50,12 @@ main {
 
 }
 
-.reset {
+.side {
   float: right;
+}
+
+.presets {
+
 }
 
 .reset-button {
