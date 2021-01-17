@@ -13,7 +13,12 @@ main {
 }
 
 .addon {
-  padding-bottom: 10px;
+  background: #f7f7f7;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border: 1px solid #cfcfcf;
+  border-radius: 5px;
+  margin: 10px 0 10px 0;
+  padding: 4px;
 }
 
 .addon-title {
@@ -30,6 +35,7 @@ main {
 
 .setting-container {
   margin-left: 20px;
+  column-width: 300px;
 }
 
 .setting {
@@ -44,13 +50,29 @@ main {
 
 }
 
-.dirty {
+.dirty-outer {
+  display: flex;
   position: fixed;
-  top: 0;
+  top: 4px;
   left: 0;
   width: 100%;
-  background-color: white;
-  text-align: center;
-  padding: 2px;
-  border-bottom: 1px solid black;
+  justify-content: center;
+  animation: dirty-appear 0.2s ease;
+}
+
+.dirty-inner {
+  padding: 20px;
+  background: #ffeedf;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border: 1px solid #cfcfcf;
+  border-radius: 4px;
+}
+
+@keyframes dirty-appear {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }

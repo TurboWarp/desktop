@@ -193,9 +193,11 @@ AddonComponent.propTypes = {
 };
 
 const DirtyComponent = (props) => (
-  <div className={styles.dirty}>
-    {"Some settings need a reload to apply. "}
-    <button onClick={props.onReloadNow}>Reload Now</button>
+  <div className={styles.dirtyOuter}>
+    <div className={styles.dirtyInner}>
+      {"Some settings may need a reload to apply. "}
+      <button onClick={props.onReloadNow}>Reload Now</button>
+    </div>
   </div>
 );
 

@@ -198,8 +198,6 @@ function createSettingsWindow() {
     width: 700,
     height: 450,
     parent: BrowserWindow.getFocusedWindow(),
-    minimizable: false,
-    maximizable: false,
     webPreferences: {
       contextIsolation: false,
       nodeIntegration: true
