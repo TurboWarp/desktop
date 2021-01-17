@@ -200,7 +200,6 @@ const AddonComponent = ({
     )}
   </div>
 );
-
 AddonComponent.propTypes = {
   id: PropTypes.string,
   settings: PropTypes.object,
@@ -225,7 +224,6 @@ const DirtyComponent = (props) => (
     </div>
   </div>
 );
-
 DirtyComponent.propTypes = {
   onReloadNow: PropTypes.func
 };
@@ -319,7 +317,6 @@ class AddonSettingsComponent extends React.Component {
     );
   }
 }
-
 AddonSettingsComponent.propTypes = {
   addons: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
