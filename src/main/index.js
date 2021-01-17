@@ -165,6 +165,12 @@ ipcMain.on('addon-settings-changed', () => {
   }
 });
 
+ipcMain.on('reload-all', () => {
+  for (const window of editorWindows) {
+    window.reload();
+  }
+});
+
 app.on('window-all-closed', () => {
   app.quit();
 });

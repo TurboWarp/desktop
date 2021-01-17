@@ -145,11 +145,23 @@ AddonComponent.propTypes = {
   })
 };
 
+const DirtyComponent = (props) => (
+  <div className={styles.dirty}>
+    {"Some settings need a reload to apply. "}
+    <button onClick={props.onReloadNow}>Reload Now</button>
+  </div>
+);
+
+DirtyComponent.propTypes = {
+  onReloadNow: PropTypes.func
+};
+
 class AddonSettingsComponent extends React.Component {
   constructor (props) {
     super(props);
     this.state = this.getInitialState();
     this.handleReset = this.handleReset.bind(this);
+    this.handleReloadNow = this.handleReloadNow.bind(this);
   }
 
   getInitialState () {
@@ -176,10 +188,12 @@ class AddonSettingsComponent extends React.Component {
         AddonSettingsAPI.setEnabled(addonId, value);
       } else {
         AddonSettingsAPI.setSettingValue(addonId, name, value);
+        ipcRenderer.send('addon-settings-changed');
       }
-      ipcRenderer.send('addon-settings-changed');
+      this.setState({
+        dirty: true
+      });
       this.setState((state, props) => ({
-        dirty: true,
         [addonId]: {
           ...state[addonId],
           [name]: value
@@ -195,11 +209,23 @@ class AddonSettingsComponent extends React.Component {
     }
   }
 
+  handleReloadNow () {
+    ipcRenderer.send('reload-all');
+    this.setState({
+      dirty: false
+    });
+  }
+
   render () {
     return (
       <main>
+        {this.state.dirty && (
+          <DirtyComponent
+            onReloadNow={this.handleReloadNow}
+          />
+        )}
         <h1>Addon Settings</h1>
-        <p><b>Note:</b> You must restart TurboWarp Desktop for changes to apply.</p>
+        <p><b>Note:</b> You may have to reload/restart TurboWarp for certain settings to apply.</p>
         <div className={styles.addonContainer}>
           {this.props.addons.map(({id, manifest}) => {
             const state = this.state[id];
