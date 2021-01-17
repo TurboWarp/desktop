@@ -26,6 +26,7 @@ if (isMac) {
         { role: 'quit' },
         {
           label: 'New Window',
+          accelerator: 'Cmd+N',
           click: async () => {
             createEditorWindow();
           }
