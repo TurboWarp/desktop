@@ -10,7 +10,7 @@ import {promisify} from 'util';
 import GUI from 'scratch-gui';
 import {AppStateHOC, setFileHandle, openLoadingProject, closeLoadingProject} from 'scratch-gui';
 
-import AddonLoaderHOC from '../../addons/loader.jsx';
+import AddonLoaderHOC from '../../addons/loader-hoc.jsx';
 import {WrappedFileHandle} from './filesystem-api-impl';
 import './prompt-impl';
 
@@ -24,7 +24,7 @@ const onStorageInit = (storage) => {
 };
 
 const onLoadAddons = () => {
-  require('../../addons/index');
+  require('../../addons/entry');
 };
 
 const onClickLogo = () => {

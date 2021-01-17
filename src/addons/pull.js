@@ -35,6 +35,7 @@ fs.mkdirSync('libraries', {recursive: true});
 fs.mkdirSync('libraries-raw', {recursive: true});
 
 const HEADER = `/**!
+ * Imported from SA
  * @license GPLv3.0 (see LICENSE or https://www.gnu.org/licenses/ for more information)
  */\n\n`;
 

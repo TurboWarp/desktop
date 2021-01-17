@@ -1,7 +1,7 @@
 import {ipcRenderer} from 'electron';
 import IntlMessageFormat from 'intl-messageformat';
 import AddonSettingsAPI from './settings-api';
-import getTranslations from './translations';
+import getAddonTranslations from './get-addon-translations';
 import dataURLToBlob from './api-libraries/data-url-to-blob';
 
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
@@ -38,7 +38,7 @@ class Redux extends EventTarget {
 
 const tabReduxInstance = new Redux();
 const language = tabReduxInstance.state.locales.locale.split('-')[0];
-const translations = getTranslations(language);
+const translations = getAddonTranslations(language);
 
 // Temporary until upstream removes window.scratchAddons
 window.scratchAddons = {

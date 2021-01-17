@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import addons from '../addons';
-import getTranslations from '../translations';
+import getAddonTranslations from '../get-addon-translations';
 import AddonSettingsAPI from '../settings-api';
 import styles from './settings.css';
 
 const urlParameters = new URLSearchParams(location.search);
 const locale = urlParameters.get('locale') || 'en';
-const addonTranslations = getTranslations(locale);
+const addonTranslations = getAddonTranslations(locale);
 
 const settingsTranslations = require('../settings-l10n/en.json');
 if (locale !== 'en') {

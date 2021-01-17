@@ -15,4 +15,4 @@ Folder structure:
  + settings - the settings page
  + settings-l10n - settings page translations
 
-addons, addons-l10m, libraries, and libraries-raw and managed by pull.js and any changed may get overwritten.
+addons, addons-l10m, libraries, and libraries-raw and managed by pull.js and any changes may get overwritten.
