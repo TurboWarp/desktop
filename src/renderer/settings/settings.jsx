@@ -95,6 +95,31 @@ SettingComponent.propTypes = {
   value: PropTypes.any
 };
 
+const NoticeComponent = ({
+  addonId,
+  notice
+}) => {
+  const noticeId = notice.id;
+  const text = translations[`${addonId}/@info-${noticeId}`] || notice.text;
+  return (
+    <div
+      className={styles.notice}
+      type={notice.type}
+    >
+      {"Note: "}
+      {text}
+    </div>
+  );
+};
+NoticeComponent.propTypes = {
+  addonId: PropTypes.string,
+  notice: PropTypes.shape({
+    type: PropTypes.string,
+    text: PropTypes.string,
+    id: PropTypes.string
+  })
+};
+
 const AddonComponent = ({
   id,
   settings,
@@ -116,6 +141,17 @@ const AddonComponent = ({
     </div>
     {settings.enabled && (
       <div>
+        {manifest.info && (
+          <div className={styles.noticeContainer}>
+            {manifest.info.map((info) => (
+              <NoticeComponent
+                key={info.id}
+                addonId={id}
+                notice={info}
+              />
+            ))}
+          </div>
+        )}
         {manifest.credits && (
           <div className={styles.credits}>
             {"Credits: "}
@@ -147,6 +183,9 @@ AddonComponent.propTypes = {
   manifest: PropTypes.shape({
     name: PropTypes.string,
     description: PropTypes.string,
+    info: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string
+    })),
     settings: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string
     }))
