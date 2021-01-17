@@ -73,20 +73,40 @@ function createWindow(url, options) {
   });
 
   if (!isMac) {
-    // On Mac, this is handled by the menu bar.
+    // On Mac, shortcuts are handled by the menu bar.
     window.webContents.on('before-input-event', (e, input) => {
+      if (input.isAutoRepeat || input.isComposing || input.type !== 'keyDown' || input.meta) {
+        return;
+      }
+      // Ctrl+Shift+I to open dev tools
       if (
-        input.type === 'keyDown' &&
         input.control &&
         input.shift &&
-        input.key === 'I' &&
-        !input.alt &&
-        !input.meta &&
-        !input.isAutoRepeat &&
-        !input.isComposing
+        input.key.toLowerCase() === 'i' &&
+        !input.alt
       ) {
         e.preventDefault();
         window.webContents.toggleDevTools();
+      }
+      // Ctrl+N to open new window
+      if (
+        input.control &&
+        input.key.toLowerCase() === 'n'
+      ) {
+        e.preventDefault();
+        createEditorWindow();
+      }
+      // Ctrl+R and Ctrl+Shift+R to reload
+      if (
+        input.control &&
+        input.key.toLowerCase() === 'r'
+      ) {
+        e.preventDefault();
+        if (input.shift) {
+          window.webContents.reloadIgnoringCache();
+        } else {
+          window.webContents.reload();
+        }
       }
     });
   }
