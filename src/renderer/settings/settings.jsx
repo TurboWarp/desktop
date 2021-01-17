@@ -33,6 +33,7 @@ const SettingComponent = ({
             checked={value}
             onChange={(e) => onChange(settingId, e.target.checked)}
           />
+          {nbsp}
           {settingName}
         </label>
       )}
@@ -107,6 +108,7 @@ const AddonComponent = ({
         onChange={(e) => onChange('enabled', e.target.checked)}
         checked={settings.enabled}
       />
+      {nbsp}
       {translations[`${id}/@name`] || manifest.name}
     </label>
     <div className={styles.description}>
