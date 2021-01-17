@@ -17,22 +17,37 @@ let fileToOpen = null;
 let aboutWindow = null;
 let settingsWindow = null;
 
-Menu.setApplicationMenu(Menu.buildFromTemplate([
-  ...(isMac ? [{ role: 'appMenu' }] : []),
-  { role: 'fileMenu' },
-  { role: 'editMenu' },
-  { role: 'viewMenu' },
-  { role: 'windowMenu' },
-  {
-    role: 'help',
-    submenu: [
-      {
-        label: 'Learn more',
-        click: () => shell.openExternal('https://desktop.turbowarp.org/')
-      }
-    ]
-  }
-]));
+if (isMac) {
+  Menu.setApplicationMenu(Menu.buildFromTemplate([
+    { role: 'appMenu' },
+    {
+      role: 'fileMenu',
+      submenu: [
+        { role: 'quit' },
+        {
+          label: 'New Window',
+          click: async () => {
+            createEditorWindow();
+          }
+        }
+      ]
+    },
+    { role: 'editMenu' },
+    { role: 'viewMenu' },
+    { role: 'windowMenu' },
+    {
+      role: 'help',
+      submenu: [
+        {
+          label: 'Learn more',
+          click: () => shell.openExternal('https://desktop.turbowarp.org/')
+        }
+      ]
+    }
+  ]));
+} else {
+  Menu.setApplicationMenu(null);
+}
 
 function getURL(route) {
   if (isDevelopment) {
@@ -47,10 +62,7 @@ function getURL(route) {
 }
 
 function createWindow(url, options) {
-  const window = new BrowserWindow({
-    autoHideMenuBar: true,
-    ...options
-  });
+  const window = new BrowserWindow(options);
 
   window.loadURL(url);
 
@@ -58,6 +70,26 @@ function createWindow(url, options) {
     e.preventDefault();
     shell.openExternal(url);
   });
+
+  if (!isMac) {
+    // On Mac, this is handled by the menu bar.
+    window.webContents.on('before-input-event', (e, input) => {
+      console.log(input);
+      if (
+        input.type === 'keyDown' &&
+        input.control &&
+        input.shift &&
+        input.key === 'I' &&
+        !input.alt &&
+        !input.meta &&
+        !input.isAutoRepeat &&
+        !input.isComposing
+      ) {
+        e.preventDefault();
+        window.webContents.toggleDevTools();
+      }
+    });
+  }
 
   return window;
 }
