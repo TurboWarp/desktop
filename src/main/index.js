@@ -108,7 +108,6 @@ function createEditorWindow() {
     height: 800,
     webPreferences: {
       contextIsolation: false,
-      enableRemoteModule: true,
       nodeIntegration: true
     }
   });
@@ -193,6 +192,14 @@ function createSettingsWindow() {
 
   return window;
 }
+
+ipcMain.handle('show-save-dialog', async (event, options) => {
+  return dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), options);
+});
+
+ipcMain.handle('show-open-dialog', async (event, options) => {
+  return dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), options);
+});
 
 ipcMain.on('about', () => {
   if (aboutWindow === null) {

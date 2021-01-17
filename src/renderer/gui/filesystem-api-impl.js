@@ -3,12 +3,11 @@
  * https://web.dev/file-system-access/
  */
 
-import {remote} from 'electron';
+import {ipcRenderer} from 'electron';
 import fs from 'fs';
 import pathUtil from 'path';
 import {promisify} from 'util';
 
-const dialog = remote.dialog;
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 
@@ -88,7 +87,7 @@ const typesToFilterList = (types) => types.map((type) => ({
 }));
 
 window.showSaveFilePicker = async (options) => {
-  const result = await dialog.showSaveDialog(remote.getCurrentWindow(), {
+  const result = await ipcRenderer.invoke('show-save-dialog', {
     filters: typesToFilterList(options.types)
   });
 
@@ -112,7 +111,7 @@ window.showSaveFilePicker = async (options) => {
 };
 
 window.showOpenFilePicker = async (options) => {
-  const result = await dialog.showOpenDialog(remote.getCurrentWindow(), {
+  const result = await ipcRenderer.invoke('show-open-dialog', {
     properties: ['openFile'],
     filters: typesToFilterList(options.types)
   });
