@@ -316,17 +316,17 @@ if (acquiredLock) {
     }
     createEditorWindow();
   });
-  
+
   app.on('activate', () => {
     if (editorWindows.size === 0) {
       createEditorWindow();
     }
   });
-  
+
   app.on('ready', () => {
     checkForUpdate();
     createEditorWindow();
-  });  
+  });
 } else {
   app.quit();
 }
