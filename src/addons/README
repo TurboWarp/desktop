@@ -12,5 +12,6 @@ Folder structure:
  + libraries - libraries used by addons loaded with `import`
  + libraries-raw - libraries used by addons loaded with `addon.tab.loadScript`
  + api-libraries - libraries used by addon API
+ + settings - the settings page
 
-All of these folders except api-libraries are managed by pull.js and any changes may get overwritten.
+addons, addons-l10m, libraries, and libraries-raw and managed by pull.js and any changed may get overwritten.
