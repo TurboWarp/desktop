@@ -1,16 +1,16 @@
-Addons, translations, and libraries are based on the "Scratch Addons" browser extension.
+Addons, translations, and libraries are from the "Scratch Addons" browser extension.
 
 These addons are licensed under the GNU General Public License v3.0. See LICENSE in the root of this repository for more information.
 
-Due to differences in environment, some patches are applied to the original source files. These patches are maintained in https://github.com/GarboMuffin/ScratchAddons/tree/tw. We attempt to maintain a minimal diff.
+We apply some patches on top of the original source files. These patches are maintained in https://github.com/GarboMuffin/ScratchAddons/tree/tw. We attempt to maintain a minimal diff.
 
 Any bugs or feature requests in these addons should be sent upstream.
 
 Folder structure:
  + addons - the addons
- + addons-l10n - translations
- + libraries - libraries loaded with `import`
- + libraries-raw - libraries loaded with `addon.tab.loadScript`
+ + addons-l10n - addon translations
+ + libraries - libraries used by addons loaded with `import`
+ + libraries-raw - libraries used by addons loaded with `addon.tab.loadScript`
  + api-libraries - libraries used by addon API
 
-These folders are all managed by pull.js.
+All of these folders except api-libraries are managed by pull.js and any changes may get overwritten.
