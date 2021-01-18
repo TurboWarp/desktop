@@ -45,6 +45,7 @@
   "build": {
     "appId": "org.turbowarp.desktop",
     "productName": "TurboWarp Desktop",
+    "artifactName": "${productName}-${os}-${version}.${ext}",
     "win": {
       "target": "nsis"
     },
@@ -71,7 +72,7 @@
       ]
     },
     "linux": {
-      "target": "tar.gz"
+      "target": "deb"
     },
     "fileAssociations": [
       {
