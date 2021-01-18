@@ -109,15 +109,22 @@ const SettingComponent = ({
         </label>
       )}
       {setting.type === 'color' && (
-        <label>
-          <input
-            type="color"
-            value={value}
-            onChange={(e) => SettingsStore.setAddonSetting(addonId, settingId, e.target.value)}
-          />
-          {nbsp}
-          {settingName}
-        </label>
+        <div>
+          <button
+            onClick={() => SettingsStore.setAddonSetting(addonId, settingId, setting.default)}
+          >
+            {settingsTranslations['tw.addons.settings.reset']}
+          </button>
+          <label>
+            <input
+              type="color"
+              value={value}
+              onChange={(e) => SettingsStore.setAddonSetting(addonId, settingId, e.target.value)}
+            />
+            {nbsp}
+            {settingName}
+          </label>
+        </div>
       )}
       {setting.type === 'select' && (
         <label>
@@ -225,40 +232,42 @@ const AddonComponent = ({
   manifest
 }) => (
   <div className={classNames(styles.addon, {[styles.addonDirty]: settings.dirty})}>
-    <label className={styles.addonTitle}>
-      <input
-        type="checkbox"
-        onChange={(e) => SettingsStore.setAddonEnabled(id, e.target.checked)}
-        checked={settings.enabled}
-      />
-      <span className={styles.addonTitleText}>
-        {nbsp}
-        {addonTranslations[`${id}/@name`] || manifest.name}
-      </span>
-      {manifest.tags && (
-        <TagComponent
-          tags={manifest.tags}
+    <div className={styles.addonTitleContainer}>
+      <label className={styles.addonTitle}>
+        <input
+          type="checkbox"
+          onChange={(e) => SettingsStore.setAddonEnabled(id, e.target.checked)}
+          checked={settings.enabled}
         />
-      )}
-    </label>
-    {settings.enabled && (
-      <div className={styles.side}>
-        {manifest.presets && (
-          <PresetComponent
-            addonId={id}
-            presets={manifest.presets}
+        <span className={styles.addonTitleText}>
+          {nbsp}
+          {addonTranslations[`${id}/@name`] || manifest.name}
+        </span>
+        {manifest.tags && (
+          <TagComponent
+            tags={manifest.tags}
           />
         )}
-        {manifest.settings && (
-          <button
-            className={styles.resetButton}
-            onClick={() => SettingsStore.resetAddon(id)}
-          >
-            {settingsTranslations['tw.addons.settings.reset']}
-          </button>
-        )}
-      </div>
-    )}
+      </label>
+      {settings.enabled && (
+        <div className={styles.addonOperations}>
+          {manifest.presets && (
+            <PresetComponent
+              addonId={id}
+              presets={manifest.presets}
+            />
+          )}
+          {settings.enabled && manifest.settings && (
+            <button
+              className={styles.resetButton}
+              onClick={() => SettingsStore.resetAddon(id)}
+            >
+              {settingsTranslations['tw.addons.settings.reset']}
+            </button>
+          )}
+        </div>
+      )}
+    </div>
     <div className={styles.description}>
       {addonTranslations[`${id}/@description`] || manifest.description}
     </div>

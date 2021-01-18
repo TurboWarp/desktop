@@ -21,14 +21,24 @@ body {
   background: #ffeedf;
 }
 
+.addon-title-container {
+  padding-bottom: 3px;
+  display: flex;
+  justify-content: space-between;
+  height: 24px;
+}
+
 .addon-title {
   font-weight: bold;
   display: flex;
   align-items: center;
-  padding-bottom: 3px;
 }
 
 .addon-title-text {
+
+}
+
+.addon-operations {
 
 }
 
@@ -85,10 +95,6 @@ body {
 
 .notice {
 
-}
-
-.side {
-  float: right;
 }
 
 .presets {
