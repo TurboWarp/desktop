@@ -11,5 +11,6 @@
   "bitmap-copy",
   "editor-theme3",
   "hide-flyout",
-  "fix-uploaded-svgs"
+  "fix-uploaded-svgs",
+  "tw-compiler-options"
 ]

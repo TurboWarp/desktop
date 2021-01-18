@@ -22,7 +22,7 @@ if (locale !== 'en') {
 
 const nbsp = '\u00a0';
 
-const AddonCredits = ({credits}) => (
+const AddonCreditsComponent = ({credits}) => (
   credits.map((author, index) => {
     const isLast = index === credits.length - 1;
     return (
@@ -42,11 +42,18 @@ const AddonCredits = ({credits}) => (
     );
   })
 );
-AddonCredits.propTypes = {
+AddonCreditsComponent.propTypes = {
   credits: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
     link: PropTypes.string
   }))
+};
+
+const TagComponent = ({tags}) => (
+  null 
+);
+TagComponent.propTypes = {
+  tags: PropTypes.arrayOf(PropTypes.string)
 };
 
 const SettingComponent = ({
@@ -250,7 +257,7 @@ const AddonComponent = ({
         {manifest.credits && (
           <div className={styles.credits}>
             {settingsTranslations["tw.addons.settings.credits"]}
-            <AddonCredits credits={manifest.credits} />
+            <AddonCreditsComponent credits={manifest.credits} />
           </div>
         )}
         {manifest.settings && (
