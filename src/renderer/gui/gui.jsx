@@ -56,6 +56,9 @@ const darkModeMedia = window.matchMedia('(prefers-color-scheme: dark)');
 darkModeMedia.onchange = () => document.body.setAttribute('theme', darkModeMedia.matches ? 'dark' : 'light');
 darkModeMedia.onchange();
 
+const urlSearchParams = new URLSearchParams(location.search);
+const fileToOpen = urlSearchParams.get('file');
+
 const DesktopHOC = function (WrappedComponent) {
   let mountedOnce = false;
   class DesktopComponent extends React.Component {
@@ -72,22 +75,20 @@ const DesktopHOC = function (WrappedComponent) {
         return;
       }
       mountedOnce = true;
-      const urlSearchParams = new URLSearchParams(location.search);
-      const file = urlSearchParams.get("file");
-      if (file !== null) {
+      if (fileToOpen !== null) {
         this.props.onLoadingStarted();
-        readFile(file)
+        readFile(fileToOpen)
           .then((buffer) => this.props.vm.loadProject(buffer.buffer))
           .then(() => {
-            const title = getProjectTitle(file);
+            const title = getProjectTitle(fileToOpen);
             if (title) {
               this.setState({
                 title
               });
               onUpdateProjectTitle(title);
             }
-            if (file.endsWith('.sb3')) {
-              this.props.onSetFileHandle(new WrappedFileHandle(file));
+            if (fileToOpen.endsWith('.sb3')) {
+              this.props.onSetFileHandle(new WrappedFileHandle(fileToOpen));
             }
           })
           .catch((err) => {
@@ -155,7 +156,7 @@ const WrappedGUI = compose(
 )(GUI);
 
 ReactDOM.render(<WrappedGUI
-  projectId="0"
+  projectId={fileToOpen ? '' : '0'}
   canEditTitle
   isScratchDesktop
   canModifyCloudData={false}
