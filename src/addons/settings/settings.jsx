@@ -98,7 +98,10 @@ const SettingComponent = ({
       )}
       {setting.type === 'select' && (
         <label>
-          <select onChange={(e) => SettingsStore.setAddonSetting(addonId, settingId, e.target.value)}>
+          <select
+            onChange={(e) => SettingsStore.setAddonSetting(addonId, settingId, e.target.value)}
+            value={value}
+          >
             {setting.potentialValues.map((value) => {
               const valueId = value.id;
               const valueName = addonTranslations[`${addonId}/@settings-select-${settingId}-${valueId}`] || value.name;
