@@ -27,12 +27,12 @@ body {
   display: flex;
   background-color: #f0f0f0;
   color: #222;
-  border: 1px solid #b9b9b9;
+  border: 1px solid #cecece;
   border-radius: 4px;
 }
 
 .search-container:focus-within {
-  border-color: #747474;
+  border-color: currentColor;
 }
 
 .search-input {
