@@ -456,13 +456,14 @@ class AddonSettingsComponent extends React.Component {
     this.searchBar = searchBar;
   }
   handleKeyDown (e) {
-    if (!this.state.easterEggs && e.key.toLowerCase() === KONAMI[this.konamiProgress]) {
+    if (e.key.toLowerCase() === KONAMI[this.konamiProgress]) {
       this.konamiProgress++;
       if (this.konamiProgress >= KONAMI.length) {
         this.setState({
           easterEggs: true,
           search: settingsTranslations['tw.addons.settings.tags.easterEgg']
         });
+        this.konamiProgress = 0;
         this.searchBar.blur();
         e.preventDefault();
         return;
