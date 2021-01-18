@@ -442,6 +442,9 @@ class AddonSettingsComponent extends React.Component {
   handleResetAll () {
     if (confirm(settingsTranslations['tw.addons.settings.confirmResetAll'])) {
       SettingsStore.resetAllAddons();
+      this.setState({
+        search: ''
+      });
     }
   }
   handleSearch (e) {
@@ -458,8 +461,9 @@ class AddonSettingsComponent extends React.Component {
       if (this.konamiProgress >= KONAMI.length) {
         this.setState({
           easterEggs: true,
-          search: ''
+          search: settingsTranslations['tw.addons.settings.tags.easterEgg']
         });
+        this.searchBar.blur();
         e.preventDefault();
         return;
       }
@@ -475,42 +479,61 @@ class AddonSettingsComponent extends React.Component {
     }
   }
   isIncludedInSearch (addonId, manifest) {
-    const search = this.state.search.trim().toLowerCase();
-    if (!search) {
+    const normalize = (i) => i.toLowerCase();
+    const terms = normalize(this.state.search.trim()).split(' ');
+    if (terms.length === 0) {
       return true;
     }
     let texts = [
-      addonId,
-      addonTranslations[`${addonId}/@name`] || manifest.name,
-      addonTranslations[`${addonId}/@name`] || manifest.description
+      normalize(addonId),
+      normalize(addonTranslations[`${addonId}/@name`] || manifest.name),
+      normalize(addonTranslations[`${addonId}/@name`] || manifest.description)
     ];
     if (manifest.settings) {
       for (const setting of manifest.settings) {
-        texts.push(addonTranslations[`${addonId}/@settings-name-${setting.id}`] || setting.name);
+        texts.push(normalize(addonTranslations[`${addonId}/@settings-name-${setting.id}`] || setting.name));
       }
     }
     if (manifest.presets) {
       for (const preset of manifest.presets) {
-        texts.push(addonTranslations[`${addonId}/@preset-name-${preset.id}`] || preset.name);
-        texts.push(addonTranslations[`${addonId}/@preset-description-${preset.id}`] || preset.description);
+        texts.push(normalize(addonTranslations[`${addonId}/@preset-name-${preset.id}`] || preset.name));
+        texts.push(normalize(addonTranslations[`${addonId}/@preset-description-${preset.id}`] || preset.description));
       }
     }
-    for (const text of texts) {
-      if (text.toLowerCase().includes(search)) {
-        return true;
+    if (manifest.tags) {
+      for (const tag of manifest.tags) {
+        const translatedTag = settingsTranslations[`tw.addons.settings.tags.${tag}`];
+        if (translatedTag) {
+          texts.push(normalize(settingsTranslations[`tw.addons.settings.tags.${tag}`]));
+        }
       }
     }
-    return false;
+    // For an addon to be included, all search terms must match one of the texts.
+    for (const term of terms) {
+      if (!term) continue;
+      let found = false;
+      for (const text of texts) {
+        if (text.includes(term)) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        return false;
+      }
+    }
+    return true;
   }
   shouldShowAddon (state, addonId, manifest) {
     if (!this.isIncludedInSearch(addonId, manifest)) {
       return false;
     }
-    const isEasterEgg = manifest.tags && manifest.tags.includes('easterEgg');
     if (this.state.easterEggs) {
+      // Show everything when easter eggs are visible.
       return true;
     }
-    return !isEasterEgg || state.enabled;
+    // Otherwise, only show easter eggs when they are enabled.
+    return state.enabled || !(manifest.tags && manifest.tags.includes('easterEgg'));
   }
   render () {
     const addons = Object.entries(this.props.addons).map(([id, manifest]) => ({
