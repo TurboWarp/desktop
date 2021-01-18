@@ -1,4 +1,4 @@
-module.exports = [
+const addons = [
     "editor-devtools",
     "block-switching",
     "editor-searchable-dropdowns",
@@ -13,3 +13,11 @@ module.exports = [
     "hide-flyout",
     "fix-uploaded-svgs",
 ];
+
+const addonMap = {};
+for (const addonId of addons) {
+    const manifest = require(`./addons/${addonId}/addon.json`);
+    addonMap[addonId] = manifest;
+}
+
+export default addonMap;

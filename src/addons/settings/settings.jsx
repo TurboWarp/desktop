@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import addons from '../addons';
 import getAddonTranslations from '../get-addon-translations';
-import AddonSettingsAPI from '../settings-api';
+import SettingsStore from '../settings-store';
 import styles from './settings.css';
 
 const urlParameters = new URLSearchParams(location.search);
@@ -50,7 +50,6 @@ AddonCredits.propTypes = {
 const SettingComponent = ({
   addonId,
   setting,
-  onChange,
   value
 }) => {
   const settingId = setting.id;
@@ -64,7 +63,7 @@ const SettingComponent = ({
           <input
             type="checkbox"
             checked={value}
-            onChange={(e) => onChange(settingId, e.target.checked, setting)}
+            onChange={(e) => SettingsStore.setAddonSetting(addonId, settingId, e.target.checked)}
           />
           {nbsp}
           {settingName}
@@ -78,7 +77,7 @@ const SettingComponent = ({
             max={setting.max}
             step="1"
             value={value}
-            onChange={(e) => onChange(settingId, +e.target.value, setting)}
+            onChange={(e) => SettingsStore.setAddonSetting(addonId, settingId, +e.target.value)}
           />
           {nbsp}
           {settingName}
@@ -89,7 +88,7 @@ const SettingComponent = ({
           <input
             type="color"
             value={value}
-            onChange={(e) => onChange(settingId, e.target.value, setting)}
+            onChange={(e) => SettingsStore.setAddonSetting(addonId, settingId, e.target.value)}
           />
           {nbsp}
           {settingName}
@@ -97,7 +96,7 @@ const SettingComponent = ({
       )}
       {setting.type === 'select' && (
         <label>
-          <select onChange={(e) => onChange(settingId, e.target.value, setting)}>
+          <select onChange={(e) => SettingsStore.setAddonSetting(addonId, settingId, e.target.value)}>
             {setting.potentialValues.map((value) => {
               const valueId = value.id;
               const valueName = addonTranslations[`${addonId}/@settings-select-${settingId}-${valueId}`] || value.name;
@@ -124,7 +123,6 @@ SettingComponent.propTypes = {
     id: PropTypes.string,
     name: PropTypes.string
   }),
-  onChange: PropTypes.func,
   value: PropTypes.any
 };
 
@@ -155,12 +153,11 @@ NoticeComponent.propTypes = {
 
 const PresetComponent = ({
   addonId,
-  onSelectPreset,
-  manifest
+  presets
 }) => (
   <select
     className={styles.presets}
-    onChange={(e) => onSelectPreset(manifest, e.target.value)}
+    onChange={(e) => SettingsStore.applyAddonPreset(addonId, e.target.value)}
     value="_presets"
   >
     <option
@@ -169,7 +166,7 @@ const PresetComponent = ({
     >
       {settingsTranslations['tw.addons.settings.presets']}
     </option>
-    {manifest.presets.map((preset) => {
+    {presets.map((preset) => {
       const presetId = preset.id;
       const name = addonTranslations[`${addonId}/@preset-name-${presetId}`] || preset.name;
       const description = addonTranslations[`${addonId}/@preset-name-${presetId}`] || preset.name;
@@ -186,30 +183,24 @@ const PresetComponent = ({
 );
 PresetComponent.propTypes = {
   addonId: PropTypes.string,
-  onSelectPreset: PropTypes.func,
-  manifest: PropTypes.shape({
-    presets: PropTypes.arrayOf(PropTypes.shape({
-      name: PropTypes.string,
-      id: PropTypes.string,
-      description: PropTypes.string,
-      values: PropTypes.object
-    }))
-  })
+  presets: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    id: PropTypes.string,
+    description: PropTypes.string,
+    values: PropTypes.object
+  }))
 };
 
 const AddonComponent = ({
   id,
   settings,
-  onChange,
-  onSelectPreset,
-  onReset,
   manifest
 }) => (
   <div className={styles.addon}>
     <label className={styles.addonTitle}>
       <input
         type="checkbox"
-        onChange={(e) => onChange('enabled', e.target.checked)}
+        onChange={(e) => SettingsStore.setAddonEnabled(id, e.target.checked)}
         checked={settings.enabled}
       />
       {nbsp}
@@ -219,14 +210,13 @@ const AddonComponent = ({
       {settings.enabled && manifest.presets && (
         <PresetComponent
           addonId={id}
-          onSelectPreset={onSelectPreset}
-          manifest={manifest}
+          presets={manifest.presets}
         />
       )}
       {settings.modified && (
         <button
           className={styles.resetButton}
-          onClick={onReset}
+          onClick={() => SettingsStore.resetAddon(id)}
         >
           {settingsTranslations['tw.addons.settings.reset']}
         </button>
@@ -261,7 +251,6 @@ const AddonComponent = ({
                 key={setting.id}
                 addonId={id}
                 setting={setting}
-                onChange={onChange}
                 value={settings[setting.id]}
               />
             ))}
@@ -274,9 +263,6 @@ const AddonComponent = ({
 AddonComponent.propTypes = {
   id: PropTypes.string,
   settings: PropTypes.object,
-  onChange: PropTypes.func,
-  onSelectPreset: PropTypes.func,
-  onReset: PropTypes.func,
   manifest: PropTypes.shape({
     name: PropTypes.string,
     description: PropTypes.string,
@@ -309,134 +295,71 @@ DirtyComponent.propTypes = {
   onReloadNow: PropTypes.func
 };
 
-const loadedAddons = addons.map((id) => ({
-  id,
-  manifest: require(`../../addons/addons/${id}/addon.json`)
-}));
-
 class AddonSettingsComponent extends React.Component {
   constructor (props) {
     super(props);
     this.state = this.getInitialState();
-    this.handleResetAll = this.handleResetAll.bind(this);
+    this.onSettingChanged = this.onSettingChanged.bind(this);
+    this.onResetAll = this.onResetAll.bind(this);
+    this.onResetAddon = this.onResetAddon.bind(this);
     this.handleReloadNow = this.handleReloadNow.bind(this);
+    this.handleResetAll = this.handleResetAll.bind(this);
+  }
+
+  getInitialAddonState (id, manifest) {
+    const state = {
+      enabled: SettingsStore.getAddonEnabled(id),
+      modified: SettingsStore.doesAddonHaveSettings(id)
+    };
+    if (manifest.settings) {
+      for (const setting of manifest.settings) {
+        state[setting.id] = SettingsStore.getAddonSetting(id, setting.id);
+      }
+    }
+    return state;
   }
 
   getInitialState () {
     const initialState = {
       dirty: false
     };
-    for (const {id, manifest} of this.props.addons) {
-      const addonState = {
-        enabled: AddonSettingsAPI.getEnabled(id, manifest),
-        modified: AddonSettingsAPI.hasSettingsForAddon(id)
-      };
-      if (manifest.settings) {
-        for (const setting of manifest.settings) {
-          addonState[setting.id] = AddonSettingsAPI.getSettingValue(id, manifest, setting.id);
-        }
-      }
-      initialState[id] = addonState;
+    for (const [id, manifest] of Object.entries(this.props.addons)) {
+      initialState[id] = this.getInitialAddonState(id, manifest);
     }
     return initialState;
   }
 
-  handleSettingChange (addonId) {
-    return (name, value, manifest) => {
-      if (name === 'enabled') {
-        AddonSettingsAPI.setEnabled(addonId, value);
-        // Changing enabled always requires a reload.
-        this.setState({
-          dirty: true
-        });
-      } else {
-        AddonSettingsAPI.setSettingValue(addonId, name, value);
-        // If the manifest explicitly sets reloadRequired to false, a reload is not required.
-        if (manifest.reloadRequired !== false) {
-          this.setState({
-            dirty: true
-          });
-        }
-        if (this.props.onSettingsChanged) {
-          this.props.onSettingsChanged();
-        }
+  onSettingChanged (e) {
+    const {addonId, settingId, value, reloadRequired} = e.detail;
+    this.setState({
+      [addonId]: {
+        ...this.state[addonId],
+        modified: true,
+        [settingId]: value
       }
-      this.setState((state) => ({
-        [addonId]: {
-          ...state[addonId],
-          modified: true,
-          [name]: value
-        }
-      }));
-    };
-  }
-
-  handleSelectPreset (addonId) {
-    return (manifest, presetId) => {
-      for (const preset of manifest.presets) {
-        if (preset.id === presetId) {
-          const settingsThatRequireReload = [];
-          const values = {};
-          let reloadRequired = false;
-          for (const setting of manifest.settings) {
-            const key = setting.id;
-            const value = setting.default;
-            if (setting.reloadRequired !== false) {
-              settingsThatRequireReload.push(key);
-            }
-            values[key] = value;
-          }
-          for (const key of Object.keys(preset.values)) {
-            if (settingsThatRequireReload.includes(key)) {
-              reloadRequired = true;
-            }
-            const value = preset.values[key];
-            values[key] = value;
-          }
-
-          for (const key of Object.keys(values)) {
-            const value = values[key];
-            AddonSettingsAPI.setSettingValue(addonId, key, value);
-          }
-          if (reloadRequired) {
-            this.setState({
-              dirty: true
-            });
-          }
-          this.setState((state) => ({
-            [addonId]: {
-              ...state[addonId],
-              ...values,
-              modified: true
-            }
-          }));
-          if (this.props.onSettingsChanged) {
-            this.props.onSettingsChanged();
-          }
-          break;
-        }
-      }
-    };
-  }
-
-  handleSettingReset (addonId) {
-    return () => {
-      AddonSettingsAPI.resetAddon(addonId);
+    });
+    if (reloadRequired) {
       this.setState({
-        dirty: true,
-        [addonId]: this.getInitialState()[addonId]
-      });
-    };
-  }
-
-  handleResetAll () {
-    if (confirm(settingsTranslations['tw.addons.settings.confirmResetAll'])) {
-      AddonSettingsAPI.resetAll();
-      this.setState({
-        ...this.getInitialState(),
         dirty: true
       });
     }
+  }
+
+  onResetAll (e) {
+    this.setState(this.getInitialState());
+    this.setState({
+      dirty: true
+    });
+  }
+
+  onResetAddon (e) {
+    const {addonId} = e.detail;
+    this.setState({
+      [addonId]: this.getInitialAddonState(addonId, addons[addonId])
+    });
+    this.setState({
+      dirty: true
+    });
   }
 
   handleReloadNow () {
@@ -448,6 +371,38 @@ class AddonSettingsComponent extends React.Component {
     });
   }
 
+  handleResetAll () {
+    if (confirm(settingsTranslations['tw.addons.settings.confirmResetAll'])) {
+      SettingsStore.resetAllAddons();
+    }
+  }
+
+  componentDidMount () {
+    SettingsStore.addEventListener('setting-changed', this.onSettingChanged);
+    SettingsStore.addEventListener('reset-all', this.onResetAll);
+    SettingsStore.addEventListener('reset-addon', this.onResetAddon);
+  }
+
+  componentDidUpdate (prevProps, prevState) {
+    for (const key of Object.keys(this.state)) {
+      if (key === 'dirty') {
+        continue;
+      }
+      if (this.state[key] !== prevState[key]) {
+        if (this.props.onSettingChanged) {
+          this.props.onSettingChanged();
+        }
+        break;
+      }
+    }
+  }
+
+  componentWillUnmount () {
+    SettingsStore.removeEventListener('setting-changed', this.onSettingChanged);
+    SettingsStore.removeEventListener('reset-all', this.onResetAll);
+    SettingsStore.removeEventListener('reset-addon', this.onResetAddon);
+  }
+
   render () {
     return (
       <div>
@@ -457,16 +412,13 @@ class AddonSettingsComponent extends React.Component {
           />
         )}
         <div className={styles.addonContainer}>
-          {this.props.addons.map(({id, manifest}) => {
+          {Object.entries(this.props.addons).map(([id, manifest]) => {
             const state = this.state[id];
             return (
               <AddonComponent
                 key={id}
                 id={id}
                 settings={state}
-                onChange={this.handleSettingChange(id)}
-                onSelectPreset={this.handleSelectPreset(id)}
-                onReset={this.handleSettingReset(id)}
                 manifest={manifest}
               />
             );
@@ -483,15 +435,12 @@ class AddonSettingsComponent extends React.Component {
   }
 }
 AddonSettingsComponent.propTypes = {
-  addons: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-    manifest: PropTypes.any
-  })),
+  addons: PropTypes.object,
   onReloadNow: PropTypes.func,
   onSettingsChanged: PropTypes.func
 };
 AddonSettingsComponent.defaultProps = {
-  addons: loadedAddons
+  addons
 };
 
 export default AddonSettingsComponent;

@@ -1,24 +1,24 @@
+import {ipcRenderer} from 'electron';
 import AddonRunner from './api';
 import addons from './addons';
-import AddonSettingsAPI from './settings-api';
-import {ipcRenderer} from 'electron';
+import SettingsStore from './settings-store';
 
 try {
     const enabledAddons = [];
 
-    for (const addonId of addons) {
-        const manifest = require(`./addons/${addonId}/addon.json`);
-        if (!AddonSettingsAPI.getEnabled(addonId, manifest)) {
+    for (const id of Object.keys(addons)) {
+        if (!SettingsStore.getEnabled(id)) {
             continue;
         }
 
-        const runner = new AddonRunner(addonId, manifest);
+        const manifest = addons[id];
+        const runner = new AddonRunner(id, manifest);
         enabledAddons.push(runner);
         runner.run();
     }
 
     ipcRenderer.on('addon-settings-changed', () => {
-        AddonSettingsAPI.reread();
+        SettingsStore.reread();
         for (const runner of enabledAddons) {
             runner.settingsChanged();
         }

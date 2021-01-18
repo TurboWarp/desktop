@@ -1,5 +1,5 @@
 import IntlMessageFormat from 'intl-messageformat';
-import AddonSettingsAPI from './settings-api';
+import SettingsStore from './settings-store';
 import getAddonTranslations from './get-addon-translations';
 import dataURLToBlob from './api-libraries/data-url-to-blob';
 
@@ -128,7 +128,7 @@ class Settings extends EventTarget {
     }
 
     get (id) {
-        return AddonSettingsAPI.getSettingValue(this._addonId, this._manifest, id);
+        return SettingsStore.getSettingValue(this._addonId, id);
     }
 }
 
