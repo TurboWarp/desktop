@@ -131,7 +131,7 @@ class SettingsStore extends EventTarget {
     }
 
     applyAddonPreset (addonId, presetId) {
-        const manifest = this.getAddonManifest();
+        const manifest = this.getAddonManifest(addonId);
         for (const {id, values} of manifest.presets) {
             if (id !== presetId) {
                 continue;
@@ -143,20 +143,24 @@ class SettingsStore extends EventTarget {
             for (const key of Object.keys(settings)) {
                 this.setAddonSetting(addonId, key, settings[key]);
             }
-            break;
+            return;
         }
         throw new Error(`Unknown preset: ${presetId}`);
     }
 
     resetAllAddons () {
+        if (Object.keys(this.store).length === 0) {
+            return;
+        }
         this.store = {};
         this.saveToLocalStorage();
         this.dispatchEvent(new CustomEvent('reset-all'));
     }
 
     resetAddon (addonId) {
+        const enabledKey = this.getStorageKey(addonId, 'enabled');
         for (const key of Object.keys(this.store)) {
-            if (key.startsWith(addonId)) {
+            if (key.startsWith(addonId) && key !== enabledKey) {
                 delete this.store[key];
             }
         }

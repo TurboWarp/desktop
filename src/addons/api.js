@@ -128,7 +128,7 @@ class Settings extends EventTarget {
     }
 
     get (id) {
-        return SettingsStore.getSettingValue(this._addonId, id);
+        return SettingsStore.getAddonSetting(this._addonId, id);
     }
 }
 
@@ -149,6 +149,8 @@ class Addon {
 
 class AddonRunner {
     constructor (id, manifest) {
+        AddonRunner.instances.push(this);
+
         this.id = id;
         this.manifest = manifest;
         this.messageCache = {};
@@ -204,7 +206,7 @@ class AddonRunner {
         }
     }
 
-    run () {
+    _run () {
         this.updateCSSVariables();
 
         if (this.manifest.userstyles) {
@@ -225,7 +227,16 @@ class AddonRunner {
             }
         }
     }
+
+    run () {
+        try {
+            this._run();
+        } catch (e) {
+            console.error('Addon error', e);
+        }
+    }
 }
+AddonRunner.instances = [];
 
 const emitUrlChange = () => {
     setTimeout(() => {
@@ -235,7 +246,6 @@ const emitUrlChange = () => {
         }
     });
 };
-
 const originalReplaceState = history.replaceState;
 history.replaceState = function (...args) {
     originalReplaceState.apply(this, args);
@@ -246,5 +256,11 @@ history.pushState = function (...args) {
     originalPushState.apply(this, args);
     emitUrlChange();
 };
+
+SettingsStore.addEventListener('reread', () => {
+    for (const runner of AddonRunner.instances) {
+        runner.settingsChanged();
+    }
+});
 
 export default AddonRunner;

@@ -24,7 +24,7 @@ const onStorageInit = (storage) => {
 };
 
 const onLoadAddons = () => {
-  require('../../addons/entry');
+  require('../../addons/entry-electron');
 };
 
 const onClickLogo = () => {

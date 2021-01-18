@@ -331,13 +331,13 @@ class AddonSettingsComponent extends React.Component {
 
   onSettingChanged (e) {
     const {addonId, settingId, value, reloadRequired} = e.detail;
-    this.setState({
+    this.setState((state) => ({
       [addonId]: {
-        ...this.state[addonId],
+        ...state[addonId],
         modified: true,
         [settingId]: value
       }
-    });
+    }));
     if (reloadRequired) {
       this.setState({
         dirty: true
@@ -384,15 +384,12 @@ class AddonSettingsComponent extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    for (const key of Object.keys(this.state)) {
-      if (key === 'dirty') {
-        continue;
-      }
-      if (this.state[key] !== prevState[key]) {
-        if (this.props.onSettingChanged) {
-          this.props.onSettingChanged();
+    if (this.props.onSettingsChanged) {
+      for (const key of Object.keys(this.state)) {
+        if (key !== 'dirty' && this.state[key] !== prevState[key]) {
+          this.props.onSettingsChanged();
+          break;
         }
-        break;
       }
     }
   }
