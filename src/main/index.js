@@ -259,9 +259,9 @@ ipcMain.on('addon-settings', (event, {locale}) => {
   settingsWindow.focus();
 });
 
-ipcMain.on('addon-settings-changed', () => {
+ipcMain.on('addon-settings-changed', (event, newSettings) => {
   for (const window of editorWindows) {
-    window.webContents.send('addon-settings-changed');
+    window.webContents.send('addon-settings-changed', newSettings);
   }
 });
 

@@ -11,6 +11,7 @@ for (const [id, manifest] of Object.entries(addons)) {
     runner.run();
 }
 
-ipcRenderer.on('addon-settings-changed', () => {
-    SettingsStore.reread();
+ipcRenderer.on('addon-settings-changed', (event, settings) => {
+    SettingsStore.store = settings;
+    SettingsStore.dispatchEvent(new CustomEvent('reread'));
 });

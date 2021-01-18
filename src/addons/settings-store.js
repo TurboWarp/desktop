@@ -164,11 +164,6 @@ class SettingsStore extends EventTarget {
             }
         }
     }
-
-    reread () {
-        this.store = this.readLocalStorage();
-        this.dispatchEvent(new CustomEvent('reread'));
-    }
 }
 
 export default new SettingsStore();
