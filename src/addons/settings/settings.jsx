@@ -456,12 +456,12 @@ class AddonSettingsComponent extends React.Component {
     if (!this.state.easterEggs && e.key.toLowerCase() === KONAMI[this.konamiProgress]) {
       this.konamiProgress++;
       if (this.konamiProgress >= KONAMI.length) {
-        setTimeout(() => {
-          this.setState({
-            easterEggs: true,
-            search: ''
-          });
-        })
+        this.setState({
+          easterEggs: true,
+          search: ''
+        });
+        e.preventDefault();
+        return;
       }
     } else {
       this.konamiProgress = 0;
