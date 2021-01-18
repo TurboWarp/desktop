@@ -1,0 +1,13 @@
+{
+  "name": "Highlight currently executing blocks",
+  "description": "Adds a blue border to the blocks that are currently running in a project.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["editor"],
+  "enabledByDefault": false,
+  "l10n": true
+}

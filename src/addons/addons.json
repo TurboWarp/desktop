@@ -7,10 +7,15 @@
   "mediarecorder",
   "onion-skinning",
   "editor-stage-left",
+  "editor-colored-context-menus",
   "remove-sprite-confirm",
   "bitmap-copy",
   "editor-theme3",
   "hide-flyout",
+  "clones",
+  "mouse-pos",
+  "cat-blocks",
+  "editor-stepping",
   "fix-uploaded-svgs",
   "tw-compiler-options"
 ]
