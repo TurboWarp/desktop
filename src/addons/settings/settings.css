@@ -10,6 +10,7 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .header {
@@ -17,7 +18,6 @@ body {
   flex-direction: row;
   align-items: center;
   position: relative;
-  z-index: 10;
   padding: 8px 8px;
   background-color: #fcfcfc;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -53,7 +53,8 @@ body {
 }
 
 .addons {
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 4px;
 }
 
@@ -171,8 +172,8 @@ body {
 
 .dirty-outer {
   display: flex;
-  position: fixed;
-  top: 58px;
+  position: absolute;
+  top: 100%;
   left: 0;
   width: 100%;
   justify-content: center;

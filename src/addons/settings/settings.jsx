@@ -467,7 +467,10 @@ class AddonSettingsComponent extends React.Component {
     } else {
       this.konamiProgress = 0;
     }
-    if (e.key.toLowerCase() === 'f' && e.ctrlKey) {
+    if (e.key.length === 1 && !(e.ctrlKey || e.metaKey || e.altKey)) {
+      this.searchBar.focus();
+    }
+    if (e.key === 'f' && (e.ctrlKey || e.metaKey)) {
       this.searchBar.focus();
     }
   }
@@ -511,13 +514,6 @@ class AddonSettingsComponent extends React.Component {
     })).filter(({id, manifest, state}) => this.shouldShowAddon(state, id, manifest));
     return (
       <div className={styles.container}>
-        {this.state.dirty && (
-          ReactDOM.createPortal((
-            <DirtyComponent
-              onReloadNow={this.props.onReloadNow && this.handleReloadNow}
-            />
-          ), document.body)
-        )}
         <div className={styles.header}>
           <div className={styles.searchContainer}>
             <input
@@ -531,8 +527,14 @@ class AddonSettingsComponent extends React.Component {
             <button
               className={styles.searchButton}
               onClick={this.handleClickSearchButton}
+              tabIndex="-1"
             />
           </div>
+          {this.state.dirty && (
+            <DirtyComponent
+              onReloadNow={this.props.onReloadNow && this.handleReloadNow}
+            />
+          )}
         </div>
         <div className={styles.addons}>
           {addons.length > 0 ? (
