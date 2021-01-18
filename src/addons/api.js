@@ -9,11 +9,11 @@ const kebabCaseToCamelCase = (str) => str.replace(/-([a-z])/g, (g) => g[1].toUpp
 class Redux extends EventTarget {
     constructor () {
         super();
-        this.initialized = false;
+        this._initialized = false;
     }
 
     initialize () {
-        if (!this.initialized) {
+        if (!this._initialized) {
             window.__APP_STATE_REDUCER__ = (action, next) => {
                 this.dispatchEvent(new CustomEvent('statechanged', {
                     detail: {
@@ -23,7 +23,7 @@ class Redux extends EventTarget {
                 }));
             };
 
-            this.initialized = true;
+            this._initialized = true;
         }
     }
 
