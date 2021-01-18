@@ -112,7 +112,6 @@ const DesktopHOC = function (WrappedComponent) {
         onLoadingStarted,
         onLoadingFinished,
         onSetFileHandle,
-        projectChanged,
         vm,
         ...props
       } = this.props;
@@ -130,14 +129,12 @@ const DesktopHOC = function (WrappedComponent) {
     onLoadingStarted: PropTypes.func,
     onLoadingFinished: PropTypes.func,
     onSetFileHandle: PropTypes.func,
-    projectChanged: PropTypes.bool,
     vm: PropTypes.shape({
       loadProject: PropTypes.func
     })
   };
   const mapStateToProps = state => ({
     locale: state.locales.locale,
-    projectChanged: state.scratchGui.projectChanged,
     vm: state.scratchGui.vm
   });
   const mapDispatchToProps = dispatch => ({
