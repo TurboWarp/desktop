@@ -1,6 +1,6 @@
 import {ipcRenderer} from 'electron';
 import AddonRunner from './api';
-import addons from './addons';
+import addons from './addon-manifests';
 import SettingsStore from './settings-store';
 
 for (const [id, manifest] of Object.entries(addons)) {

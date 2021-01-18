@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import addons from '../addons';
+import addons from '../addon-manifests';
 import getAddonTranslations from '../get-addon-translations';
 import SettingsStore from '../settings-store';
 import styles from './settings.css';
@@ -23,11 +23,12 @@ const nbsp = '\u00a0';
 
 const AddonCredits = ({credits}) => (
   credits.map((author, index) => {
-    const isFirst = index === 0;
     const isLast = index === credits.length - 1;
     return (
-      <span key={index}>
-        {!isFirst && isLast ? ' and ' : null}
+      <span
+        className={styles.credit}
+        key={index}
+      >
         <a
           href={author.link}
           target="_blank"
@@ -206,22 +207,24 @@ const AddonComponent = ({
       {nbsp}
       {addonTranslations[`${id}/@name`] || manifest.name}
     </label>
-    <div className={styles.side}>
-      {settings.enabled && manifest.presets && (
-        <PresetComponent
-          addonId={id}
-          presets={manifest.presets}
-        />
-      )}
-      {settings.modified && (
-        <button
-          className={styles.resetButton}
-          onClick={() => SettingsStore.resetAddon(id)}
-        >
-          {settingsTranslations['tw.addons.settings.reset']}
-        </button>
-      )}
-    </div>
+    {settings.enabled && (
+      <div className={styles.side}>
+        {manifest.presets && (
+          <PresetComponent
+            addonId={id}
+            presets={manifest.presets}
+          />
+        )}
+        {manifest.settings && (
+          <button
+            className={styles.resetButton}
+            onClick={() => SettingsStore.resetAddon(id)}
+          >
+            {settingsTranslations['tw.addons.settings.reset']}
+          </button>
+        )}
+      </div>
+    )}
     <div className={styles.description}>
       {addonTranslations[`${id}/@description`] || manifest.description}
     </div>
@@ -298,38 +301,33 @@ DirtyComponent.propTypes = {
 class AddonSettingsComponent extends React.Component {
   constructor (props) {
     super(props);
-    this.state = this.getInitialState();
-    this.onSettingChanged = this.onSettingChanged.bind(this);
-    this.onResetAll = this.onResetAll.bind(this);
-    this.onResetAddon = this.onResetAddon.bind(this);
+    this.handleSettingStoreChanged = this.handleSettingStoreChanged.bind(this);
     this.handleReloadNow = this.handleReloadNow.bind(this);
     this.handleResetAll = this.handleResetAll.bind(this);
-  }
-
-  getInitialAddonState (id, manifest) {
-    const state = {
-      enabled: SettingsStore.getAddonEnabled(id),
-      modified: SettingsStore.doesAddonHaveSettings(id)
-    };
-    if (manifest.settings) {
-      for (const setting of manifest.settings) {
-        state[setting.id] = SettingsStore.getAddonSetting(id, setting.id);
-      }
-    }
-    return state;
-  }
-
-  getInitialState () {
-    const initialState = {
+    this.state = {
       dirty: false
     };
     for (const [id, manifest] of Object.entries(this.props.addons)) {
-      initialState[id] = this.getInitialAddonState(id, manifest);
+      const addonState = {
+        enabled: SettingsStore.getAddonEnabled(id)
+      };
+      if (manifest.settings) {
+        for (const setting of manifest.settings) {
+          addonState[setting.id] = SettingsStore.getAddonSetting(id, setting.id);
+        }
+      }
+      this.state[id] = addonState;
     }
-    return initialState;
+    this.changeTimeout = null;
   }
-
-  onSettingChanged (e) {
+  componentDidMount () {
+    SettingsStore.addEventListener('setting-changed', this.handleSettingStoreChanged);
+  }
+  componentWillUnmount () {
+    SettingsStore.removeEventListener('setting-changed', this.handleSettingStoreChanged);
+    clearTimeout(this.changeTimeout);
+  }
+  handleSettingStoreChanged (e) {
     const {addonId, settingId, value, reloadRequired} = e.detail;
     this.setState((state) => ({
       [addonId]: {
@@ -343,63 +341,26 @@ class AddonSettingsComponent extends React.Component {
         dirty: true
       });
     }
-  }
-
-  onResetAll (e) {
-    this.setState(this.getInitialState());
-    this.setState({
-      dirty: true
-    });
-  }
-
-  onResetAddon (e) {
-    const {addonId} = e.detail;
-    this.setState({
-      [addonId]: this.getInitialAddonState(addonId, addons[addonId])
-    });
-    this.setState({
-      dirty: true
-    });
-  }
-
-  handleReloadNow () {
-    if (this.props.onReloadNow) {
-      this.props.onReloadNow();
+    if (this.changeTimeout === null) {
+      this.changeTimeout = setTimeout(() => {
+        if (this.props.onSettingsChanged) {
+          this.props.onSettingsChanged();
+        }
+        this.changeTimeout = null;
+      });
     }
+  }
+  handleReloadNow () {
+    this.props.onReloadNow();
     this.setState({
       dirty: false
     });
   }
-
   handleResetAll () {
     if (confirm(settingsTranslations['tw.addons.settings.confirmResetAll'])) {
       SettingsStore.resetAllAddons();
     }
   }
-
-  componentDidMount () {
-    SettingsStore.addEventListener('setting-changed', this.onSettingChanged);
-    SettingsStore.addEventListener('reset-all', this.onResetAll);
-    SettingsStore.addEventListener('reset-addon', this.onResetAddon);
-  }
-
-  componentDidUpdate (prevProps, prevState) {
-    if (this.props.onSettingsChanged) {
-      for (const key of Object.keys(this.state)) {
-        if (key !== 'dirty' && this.state[key] !== prevState[key]) {
-          this.props.onSettingsChanged();
-          break;
-        }
-      }
-    }
-  }
-
-  componentWillUnmount () {
-    SettingsStore.removeEventListener('setting-changed', this.onSettingChanged);
-    SettingsStore.removeEventListener('reset-all', this.onResetAll);
-    SettingsStore.removeEventListener('reset-addon', this.onResetAddon);
-  }
-
   render () {
     return (
       <div>

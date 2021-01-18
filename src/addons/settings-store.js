@@ -1,4 +1,4 @@
-import addons from './addons';
+import addons from './addon-manifests';
 
 const SETTINGS_KEY = 'tw:addons';
 
@@ -101,26 +101,25 @@ class SettingsStore extends EventTarget {
         return null;
     }
 
-    doesAddonHaveSettings (addonId) {
-        for (const key of Object.keys(this.store)) {
-            if (key.startsWith(addonId)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     setAddonSetting (addonId, settingId, value) {
         const settingObject = this.getAddonSettingObject(addonId, settingId);
-        const reloadRequired = !(settingObject && settingObject.reloadRequired === false);
         const key = this.getStorageKey(addonId, settingId);
-        this.store[key] = value;
+        if (value === null) {
+            delete this.store[key];
+            if (settingId === 'enabled') {
+                value = !!this.getAddonManifest(addonId).enabledByDefault;
+            } else {
+                value = settingObject.default;
+            }
+        } else {
+            this.store[key] = value;
+        }
         this.saveToLocalStorage();
         this.dispatchEvent(new CustomEvent('setting-changed', {
             detail: {
                 addonId,
                 settingId,
-                reloadRequired,
+                reloadRequired: !(settingObject && settingObject.reloadRequired === false),
                 value
             }
         }));
@@ -149,27 +148,21 @@ class SettingsStore extends EventTarget {
     }
 
     resetAllAddons () {
-        if (Object.keys(this.store).length === 0) {
-            return;
+        for (const addon of Object.keys(addons)) {
+            this.resetAddon(addon, true);
         }
-        this.store = {};
-        this.saveToLocalStorage();
-        this.dispatchEvent(new CustomEvent('reset-all'));
     }
 
-    resetAddon (addonId) {
-        const enabledKey = this.getStorageKey(addonId, 'enabled');
+    resetAddon (addonId, resetEverything) {
         for (const key of Object.keys(this.store)) {
-            if (key.startsWith(addonId) && key !== enabledKey) {
-                delete this.store[key];
+            if (key.startsWith(addonId)) {
+                const setting = key.split('/')[1];
+                if (setting === 'enabled' && !resetEverything) {
+                    continue;
+                }
+                this.setAddonSetting(addonId, setting, null);
             }
         }
-        this.saveToLocalStorage();
-        this.dispatchEvent(new CustomEvent('reset-addon', {
-            detail: {
-                addonId
-            }
-        }));
     }
 
     reread () {

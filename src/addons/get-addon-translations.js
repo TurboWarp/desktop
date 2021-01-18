@@ -1,8 +1,8 @@
-import addons from './addons';
+import addons from './addons.json';
 
 export default function getTranslations (lang) {
   const result = {};
-  for (const addonId of Object.keys(addons)) {
+  for (const addonId of addons) {
     try {
       const english = require(`./addons-l10n/en/${addonId}.json`);
       Object.assign(result, english);

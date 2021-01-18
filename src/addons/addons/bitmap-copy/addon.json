@@ -16,6 +16,6 @@
   ],
   "tags": ["editor", "recommended"],
   "permissions": ["clipboardWrite"],
-  "enabledByDefault": false,
+  "enabledByDefault": true,
   "l10n": true
 }
