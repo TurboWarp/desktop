@@ -467,10 +467,11 @@ class AddonSettingsComponent extends React.Component {
     } else {
       this.konamiProgress = 0;
     }
-    if (e.key.length === 1 && !(e.ctrlKey || e.metaKey || e.altKey)) {
+    const key = e.key;
+    if (key.length === 1 && key !== ' ' && !(e.ctrlKey || e.metaKey || e.altKey)) {
       this.searchBar.focus();
     }
-    if (e.key === 'f' && (e.ctrlKey || e.metaKey)) {
+    if (key === 'f' && (e.ctrlKey || e.metaKey)) {
       this.searchBar.focus();
     }
   }
