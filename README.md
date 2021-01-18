@@ -46,7 +46,7 @@ npm run dev
 # Production (output is in `dist` folder)
 npm run dist
 # If it crashes with "JavaScript heap out of memory", try:
-NODE_OPTIONS=--max-old-space-size=4096 npm run compile
+NODE_OPTIONS=--max-old-space-size=4096 npm run dist
 ```
 
 ## Website
