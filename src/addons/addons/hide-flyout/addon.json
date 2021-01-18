@@ -42,7 +42,8 @@
           "name": "Long"
         }
       ],
-      "default": "default"
+      "default": "default",
+      "reloadRequired": false
     },
     {
       "name": "Toggle on...",
