@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -370,6 +371,7 @@ class AddonSettingsComponent extends React.Component {
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.searchRef = this.searchRef.bind(this);
+    this.handleClickSearchButton = this.handleClickSearchButton.bind(this);
     this.searchBar = null;
     this.state = {
       dirty: false,
@@ -450,6 +452,9 @@ class AddonSettingsComponent extends React.Component {
   searchRef (searchBar) {
     this.searchBar = searchBar;
   }
+  handleClickSearchButton (e) {
+    this.searchBar.focus();
+  }
   handleKeyDown (e) {
     if (!this.state.easterEggs && e.key.toLowerCase() === KONAMI[this.konamiProgress]) {
       this.konamiProgress++;
@@ -507,19 +512,29 @@ class AddonSettingsComponent extends React.Component {
     return (
       <div className={styles.container}>
         {this.state.dirty && (
-          <DirtyComponent
-            onReloadNow={this.props.onReloadNow && this.handleReloadNow}
-          />
+          ReactDOM.createPortal((
+            <DirtyComponent
+              onReloadNow={this.props.onReloadNow && this.handleReloadNow}
+            />
+          ), document.body)
         )}
-        <input
-          className={styles.search}
-          value={this.state.search}
-          onChange={this.handleSearch}
-          ref={this.searchRef}
-          placeholder={settingsTranslations['tw.addons.settings.search']}
-          autoFocus
-        />
-        <div className={styles.addonContainer}>
+        <div className={styles.header}>
+          <div className={styles.searchContainer}>
+            <input
+              className={styles.searchInput}
+              value={this.state.search}
+              onChange={this.handleSearch}
+              placeholder={settingsTranslations['tw.addons.settings.search']}
+              ref={this.searchRef}
+              autoFocus
+            />
+            <button
+              className={styles.searchButton}
+              onClick={this.handleClickSearchButton}
+            />
+          </div>
+        </div>
+        <div className={styles.addons}>
           {addons.length > 0 ? (
             <>
               {addons.map(({id, manifest, state}) => (

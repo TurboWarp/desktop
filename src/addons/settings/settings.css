@@ -2,10 +2,59 @@ body {
   background-color: white;
   color: black;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0;
 }
 
-.addon-container {
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+  padding: 8px 8px;
+  background-color: #fcfcfc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search-container {
+  display: flex;
+}
+
+.search-input {
+  background-color: #f0f0f0;
+  color: #222;
+  width: 150px;
+  height: 16px;
+  padding: 10px 15px;
+  border: none;
+  outline: none;
+  border-radius: 4px 0 0 4px;
+}
+
+.search-button {
+  background-color: #f0f0f0;
+  color: #222;
+  height: 36px;
+  width: 36px;
+  background-image: url("search.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  outline: none;
+  cursor: pointer;
+}
+
+.addons {
+  overflow: auto;
+  padding: 4px;
 }
 
 .addon {
@@ -52,19 +101,19 @@ body {
 
 .tag-recommended {
   color: white;
-  background: #175ef8;
+  background-color: #175ef8;
   border-color: #0e44b8;
 }
 
 .tag-beta {
   color: white;
-  background: #fd662b;
+  background-color: #fd662b;
   border-color: #d84a12;
 }
 
 .tag-easter-egg {
   color: black;
-  background: #b9f38d;
+  background-color: #b9f38d;
   border-color: #8fce5e;
 }
 
@@ -115,10 +164,6 @@ body {
 
 }
 
-.search {
-
-}
-
 .no-results {
   text-align: center;
   font-style: italic;
@@ -127,7 +172,7 @@ body {
 .dirty-outer {
   display: flex;
   position: fixed;
-  top: 8px;
+  top: 58px;
   left: 0;
   width: 100%;
   justify-content: center;
@@ -136,7 +181,7 @@ body {
 }
 
 .dirty-inner {
-  padding: 20px;
+  padding: 8px;
   background: #ffeedf;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border: 1px solid #cfcfcf;

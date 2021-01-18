@@ -4,7 +4,6 @@ import {ipcRenderer} from 'electron';
 
 import Settings from '../../addons/settings/settings.jsx';
 import SettingsStore from '../../addons/settings-store';
-import styles from './settings.css';
 
 const onReloadNow = () => {
   ipcRenderer.send('reload-all');
@@ -21,10 +20,8 @@ const onSettingsChanged = () => {
 };
 
 ReactDOM.render((
-  <main>
-    <Settings
-      onReloadNow={onReloadNow}
-      onSettingsChanged={onSettingsChanged}
-    />
-  </main>
+  <Settings
+    onReloadNow={onReloadNow}
+    onSettingsChanged={onSettingsChanged}
+  />
 ), require('../app-target'));
