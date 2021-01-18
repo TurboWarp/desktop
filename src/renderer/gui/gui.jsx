@@ -57,6 +57,7 @@ darkModeMedia.onchange = () => document.body.setAttribute('theme', darkModeMedia
 darkModeMedia.onchange();
 
 const DesktopHOC = function (WrappedComponent) {
+  let mountedOnce = false;
   class DesktopComponent extends React.Component {
     constructor (props) {
       super(props);
@@ -67,6 +68,10 @@ const DesktopHOC = function (WrappedComponent) {
     }
 
     componentDidMount () {
+      if (mountedOnce) {
+        return;
+      }
+      mountedOnce = true;
       const urlSearchParams = new URLSearchParams(location.search);
       const file = urlSearchParams.get("file");
       if (file !== null) {
