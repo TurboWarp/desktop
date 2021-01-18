@@ -371,7 +371,6 @@ class AddonSettingsComponent extends React.Component {
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.searchRef = this.searchRef.bind(this);
-    this.handleClickSearchButton = this.handleClickSearchButton.bind(this);
     this.searchBar = null;
     this.state = {
       dirty: false,
@@ -452,9 +451,6 @@ class AddonSettingsComponent extends React.Component {
   searchRef (searchBar) {
     this.searchBar = searchBar;
   }
-  handleClickSearchButton (e) {
-    this.searchBar.focus();
-  }
   handleKeyDown (e) {
     if (!this.state.easterEggs && e.key.toLowerCase() === KONAMI[this.konamiProgress]) {
       this.konamiProgress++;
@@ -516,7 +512,7 @@ class AddonSettingsComponent extends React.Component {
     return (
       <div className={styles.container}>
         <div className={styles.header}>
-          <div className={styles.searchContainer}>
+          <label className={styles.searchContainer}>
             <input
               className={styles.searchInput}
               value={this.state.search}
@@ -525,12 +521,8 @@ class AddonSettingsComponent extends React.Component {
               ref={this.searchRef}
               autoFocus
             />
-            <button
-              className={styles.searchButton}
-              onClick={this.handleClickSearchButton}
-              tabIndex="-1"
-            />
-          </div>
+            <div className={styles.searchButton} />
+          </label>
           {this.state.dirty && (
             <DirtyComponent
               onReloadNow={this.props.onReloadNow && this.handleReloadNow}
