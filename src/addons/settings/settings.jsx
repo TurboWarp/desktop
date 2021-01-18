@@ -231,7 +231,9 @@ const AddonComponent = ({
     </div>
     {settings.enabled && (
       <div>
-        {manifest.info && (
+        {/* notices are temporarily disabled because they're currently only used to notify a refresh is required */}
+        {/* we already handle notifying users of that different than upstream */}
+        {/* {manifest.info && (
           <div className={styles.noticeContainer}>
             {manifest.info.map((info) => (
               <NoticeComponent
@@ -241,7 +243,7 @@ const AddonComponent = ({
               />
             ))}
           </div>
-        )}
+        )} */}
         {manifest.credits && (
           <div className={styles.credits}>
             {settingsTranslations["tw.addons.settings.credits"]}
