@@ -33,24 +33,36 @@ body {
 }
 
 .tag {
-  color: #fff;
   border-radius: 4px;
   padding: 2px 5px;
   font-size: 12px;
   margin-left: 10px;
+  border-bottom: 2px solid #111;
 }
 
 .tag-recommended {
+  color: white;
   background: #175ef8;
   border-color: #0e44b8;
 }
 
+.tag-easter-egg {
+  color: black;
+  background: #b9f38d;
+  border-color: #8fce5e;
+}
+
 .tag-turbowarp {
+  color: white;
   background: #ff4c4c;
   border-color: rgb(185, 38, 38);
 }
 
-.credits {
+.credit-container {
+
+}
+
+.credit {
 
 }
 

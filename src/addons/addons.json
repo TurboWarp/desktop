@@ -14,8 +14,8 @@
   "hide-flyout",
   "clones",
   "mouse-pos",
-  "cat-blocks",
   "editor-stepping",
   "fix-uploaded-svgs",
-  "tw-compiler-options"
+  "tw-compiler-options",
+  "cat-blocks"
 ]

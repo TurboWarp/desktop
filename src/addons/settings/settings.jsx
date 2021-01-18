@@ -56,6 +56,11 @@ const TagComponent = ({tags}) => tags.length > 0 && (
         {settingsTranslations['tw.addons.settings.tags.recommended']}
       </span>
     )}
+    {tags.includes('easterEgg') && (
+      <span className={classNames(styles.tag, styles.tagEasterEgg)}>
+        {settingsTranslations['tw.addons.settings.tags.easterEgg']}
+      </span>
+    )}
     {tags.includes('turbowarp') && (
       <span className={classNames(styles.tag, styles.tagTurbowarp)}>
         {settingsTranslations['tw.addons.settings.tags.turbowarp']}
@@ -273,7 +278,7 @@ const AddonComponent = ({
           </div>
         )} */}
         {manifest.credits && (
-          <div className={styles.credits}>
+          <div className={styles.creditContainer}>
             {settingsTranslations["tw.addons.settings.credits"]}
             <AddonCreditsComponent credits={manifest.credits} />
           </div>
@@ -329,15 +334,31 @@ DirtyComponent.propTypes = {
   onReloadNow: PropTypes.func
 };
 
+const KONAMI = [
+  'arrowup',
+  'arrowup',
+  'arrowdown',
+  'arrowdown',
+  'arrowleft',
+  'arrowright',
+  'arrowleft',
+  'arrowright',
+  'b',
+  'a',
+];
+
 class AddonSettingsComponent extends React.Component {
   constructor (props) {
     super(props);
     this.handleSettingStoreChanged = this.handleSettingStoreChanged.bind(this);
     this.handleReloadNow = this.handleReloadNow.bind(this);
     this.handleResetAll = this.handleResetAll.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
     this.state = {
-      dirty: false
+      dirty: false,
+      easterEggs: false
     };
+    this.konamiProgress = 0;
     for (const [id, manifest] of Object.entries(this.props.addons)) {
       const addonState = {
         enabled: SettingsStore.getAddonEnabled(id),
@@ -354,9 +375,11 @@ class AddonSettingsComponent extends React.Component {
   }
   componentDidMount () {
     SettingsStore.addEventListener('setting-changed', this.handleSettingStoreChanged);
+    document.body.addEventListener('keydown', this.handleKeyDown);
   }
   componentWillUnmount () {
     SettingsStore.removeEventListener('setting-changed', this.handleSettingStoreChanged);
+    document.body.removeEventListener('keydown', this.handleKeyDown);
   }
   handleSettingStoreChanged (e) {
     const {addonId, settingId, value, reloadRequired} = e.detail;
@@ -402,6 +425,25 @@ class AddonSettingsComponent extends React.Component {
       SettingsStore.resetAllAddons();
     }
   }
+  handleKeyDown (e) {
+    if (!this.state.easterEggs && e.key.toLowerCase() === KONAMI[this.konamiProgress]) {
+      this.konamiProgress++;
+      if (this.konamiProgress >= KONAMI.length) {
+        this.setState({
+          easterEggs: true
+        });
+      }
+    } else {
+      this.konamiProgress = 0;
+    }
+  }
+  shouldShowAddon (state, manifest) {
+    const isEasterEgg = manifest.tags && manifest.tags.includes('easterEgg');
+    if (this.state.easterEggs) {
+      return true;
+    }
+    return !isEasterEgg || state.enabled;
+  }
   render () {
     return (
       <div>
@@ -413,6 +455,9 @@ class AddonSettingsComponent extends React.Component {
         <div className={styles.addonContainer}>
           {Object.entries(this.props.addons).map(([id, manifest]) => {
             const state = this.state[id];
+            if (!this.shouldShowAddon(state, manifest)) {
+              return null;
+            }
             return (
               <AddonComponent
                 key={id}
