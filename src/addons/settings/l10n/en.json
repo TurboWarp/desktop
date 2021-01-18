@@ -9,5 +9,7 @@
   "tw.addons.settings.presets": "Presets",
   "tw.addons.settings.tags.recommended": "Recommended",
   "tw.addons.settings.tags.easterEgg": "Easter Egg",
-  "tw.addons.settings.tags.turbowarp": "TurboWarp"
+  "tw.addons.settings.tags.turbowarp": "TurboWarp",
+  "tw.addons.settings.search": "Search",
+  "tw.addons.settings.noResults": "No results."
 }

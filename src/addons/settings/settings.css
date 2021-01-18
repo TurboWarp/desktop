@@ -25,13 +25,13 @@ body {
   padding-bottom: 3px;
   display: flex;
   justify-content: space-between;
-  height: 24px;
+  min-height: 24px;
 }
 
 .addon-title {
   font-weight: bold;
   display: flex;
-  align-items: center;
+  align-items: baseline;
 }
 
 .addon-title-text {
@@ -107,6 +107,15 @@ body {
 
 .reset-all-button {
 
+}
+
+.search {
+
+}
+
+.no-results {
+  text-align: center;
+  font-style: italic;
 }
 
 .dirty-outer {

@@ -363,9 +363,13 @@ class AddonSettingsComponent extends React.Component {
     this.handleReloadNow = this.handleReloadNow.bind(this);
     this.handleResetAll = this.handleResetAll.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
+    this.searchRef = this.searchRef.bind(this);
+    this.searchBar = null;
     this.state = {
       dirty: false,
-      easterEggs: false
+      easterEggs: false,
+      search: ''
     };
     this.konamiProgress = 0;
     for (const [id, manifest] of Object.entries(this.props.addons)) {
@@ -380,7 +384,6 @@ class AddonSettingsComponent extends React.Component {
       }
       this.state[id] = addonState;
     }
-    this.changeTimeout = null;
   }
   componentDidMount () {
     SettingsStore.addEventListener('setting-changed', this.handleSettingStoreChanged);
@@ -434,19 +437,56 @@ class AddonSettingsComponent extends React.Component {
       SettingsStore.resetAllAddons();
     }
   }
+  handleSearch (e) {
+    this.setState({
+      search: e.target.value
+    });
+  }
+  searchRef (searchBar) {
+    this.searchBar = searchBar;
+  }
   handleKeyDown (e) {
     if (!this.state.easterEggs && e.key.toLowerCase() === KONAMI[this.konamiProgress]) {
       this.konamiProgress++;
       if (this.konamiProgress >= KONAMI.length) {
         this.setState({
-          easterEggs: true
+          easterEggs: true,
+          search: ''
         });
       }
     } else {
       this.konamiProgress = 0;
     }
+    if (e.key.toLowerCase() === 'f' && e.ctrlKey) {
+      this.searchBar.focus();
+    }
   }
-  shouldShowAddon (state, manifest) {
+  isIncludedInSearch (addonId, manifest) {
+    const search = this.state.search.trim().toLowerCase();
+    if (!search) {
+      return true;
+    }
+    const texts = [
+      addonTranslations[`${addonId}/@name`] || manifest.name,
+      addonTranslations[`${addonId}/@name`] || manifest.description,
+      ...(manifest.settings ? manifest.settings.map((setting) => {
+        return addonTranslations[`${addonId}/@settings-name-${setting.id}`] || setting.name;
+      }) : [])
+    ].map((i) => i.toLowerCase())
+    for (const term of search.split(' ')) {
+      if (!term) continue;
+      for (const text of texts) {
+        if (text.includes(term)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  shouldShowAddon (state, addonId, manifest) {
+    if (!this.isIncludedInSearch(addonId, manifest)) {
+      return false;
+    }
     const isEasterEgg = manifest.tags && manifest.tags.includes('easterEgg');
     if (this.state.easterEggs) {
       return true;
@@ -454,34 +494,49 @@ class AddonSettingsComponent extends React.Component {
     return !isEasterEgg || state.enabled;
   }
   render () {
+    const addons = Object.entries(this.props.addons).map(([id, manifest]) => ({
+      id,
+      manifest,
+      state: this.state[id]
+    })).filter(({id, manifest, state}) => this.shouldShowAddon(state, id, manifest));
     return (
-      <div>
+      <div className={styles.container}>
         {this.state.dirty && (
           <DirtyComponent
             onReloadNow={this.props.onReloadNow && this.handleReloadNow}
           />
         )}
+        <input
+          className={styles.search}
+          value={this.state.search}
+          onChange={this.handleSearch}
+          ref={this.searchRef}
+          placeholder={settingsTranslations['tw.addons.settings.search']}
+          autoFocus
+        />
         <div className={styles.addonContainer}>
-          {Object.entries(this.props.addons).map(([id, manifest]) => {
-            const state = this.state[id];
-            if (!this.shouldShowAddon(state, manifest)) {
-              return null;
-            }
-            return (
-              <AddonComponent
-                key={id}
-                id={id}
-                settings={state}
-                manifest={manifest}
-              />
-            );
-          })}
-          <button
-            className={styles.resetAllButton}
-            onClick={this.handleResetAll}
-          >
-            {settingsTranslations["tw.addons.settings.resetAll"]}
-          </button>
+          {addons.length > 0 ? (
+            <>
+              {addons.map(({id, manifest, state}) => (
+                <AddonComponent
+                  key={id}
+                  id={id}
+                  settings={state}
+                  manifest={manifest}
+                />
+              ))}
+              <button
+                className={styles.resetAllButton}
+                onClick={this.handleResetAll}
+              >
+                {settingsTranslations["tw.addons.settings.resetAll"]}
+              </button>
+            </>
+          ) : (
+            <div className={styles.noResults}>
+              {settingsTranslations['tw.addons.settings.noResults']}
+            </div>
+          )}
         </div>
       </div>
     );
