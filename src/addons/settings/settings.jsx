@@ -210,11 +210,12 @@ const PresetComponent = ({
     {presets.map((preset) => {
       const presetId = preset.id;
       const name = addonTranslations[`${addonId}/@preset-name-${presetId}`] || preset.name;
-      const description = addonTranslations[`${addonId}/@preset-name-${presetId}`] || preset.name;
+      const description = addonTranslations[`${addonId}/@preset-description-${presetId}`] || preset.description;
       return (
         <option
           key={presetId}
           value={presetId}
+          title={description}
         >
           {name}
         </option>
@@ -455,10 +456,12 @@ class AddonSettingsComponent extends React.Component {
     if (!this.state.easterEggs && e.key.toLowerCase() === KONAMI[this.konamiProgress]) {
       this.konamiProgress++;
       if (this.konamiProgress >= KONAMI.length) {
-        this.setState({
-          easterEggs: true,
-          search: ''
-        });
+        setTimeout(() => {
+          this.setState({
+            easterEggs: true,
+            search: ''
+          });
+        })
       }
     } else {
       this.konamiProgress = 0;
@@ -476,19 +479,25 @@ class AddonSettingsComponent extends React.Component {
     if (!search) {
       return true;
     }
-    const texts = [
+    let texts = [
+      addonId,
       addonTranslations[`${addonId}/@name`] || manifest.name,
-      addonTranslations[`${addonId}/@name`] || manifest.description,
-      ...(manifest.settings ? manifest.settings.map((setting) => {
-        return addonTranslations[`${addonId}/@settings-name-${setting.id}`] || setting.name;
-      }) : [])
-    ].map((i) => i.toLowerCase())
-    for (const term of search.split(' ')) {
-      if (!term) continue;
-      for (const text of texts) {
-        if (text.includes(term)) {
-          return true;
-        }
+      addonTranslations[`${addonId}/@name`] || manifest.description
+    ];
+    if (manifest.settings) {
+      for (const setting of manifest.settings) {
+        texts.push(addonTranslations[`${addonId}/@settings-name-${setting.id}`] || setting.name);
+      }
+    }
+    if (manifest.presets) {
+      for (const preset of manifest.presets) {
+        texts.push(addonTranslations[`${addonId}/@preset-name-${preset.id}`] || preset.name);
+        texts.push(addonTranslations[`${addonId}/@preset-description-${preset.id}`] || preset.description);
+      }
+    }
+    for (const text of texts) {
+      if (text.toLowerCase().includes(search)) {
+        return true;
       }
     }
     return false;
@@ -519,6 +528,7 @@ class AddonSettingsComponent extends React.Component {
               onChange={this.handleSearch}
               placeholder={settingsTranslations['tw.addons.settings.search']}
               ref={this.searchRef}
+              spellCheck='false'
               autoFocus
             />
             <div className={styles.searchButton} />
