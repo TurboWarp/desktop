@@ -9,5 +9,6 @@
     }
   ],
   "enabledByDefault": false,
+  "tags": ["turbowarp"],
   "l10n": true
 }

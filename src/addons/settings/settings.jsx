@@ -11,10 +11,10 @@ const urlParameters = new URLSearchParams(location.search);
 const locale = urlParameters.get('locale') || 'en';
 const addonTranslations = getAddonTranslations(locale);
 
-const settingsTranslations = require('../settings-l10n/en.json');
+const settingsTranslations = require('./l10n/en.json');
 if (locale !== 'en') {
   try {
-    Object.assign(settingsTranslations, require(`../settings-l10n/${locale}.json`));
+    Object.assign(settingsTranslations, require(`./l10n/${locale}.json`));
   } catch (e) {
     // ignore
   }
@@ -49,8 +49,19 @@ AddonCreditsComponent.propTypes = {
   }))
 };
 
-const TagComponent = ({tags}) => (
-  null 
+const TagComponent = ({tags}) => tags.length > 0 && (
+  <span className={styles.tagContainer}>
+    {tags.includes('recommended') && (
+      <span className={classNames(styles.tag, styles.tagRecommended)}>
+        {settingsTranslations['tw.addons.settings.tags.recommended']}
+      </span>
+    )}
+    {tags.includes('turbowarp') && (
+      <span className={classNames(styles.tag, styles.tagTurbowarp)}>
+        {settingsTranslations['tw.addons.settings.tags.turbowarp']}
+      </span>
+    )}
+  </span>
 );
 TagComponent.propTypes = {
   tags: PropTypes.arrayOf(PropTypes.string)
@@ -215,8 +226,15 @@ const AddonComponent = ({
         onChange={(e) => SettingsStore.setAddonEnabled(id, e.target.checked)}
         checked={settings.enabled}
       />
-      {nbsp}
-      {addonTranslations[`${id}/@name`] || manifest.name}
+      <span className={styles.addonTitleText}>
+        {nbsp}
+        {addonTranslations[`${id}/@name`] || manifest.name}
+      </span>
+      {manifest.tags && (
+        <TagComponent
+          tags={manifest.tags}
+        />
+      )}
     </label>
     {settings.enabled && (
       <div className={styles.side}>

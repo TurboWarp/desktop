@@ -23,6 +23,31 @@ body {
 
 .addon-title {
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  padding-bottom: 3px;
+}
+
+.addon-title-text {
+
+}
+
+.tag {
+  color: #fff;
+  border-radius: 4px;
+  padding: 2px 5px;
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+.tag-recommended {
+  background: #175ef8;
+  border-color: #0e44b8;
+}
+
+.tag-turbowarp {
+  background: #ff4d4d;
+  border-color: rgb(185, 38, 38);
 }
 
 .credits {
