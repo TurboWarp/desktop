@@ -56,6 +56,12 @@ body {
   border-color: #0e44b8;
 }
 
+.tag-beta {
+  color: white;
+  background: #fd662b;
+  border-color: #d84a12;
+}
+
 .tag-easter-egg {
   color: black;
   background: #b9f38d;
