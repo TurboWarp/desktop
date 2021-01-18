@@ -47,6 +47,14 @@ window.scratchAddons = {
     }
 };
 
+const getEditorMode = () => {
+    const mode = tabReduxInstance.state.scratchGui.mode;
+    if (mode.isEmbedded) return 'embed';
+    if (mode.isFullScreen) return 'fullscreen';
+    if (mode.isPlayerOnly) return 'projectpage';
+    return 'editor';
+};
+
 class Tab extends EventTarget {
     constructor () {
         super();
@@ -112,11 +120,7 @@ class Tab extends EventTarget {
     }
 
     get editorMode () {
-        const mode = this.redux.state.scratchGui.mode;
-        if (mode.isEmbedded) return 'embed';
-        if (mode.isFullScreen) return 'fullscreen';
-        if (mode.isPlayerOnly) return 'projectpage';
-        return 'editor';
+        return getEditorMode();
     }
 }
 
@@ -238,13 +242,19 @@ class AddonRunner {
 }
 AddonRunner.instances = [];
 
+let oldMode = getEditorMode();
 const emitUrlChange = () => {
-    setTimeout(() => {
-        for (const addon of AddonRunner.instances) {
-            // TODO: event detail
-            addon.tab.dispatchEvent(new CustomEvent('urlChange'));
-        }
-    });
+    // In Scratch, URL changes usually mean someone went from editor to fullscreen or something like that.
+    // This is not the case in TW -- the URL can change for many other reasons that addons probably aren't prepared to handle.
+    const newMode = getEditorMode();
+    if (newMode !== oldMode) {
+        oldMode = newMode;
+        setTimeout(() => {
+            for (const addon of AddonRunner.instances) {
+                addon.publicAPI.addon.tab.dispatchEvent(new CustomEvent('urlChange'));
+            }
+        });
+    }
 };
 const originalReplaceState = history.replaceState;
 history.replaceState = function (...args) {
