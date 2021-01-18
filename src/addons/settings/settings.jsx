@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import addons from '../addon-manifests';
 import getAddonTranslations from '../get-addon-translations';
@@ -197,7 +198,7 @@ const AddonComponent = ({
   settings,
   manifest
 }) => (
-  <div className={styles.addon}>
+  <div className={classNames(styles.addon, {[styles.addonDirty]: settings.dirty})}>
     <label className={styles.addonTitle}>
       <input
         type="checkbox"
@@ -309,7 +310,8 @@ class AddonSettingsComponent extends React.Component {
     };
     for (const [id, manifest] of Object.entries(this.props.addons)) {
       const addonState = {
-        enabled: SettingsStore.getAddonEnabled(id)
+        enabled: SettingsStore.getAddonEnabled(id),
+        dirty: false
       };
       if (manifest.settings) {
         for (const setting of manifest.settings) {
@@ -325,29 +327,28 @@ class AddonSettingsComponent extends React.Component {
   }
   componentWillUnmount () {
     SettingsStore.removeEventListener('setting-changed', this.handleSettingStoreChanged);
-    clearTimeout(this.changeTimeout);
   }
   handleSettingStoreChanged (e) {
     const {addonId, settingId, value, reloadRequired} = e.detail;
     this.setState((state) => ({
       [addonId]: {
         ...state[addonId],
-        modified: true,
         [settingId]: value
       }
     }));
     if (reloadRequired) {
+      this.setState((state) => ({
+        [addonId]: {
+          ...state[addonId],
+          dirty: true
+        }
+      }));
       this.setState({
         dirty: true
       });
     }
-    if (this.changeTimeout === null) {
-      this.changeTimeout = setTimeout(() => {
-        if (this.props.onSettingsChanged) {
-          this.props.onSettingsChanged();
-        }
-        this.changeTimeout = null;
-      });
+    if (this.props.onSettingsChanged) {
+      this.props.onSettingsChanged();
     }
   }
   handleReloadNow () {
@@ -355,6 +356,16 @@ class AddonSettingsComponent extends React.Component {
     this.setState({
       dirty: false
     });
+    for (const addonId of Object.keys(addons)) {
+      if (this.state[addonId].dirty) {
+        this.setState((state) => ({
+          [addonId]: {
+            ...state[addonId],
+            dirty: false
+          }
+        }));
+      }
+    }
   }
   handleResetAll () {
     if (confirm(settingsTranslations['tw.addons.settings.confirmResetAll'])) {

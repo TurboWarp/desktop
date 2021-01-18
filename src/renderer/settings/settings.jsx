@@ -9,8 +9,14 @@ const onReloadNow = () => {
   ipcRenderer.send('reload-all');
 };
 
+let timeout = null;
 const onSettingsChanged = () => {
-  ipcRenderer.send('addon-settings-changed');
+  if (timeout === null) {
+    timeout = setTimeout(() => {
+      ipcRenderer.send('addon-settings-changed');
+      timeout = null;
+    });
+  }
 };
 
 ReactDOM.render((

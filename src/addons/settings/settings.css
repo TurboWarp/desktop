@@ -21,6 +21,10 @@ main {
   padding: 4px;
 }
 
+.addon-dirty {
+  background: #ffeedf;
+}
+
 .addon-title {
   font-weight: bold;
 }
