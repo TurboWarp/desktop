@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import {version} from '../../../package.json';
 import licenseText from '!!raw-loader!../../../LICENSE';
-import styles from '../common.css';
+import styles from './about.css';
 
 ReactDOM.render((
   <main>

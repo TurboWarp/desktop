@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {ipcRenderer} from 'electron';
 
 import Settings from '../../addons/settings/settings.jsx';
-import styles from '../common.css';
+import styles from './settings.css';
 
 const onReloadNow = () => {
   ipcRenderer.send('reload-all');

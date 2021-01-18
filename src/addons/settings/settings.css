@@ -1,11 +1,7 @@
 body {
-  font-family: sans-serif;
   background-color: white;
   color: black;
-}
-
-main {
-  padding: 4px;
+  font-family: system-ui, sans-serif;
 }
 
 .addon-container {
