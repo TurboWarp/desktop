@@ -20,8 +20,8 @@ jobs:
       run: npm ci
     - name: Fetch library files
       run: node download-library-files.js
-    - name: Build
-      run: npm run dist
-      env:
-        NODE_OPTIONS: --max-old-space-size=4096
-
+    - name: Build/release
+      uses: samuelmeuli/action-electron-builder@v1
+      with:
+        github_token: ${{ secrets.github_token }}
+        release: ${{ startsWith(github.ref, 'refs/tags/v') }}
