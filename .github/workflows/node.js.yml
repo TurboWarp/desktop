@@ -34,6 +34,6 @@ jobs:
         draft: true
         prerelease: false
     - name: Package
-      run: npx electron-builder -- --publish-always
+      run: npx --no-install electron-builder --publish always
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
