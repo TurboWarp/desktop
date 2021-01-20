@@ -6,12 +6,16 @@ on:
     - 'v*'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js
+    - name: Install Node.js
       uses: actions/setup-node@v1
       with:
         node-version: 10.x
@@ -23,7 +27,7 @@ jobs:
       run: npm run compile
       env:
         NODE_OPTIONS: --max-old-space-size=4096
-    - name: Package
+    - name: Package and Publish
       run: npx --no-install electron-builder --publish always
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
