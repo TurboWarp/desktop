@@ -3,7 +3,7 @@ name: Update scratch-gui
 on: workflow_dispatch
 
 jobs:
-  build:
+  update:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,3 +15,5 @@ jobs:
     - run: npm ci
     - run: npm install scratch-gui@github:TurboWarp/scratch-gui#desktop
     - uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: Update scratch-gui
