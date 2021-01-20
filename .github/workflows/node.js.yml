@@ -21,6 +21,8 @@ jobs:
       run: node download-library-files.js
     - name: Compile
       run: npm run compile
+      env:
+        NODE_OPTIONS: --max-old-space-size=4096
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
