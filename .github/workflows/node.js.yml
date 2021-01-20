@@ -22,3 +22,5 @@ jobs:
       run: node download-library-files.js
     - name: Build
       run: npm run dist
+      env:
+        NODE_OPTIONS: --max-old-space-size=4096
