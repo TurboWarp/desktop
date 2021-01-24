@@ -81,6 +81,13 @@
         "name": "Scratch 3 Project",
         "role": "Editor"
       }
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "repo": "desktop",
+        "owner": "TurboWarp"
+      }
     ]
   },
   "electronWebpack": {

@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  push:
+    tags:
+    - 'v*'
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: Install Dependencies
+      run: npm ci
+    - name: Download Library Files
+      run: node download-library-files.js
+    - name: Compile
+      run: npm run compile
+      env:
+        NODE_OPTIONS: --max-old-space-size=4096
+    - name: Package and Publish
+      run: npx --no-install electron-builder --publish always
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
