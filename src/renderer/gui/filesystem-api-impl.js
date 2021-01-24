@@ -5,11 +5,11 @@
 
 import {ipcRenderer} from 'electron';
 import fs from 'fs';
+import writeFileAtomic from 'write-file-atomic';
 import pathUtil from 'path';
 import {promisify} from 'util';
 
 const readFile = promisify(fs.readFile);
-const writeFile = promisify(fs.writeFile);
 
 const readAsArrayBuffer = (blob) => new Promise((resolve, reject) => {
   const fr = new FileReader();
@@ -26,7 +26,7 @@ class WrappedFileWritable {
   async write (content) {
     if (content instanceof Blob) {
       const arrayBuffer = await readAsArrayBuffer(content);
-      await writeFile(this._path, Buffer.from(new Uint8Array(arrayBuffer)));
+      await writeFileAtomic(this._path, Buffer.from(new Uint8Array(arrayBuffer)));
     }
   }
 
