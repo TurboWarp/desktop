@@ -1,10 +1,10 @@
-name: Release
+name: Build
 
 on:
   workflow_dispatch:
 
 jobs:
-  release:
+  build:
     runs-on: ${{ matrix.os }}
 
     strategy:
