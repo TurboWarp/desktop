@@ -1,5 +1,3 @@
-'use strict'
-
 import {app, BrowserWindow, Menu, ipcMain, shell, dialog} from 'electron'
 import * as pathUtil from 'path'
 import {format as formatUrl} from 'url'
