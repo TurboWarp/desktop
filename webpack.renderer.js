@@ -3,10 +3,7 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const merge = require('webpack-merge');
 
-const addonFolder = path.resolve(__dirname, 'src', 'addons', 'addons');
-const rawLibrariesFolder = path.resolve(__dirname, 'src', 'addons', 'libraries-raw');
 const libraryFilesFolder = path.resolve(__dirname, 'library-files');
-
 if (!fs.existsSync(libraryFilesFolder)) {
     fs.mkdirSync(libraryFilesFolder);
 }
@@ -20,9 +17,6 @@ module.exports = defaultConfig => {
                 {
                     test: /\.jsx?$/,
                     loader: 'babel-loader',
-                    exclude: [
-                        rawLibrariesFolder
-                    ],
                     options: {
                         presets: ['@babel/preset-env', '@babel/preset-react']
                     }
@@ -30,18 +24,12 @@ module.exports = defaultConfig => {
                 {
                     test: /\.(svg|png|wav|gif|jpg|mp3)$/,
                     loader: 'file-loader',
-                    exclude: [
-                        addonFolder
-                    ],
                     options: {
                         outputPath: 'static/assets/'
                     }
                 },
                 {
                     test: /\.css$/,
-                    exclude: [
-                        addonFolder
-                    ],
                     use: [
                         {
                             loader: 'style-loader'
@@ -69,25 +57,6 @@ module.exports = defaultConfig => {
                             }
                         }
                     ]
-                },
-                {
-                    test: /\.css$/,
-                    include: [
-                        addonFolder
-                    ],
-                    loader: 'raw-loader'
-                },
-                {
-                    test: /\.svg$/,
-                    include: [
-                        addonFolder
-                    ],
-                    loader: 'file-loader',
-                    options: {
-                        name: '[path][name].[ext]',
-                        context: addonFolder,
-                        outputPath: 'addon-files'
-                    }
                 }
             ],
         },
@@ -96,10 +65,6 @@ module.exports = defaultConfig => {
                 {
                     from: 'node_modules/scratch-blocks/media',
                     to: 'static/blocks-media'
-                },
-                {
-                    from: rawLibrariesFolder,
-                    to: 'addon-files/libraries-raw'
                 },
                 {
                     from: libraryFilesFolder,

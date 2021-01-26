@@ -8,9 +8,9 @@ import fs from 'fs';
 import pathUtil from 'path';
 import {promisify} from 'util';
 import GUI from 'scratch-gui';
-import {AppStateHOC, setFileHandle, openLoadingProject, closeLoadingProject} from 'scratch-gui';
+import {AppStateHOC, setFileHandle, openLoadingProject, closeLoadingProject, TWThemeHOC} from 'scratch-gui';
+import SettingStore from '../../../node_modules/scratch-gui/src/addons/settings-store';
 
-import AddonLoaderHOC from '../../addons/loader-hoc.jsx';
 import {WrappedFileHandle} from './filesystem-api-impl';
 import './prompt-impl';
 
@@ -24,8 +24,12 @@ const onStorageInit = (storage) => {
 };
 
 const onLoadAddons = () => {
-  require('../../addons/entry-electron');
+  require('../../../node_modules/scratch-gui/src/addons/entry');
 };
+
+ipcRenderer.on('addon-settings-changed', (event, settings) => {
+  SettingStore.setStore(settings);
+});
 
 const onClickLogo = () => {
   ipcRenderer.send('about');
@@ -151,7 +155,7 @@ const DesktopHOC = function (WrappedComponent) {
 
 const WrappedGUI = compose(
   AppStateHOC,
-  AddonLoaderHOC,
+  TWThemeHOC,
   DesktopHOC
 )(GUI);
 
