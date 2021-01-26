@@ -25,6 +25,7 @@ window.prompt = (message, defaultValue) => new Promise((resolve, reject) => {
   container.style.alignItems = 'center';
   container.style.justifyContent = 'center';
   container.style.background = 'rgba(0, 0, 0, 0.5)';
+  container.style.color = 'black';
 
   const content = document.createElement('div');
   content.style.background = 'white';
