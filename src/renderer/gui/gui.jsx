@@ -13,6 +13,7 @@ import SettingStore from '../../../node_modules/scratch-gui/src/addons/settings-
 
 import {WrappedFileHandle} from './filesystem-api-impl';
 import './prompt-impl';
+import styles from './gui.css';
 
 const readFile = promisify(fs.readFile);
 

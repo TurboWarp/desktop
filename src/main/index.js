@@ -217,7 +217,7 @@ function createSettingsWindow(locale) {
   const window = createWindow(url, {
     title: 'Addon Settings',
     width: 700,
-    height: 600,
+    height: 650,
     webPreferences: {
       contextIsolation: false,
       nodeIntegration: true
