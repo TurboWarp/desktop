@@ -1,8 +1,12 @@
 import {app, BrowserWindow, Menu, ipcMain, shell, dialog} from 'electron'
-import * as pathUtil from 'path'
+import pathUtil from 'path'
+import fs from 'fs';
+import util from 'util';
 import {format as formatUrl} from 'url'
 import {version} from '../../package.json';
 import checkForUpdate from './update-checker';
+
+const writeFile = util.promisify(fs.writeFile);
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
@@ -11,7 +15,6 @@ const isWindows = process.platform === 'win32';
 const editorWindows = new Set();
 const editorWindowTitle = `TurboWarp Desktop ${version}`;
 let fileToOpen = null;
-
 let aboutWindow = null;
 let settingsWindow = null;
 
@@ -255,6 +258,29 @@ ipcMain.on('addon-settings', (event, {locale}) => {
   }
   settingsWindow.show();
   settingsWindow.focus();
+});
+
+ipcMain.on('export-addon-settings', async (event, settings) => {
+  const result = await dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), {
+    defaultPath: 'turbowarp-addon-setting.json',
+    filters: [
+      {
+        name: 'JSON',
+        extensions: ['json']
+      }
+    ]
+  });
+  if (result.canceled) {
+    return;
+  }
+
+  // Sometimes the system file pickers are stupid.
+  let path = result.filePath;
+  if (!path.endsWith('.json')) {
+    path += '.json';
+  }
+
+  await writeFile(path, JSON.stringify(settings));
 });
 
 ipcMain.on('addon-settings-changed', (event, newSettings) => {

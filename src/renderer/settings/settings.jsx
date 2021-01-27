@@ -19,9 +19,14 @@ const onSettingsChanged = () => {
   }
 };
 
+const onExportSettings = settings => {
+  ipcRenderer.send('export-addon-settings', settings);
+};
+
 ReactDOM.render((
   <Settings
     onReloadNow={onReloadNow}
     onSettingsChanged={onSettingsChanged}
+    onExportSettings={onExportSettings}
   />
 ), require('../app-target'));
