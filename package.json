@@ -46,8 +46,8 @@
   "build": {
     "appId": "org.turbowarp.desktop",
     "productName": "TurboWarp Desktop",
-    "artifactName": "${productName}-${os}-${arch}-${version}.${ext}",
     "win": {
+      "artifactName": "${productName} Setup ${version}.${ext}",
       "target": "nsis"
     },
     "nsis": {
@@ -55,6 +55,7 @@
       "deleteAppDataOnUninstall": true
     },
     "mac": {
+      "artifactName": "${productName} Setup ${version}.${ext}",
       "category": "public.app-category.education",
       "darkModeSupport": true,
       "gatekeeperAssess": false,
@@ -73,6 +74,7 @@
       ]
     },
     "linux": {
+      "artifactName": "${productName}-${os}-${arch}-${version}.${ext}",
       "target": [
         {
           "target": "deb",
