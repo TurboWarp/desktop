@@ -50,6 +50,12 @@ const onUpdateProjectTitle = (title) => {
   }
 };
 
+const onVmInit = (vm) => {
+  vm.setCompilerOptions({
+    warpTimer: true
+  });
+};
+
 const getProjectTitle = (file) => {
   const name = pathUtil.basename(file);
   const match = name.match(/^(.*)\.sb[2|3]?$/);
@@ -168,6 +174,7 @@ ReactDOM.render(<WrappedGUI
   onStorageInit={onStorageInit}
   onLoadAddons={onLoadAddons}
   onClickLogo={onClickLogo}
+  onVmInit={onVmInit}
   onUpdateProjectTitle={onUpdateProjectTitle}
 />, require('../app-target'));
 // TODO: showTelemetryModal?
