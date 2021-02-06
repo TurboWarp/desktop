@@ -9,10 +9,10 @@
   "tw.desktop.main.unload.detail": "Any unsaved changes will be lost.",
   "tw.desktop.main.updater.download": "Download update",
   "tw.desktop.main.updater.later": "Remind me later",
-  "tw.desktop.main.updater.available": "An update is available: v{version}",
+  "tw.desktop.main.updater.message": "An update is available: v{version}",
   "tw.desktop.main.updater.detail": "This update may contain new features or bug fixes.",
   "tw.desktop.main.updater.ignore": "Don't remind me again for this update",
-  "tw.desktop.main.updater.security.available": "An important security update is available: v${version}",
+  "tw.desktop.main.updater.security.message": "An important security update is available: v${version}",
   "tw.desktop.main.updater.security.detail": "This version of TurboWarp may be vulnerable to an exploit that puts your computer at risk of infection. Updating is highly recommended.",
   "tw.desktop.renderer.prompt.ok": "OK",
   "tw.desktop.renderer.prompt.cancel": "Cancel"

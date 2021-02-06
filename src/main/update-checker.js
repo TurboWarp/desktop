@@ -2,6 +2,7 @@ import {net, dialog, shell, BrowserWindow} from 'electron';
 import lt from 'semver/functions/lt';
 import {version} from '../../package.json';
 import {get, set} from './store';
+import getTranslation from './translations';
 
 // Flags for debugging.
 // Please make sure these are both `false` in release.
@@ -67,13 +68,13 @@ async function updateAvailable(latestVersion) {
   const choice = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
     type: 'info',
     buttons: [
-      'Download Update',
-      'Remind me later'
+      getTranslation('tw.desktop.main.updater.download'),
+      getTranslation('tw.desktop.main.updater.later')
     ],
     cancelId: 1,
-    message: `An update is available: v${latestVersion}`,
-    detail: 'This update may contain new features or bug fixes.',
-    checkboxLabel: 'Don\'t remind me again for this update',
+    message: getTranslation('tw.desktop.main.updater.message').replace('{version}', latestVersion),
+    detail: getTranslation('tw.desktop.main.updater.detail'),
+    checkboxLabel: getTranslation('tw.desktop.main.updater.ignore'),
     checkboxChecked: false
   });
 
@@ -88,12 +89,12 @@ function urgentUpdateAvailable(latestVersion) {
   const choice = dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
     type: 'warning',
     buttons: [
-      'Download update',
-      'Not now'
+      getTranslation('tw.desktop.main.updater.download'),
+      getTranslation('tw.desktop.main.updater.later')
     ],
     cancelId: 1,
-    message: `An important security update is available: v${latestVersion}`,
-    detail: 'This version of TurboWarp may be vulnerable to an exploit that puts your computer at risk of infection. Updating is highly recommended.'
+    message: getTranslation('tw.desktop.main.updater.security.message').replace('{version}', latestVersion),
+    detail: getTranslation('tw.desktop.main.updater.security.detail')
   });
 
   if (choice === 0) {

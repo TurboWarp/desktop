@@ -27,7 +27,7 @@ if (isMac) {
       submenu: [
         { role: 'quit' },
         {
-          label: 'New Window',
+          label: getTranslation('tw.desktop.main.menuBar.newWindow'),
           accelerator: 'Cmd+N',
           click: async () => {
             createEditorWindow();
@@ -42,7 +42,7 @@ if (isMac) {
       role: 'help',
       submenu: [
         {
-          label: 'Learn more',
+          label: getTranslation('tw.desktop.main.menuBar.learnMore'),
           click: () => shell.openExternal('https://desktop.turbowarp.org/')
         }
       ]
@@ -159,13 +159,13 @@ function createEditorWindow() {
     const choice = dialog.showMessageBoxSync(window, {
       type: 'info',
       buttons: [
-        'Stay',
-        'Leave'
+        getTranslation('tw.desktop.main.unload.stay'),
+        getTranslation('tw.desktop.main.unload.leave')
       ],
       cancelId: 0,
       defaultId: 0,
-      message: 'Are you sure you want to quit?',
-      detail: 'Any unsaved changes will be lost.'
+      message: getTranslation('tw.desktop.main.unload.message'),
+      detail: getTranslation('tw.desktop.main.unload.detail')
     });
     if (choice === 1) {
       e.preventDefault();
@@ -195,7 +195,7 @@ function closeWhenPressEscape(window) {
 
 function createAboutWindow() {
   const window = createWindow(getURL('about'), {
-    title: 'About',
+    title: getTranslation('tw.desktop.main.windows.about'),
     width: 800,
     height: 450,
     parent: BrowserWindow.getFocusedWindow(),
@@ -219,7 +219,7 @@ function createAboutWindow() {
 function createSettingsWindow(locale) {
   const url = `${getURL('settings')}&locale=${locale}`;
   const window = createWindow(url, {
-    title: 'Addon Settings',
+    title: getTranslation('tw.desktop.main.windows.addonSettings'),
     width: 700,
     height: 650,
     webPreferences: {
