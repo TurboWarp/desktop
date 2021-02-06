@@ -1,4 +1,5 @@
-let promptVisible = false;
+import getTranslation from './translations';
+
 let cancelButton;
 
 document.addEventListener('keydown', (e) => {
@@ -54,14 +55,14 @@ window.prompt = (message, defaultValue) => new Promise((resolve, reject) => {
   buttonContainer.style.justifyContent = 'flex-end';
 
   const okButton = document.createElement('button');
-  okButton.textContent = 'OK';
+  okButton.textContent = getTranslation('tw.desktop.renderer.prompt.ok');
   okButton.onclick = () => {
     cleanup();
     resolve(input.value);
   };
 
   cancelButton = document.createElement('button');
-  cancelButton.textContent = 'Cancel';
+  cancelButton.textContent = getTranslation('tw.desktop.renderer.prompt.cancel');
   cancelButton.onclick = () => {
     cleanup();
     resolve(null);

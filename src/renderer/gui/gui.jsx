@@ -13,6 +13,7 @@ import {openTelemetryModal} from 'scratch-gui/src/reducers/modals';
 import SettingStore from '../../../node_modules/scratch-gui/src/addons/settings-store';
 import {WrappedFileHandle} from './filesystem-api-impl';
 import telemetry from './telemetry';
+import {localeChanged} from './translations';
 import './prompt-impl';
 import styles from './gui.css';
 
@@ -85,7 +86,7 @@ const DesktopHOC = function (WrappedComponent) {
       this.handleTelemetryOptOut =this.handleTelemetryOptOut.bind(this);
     }
     componentDidMount () {
-      ipcRenderer.send('locale-changed', this.props.locale);
+      localeChanged(this.props.locale);
       if (mountedOnce) {
         return;
       }
