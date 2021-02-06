@@ -85,6 +85,7 @@ const DesktopHOC = function (WrappedComponent) {
       this.handleTelemetryOptOut =this.handleTelemetryOptOut.bind(this);
     }
     componentDidMount () {
+      ipcRenderer.send('locale-changed', this.props.locale);
       if (mountedOnce) {
         return;
       }

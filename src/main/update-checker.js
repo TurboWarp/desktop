@@ -58,7 +58,7 @@ function getUpdateURL(current, latest) {
 }
 
 async function updateAvailable(latestVersion) {
-  const ignoredUpdate = await get(IGNORE_UPDATE_KEY);
+  const ignoredUpdate = get(IGNORE_UPDATE_KEY);
   if (ignoredUpdate !== null && ignoredUpdate === latestVersion) {
     log('not showing update message: ignored by user');
     return;
@@ -80,7 +80,7 @@ async function updateAvailable(latestVersion) {
   if (choice.response === 0) {
     shell.openExternal(getUpdateURL(version, latestVersion));
   } else if (choice.checkboxChecked) {
-    await set(IGNORE_UPDATE_KEY, latestVersion);
+    set(IGNORE_UPDATE_KEY, latestVersion);
   }
 }
 

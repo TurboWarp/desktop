@@ -5,6 +5,7 @@ import util from 'util';
 import {format as formatUrl} from 'url'
 import {version} from '../../package.json';
 import checkForUpdate from './update-checker';
+import getTranslation from './translations';
 
 const writeFile = util.promisify(fs.writeFile);
 
