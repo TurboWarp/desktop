@@ -244,7 +244,7 @@ ipcMain.handle('show-open-dialog', async (event, options) => {
   return dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), options);
 });
 
-ipcMain.on('about', () => {
+ipcMain.on('open-about', () => {
   if (aboutWindow === null) {
     aboutWindow = createAboutWindow();
   }
@@ -252,12 +252,16 @@ ipcMain.on('about', () => {
   aboutWindow.focus();
 });
 
-ipcMain.on('addon-settings', (event, {locale}) => {
+ipcMain.on('open-addon-settings', (event, {locale}) => {
   if (settingsWindow === null) {
     settingsWindow = createSettingsWindow(locale);
   }
   settingsWindow.show();
   settingsWindow.focus();
+});
+
+ipcMain.on('open-source-code', () => {
+  shell.openExternal('https://github.com/TurboWarp');
 });
 
 ipcMain.on('export-addon-settings', async (event, settings) => {

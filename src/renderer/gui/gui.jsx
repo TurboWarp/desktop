@@ -9,35 +9,36 @@ import pathUtil from 'path';
 import {promisify} from 'util';
 import GUI from 'scratch-gui';
 import {AppStateHOC, setFileHandle, openLoadingProject, closeLoadingProject, TWThemeHOC} from 'scratch-gui';
+import {openTelemetryModal} from 'scratch-gui/src/reducers/modals';
 import SettingStore from '../../../node_modules/scratch-gui/src/addons/settings-store';
-
 import {WrappedFileHandle} from './filesystem-api-impl';
+import telemetry from './telemetry';
 import './prompt-impl';
 import styles from './gui.css';
 
 const readFile = promisify(fs.readFile);
 
-const onStorageInit = (storage) => {
+const handleStorageInit = (storage) => {
   storage.addWebStore(
     [storage.AssetType.ImageVector, storage.AssetType.ImageBitmap, storage.AssetType.Sound],
     asset => `library-files/${asset.assetId}.${asset.dataFormat}`
   );
 };
 
-const onLoadAddons = () => {
-  require('../../../node_modules/scratch-gui/src/addons/entry');
-};
-
 ipcRenderer.on('addon-settings-changed', (event, settings) => {
   SettingStore.setStore(settings);
 });
 
-const onClickLogo = () => {
-  ipcRenderer.send('about');
+const openAbout = () => {
+  ipcRenderer.send('open-about');
+};
+
+const openSourceCode = () => {
+  ipcRenderer.send('open-source-code');
 };
 
 let defaultTitle = null;
-const onUpdateProjectTitle = (title) => {
+const handleUpdateProjectTitle = (title) => {
   // The first project title update will always be the default title eg. "Project"
   // This might not work properly if the user changes language.
   if (defaultTitle === null) {
@@ -50,7 +51,7 @@ const onUpdateProjectTitle = (title) => {
   }
 };
 
-const onVmInit = (vm) => {
+const handleVmInit = (vm) => {
   vm.setCompilerOptions({
     warpTimer: true
   });
@@ -76,11 +77,13 @@ const DesktopHOC = function (WrappedComponent) {
     constructor (props) {
       super(props);
       this.state = {
-        title: null
+        title: null,
+        telemetryEnabled: telemetry.isEnabled()
       };
       this.handleClickAddonSettings =this.handleClickAddonSettings.bind(this);
+      this.handleTelemetryOptIn =this.handleTelemetryOptIn.bind(this);
+      this.handleTelemetryOptOut =this.handleTelemetryOptOut.bind(this);
     }
-
     componentDidMount () {
       if (mountedOnce) {
         return;
@@ -96,7 +99,7 @@ const DesktopHOC = function (WrappedComponent) {
               this.setState({
                 title
               });
-              onUpdateProjectTitle(title);
+              handleUpdateProjectTitle(title);
             }
             if (fileToOpen.endsWith('.sb3')) {
               this.props.onSetFileHandle(new WrappedFileHandle(fileToOpen));
@@ -111,13 +114,23 @@ const DesktopHOC = function (WrappedComponent) {
           });
       }
     }
-
     handleClickAddonSettings() {
-      ipcRenderer.send('addon-settings', {
+      ipcRenderer.send('open-addon-settings', {
         locale: this.props.locale.split('-')[0]
       });
     }
-
+    handleTelemetryOptIn () {
+      telemetry.setEnabled(true);
+      this.setState({
+        telemetryEnabled: true
+      });
+    }
+    handleTelemetryOptOut () {
+      telemetry.setEnabled(false);
+      this.setState({
+        telemetryEnabled: false
+      });
+    }
     render() {
       const {
         locale,
@@ -131,6 +144,23 @@ const DesktopHOC = function (WrappedComponent) {
         <WrappedComponent
           projectTitle={this.state.title}
           onClickAddonSettings={this.handleClickAddonSettings}
+          onTelemetryModalOptIn={this.handleTelemetryOptIn}
+          onTelemetryModalOptOut={this.handleTelemetryOptOut}        
+          isTelemetryEnabled={this.state.telemetryEnabled}
+          onClickAbout={[
+            {
+              title: 'About',
+              onClick: openAbout
+            },
+            {
+              title: 'Source Code',
+              onClick: openSourceCode
+            },
+            {
+              title: 'Data Settings',
+              onClick: this.props.onOpenTelemetryModal
+            }
+          ]}
           {...props}
         />
       );
@@ -152,6 +182,7 @@ const DesktopHOC = function (WrappedComponent) {
   const mapDispatchToProps = dispatch => ({
     onLoadingStarted: () => dispatch(openLoadingProject()),
     onLoadingFinished: () => dispatch(closeLoadingProject()),
+    onOpenTelemetryModal: () => dispatch(openTelemetryModal()),
     onSetFileHandle: fileHandle => dispatch(setFileHandle(fileHandle))
   });
   return connect(
@@ -166,17 +197,20 @@ const WrappedGUI = compose(
   DesktopHOC
 )(GUI);
 
+const appTarget = require('../app-target');
 ReactDOM.render(<WrappedGUI
   projectId={fileToOpen ? '' : '0'}
   canEditTitle
   isScratchDesktop
   canModifyCloudData={false}
-  onStorageInit={onStorageInit}
-  onLoadAddons={onLoadAddons}
-  onClickLogo={onClickLogo}
-  onVmInit={onVmInit}
-  onUpdateProjectTitle={onUpdateProjectTitle}
-/>, require('../app-target'));
-// TODO: showTelemetryModal?
+  onStorageInit={handleStorageInit}
+  onVmInit={handleVmInit}
+  onUpdateProjectTitle={handleUpdateProjectTitle}
+  showTelemetryModal={telemetry.isUndecided()}
+/>, appTarget);
+GUI.setAppElement(appTarget);
+
+// Load addons
+require('scratch-gui/src/addons/entry');
 
 export default WrappedGUI;
