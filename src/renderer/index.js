@@ -1,3 +1,5 @@
+import './normalize.css';
+
 const searchParams = new URLSearchParams(location.search);
 const route = searchParams.get('route');
 
