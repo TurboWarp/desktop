@@ -195,7 +195,7 @@ function closeWhenPressEscape(window) {
 function createAboutWindow() {
   const window = createWindow(getURL('about'), {
     title: 'About',
-    width: 700,
+    width: 800,
     height: 450,
     parent: BrowserWindow.getFocusedWindow(),
     minimizable: false,
