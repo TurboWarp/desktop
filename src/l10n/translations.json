@@ -1,4 +1,23 @@
 {
+    "de": {
+        "tw.desktop.main.menuBar.learnMore": "Mehr erfahren",
+        "tw.desktop.main.menuBar.newWindow": "Neues Fenster",
+        "tw.desktop.main.unload.detail": "Alle nicht gespeicherten Änderungen werden verloren gehen.",
+        "tw.desktop.main.unload.leave": "Verlassen",
+        "tw.desktop.main.unload.message": "Bist du sicher, dass du beenden willst?",
+        "tw.desktop.main.unload.stay": "Bleiben",
+        "tw.desktop.main.updater.detail": "Dieses Update enthält neue Funktionen oder Verbesserungen.",
+        "tw.desktop.main.updater.download": "Update herunterladen",
+        "tw.desktop.main.updater.ignore": "Erinnere mich nicht mehr an dieses Update",
+        "tw.desktop.main.updater.later": "Später erinnern",
+        "tw.desktop.main.updater.message": "Neues Update verfügbar: v{version}",
+        "tw.desktop.main.updater.security.detail": "Diese Version von TurboWarp könnte ungeschützt gegen Angriffe, die deinen Computer mit Schadsoftware infizieren können, sein. Das Update ist hoch empfohlen.",
+        "tw.desktop.main.updater.security.message": "Ein wichtiges Sicherheitsupdate ist verfügbar: v{version}",
+        "tw.desktop.main.windows.about": "Über",
+        "tw.desktop.main.windows.addonSettings": "Addon-Einstellungen",
+        "tw.desktop.renderer.prompt.cancel": "Abbrechen",
+        "tw.desktop.renderer.prompt.ok": "OK."
+    },
     "it": {
         "tw.desktop.main.menuBar.learnMore": "Ulteriori informazioni",
         "tw.desktop.main.menuBar.newWindow": "Nuova Finestra",
@@ -40,5 +59,24 @@
     "ro": {
         "tw.desktop.main.windows.about": "Despre",
         "tw.desktop.main.windows.addonSettings": "Setările Addon-urilor"
+    },
+    "tr": {
+        "tw.desktop.main.menuBar.learnMore": "Daha fazla bilgi edin",
+        "tw.desktop.main.menuBar.newWindow": "Yeni Pencere",
+        "tw.desktop.main.unload.detail": "Kaydedilmemiş tüm değişiklikler kaybolabilir.",
+        "tw.desktop.main.unload.leave": "Git",
+        "tw.desktop.main.unload.message": "Sen çıkmaktan emin misin?",
+        "tw.desktop.main.unload.stay": "Kal",
+        "tw.desktop.main.updater.detail": "Bu güncellemede yeni özellikler veya hata düzeltmeleri olabilir.",
+        "tw.desktop.main.updater.download": "Güncellemeyi indir",
+        "tw.desktop.main.updater.ignore": "Bana bu güncelemeyi hatırlatma",
+        "tw.desktop.main.updater.later": "Beni daha sonra hatırlat",
+        "tw.desktop.main.updater.message": "Bir güncellemesi mevcuttur: v{version}",
+        "tw.desktop.main.updater.security.detail": "TurboWarp'ın bu sürümü, bilgisayarınızı virüs bulaşma riskine sokan bir açıktan yararlanmaya açık olabilir. Güncelleme şimdi tavsiye edilir.",
+        "tw.desktop.main.updater.security.message": "Önemli bir güvenlik güncellemesi mevcuttur: v{version}",
+        "tw.desktop.main.windows.about": "Hakkında",
+        "tw.desktop.main.windows.addonSettings": "Eklenti Ayarlar",
+        "tw.desktop.renderer.prompt.cancel": "İptal",
+        "tw.desktop.renderer.prompt.ok": "Tamam"
     }
 }
