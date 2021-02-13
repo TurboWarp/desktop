@@ -75,6 +75,7 @@
     },
     "linux": {
       "artifactName": "${productName}-${os}-${arch}-${version}.${ext}",
+      "icon": "./build/",
       "target": [
         {
           "target": "deb",
@@ -87,6 +88,9 @@
         {
           "target": "deb",
           "arch": "armv7l"
+        },
+        {
+          "target": "snap"
         }
       ]
     },
