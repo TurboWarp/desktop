@@ -17,7 +17,7 @@
     "source-map-support": "^0.5.19"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.12.13",
     "autoprefixer": "^10.2.4",
     "css-loader": "^5.0.1",
