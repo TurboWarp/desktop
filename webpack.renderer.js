@@ -49,7 +49,6 @@ module.exports = defaultConfig => {
                             options: {
                                 postcssOptions: {
                                     plugins: [
-                                        'autoprefixer',
                                         'postcss-import',
                                         'postcss-simple-vars'
                                     ]

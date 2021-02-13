@@ -19,7 +19,6 @@
   "devDependencies": {
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.12.13",
-    "autoprefixer": "^10.2.4",
     "css-loader": "^5.0.2",
     "electron": "^11.2.3",
     "electron-builder": "^22.10.4",
