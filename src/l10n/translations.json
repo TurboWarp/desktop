@@ -18,6 +18,25 @@
         "tw.desktop.renderer.prompt.cancel": "Abbrechen",
         "tw.desktop.renderer.prompt.ok": "OK."
     },
+    "es": {
+        "tw.desktop.main.menuBar.learnMore": "Ver más",
+        "tw.desktop.main.menuBar.newWindow": "Nueva Ventana",
+        "tw.desktop.main.unload.detail": "Cambios sin guardar serán perdidos.",
+        "tw.desktop.main.unload.leave": "Abandonar",
+        "tw.desktop.main.unload.message": "¿Está seguro de que quiere cerrar?",
+        "tw.desktop.main.unload.stay": "Permanecer",
+        "tw.desktop.main.updater.detail": "Esta actualización puede contener nuevas funciones y arreglos de bugs.",
+        "tw.desktop.main.updater.download": "Descargar actualización",
+        "tw.desktop.main.updater.ignore": "No me recuerdes de nuevo de esta actualizació",
+        "tw.desktop.main.updater.later": "Recuérdeme más tarde",
+        "tw.desktop.main.updater.message": "Actualización disponible: v{version}",
+        "tw.desktop.main.updater.security.detail": "Esta versión de TurboWarp puede ser vulnerable a un exploit que pone a su computadora en riesgo de una infección. Se recomienda altamente actualizar.",
+        "tw.desktop.main.updater.security.message": "Actualización importante de seguridad disponible: v{version}",
+        "tw.desktop.main.windows.about": "Acerca De",
+        "tw.desktop.main.windows.addonSettings": "Ajustes de Addons",
+        "tw.desktop.renderer.prompt.cancel": "Cancelar",
+        "tw.desktop.renderer.prompt.ok": "OK"
+    },
     "it": {
         "tw.desktop.main.menuBar.learnMore": "Ulteriori informazioni",
         "tw.desktop.main.menuBar.newWindow": "Nuova Finestra",
@@ -57,8 +76,23 @@
         "tw.desktop.renderer.prompt.ok": "OK"
     },
     "ro": {
+        "tw.desktop.main.menuBar.learnMore": "Află mai multe.",
+        "tw.desktop.main.menuBar.newWindow": "Fereastră Nouă",
+        "tw.desktop.main.unload.detail": "Orice modificări nesalvate vor fi pierdute/",
+        "tw.desktop.main.unload.leave": "Ieși",
+        "tw.desktop.main.unload.message": "Ești sigur că vrei să ieși?",
+        "tw.desktop.main.unload.stay": "Rămâi",
+        "tw.desktop.main.updater.detail": "Această actualizare ar putea conține funcții noi sau reparări ale erorilor.",
+        "tw.desktop.main.updater.download": "Descarcă actualizarea",
+        "tw.desktop.main.updater.ignore": "Nu-mi aminti din nou de această actualizare",
+        "tw.desktop.main.updater.later": "Amintește-mi mai târziu",
+        "tw.desktop.main.updater.message": "O actualizare este disponibilă: v{version}",
+        "tw.desktop.main.updater.security.detail": "Această versiune de TurboWarp poate fi vulnerabilă la un abuz care vă pune calculatorul la risc de infectare. Actualizare foarte recomandată.",
+        "tw.desktop.main.updater.security.message": "O actualizare importantă de securitate este disponibilă: v{version}",
         "tw.desktop.main.windows.about": "Despre",
-        "tw.desktop.main.windows.addonSettings": "Setările Addon-urilor"
+        "tw.desktop.main.windows.addonSettings": "Setările Addon-urilor",
+        "tw.desktop.renderer.prompt.cancel": "Anulează",
+        "tw.desktop.renderer.prompt.ok": "OK"
     },
     "tr": {
         "tw.desktop.main.menuBar.learnMore": "Daha fazla bilgi edin",
