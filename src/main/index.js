@@ -18,6 +18,7 @@ const editorWindowTitle = `TurboWarp Desktop ${version}`;
 let fileToOpen = null;
 let aboutWindow = null;
 let settingsWindow = null;
+let privacyWindow = null;
 
 if (isMac) {
   Menu.setApplicationMenu(Menu.buildFromTemplate([
@@ -152,6 +153,7 @@ function createEditorWindow() {
     if (editorWindows.size === 0) {
       if (aboutWindow) aboutWindow.close();
       if (settingsWindow) settingsWindow.close();
+      if (privacyWindow) privacyWindow.close();
     }
   });
 
@@ -237,6 +239,26 @@ function createSettingsWindow(locale) {
   return window;
 }
 
+function createPrivacyWindow() {
+  const window = createWindow(getURL('privacy'), {
+    title: getTranslation('tw.desktop.main.windows.addonSettings'),
+    width: 700,
+    height: 650,
+    webPreferences: {
+      contextIsolation: false,
+      nodeIntegration: true
+    }
+  });
+
+  window.on('closed', () => {
+    privacyWindow = null;
+  });
+
+  closeWhenPressEscape(window);
+
+  return window;
+}
+
 ipcMain.handle('show-save-dialog', async (event, options) => {
   return dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), options);
 });
@@ -259,6 +281,14 @@ ipcMain.on('open-addon-settings', (event, {locale}) => {
   }
   settingsWindow.show();
   settingsWindow.focus();
+});
+
+ipcMain.on('open-privacy-policy', () => {
+  if (privacyWindow === null) {
+    privacyWindow = createPrivacyWindow();
+  }
+  privacyWindow.show();
+  privacyWindow.focus();
 });
 
 ipcMain.on('open-source-code', () => {

@@ -12,6 +12,8 @@ if (route === 'editor') {
   import('./about/about.jsx');
 } else if (route === 'settings') {
   import('./settings/settings.jsx');
+} else if (route === 'privacy') {
+  import('./privacy/privacy.jsx');
 } else {
   alert(`Invalid route: ${route}`);
 }

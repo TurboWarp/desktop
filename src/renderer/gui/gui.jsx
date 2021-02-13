@@ -38,6 +38,10 @@ const openSourceCode = () => {
   ipcRenderer.send('open-source-code');
 };
 
+const openPrivacyPolicy = () => {
+  ipcRenderer.send('open-privacy-policy');
+};
+
 let defaultTitle = null;
 const handleUpdateProjectTitle = (title) => {
   // The first project title update will always be the default title eg. "Project"
@@ -157,6 +161,10 @@ const DesktopHOC = function (WrappedComponent) {
             {
               title: 'Source Code',
               onClick: openSourceCode
+            },
+            {
+              title: 'Privacy Policy',
+              onClick: openPrivacyPolicy
             },
             {
               title: 'Data Settings',
