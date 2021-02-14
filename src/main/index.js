@@ -241,7 +241,7 @@ function createSettingsWindow(locale) {
 
 function createPrivacyWindow() {
   const window = createWindow(getURL('privacy'), {
-    title: getTranslation('tw.desktop.main.windows.addonSettings'),
+    title: getTranslation('tw.desktop.main.windows.privacy'),
     width: 700,
     height: 650,
     webPreferences: {

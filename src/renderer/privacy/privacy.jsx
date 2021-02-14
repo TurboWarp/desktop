@@ -4,10 +4,12 @@ import ReactDOM from 'react-dom';
 import styles from './privacy.css';
 
 ReactDOM.render((
+  // TODO: Update privacy.html to match, perhaps generate this page from privacy.html?
   <main>
-    <h1>TurboWarp Desktop Privacy Policy</h1>
-    <p><i>Updated January 18th, 2021</i></p>
-    <p>When you launch the TurboWarp Desktop app, it may make a request to desktop.turbowarp.org to check for updates. We do not log these requests. This is an important security feature that can not be turned off. It will never automatically update -- it is always up to the user to decide.</p>
-    <p>That's it.</p>
+    <h1>Privacy Policy</h1>
+    <p><i>Updated February 13th, 2021</i></p>
+    <p>The app does not collect any information about you or your use of the app.</p>
+    <p>The app may make requests to check for updates. These requests are not logged. This is an important security feature that cannot be disabled.</p>
+    <p>Any concerns related to privacy or any other matter should be sent to: <a href="mailto:contact@turbowarp.org">contact@turbowarp.org</a></p>
   </main>
 ), require('../app-target'));
