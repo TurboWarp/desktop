@@ -103,6 +103,10 @@ function urgentUpdateAvailable(latestVersion) {
 }
 
 function checkForUpdate() {
+  // Snap handles updates on its own
+  if (process.env.SNAP) {
+    return;
+  }
   getLatestVersions()
     .then(({latest, oldestSafe}) => {
       if (FORCE_URGENT_UPDATE || lt(version, oldestSafe)) {
