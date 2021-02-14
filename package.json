@@ -47,6 +47,7 @@
     "productName": "TurboWarp Desktop",
     "win": {
       "artifactName": "${productName} Setup ${version}.${ext}",
+      "icon": "build/icon.ico",
       "target": "nsis"
     },
     "nsis": {
