@@ -132,12 +132,12 @@ const DesktopHOC = function (WrappedComponent) {
               onClick: openAbout
             },
             {
-              title: 'Source Code',
-              onClick: openSourceCode
-            },
-            {
               title: 'Privacy Policy',
               onClick: openPrivacyPolicy
+            },
+            {
+              title: 'Source Code',
+              onClick: openSourceCode
             }
           ]}
           {...props}

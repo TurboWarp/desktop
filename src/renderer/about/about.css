@@ -1,9 +1,14 @@
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: hsla(0, 100%, 65%, 1);
+}
+main {
   background-color: white;
   color: black;
+  margin: 20px;
+  padding: 20px;
 }
-
-main {
-  padding: 4px;
+pre {
+  font-size: 0.8em;
+  overflow-x: hidden;
 }
