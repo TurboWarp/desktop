@@ -9,12 +9,11 @@ import pathUtil from 'path';
 import {promisify} from 'util';
 import GUI from 'scratch-gui';
 import {AppStateHOC} from 'scratch-gui';
-import {openTelemetryModal, openLoadingProject, closeLoadingProject} from 'scratch-gui/src/reducers/modals';
+import {openLoadingProject, closeLoadingProject} from 'scratch-gui/src/reducers/modals';
 import {setFileHandle} from 'scratch-gui/src/reducers/tw';
 import SettingStore from 'scratch-gui/src/addons/settings-store';
 import TWThemeHOC from 'scratch-gui/src/lib/tw-theme-hoc.jsx';
 import {WrappedFileHandle} from './filesystem-api-impl';
-import telemetry from './telemetry';
 import {localeChanged} from './translations';
 import './prompt-impl';
 import styles from './gui.css';
@@ -84,12 +83,9 @@ const DesktopHOC = function (WrappedComponent) {
     constructor (props) {
       super(props);
       this.state = {
-        title: null,
-        telemetryEnabled: telemetry.isEnabled()
+        title: null
       };
       this.handleClickAddonSettings =this.handleClickAddonSettings.bind(this);
-      this.handleTelemetryOptIn =this.handleTelemetryOptIn.bind(this);
-      this.handleTelemetryOptOut =this.handleTelemetryOptOut.bind(this);
     }
     componentDidMount () {
       localeChanged(this.props.locale);
@@ -127,18 +123,6 @@ const DesktopHOC = function (WrappedComponent) {
         locale: this.props.locale.split('-')[0]
       });
     }
-    handleTelemetryOptIn () {
-      telemetry.setEnabled(true);
-      this.setState({
-        telemetryEnabled: true
-      });
-    }
-    handleTelemetryOptOut () {
-      telemetry.setEnabled(false);
-      this.setState({
-        telemetryEnabled: false
-      });
-    }
     render() {
       const {
         locale,
@@ -152,9 +136,6 @@ const DesktopHOC = function (WrappedComponent) {
         <WrappedComponent
           projectTitle={this.state.title}
           onClickAddonSettings={this.handleClickAddonSettings}
-          onTelemetryModalOptIn={this.handleTelemetryOptIn}
-          onTelemetryModalOptOut={this.handleTelemetryOptOut}        
-          isTelemetryEnabled={this.state.telemetryEnabled}
           onClickAbout={[
             {
               title: 'About',
@@ -167,10 +148,6 @@ const DesktopHOC = function (WrappedComponent) {
             {
               title: 'Privacy Policy',
               onClick: openPrivacyPolicy
-            },
-            {
-              title: 'Data Settings',
-              onClick: this.props.onOpenTelemetryModal
             }
           ]}
           {...props}
@@ -194,7 +171,6 @@ const DesktopHOC = function (WrappedComponent) {
   const mapDispatchToProps = dispatch => ({
     onLoadingStarted: () => dispatch(openLoadingProject()),
     onLoadingFinished: () => dispatch(closeLoadingProject()),
-    onOpenTelemetryModal: () => dispatch(openTelemetryModal()),
     onSetFileHandle: fileHandle => dispatch(setFileHandle(fileHandle))
   });
   return connect(
@@ -218,7 +194,6 @@ ReactDOM.render(<WrappedGUI
   onStorageInit={handleStorageInit}
   onVmInit={handleVmInit}
   onUpdateProjectTitle={handleUpdateProjectTitle}
-  showTelemetryModal={telemetry.isUndecided()}
 />, appTarget);
 GUI.setAppElement(appTarget);
 
