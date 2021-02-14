@@ -43,18 +43,8 @@ const openPrivacyPolicy = () => {
   ipcRenderer.send('open-privacy-policy');
 };
 
-let defaultTitle = null;
 const handleUpdateProjectTitle = (title) => {
-  // The first project title update will always be the default title eg. "Project"
-  // This might not work properly if the user changes language.
-  if (defaultTitle === null) {
-    defaultTitle = title;
-  }
-  if (title === defaultTitle) {
-    document.title = '';
-  } else {
-    document.title = title;
-  }
+  document.title = title;
 };
 
 const handleVmInit = (vm) => {
