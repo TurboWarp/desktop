@@ -57,6 +57,13 @@
         margin-right: 5px;
       }
 
+      .changelog {
+        display: none;
+      }
+      [changelog="true"] .changelog {
+        display: flex;
+      }
+
       .select-os {
         height: 80px;
         box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
@@ -65,7 +72,7 @@
         display: flex;
         align-items: center;
       }
-      .select-os-inner span {
+      .select-os-label {
         margin-right: 16px;
         font-weight: bold;
       }
@@ -158,11 +165,35 @@
       .faq {
         padding-bottom: 32px;
       }
+      .faq-questions {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .faq-question {
+        padding-right: 4px;
+        flex: 0 50%;
+      }
 
       .picture {
         max-width: 100%;
         height: 100%;
         margin-bottom: 4px;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #111;
+          color: #eee;
+        }
+        a {
+          color: #4af;
+        }
+        .select-os {
+          box-shadow: 0 0 3px rgba(255, 255, 255, 0.25);
+        }
+        .select-os-inner button {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
       }
     </style>
   </head>
@@ -180,9 +211,21 @@
       </div>
     </section>
 
+    <section class="changelog" id="changelog">
+      <div>
+        <h2>Changes since v0.0.4</h2>
+        <ul>
+          <li>Warp timer is now enabled by default. This may slightly reduce performance, but it greatly reduces the risk of crashes. It can be disabled in the Advanced menu.</li>
+          <li>The app now has an icon.</li>
+          <li>More parts of the app's interface are now translatable.</li>
+          <li>Various bug fixes and improvements.</li>
+        </ul>
+      </div>
+    </section>
+
     <section class="select-os">
       <div class="select-os-inner">
-        <span>Choose your OS:</span>
+        <span class="select-os-label">Choose your OS:</span>
         <button class="os-button-windows">
           <!-- Icon from Font Awesome https://fontawesome.com/icons/windows?style=brands -->
           <!-- https://creativecommons.org/licenses/by/4.0/ -->
@@ -238,12 +281,12 @@
     <section class="os os-mac">
       <div>
         <h2>Install TurboWarp Desktop for macOS</h2>
-        <p>TurboWarp Desktop is a universal app -- it works on Intel Mac and Apple Silicon Macs, though it is only tested on an Intel Mac.</p>
+        <p>TurboWarp Desktop is a universal app -- it works on both Intel Macs and Apple Silicon Macs.</p>
         <div class="steps">
           <div class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-Setup-{version}.exe">Download the installer.</a>
+              <a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-Setup-{version}.dmg">Download the installer.</a>
             </div>
           </div>
           <div class="step">
@@ -291,19 +334,33 @@
             </div>
           </div>
         </div>
+
+        <h3>Other distributions</h3>
+        <p>Please <a href="https://github.com/TurboWarp/desktop/issues">open an issue on GitHub</a>.</p>
       </div>
     </section>
 
     <section class="faq">
-      <div>
-        <h2>Privacy Policy</h2>
-        <p>See <a href="privacy.html">privacy policy</a>.</p>
+      <div class="faq-questions">
+        <div class="faq-question">
+          <h2>Bugs</h2>
+          <p>Bugs should be reported <a href="https://github.com/TurboWarp/desktop/issues">on GitHub</a>.</p>
+        </div>
 
-        <h2>Source Code</h2>
-        <p>TurboWarp's source code is <a data-href="https://github.com/TurboWarp/">on GitHub</a>. TurboWarp Desktop is licensed under the GNU General Public License v3.0.</p>
+        <div class="faq-question">
+          <h2>Privacy Policy</h2>
+          <p>See <a href="privacy.html">privacy policy</a>.</p>
+        </div>
 
-        <h2>Updates</h2>
-        <p>The app will periodically check for updates and notify you when one is available. To update, download the installer for your platform and run it again.</p>
+        <div class="faq-question">
+          <h2>Source Code</h2>
+          <p>TurboWarp's source code is <a data-href="https://github.com/TurboWarp/">on GitHub</a>. TurboWarp Desktop is licensed under the GNU General Public License v3.0.</p>
+        </div>
+
+        <div class="faq-question">
+          <h2>Updates</h2>
+          <p>The app may periodically check for updates and notify you when one is available. To update, download the new installer and run it again.</p>
+        </div>
       </div>
     </section>
 
@@ -359,6 +416,11 @@
         var links = document.querySelectorAll('a[data-href]');
         for (var i = 0; i < links.length; i++) {
           links[i].href = links[i].getAttribute('data-href').replace(/{version}/g, VERSION);
+        }
+
+        if (/from|to/i.test(location.search)) {
+          document.body.setAttribute('changelog', 'true');
+          document.querySelector('#changelog').scrollIntoView();
         }
 
         setOS(getOS());
