@@ -14,6 +14,8 @@
         margin: 0;
         padding: 0;
         font-size: 16px;
+        background-color: white;
+        color: black;
       }
       a {
         color: #25d;
@@ -29,6 +31,8 @@
         display: flex;
         justify-content: center;
         width: 100%;
+        padding-right: 8px;
+        padding-left: 8px;
       }
       section > div {
         width: 100%;
@@ -36,12 +40,13 @@
       }
 
       .header {
-        padding: 4rem 0;
+        padding-top: 64px;
+        padding-bottom: 64px;
         color: white;
         background-color: hsla(0, 100%, 65%, 1);
       }
       .header-title {
-        font-size: 2rem;
+        font-size: 32px;
         display: flex;
         align-items: center;
       }
@@ -50,7 +55,7 @@
       }
 
       .select-os {
-        height: 5rem;
+        height: 80px;
         box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
       }
       .select-os-inner {
@@ -58,7 +63,7 @@
         align-items: center;
       }
       .select-os-inner span {
-        margin-right: 1rem;
+        margin-right: 16px;
         font-weight: bold;
       }
       .select-os-inner button {
@@ -67,10 +72,10 @@
         color: white;
         font-size: .8rem;
         font-weight: bold;
-        margin-right: 1rem;
-        border-radius: 1.6rem;
-        background-color: rgba(0, 0, 0, 0.1);
-        padding: .5rem 1.1rem;
+        margin-right: 16px;
+        border-radius: 26px;
+        background-color: rgba(0, 0, 0, 0.15);
+        padding: 8px 18px;
         display: flex;
         align-items: center;
       }
@@ -87,7 +92,8 @@
 
       .os {
         display: none;
-        padding: 2rem 0;
+        padding-top: 32px;
+        padding-bottom: 32px;
       }
       [os="windows"] .os-windows,
       [os="mac"] .os-mac,
@@ -96,15 +102,17 @@
       }
       .steps {
         display: flex;
+        flex-direction: column;
       }
       .step {
         display: flex;
-        margin-right: 40px;
+        margin-bottom: 20px;
       }
       .step-number {
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-shrink: 0;
         color: white;
         background-color: hsla(0, 100%, 65%, 1);
         border-radius: 100%;
@@ -113,7 +121,7 @@
         margin-right: 20px;
       }
       .step-content {
-        margin-top: 6px;
+        margin-top: 8px;
       }
       .command {
         font-family: monospace;
@@ -139,6 +147,15 @@
       [arch="unknown"] .arch-not-unknown {
         display: none;
       }
+
+      .faq {
+        padding-bottom: 32px;
+      }
+
+      .picture {
+        max-width: 100%;
+        margin-bottom: 4px;
+      }
     </style>
   </head>
 
@@ -146,7 +163,7 @@
     <section class="header">
       <div>
         <h1 class="header-title">
-          <img src="images/icon.png">
+          <img src="images/icon.png" width="64" height="64" aria-hidden="true">
           <div>TurboWarp Desktop</div>
         </h1>
         <p>Use TurboWarp from an app on your desktop.</p>
@@ -180,19 +197,23 @@
     <section class="os os-windows">
       <div>
         <h2>Install TurboWarp Desktop for Windows</h2>
-
         <div class="steps">
           <div class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <a href="https://github.com/TurboWarp/desktop/releases/download/v0.0.4/TurboWarp-Desktop-Setup-0.0.4.exe">Download the installer.</a>
+              <a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-Setup-{version}.exe">Download the installer.</a>
             </div>
           </div>
           <div class="step">
             <div class="step-number">2</div>
             <div class="step-content">
               Run the .exe file.
-              <img src="TODO">
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              If Windows SmartScreen appears, click "More info" then "Run anyways"
             </div>
           </div>
         </div>
@@ -202,19 +223,24 @@
     <section class="os os-mac">
       <div>
         <h2>Install TurboWarp Desktop for macOS</h2>
-
         <div class="steps">
           <div class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <a href="https://github.com/TurboWarp/desktop/releases/download/v0.0.4/TurboWarp-Desktop-Setup-0.0.4.exe">Download the installer.</a>
+              <a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-Setup-{version}.exe">Download the installer.</a>
             </div>
           </div>
           <div class="step">
             <div class="step-number">2</div>
             <div class="step-content">
               Open the .dmg file. Move TurboWarp Desktop into Applications.
-              <img src="TODO">
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              Our binaries are <a href="https://github.com/TurboWarp/desktop/issues/4">not signed</a>, so additional steps are required.
+              Open Finder, navigate to Applications, right click TurboWarp Desktop and select "Open" and then "Open" again.
             </div>
           </div>
         </div>
@@ -225,20 +251,18 @@
       <div>
         <h2>Install TurboWarp Desktop for Linux</h2>
 
-        <p><i>If your distribution isn't listed here, please <a href="https://github.com/TurboWarp/desktop/issues/new">open an issue</a>.</i></p>
-
         <h3>Debian and Ubuntu</h3>
         <div class="steps">
           <div class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <a class="arch-armv7l" href="https://github.com/TurboWarp/desktop/releases/download/v0.0.4/TurboWarp.Desktop-linux-arm64-0.0.4.deb">Download the installer.</a>
+              <a class="arch-armv7l" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-arm64-{version}.deb">Download the installer.</a>
               <span class="arch-not-unknown">Alternative downloads for other platforms:</span>
               <span class="arch-unknown">Download the package for your platform:</span>
               <ul>
-                <li><a href="https://github.com/TurboWarp/desktop/releases/download/v0.0.4/TurboWarp.Desktop-linux-amd64-0.0.4.deb">x86 64-bit</a></li>
-                <li><a href="https://github.com/TurboWarp/desktop/releases/download/v0.0.4/TurboWarp.Desktop-linux-arm64-0.0.4.deb">ARM 64-bit</a></li>
-                <li><a href="https://github.com/TurboWarp/desktop/releases/download/v0.0.4/TurboWarp.Desktop-linux-armv7l-0.0.4.deb">ARMv7</a></li>
+                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-amd64-{version}.deb">x86 64-bit</a></li>
+                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-arm64-{version}.deb">ARM 64-bit</a></li>
+                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-armv7l-{version}.deb">ARMv7</a></li>
               </ul>
             </div>
           </div>
@@ -246,23 +270,33 @@
             <div class="step-number">2</div>
             <div class="step-content">
               Install the .deb with your distribution's package manager.
-              <img src="TODO">
             </div>
           </div>
         </div>
-
-        <h3>Snap</h3>
-        <div>
-          <span class="command">snap install turbowarp-desktop</span>
-        </div>
-
-        <h3>AppImage</h3>
-        <p>TODO</p>
       </div>
+    </section>
+
+    <section class="faq">
+      <div>
+        <h2>Privacy Policy</h2>
+        <p>See <a href="privacy.html">privacy policy</a>.</p>
+
+        <h2>Source Code</h2>
+        <p>TurboWarp's source code is <a data-href="https://github.com/TurboWarp/">on GitHub</a>. TurboWarp Desktop is licensed under the GNU General Public License v3.0.</p>
+      </div>
+    </section>
+
+    <section>
+      <img class="picture" src="images/screenshot-win-light.png">
+    </section>    
+    <section>
+      <p>Project pictured: <a href="https://scratch.mit.edu/projects/425020125/">Full Sphere Path Tracer by piano_miles</a></p>
     </section>
 
     <script>
       (function() {
+        var VERSION = '0.0.4';
+
         function getOS() {
           // TODO
           if (/android/i.test(navigator.userAgent)) return 'windows';
@@ -277,7 +311,8 @@
         }
         function getArch() {
           // TODO
-          if (/armv7l/.test(navigator.userAgent)||true) return 'armv7l';
+          if (/x86_64/i.test(navigator.userAgent)) return 'amd64';
+          if (/armv7l/i.test(navigator.userAgent)) return 'armv7l';
           return 'unknown';
         }
         function setArch(arch) {
@@ -293,6 +328,11 @@
         document.querySelector('.os-button-linux').addEventListener('click', function () {
           setOS('linux');
         });
+
+        var links = document.querySelectorAll('a[data-href]');
+        for (var i = 0; i < links.length; i++) {
+          links[i].href = links[i].getAttribute('data-href').replace(/{version}/g, VERSION);
+        }
 
         setOS(getOS());
         setArch(getArch());
