@@ -1,4 +1,5 @@
 import getTranslation from './translations';
+import styles from './prompt.css';
 
 let cancelButton;
 
@@ -13,37 +14,19 @@ window.prompt = (message, defaultValue) => new Promise((resolve, reject) => {
     cancelButton.click();
   }
 
-  // TODO: dark mode
-
   const container = document.createElement('div');
-  container.style.position = 'absolute';
-  container.style.top = '0';
-  container.style.left = '0';
-  container.style.width = '100%';
-  container.style.height = '100%';
-  container.style.zIndex = '999999';
-  container.style.display = 'flex';
-  container.style.alignItems = 'center';
-  container.style.justifyContent = 'center';
-  container.style.background = 'rgba(0, 0, 0, 0.5)';
-  container.style.color = 'black';
+  container.className = styles.container;
 
   const content = document.createElement('div');
-  content.style.background = 'white';
-  content.style.padding = '20px';
-  content.style.border = '1px solid black';
-  content.style.borderRadius = '3px';
-  content.style.boxShadow = 'black 0 0 10px';
-  content.style.maxWidth = '480px';
+  content.className = styles.content;
 
   const title = document.createElement('h2');
   title.textContent = message;
+  title.className = styles.title;
 
   const input = document.createElement('input');
   input.value = defaultValue || '';
-  input.style.display = 'block';
-  input.style.width = '100%';
-  input.style.marginBottom = '10px';
+  input.className = styles.input;
   input.onkeydown = e => {
     if (e.key === 'Enter') {
       okButton.click();
@@ -51,10 +34,10 @@ window.prompt = (message, defaultValue) => new Promise((resolve, reject) => {
   };
 
   const buttonContainer = document.createElement('div');
-  buttonContainer.style.display = 'flex';
-  buttonContainer.style.justifyContent = 'flex-end';
+  buttonContainer.className = styles.buttonContainer;
 
   const okButton = document.createElement('button');
+  okButton.className = styles.buttonOk;
   okButton.textContent = getTranslation('tw.desktop.renderer.prompt.ok');
   okButton.onclick = () => {
     cleanup();
@@ -62,13 +45,12 @@ window.prompt = (message, defaultValue) => new Promise((resolve, reject) => {
   };
 
   cancelButton = document.createElement('button');
+  cancelButton.className = styles.buttonCancel;
   cancelButton.textContent = getTranslation('tw.desktop.renderer.prompt.cancel');
   cancelButton.onclick = () => {
     cleanup();
     resolve(null);
   };
-
-  okButton.style.margin = cancelButton.style.margin = '3px';
 
   const cleanup = () => {
     cancelButton = null;
