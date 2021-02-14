@@ -12,6 +12,7 @@ const writeFile = util.promisify(fs.writeFile);
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
 const isWindows = process.platform === 'win32';
+const isLinux = process.platform === 'linux';
 
 const editorWindows = new Set();
 const editorWindowTitle = `TurboWarp Desktop ${version}`;
@@ -66,6 +67,9 @@ function getURL(route) {
 }
 
 function createWindow(url, options) {
+  if (isLinux) {
+    options.icon = pathUtil.join(__static, 'icon.png');
+  }
   const window = new BrowserWindow(options);
 
   window.loadURL(url);
