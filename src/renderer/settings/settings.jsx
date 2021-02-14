@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {ipcRenderer} from 'electron';
 
-import Settings from '../../../node_modules/scratch-gui/src/addons/settings/settings.jsx';
-import SettingsStore from '../../../node_modules/scratch-gui/src/addons/settings-store';
+import Settings from 'scratch-gui/src/addons/settings/settings.jsx';
+import SettingsStore from 'scratch-gui/src/addons/settings-store';
 
 const onReloadNow = () => {
   ipcRenderer.send('reload-all');
