@@ -30,6 +30,9 @@
       img {
         display: block;
       }
+      body:not([loaded]) section {
+        display: none;
+      }
       section {
         display: flex;
         justify-content: center;
@@ -66,9 +69,15 @@
 
       .changelog {
         display: none;
+        margin-bottom: 32px;
       }
       [changelog="true"] .changelog {
         display: flex;
+      }
+      [changelog="true"] .header,
+      [changelog="true"] .faq,
+      [changelog="true"] .picture-container {
+        display: none;
       }
 
       .select-os {
@@ -77,6 +86,7 @@
         background: white;
         position: relative;
         z-index: 99;
+        margin-bottom: 32px;
       }
       .select-os-inner {
         display: flex;
@@ -114,9 +124,7 @@
 
       .os {
         display: none;
-        background-color: rgb(255, 243, 243);
-        padding-top: 32px;
-        padding-bottom: 32px;
+        margin-bottom: 32px;
       }
       [os="windows"] .os-windows,
       [os="mac"] .os-mac,
@@ -173,7 +181,7 @@
       }
 
       .faq {
-        padding-bottom: 32px;
+        margin-bottom: 32px;
       }
       .faq-questions {
         display: flex;
@@ -212,13 +220,10 @@
         }
         .select-os {
           box-shadow: 0 0 3px rgba(255, 255, 255, 0.25);
-          background: #111;
+          background: #171717;
         }
         .select-os-inner button {
           background-color: rgba(255, 255, 255, 0.2);
-        }
-        .os {
-          background: rgb(20, 19, 19);
         }
       }
     </style>
@@ -234,18 +239,6 @@
         <p>Use TurboWarp from an app on your desktop, even when you're offline.</p>
         <p><i>TurboWarp is not affiliated with Scratch.</i></p>
         <noscript><p>This page requires JavaScript.</p></noscript>
-      </div>
-    </section>
-
-    <section class="changelog" id="changelog">
-      <div>
-        <h2>Changes since v0.0.4</h2>
-        <ul>
-          <li>Warp timer is now enabled by default. This may slightly reduce performance, but it greatly reduces the risk of crashes. It can be disabled in the Advanced menu.</li>
-          <li>The app now has an icon.</li>
-          <li>More parts of the app's interface are now translatable.</li>
-          <li>Various bug fixes and improvements.</li>
-        </ul>
       </div>
     </section>
 
@@ -276,6 +269,19 @@
             Linux
           </div>
         </button>
+      </div>
+    </section>
+
+    <section class="changelog" id="changelog">
+      <div>
+        <h2>Changes since v0.0.4</h2>
+        <ul>
+          <li>Warp timer is now enabled by default. This may slightly reduce performance, but it greatly reduces the risk of crashes. It can be disabled in the Advanced menu.</li>
+          <li>The app now has an icon.</li>
+          <li>More parts of the app's interface are now translatable.</li>
+          <li>Various bug fixes and improvements.</li>
+        </ul>
+        <p>To update, download the new installer and run it again.</p>
       </div>
     </section>
 
@@ -490,6 +496,8 @@
 
         setOS(getOS());
         setArch(getArch());
+
+        document.body.setAttribute('loaded', '');
       }());
     </script>
   </body>
