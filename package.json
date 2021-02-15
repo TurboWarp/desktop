@@ -86,6 +86,10 @@
         },
         {
           "target": "deb",
+          "arch": "x86"
+        },
+        {
+          "target": "deb",
           "arch": "arm64"
         },
         {
@@ -96,7 +100,20 @@
           "target": "snap"
         },
         {
-          "target": "appimage"
+          "target": "appimage",
+          "arch": "x64"
+        },
+        {
+          "target": "appimage",
+          "arch": "x86"
+        },
+        {
+          "target": "appimage",
+          "arch": "arm64"
+        },
+        {
+          "target": "appimage",
+          "arch": "armv7l"
         }
       ]
     },

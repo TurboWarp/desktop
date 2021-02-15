@@ -41,6 +41,13 @@
         width: 100%;
         max-width: 942px;
       }
+      code {
+        font-family: monospace;
+        font-size: 1rem;
+        padding: 3px;
+        background: #e6e6e6;
+        border-radius: 3px;
+      }
 
       .header {
         padding-top: 64px;
@@ -133,13 +140,6 @@
       .step-content {
         margin-top: 8px;
       }
-      .command {
-        font-family: monospace;
-        font-size: 1rem;
-        padding: 3px;
-        background: #e6e6e6;
-        border-radius: 3px;
-      }
       .command::before {
         content: "$ ";
       }
@@ -187,6 +187,12 @@
           color: #eee;
         }
         a {
+          color: #4af;
+        }
+        code {
+          background-color: #222;
+        }
+        a code {
           color: #4af;
         }
         .select-os {
@@ -309,9 +315,7 @@
 
     <section class="os os-linux">
       <div>
-        <h2>Install TurboWarp Desktop for Linux</h2>
-
-        <h3>Debian and Ubuntu</h3>
+        <h2>Install TurboWarp Desktop on Debian and Ubuntu</h2>
         <div class="steps">
           <div class="step">
             <div class="step-number">1</div>
@@ -336,8 +340,38 @@
           </div>
         </div>
 
-        <h3>Other distributions</h3>
-        <p>Please <a href="https://github.com/TurboWarp/desktop/issues">open an issue on GitHub</a>.</p>
+        <h2>Install TurboWarp Desktop with Snap</h2>
+        <p>TurboWarp is published in the Snap Store under the name <a href="https://snapcraft.io/turbowarp-desktop"><code>turbowarp-desktop</code></a>.</p>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <code class="command">snap install turbowarp-desktop</code>
+            </div>
+          </div>
+        </div>
+
+        <h2>Install TurboWarp Desktop with AppImage</h2>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-amd64-{version}.AppImage">Download app.</a>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              Mark as executable. (typically a checkbox in right click > Properties > Permissions)
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              Run the app.
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
