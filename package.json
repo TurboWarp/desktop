@@ -86,7 +86,7 @@
         },
         {
           "target": "deb",
-          "arch": "x86"
+          "arch": "ia32"
         },
         {
           "target": "deb",
@@ -105,7 +105,7 @@
         },
         {
           "target": "appimage",
-          "arch": "x86"
+          "arch": "ia32"
         },
         {
           "target": "appimage",
