@@ -250,6 +250,9 @@ function createPrivacyWindow() {
     title: getTranslation('tw.desktop.main.windows.privacy'),
     width: 600,
     height: 450,
+    parent: BrowserWindow.getFocusedWindow(),
+    minimizable: false,
+    maximizable: false,
     webPreferences: {
       contextIsolation: false,
       nodeIntegration: true
