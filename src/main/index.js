@@ -70,6 +70,8 @@ function createWindow(url, options) {
   if (isLinux) {
     options.icon = pathUtil.join(__static, 'icon.png');
   }
+  options.minWidth = 200;
+  options.minHeight = 200;
   const window = new BrowserWindow(options);
 
   window.loadURL(url);
