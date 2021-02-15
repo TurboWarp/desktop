@@ -74,6 +74,9 @@
       .select-os {
         height: 80px;
         box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+        background: white;
+        position: relative;
+        z-index: 99;
       }
       .select-os-inner {
         display: flex;
@@ -109,6 +112,7 @@
 
       .os {
         display: none;
+        background-color: rgb(255, 243, 243);
         padding-top: 32px;
         padding-bottom: 32px;
       }
@@ -145,12 +149,14 @@
       }
       .arch-unknown,
       .arch-amd64,
+      .arch-ia32,
       .arch-arm64,
       .arch-armv7l {
         display: none;
       }
       [arch="unknown"] .arch-unknown,
       [arch="amd64"] .arch-amd64,
+      [arch="ia32"] .arch-ia32,
       [arch="arm64"] .arch-arm64,
       [arch="armv7l"] .arch-armv7l {
         display: block;
@@ -174,6 +180,11 @@
         flex: 0 50%;
       }
 
+      .picture-container {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+      }
       .picture {
         width: 100%;
         max-width: 1266px;
@@ -197,9 +208,13 @@
         }
         .select-os {
           box-shadow: 0 0 3px rgba(255, 255, 255, 0.25);
+          background: #111;
         }
         .select-os-inner button {
           background-color: rgba(255, 255, 255, 0.2);
+        }
+        .os {
+          background: rgb(20, 19, 19);
         }
       }
     </style>
@@ -261,7 +276,6 @@
     <section class="os os-windows">
       <div>
         <h2>Install TurboWarp Desktop for Windows</h2>
-        <p>TurboWarp Desktop only supports 64-bit versions of Windows.</p>
         <div class="steps">
           <div class="step">
             <div class="step-number">1</div>
@@ -288,7 +302,6 @@
     <section class="os os-mac">
       <div>
         <h2>Install TurboWarp Desktop for macOS</h2>
-        <p>TurboWarp Desktop is a universal app -- it works on both Intel Macs and Apple Silicon Macs.</p>
         <div class="steps">
           <div class="step">
             <div class="step-number">1</div>
@@ -315,18 +328,20 @@
 
     <section class="os os-linux">
       <div>
-        <h2>Install TurboWarp Desktop on Debian and Ubuntu</h2>
+        <h2>Install TurboWarp Desktop for Debian and Ubuntu</h2>
         <div class="steps">
           <div class="step">
             <div class="step-number">1</div>
             <div class="step-content">
               <a class="arch-amd64" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-amd64-{version}.deb">Download package. (x86 64-bit)</a>
+              <a class="arch-ia32" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-ia32-{version}.deb">Download package. (ARM 32-bit)</a>
               <a class="arch-arm64" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-arm64-{version}.deb">Download package. (ARM 64-bit)</a>
               <a class="arch-armv7l" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-armv7l-{version}.deb">Download package. (ARMv7)</a>
               <span class="arch-not-unknown">Alternative downloads for other architectures:</span>
               <span class="arch-unknown">Download the package for your system's architecture:</span>
               <ul>
                 <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-amd64-{version}.deb">x86 64-bit</a></li>
+                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-ia32-{version}.deb">x86 32-bit</a></li>
                 <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-arm64-{version}.deb">ARM 64-bit</a></li>
                 <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-armv7l-{version}.deb">ARMv7</a></li>
               </ul>
@@ -341,12 +356,18 @@
         </div>
 
         <h2>Install TurboWarp Desktop with Snap</h2>
-        <p>TurboWarp is published in the Snap Store under the name <a href="https://snapcraft.io/turbowarp-desktop"><code>turbowarp-desktop</code></a>.</p>
+        <p>TurboWarp is published in the Snap store with the name <a href="https://snapcraft.io/turbowarp-desktop"><code>turbowarp-desktop</code></a>. Currently only x86 64-bit is supported.</p>
         <div class="steps">
           <div class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <code class="command">snap install turbowarp-desktop</code>
+              <a href="https://snapcraft.io/docs/installing-snapd">Install snapd.</a>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <code class="command">sudo snap install turbowarp-desktop</code>
             </div>
           </div>
         </div>
@@ -356,7 +377,18 @@
           <div class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-amd64-{version}.AppImage">Download app.</a>
+              <a class="arch-amd64" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-amd64-{version}.AppImage">Download app. (x86 64-bit)</a>
+              <a class="arch-ia32" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-ia32-{version}.AppImage">Download app. (ARM 32-bit)</a>
+              <a class="arch-arm64" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-arm64-{version}.AppImage">Download app. (ARM 64-bit)</a>
+              <a class="arch-armv7l" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-armv7l-{version}.AppImage">Download app. (ARMv7)</a>
+              <span class="arch-not-unknown">Alternative downloads for other architectures:</span>
+              <span class="arch-unknown">Download the app for your system's architecture:</span>
+              <ul>
+                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-amd64-{version}.AppImage">x86 64-bit</a></li>
+                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-ia32-{version}.AppImage">x86 32-bit</a></li>
+                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-arm64-{version}.AppImage">ARM 64-bit</a></li>
+                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-armv7l-{version}.AppImage">ARMv7</a></li>
+              </ul>
             </div>
           </div>
           <div class="step">
@@ -399,10 +431,8 @@
       </div>
     </section>
 
-    <section>
+    <section class="picture-container">
       <img class="picture" loading="lazy" src="images/screenshot-win-light.png" width="1266" height="793" title="Project pictured: Full Sphere Path Tracer by piano_miles">
-    </section>
-    <section>
       <p>Project pictured: <a href="https://scratch.mit.edu/projects/425020125/">Full Sphere Path Tracer by piano_miles</a></p>
     </section>
 
@@ -411,9 +441,6 @@
         var VERSION = '0.0.4';
 
         function getOS() {
-          var hash = location.hash;
-          if (hash.charAt(0) === '#') hash = hash.substr(1);
-          if (['windows', 'linux', 'mac'].indexOf(hash) !== -1) return hash;
           if (/android/i.test(navigator.userAgent)) return 'windows';
           if (/iphone|ipad|ipod/i.test(navigator.userAgent)) return 'windows';
           if (/cros/i.test(navigator.userAgent)) return 'windows';
@@ -421,11 +448,8 @@
           if (/mac/i.test(navigator.userAgent)) return 'mac';
           return 'windows';
         }
-        function setOS(os, hash) {
+        function setOS(os) {
           document.body.setAttribute('os', os);
-          if (hash) {
-            location.hash = os;
-          }
         }
         function getArch() {
           // TODO
@@ -439,13 +463,13 @@
         }
 
         document.querySelector('.os-button-windows').addEventListener('click', function () {
-          setOS('windows', true);
+          setOS('windows');
         });
         document.querySelector('.os-button-mac').addEventListener('click', function () {
-          setOS('mac', true);
+          setOS('mac');
         });
         document.querySelector('.os-button-linux').addEventListener('click', function () {
-          setOS('linux', true);
+          setOS('linux');
         });
 
         var links = document.querySelectorAll('a[data-href]');
