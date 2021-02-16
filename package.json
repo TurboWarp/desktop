@@ -97,9 +97,6 @@
           "arch": "armv7l"
         },
         {
-          "target": "snap"
-        },
-        {
           "target": "appimage",
           "arch": "x64"
         },
