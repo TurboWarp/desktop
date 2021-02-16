@@ -74,6 +74,9 @@
       [changelog="true"] .changelog {
         display: flex;
       }
+      .changelog li {
+        margin-top: 4px;
+      }
 
       .select-os {
         height: 80px;
@@ -256,7 +259,7 @@
       </div>
     </section>
 
-    <section class="changelog" id="changelog">
+    <section class="changelog">
       <div>
         <h2>Changes since v0.0.4</h2>
         <ul>
@@ -483,7 +486,6 @@
 
         if (/from|to|changelog/i.test(location.search)) {
           document.body.setAttribute('changelog', 'true');
-          document.querySelector('#changelog').scrollIntoView();
         }
 
         setOS(getOS());
