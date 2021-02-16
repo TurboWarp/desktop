@@ -419,26 +419,32 @@
       </div>
     </section>
 
+    <section>
+      <div>
+        <p>Bugs should be reported <a href="https://github.com/TurboWarp/desktop/issues">on GitHub</a> or <a href="https://scratch.mit.edu/users/GarboMuffin/#comments">on Scratch</a>.</p>
+      </div>
+    </section>
+
     <section class="faq">
       <div class="faq-questions">
         <div class="faq-question">
-          <h2>Bugs</h2>
-          <p>Bugs should be reported <a href="https://github.com/TurboWarp/desktop/issues">on GitHub</a>.</p>
+          <h2>Is TurboWarp Desktop faster?</h2>
+          <p>Usually not, but it may be more stable as it won't be unloaded by your browser.</p>
         </div>
 
         <div class="faq-question">
-          <h2>Privacy Policy</h2>
-          <p>See <a href="privacy.html">privacy policy</a>.</p>
-        </div>
-
-        <div class="faq-question">
-          <h2>Source Code</h2>
-          <p>TurboWarp's source code is <a data-href="https://github.com/TurboWarp/">on GitHub</a>. TurboWarp Desktop is licensed under the GNU General Public License v3.0.</p>
-        </div>
-
-        <div class="faq-question">
-          <h2>Updates</h2>
+          <h2>How do I update?</h2>
           <p>The app may periodically check for updates and notify you when one is available. To update, download the new installer and run it again.</p>
+        </div>
+
+        <div class="faq-question">
+          <h2>Privacy policy</h2>
+          <p>Please read the <a href="privacy.html">very short privacy policy</a>.</p>
+        </div>
+
+        <div class="faq-question">
+          <h2>Source code</h2>
+          <p>TurboWarp's source code is <a data-href="https://github.com/TurboWarp/">on GitHub</a>. TurboWarp Desktop is licensed under the GNU General Public License v3.0.</p>
         </div>
       </div>
     </section>
@@ -489,7 +495,7 @@
           links[i].href = links[i].getAttribute('data-href').replace(/{version}/g, VERSION);
         }
 
-        if (/from|to/i.test(location.search)) {
+        if (/from|to|changelog/i.test(location.search)) {
           document.body.setAttribute('changelog', 'true');
           document.querySelector('#changelog').scrollIntoView();
         }
