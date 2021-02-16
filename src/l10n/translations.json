@@ -15,6 +15,7 @@
         "tw.desktop.main.updater.security.message": "Ein wichtiges Sicherheitsupdate ist verfügbar: v{version}",
         "tw.desktop.main.windows.about": "Über",
         "tw.desktop.main.windows.addonSettings": "Addon-Einstellungen",
+        "tw.desktop.main.windows.privacy": "Datenschutz",
         "tw.desktop.renderer.prompt.cancel": "Abbrechen",
         "tw.desktop.renderer.prompt.ok": "OK."
     },
@@ -72,6 +73,7 @@
         "tw.desktop.main.updater.security.message": "Uma atualização importante de segurança está disponível: v{version}",
         "tw.desktop.main.windows.about": "Sobre",
         "tw.desktop.main.windows.addonSettings": "Configurações de Addon",
+        "tw.desktop.main.windows.privacy": "Política de Privacidade",
         "tw.desktop.renderer.prompt.cancel": "Cancelar",
         "tw.desktop.renderer.prompt.ok": "OK"
     },
@@ -91,6 +93,7 @@
         "tw.desktop.main.updater.security.message": "O actualizare importantă de securitate este disponibilă: v{version}",
         "tw.desktop.main.windows.about": "Despre",
         "tw.desktop.main.windows.addonSettings": "Setările Addon-urilor",
+        "tw.desktop.main.windows.privacy": "Politica de Confidențialitate",
         "tw.desktop.renderer.prompt.cancel": "Anulează",
         "tw.desktop.renderer.prompt.ok": "OK"
     },
@@ -110,6 +113,7 @@
         "tw.desktop.main.updater.security.message": "Önemli bir güvenlik güncellemesi mevcuttur: v{version}",
         "tw.desktop.main.windows.about": "Hakkında",
         "tw.desktop.main.windows.addonSettings": "Eklenti Ayarlar",
+        "tw.desktop.main.windows.privacy": "Gizillik Politikası",
         "tw.desktop.renderer.prompt.cancel": "İptal",
         "tw.desktop.renderer.prompt.ok": "Tamam"
     }
