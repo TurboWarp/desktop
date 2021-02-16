@@ -30,15 +30,15 @@
       img {
         display: block;
       }
-      body:not([loaded]) section {
-        display: none;
-      }
       section {
         display: flex;
         justify-content: center;
         width: 100%;
         padding-right: 8px;
         padding-left: 8px;
+      }
+      body:not([loaded]) section:not(.always-visible) {
+        display: none;
       }
       section > div {
         width: 100%;
@@ -217,7 +217,7 @@
   </head>
 
   <body os="" arch="">
-    <section class="header">
+    <section class="header always-visible">
       <div>
         <h1 class="header-title">
           <img src="images/icon.png" width="64" height="64" aria-hidden="true">
@@ -229,7 +229,7 @@
       </div>
     </section>
 
-    <section class="select-os">
+    <section class="select-os always-visible">
       <div class="select-os-inner">
         <span class="select-os-label">Choose your OS:</span>
         <button class="os-button-windows">
