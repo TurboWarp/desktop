@@ -23,6 +23,7 @@
     "electron": "^11.2.3",
     "electron-builder": "^22.10.4",
     "electron-webpack": "^2.8.2",
+    "intl-messageformat": "^9.4.7",
     "postcss": "^8.2.6",
     "postcss-import": "^14.0.0",
     "postcss-loader": "^4.2.0",
