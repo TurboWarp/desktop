@@ -74,11 +74,6 @@
       [changelog="true"] .changelog {
         display: flex;
       }
-      [changelog="true"] .header,
-      [changelog="true"] .faq,
-      [changelog="true"] .picture-container {
-        display: none;
-      }
 
       .select-os {
         height: 80px;
@@ -123,13 +118,12 @@
       }
 
       .os {
-        display: none;
         margin-bottom: 32px;
       }
-      [os="windows"] .os-windows,
-      [os="mac"] .os-mac,
-      [os="linux"] .os-linux {
-        display: flex;
+      body:not([os="windows"]) .os-windows,
+      body:not([os="mac"]) .os-mac,
+      body:not([os="linux"]) .os-linux {
+        display: none;
       }
       .steps {
         display: flex;
@@ -159,22 +153,12 @@
       .command::before {
         content: "$ ";
       }
-      .arch-unknown,
-      .arch-amd64,
-      .arch-ia32,
-      .arch-arm64,
-      .arch-armv7l {
+      body:not([arch="unknown"]) .arch-unknown,
+      body:not([arch="amd64"]) .arch-amd64,
+      body:not([arch="ia32"]) .arch-ia32,
+      body:not([arch="arm64"]) .arch-arm64,
+      body:not([arch="armv7l"]) .arch-armv7l {
         display: none;
-      }
-      [arch="unknown"] .arch-unknown,
-      [arch="amd64"] .arch-amd64,
-      [arch="ia32"] .arch-ia32,
-      [arch="arm64"] .arch-arm64,
-      [arch="armv7l"] .arch-armv7l {
-        display: block;
-      }
-      .arch-not-unknown {
-        display: block;
       }
       [arch="unknown"] .arch-not-unknown {
         display: none;
@@ -280,6 +264,8 @@
           <li>The app now has an icon.</li>
           <li>More parts of the app's interface are now translatable.</li>
           <li>Various bug fixes and improvements.</li>
+          <li>This website has been redesigned.</li>
+          <li class="os-linux">Linux: More formats and system architectures are supported.</li>
         </ul>
         <p>To update, download the new installer and run it again.</p>
       </div>
@@ -345,12 +331,12 @@
           <li class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <a class="arch-amd64" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-amd64-{version}.deb">Download package. (x86 64-bit)</a>
-              <a class="arch-ia32" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-ia32-{version}.deb">Download package. (ARM 32-bit)</a>
-              <a class="arch-arm64" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-arm64-{version}.deb">Download package. (ARM 64-bit)</a>
-              <a class="arch-armv7l" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-armv7l-{version}.deb">Download package. (ARMv7)</a>
-              <span class="arch-not-unknown">Alternative downloads for other architectures:</span>
-              <span class="arch-unknown">Download the package for your system's architecture:</span>
+              <div class="arch-amd64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-amd64-{version}.deb">Download package. (x86 64-bit)</a></div>
+              <div class="arch-ia32"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-ia32-{version}.deb">Download package. (ARM 32-bit)</a></div>
+              <div class="arch-arm64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-arm64-{version}.deb">Download package. (ARM 64-bit)</a></div>
+              <div class="arch-armv7l"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-armv7l-{version}.deb">Download package. (ARMv7)</a></div>
+              <div class="arch-not-unknown">Alternative downloads for other architectures:</div>
+              <div class="arch-unknown">Download the package for your system's architecture:</div>
               <ul>
                 <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-amd64-{version}.deb">x86 64-bit</a></li>
                 <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-ia32-{version}.deb">x86 32-bit</a></li>
@@ -389,12 +375,12 @@
           <li class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <a class="arch-amd64" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-amd64-{version}.AppImage">Download app. (x86 64-bit)</a>
-              <a class="arch-ia32" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-ia32-{version}.AppImage">Download app. (ARM 32-bit)</a>
-              <a class="arch-arm64" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-arm64-{version}.AppImage">Download app. (ARM 64-bit)</a>
-              <a class="arch-armv7l" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-armv7l-{version}.AppImage">Download app. (ARMv7)</a>
-              <span class="arch-not-unknown">Alternative downloads for other architectures:</span>
-              <span class="arch-unknown">Download the app for your system's architecture:</span>
+              <div class="arch-amd64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-amd64-{version}.AppImage">Download app. (x86 64-bit)</a></div>
+              <div class="arch-ia32"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-ia32-{version}.AppImage">Download app. (ARM 32-bit)</a></div>
+              <div class="arch-arm64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-arm64-{version}.AppImage">Download app. (ARM 64-bit)</a></div>
+              <div class="arch-armv7l"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-armv7l-{version}.AppImage">Download app. (ARMv7)</a></div>
+              <div class="arch-not-unknown">Alternative downloads for other architectures:</div>
+              <div class="arch-unknown">Download the app for your system's architecture:</div>
               <ul>
                 <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-amd64-{version}.AppImage">x86 64-bit</a></li>
                 <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-ia32-{version}.AppImage">x86 32-bit</a></li>
@@ -429,7 +415,7 @@
       <div class="faq-questions">
         <div class="faq-question">
           <h2>Is TurboWarp Desktop faster?</h2>
-          <p>Usually not, but it may be more stable as it won't be unloaded by your browser.</p>
+          <p>Usually not, but it may be more stable as your browser won't unload it to save memory.</p>
         </div>
 
         <div class="faq-question">
@@ -456,7 +442,7 @@
 
     <script>
       (function() {
-        var VERSION = '0.0.4';
+        var VERSION = '0.1.0';
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'windows';
