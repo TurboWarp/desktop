@@ -187,9 +187,14 @@
       }
       .picture {
         width: 100%;
-        max-width: 1266px;
         height: 100%;
-        margin-bottom: 4px;
+        max-width: 1264px;
+      }
+      .picture-dark {
+        display: none;
+      }
+      .picture-caption {
+        margin-top: 4px;
       }
 
       @media (prefers-color-scheme: dark) {
@@ -212,6 +217,12 @@
         }
         .select-os-inner button {
           background-color: rgba(255, 255, 255, 0.2);
+        }
+        .picture-dark {
+          display: block;
+        }
+        .picture-light {
+          display: none;
         }
       }
     </style>
@@ -440,8 +451,9 @@
     </section>
 
     <section class="picture-container">
-      <img class="picture" loading="lazy" src="images/screenshot-win-light.png" width="1266" height="793" title="Project pictured: Full Sphere Path Tracer by piano_miles">
-      <p>Project pictured: <a href="https://scratch.mit.edu/projects/425020125/">Full Sphere Path Tracer by piano_miles</a></p>
+      <img class="picture picture-light" data-src="images/screenshot-light.png" width="1264" height="761" title="Project pictured: Full Sphere Path Tracer by piano_miles">
+      <img class="picture picture-dark" data-src="images/screenshot-dark.png" width="1264" height="761" title="Project pictured: Full Sphere Path Tracer by piano_miles">
+      <p class="picture-caption">Project pictured: <a href="https://scratch.mit.edu/projects/425020125/">Full Sphere Path Tracer by piano_miles</a></p>
     </section>
 
     <script>
@@ -482,6 +494,25 @@
         var links = document.querySelectorAll('a[data-href]');
         for (var i = 0; i < links.length; i++) {
           links[i].href = links[i].getAttribute('data-href').replace(/{version}/g, VERSION);
+        }
+
+        var images = document.querySelectorAll('img[data-src]');
+        var observer = window.IntersectionObserver && new IntersectionObserver(function (entries) {
+          for (var i = 0; i < entries.length; i++) {
+            var entry = entries[i];
+            if (entry.isIntersecting && !entry.target.src) {
+              entry.target.src = entry.target.getAttribute('data-src');
+            }
+          }
+        }, {
+          rootMargin: '50px'
+        });
+        for (var i = 0; i < images.length; i++) {
+          if (observer) {
+            observer.observe(images[i]);
+          } else {
+            images[i].src = images[i].getAttribute('data-src');
+          }
         }
 
         if (/from|to|changelog/i.test(location.search)) {
