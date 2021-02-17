@@ -114,6 +114,9 @@
         }
       ]
     },
+    "snap": {
+      "plugs": ["default", "camera", "audio-playback", "audio-record", "bluetooth-control"]
+    },
     "fileAssociations": [
       {
         "ext": "sb3",
