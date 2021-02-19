@@ -35,6 +35,7 @@
         "tw.desktop.main.updater.security.message": "Actualización importante de seguridad disponible: v{version}",
         "tw.desktop.main.windows.about": "Acerca De",
         "tw.desktop.main.windows.addonSettings": "Ajustes de Addons",
+        "tw.desktop.main.windows.privacy": "Política de Privacidad",
         "tw.desktop.renderer.prompt.cancel": "Cancelar",
         "tw.desktop.renderer.prompt.ok": "OK"
     },
@@ -80,7 +81,7 @@
     "ro": {
         "tw.desktop.main.menuBar.learnMore": "Află mai multe.",
         "tw.desktop.main.menuBar.newWindow": "Fereastră Nouă",
-        "tw.desktop.main.unload.detail": "Orice modificări nesalvate vor fi pierdute/",
+        "tw.desktop.main.unload.detail": "Orice modificări nesalvate vor fi pierdute.",
         "tw.desktop.main.unload.leave": "Ieși",
         "tw.desktop.main.unload.message": "Ești sigur că vrei să ieși?",
         "tw.desktop.main.unload.stay": "Rămâi",
