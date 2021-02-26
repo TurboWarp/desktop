@@ -55,6 +55,7 @@
         "tw.desktop.main.updater.security.message": "E' disponibile un importante aggiornamento per la sicurezza: v{version}",
         "tw.desktop.main.windows.about": "Info",
         "tw.desktop.main.windows.addonSettings": "Impostazioni Addon",
+        "tw.desktop.main.windows.privacy": "Politica della Privacy",
         "tw.desktop.renderer.prompt.cancel": "Annulla",
         "tw.desktop.renderer.prompt.ok": "OK"
     },
