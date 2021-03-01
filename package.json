@@ -17,7 +17,7 @@
     "source-map-support": "^0.5.19"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.12.16",
+    "@babel/preset-env": "^7.13.8",
     "@babel/preset-react": "^7.12.13",
     "css-loader": "^5.0.2",
     "electron": "^11.3.0",
