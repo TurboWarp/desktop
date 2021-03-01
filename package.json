@@ -19,7 +19,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.12.13",
-    "css-loader": "^5.0.2",
+    "css-loader": "^5.1.0",
     "electron": "^11.3.0",
     "electron-builder": "^22.10.5",
     "electron-webpack": "^2.8.2",
