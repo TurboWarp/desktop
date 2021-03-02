@@ -76,6 +76,10 @@ module.exports = defaultConfig => {
             alias: {
                 'scratch-gui$': path.resolve(__dirname, 'node_modules', 'scratch-gui', 'src', 'index.js')
             }
-        }
+        },
+        output: {
+            libraryTarget: 'var'
+        },
+        target: 'web'
     });
 };

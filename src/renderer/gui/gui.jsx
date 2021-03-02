@@ -4,9 +4,7 @@ import {compose} from 'redux';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {ipcRenderer} from 'electron';
-import fs from 'fs';
 import pathUtil from 'path';
-import {promisify} from 'util';
 import GUI from 'scratch-gui';
 import {AppStateHOC} from 'scratch-gui';
 import {openLoadingProject, closeLoadingProject} from 'scratch-gui/src/reducers/modals';
@@ -17,8 +15,6 @@ import {WrappedFileHandle} from './filesystem-api-impl';
 import {localeChanged} from './translations';
 import './prompt-impl';
 import styles from './gui.css';
-
-const readFile = promisify(fs.readFile);
 
 const handleStorageInit = (storage) => {
   storage.addWebStore(
@@ -54,8 +50,7 @@ const handleVmInit = (vm) => {
 };
 
 const getProjectTitle = (file) => {
-  const name = pathUtil.basename(file);
-  const match = name.match(/^(.*)\.sb[2|3]?$/);
+  const match = file.match(/([^/\\]+)\.sb[2|3]?$/);
   if (!match) return null;
   return match[1];
 };
@@ -85,7 +80,7 @@ const DesktopHOC = function (WrappedComponent) {
       mountedOnce = true;
       if (fileToOpen !== null) {
         this.props.onLoadingStarted();
-        readFile(fileToOpen)
+        ipcRenderer.invoke('read-file', fileToOpen)
           .then((buffer) => this.props.vm.loadProject(buffer.buffer))
           .then(() => {
             const title = getProjectTitle(fileToOpen);

@@ -1,12 +1,14 @@
 import {app, BrowserWindow, Menu, ipcMain, shell, dialog} from 'electron'
 import pathUtil from 'path'
 import fs from 'fs';
+import writeFileAtomic from 'write-file-atomic';
 import util from 'util';
 import {format as formatUrl} from 'url'
 import {version} from '../../package.json';
 import checkForUpdate from './update-checker';
 import getTranslation from './translations';
 
+const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -72,6 +74,11 @@ function createWindow(url, options) {
   }
   options.minWidth = 200;
   options.minHeight = 200;
+  options.webPreferences = {
+    contextIsolation: false,
+    nodeIntegration: false,
+    preload: pathUtil.resolve(__dirname, '../renderer/preload.js')
+  };
   const window = new BrowserWindow(options);
 
   window.loadURL(url);
@@ -134,11 +141,7 @@ function createEditorWindow() {
   const window = createWindow(url, {
     title: editorWindowTitle,
     width: 1280,
-    height: 800,
-    webPreferences: {
-      contextIsolation: false,
-      nodeIntegration: true
-    }
+    height: 800
   });
 
   if (isDevelopment) {
@@ -208,11 +211,7 @@ function createAboutWindow() {
     height: 450,
     parent: BrowserWindow.getFocusedWindow(),
     minimizable: false,
-    maximizable: false,
-    webPreferences: {
-      contextIsolation: false,
-      nodeIntegration: true
-    }
+    maximizable: false
   });
 
   window.on('closed', () => {
@@ -229,11 +228,7 @@ function createSettingsWindow(locale) {
   const window = createWindow(url, {
     title: getTranslation('tw.desktop.main.windows.addonSettings'),
     width: 700,
-    height: 650,
-    webPreferences: {
-      contextIsolation: false,
-      nodeIntegration: true
-    }
+    height: 650
   });
 
   window.on('closed', () => {
@@ -252,11 +247,7 @@ function createPrivacyWindow() {
     height: 450,
     parent: BrowserWindow.getFocusedWindow(),
     minimizable: false,
-    maximizable: false,
-    webPreferences: {
-      contextIsolation: false,
-      nodeIntegration: true
-    }
+    maximizable: false
   });
 
   window.on('closed', () => {
@@ -274,6 +265,14 @@ ipcMain.handle('show-save-dialog', async (event, options) => {
 
 ipcMain.handle('show-open-dialog', async (event, options) => {
   return dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), options);
+});
+
+ipcMain.handle('read-file', async (event, file) => {
+  return await readFile(file);
+});
+
+ipcMain.handle('write-file', async (event, file, content) => {
+  await writeFileAtomic(file, content);
 });
 
 ipcMain.on('open-about', () => {
