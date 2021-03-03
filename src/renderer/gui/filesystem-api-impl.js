@@ -4,7 +4,12 @@
  */
 
 import {ipcRenderer} from 'electron';
-import pathUtil from 'path';
+
+const getBasename = (path) => {
+  const match = path.match(/([^/\\]+)$/);
+  if (!match) return null;
+  return match[1];
+};
 
 const readAsArrayBuffer = (blob) => new Promise((resolve, reject) => {
   const fr = new FileReader();
@@ -34,7 +39,7 @@ export class WrappedFileHandle {
   constructor (path) {
     this._path = path;
     // part of public API
-    this.name = pathUtil.basename(this._path.replace(/\\/g, '/'));
+    this.name = getBasename(this._path);
   }
 
   async getFile () {
