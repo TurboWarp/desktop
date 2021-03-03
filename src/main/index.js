@@ -85,11 +85,6 @@ function createWindow(url, options) {
 
   window.loadURL(url);
 
-  window.webContents.on('new-window', (e, url) => {
-    e.preventDefault();
-    shell.openExternal(url);
-  });
-
   if (!isMac) {
     // On Mac, shortcuts are handled by the menu bar.
     window.webContents.on('before-input-event', (e, input) => {
@@ -368,6 +363,29 @@ app.on('open-file', (event, path) => {
   if (editorWindows.size > 0) {
     createEditorWindow();
   }
+});
+
+app.on('web-contents-created', (event, contents) => {
+  contents.on('new-window', (e, url) => {
+    e.preventDefault();
+    try {
+      const parsedUrl = new URL(url);
+      if (
+        parsedUrl.origin === 'https://scratch.mit.edu' ||
+        parsedUrl.origin === 'https://desktop.turbowarp.org' ||
+        parsedUrl.origin === 'https://github.com'
+      ) {
+        shell.openExternal(url);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  });
+  contents.on('will-navigate', (e, url) => {
+    if (url !== 'mailto:contact@turbowarp.org') {
+      e.preventDefault();
+    }
+  });
 });
 
 function parseArgv(argv) {
