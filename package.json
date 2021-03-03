@@ -75,6 +75,7 @@
       ]
     },
     "linux": {
+      "executableName": "turbowarp-desktop",
       "artifactName": "${productName}-${os}-${arch}-${version}.${ext}",
       "icon": "./build/",
       "synopsis": "Mod of Scratch with a compiler and more features.",
