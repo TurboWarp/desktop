@@ -10,7 +10,7 @@ contextBridge.exposeInMainWorld('electron', {
       return ipcRenderer.send(...args);
     },
     invoke(...args) {
-      return ipcRenderer.send(...args);
+      return ipcRenderer.invoke(...args);
     },
     on(...args) {
       return ipcRenderer.on(...args);
