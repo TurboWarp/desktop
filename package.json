@@ -139,6 +139,9 @@
     ]
   },
   "electronWebpack": {
+    "main": {
+      "extraEntries": ["@/preload.js"]
+    },
     "renderer": {
       "webpackConfig": "webpack.renderer.js",
       "template": "src/renderer/template.html"
