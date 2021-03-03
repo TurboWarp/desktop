@@ -6,6 +6,7 @@ import util from 'util';
 import {format as formatUrl} from 'url'
 import {version} from '../../package.json';
 import checkForUpdate from './update-checker';
+import setupContextMenu from './context-menu';
 import getTranslation from './translations';
 
 const readFile = util.promisify(fs.readFile);
@@ -123,6 +124,9 @@ function createWindow(url, options) {
       }
     });
   }
+
+  const webContents = window.webContents;
+  setupContextMenu(webContents);
 
   return window;
 }
