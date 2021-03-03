@@ -43,6 +43,9 @@ const usedFiles = new Set();
 
 const downloadAsset = async (asset) => {
   const md5ext = asset.md5ext;
+  if (usedFiles.has(md5ext)) {
+    return;
+  }
   usedFiles.add(md5ext);
   const path = pathUtil.join(libraryFiles, md5ext);
   if (fs.existsSync(path)) {
