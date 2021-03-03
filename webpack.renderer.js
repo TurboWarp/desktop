@@ -22,7 +22,7 @@ module.exports = defaultConfig => {
                     }
                 },
                 {
-                    test: /\.(svg|png|wav|gif|jpg|mp3)$/,
+                    test: /\.(svg|png|wav|gif|jpg|mp3|ttf|otf)$/,
                     loader: 'file-loader',
                     options: {
                         outputPath: 'static/assets/'
@@ -74,7 +74,8 @@ module.exports = defaultConfig => {
         ],
         resolve: {
             alias: {
-                'scratch-gui$': path.resolve(__dirname, 'node_modules', 'scratch-gui', 'src', 'index.js')
+                'scratch-gui$': path.resolve(__dirname, 'node_modules', 'scratch-gui', 'src', 'index.js'),
+                'scratch-render-fonts$': path.resolve(__dirname, 'node_modules', 'scratch-gui', 'src', 'lib', 'tw-scratch-render-fonts'),
             }
         },
         output: {
