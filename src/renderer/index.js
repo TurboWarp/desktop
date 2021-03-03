@@ -1,8 +1,5 @@
 import './normalize.css';
 
-// Tricks some addon libraries into thinking they're not running in node
-window.module = undefined;
-
 const searchParams = new URLSearchParams(location.search);
 const route = searchParams.get('route');
 
