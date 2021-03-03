@@ -23,6 +23,8 @@ let aboutWindow = null;
 let settingsWindow = null;
 let privacyWindow = null;
 
+const allowedToAccessFiles = new Set();
+
 if (isMac) {
   Menu.setApplicationMenu(Menu.buildFromTemplate([
     { role: 'appMenu' },
@@ -135,6 +137,7 @@ function createEditorWindow() {
   let url = getURL('editor');
   if (fileToOpen !== null) {
     url += `&file=${encodeURIComponent(fileToOpen)}`;
+    allowedToAccessFiles.add(fileToOpen);
     fileToOpen = null;
   }
 
@@ -260,18 +263,33 @@ function createPrivacyWindow() {
 }
 
 ipcMain.handle('show-save-dialog', async (event, options) => {
-  return dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), options);
+  const result = await dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), options);
+  if (!result.canceled) {
+    allowedToAccessFiles.add(result.filePath);
+  }
+  return result;
 });
 
 ipcMain.handle('show-open-dialog', async (event, options) => {
-  return dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), options);
+  const result = await dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), options);
+  if (!result.canceled) {
+    const [filePath] = result.filePaths;
+    allowedToAccessFiles.add(filePath);
+  }
+  return result;
 });
 
 ipcMain.handle('read-file', async (event, file) => {
+  if (!allowedToAccessFiles.has(file)) {
+    throw new Error('Not allowed to access file');
+  }
   return await readFile(file);
 });
 
 ipcMain.handle('write-file', async (event, file, content) => {
+  if (!allowedToAccessFiles.has(file)) {
+    throw new Error('Not allowed to access file');
+  }
   await writeFileAtomic(file, content);
 });
 
