@@ -1,14 +1,19 @@
-window.electron = require('electron');
+const {contextBridge, ipcRenderer} = require('electron');
 
-window.require = function (m) {
-  // Implement or stub some things to satisfy electron-webpack
-  if (m === 'module') {
-    return {
-      globalPaths: []
-    };
+contextBridge.exposeInMainWorld('TWD', {
+  sourceMapSupport: require('source-map-support/source-map-support.js')
+});
+
+contextBridge.exposeInMainWorld('electron', {
+  ipcRenderer: {
+    send(...args) {
+      return ipcRenderer.send(...args);
+    },
+    invoke(...args) {
+      return ipcRenderer.send(...args);
+    },
+    on(...args) {
+      return ipcRenderer.on(...args);
+    }
   }
-  if (m === 'source-map-support/source-map-support.js') {
-    return require('source-map-support/source-map-support.js');
-  }
-  throw new Error(`Refusing to require() module: ${m}`);
-};
+});

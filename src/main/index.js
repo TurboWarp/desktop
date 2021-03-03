@@ -77,7 +77,7 @@ function createWindow(url, options) {
   options.minWidth = 200;
   options.minHeight = 200;
   options.webPreferences = {
-    contextIsolation: false,
+    contextIsolation: true,
     nodeIntegration: false,
     preload: pathUtil.resolve(__dirname, '../renderer/preload.js')
   };
