@@ -25,7 +25,8 @@ module.exports = defaultConfig => {
                     test: /\.(svg|png|wav|gif|jpg|mp3|ttf|otf)$/,
                     loader: 'file-loader',
                     options: {
-                        outputPath: 'static/assets/'
+                        outputPath: 'static/assets/',
+                        esModule: false
                     }
                 },
                 {
