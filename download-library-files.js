@@ -41,6 +41,23 @@ const httpsAgent = new https.Agent({
 
 const usedFiles = new Set();
 
+const persistentFetch = async (url, opts) => {
+  let err;
+  for (let i = 0; i < 3; i++) {
+    try {
+      const response = await fetch(url, opts);
+      if (response.status !== 200) {
+        throw new Error(`${md5ext}: Unexpected status code: ${response.status}`);
+      }
+      return response;
+    } catch (e) {
+      if (i === 0) err = e;
+      console.warn(`Attempt to fetch ${url} failed, trying again...`);
+    }
+  }
+  throw err;
+};
+
 const downloadAsset = async (asset) => {
   const md5ext = asset.md5ext;
   if (usedFiles.has(md5ext)) {
@@ -54,12 +71,9 @@ const downloadAsset = async (asset) => {
   }
 
   console.log(`Downloading: ${md5ext}`);
-  const response = await fetch(`https://assets.scratch.mit.edu/${md5ext}`, {
+  const response = await persistentFetch(`https://assets.scratch.mit.edu/${md5ext}`, {
     agent: httpsAgent
   });
-  if (response.status !== 200) {
-    throw new Error(`${md5ext}: Unexpected status code: ${response.status}`);
-  }
   const arrayBuffer = await response.buffer();
 
   const expectedHash = asset.assetId;
@@ -85,14 +99,22 @@ const queueDownloadAsset = (asset) => {
   );
 };
 
+const assets = new Set();
+
 for (const asset of [...costumes, ...backdrops, ...sounds]) {
-  queueDownloadAsset(asset);
+  assets.add(asset);
 }
 for (const sprite of sprites) {
   for (const asset of [...sprite.costumes, ...sprite.sounds]) {
-    queueDownloadAsset(asset);
+    assets.add(asset);
   }
 }
+
+for (const asset of assets) {
+  queueDownloadAsset(asset);
+}
+
+console.time('Download assets');
 
 limiter.onDone(() => {
   for (const file of fs.readdirSync(libraryFiles)) {
@@ -100,5 +122,6 @@ limiter.onDone(() => {
       console.warn(`Extraneous: ${file}`);
     }
   }
+  console.timeEnd('Download assets');
   console.log('Done');
 });
