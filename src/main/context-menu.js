@@ -20,15 +20,17 @@ const setupContextMenu = (webContents) => {
       });
     }
 
-    menuItems.push({
-      id: 'cut',
-      label: 'Cu&t',
-      enabled: hasText,
-      click: () => {
-        clipboard.writeText(text);
-        webContents.cut();
-      }
-    });
+    if (params.isEditable) {
+      menuItems.push({
+        id: 'cut',
+        label: 'Cu&t',
+        enabled: hasText,
+        click: () => {
+          clipboard.writeText(text);
+          webContents.cut();
+        }
+      });
+    }
     menuItems.push({
       id: 'copy',
       label: '&Copy',
@@ -37,13 +39,15 @@ const setupContextMenu = (webContents) => {
         clipboard.writeText(text);
       }
     });
-    menuItems.push({
-      id: 'Paste',
-      label: '&Paste',
-      click: () => {
-        webContents.paste();
-      }
-    });
+    if (params.isEditable) {
+      menuItems.push({
+        id: 'Paste',
+        label: '&Paste',
+        click: () => {
+          webContents.paste();
+        }
+      });
+    }
 
     const menu = Menu.buildFromTemplate(menuItems);
     menu.popup();
