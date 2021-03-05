@@ -1,4 +1,4 @@
-import {app, BrowserWindow, Menu, ipcMain, shell, dialog} from 'electron'
+import {app, BrowserWindow, Menu, ipcMain, shell, dialog, clipboard} from 'electron'
 import pathUtil from 'path'
 import fs from 'fs';
 import writeFileAtomic from 'write-file-atomic';
