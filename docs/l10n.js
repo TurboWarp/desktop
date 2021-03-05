@@ -14,8 +14,7 @@ window.L = (function () {
     return (dbg.counter = (dbg.counter || 0) + 1) % 10;
   }
 
-  function translate() {
-    let language = navigator.language;
+  function translate(language) {
     if (!allLanguageMessages[language]) language = language.split('-')[0];
     const messages = allLanguageMessages[language];
     if (!messages) return;
@@ -126,9 +125,8 @@ window.L = (function () {
     return result;
   }
 
-  translate();
-
   return {
+    translate,
     genl10n
   };
 })();
