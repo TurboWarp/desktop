@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="robots" content="noindex">
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+      td {
+        text-align: center;
+      }
+      a {
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <main><p>Loading...</p></main>
+    <script>
+      fetch('https://api.github.com/repos/TurboWarp/desktop/releases')
+        .then((r) => {
+          if (!r.ok) throw new Error('Unexpected status code: ' + r.status);
+          return r.json();
+        })
+        .then((releases) => {
+          const main = document.querySelector('main');
+          while (main.firstChild) main.removeChild(main.firstChild);
+
+          for (const {assets, tag_name, html_url, prerelease} of releases) {
+            const table = document.createElement('table');
+            table.border = '1';
+            let totalDownloads = 0;
+
+            const headerRow = document.createElement('tr');
+            headerRow.appendChild(Object.assign(document.createElement('th'), {
+              textContent: 'Asset'
+            }));
+            headerRow.appendChild(Object.assign(document.createElement('th'), {
+              textContent: 'Downloads'
+            }));
+            table.appendChild(headerRow);
+
+            for (const {download_count, name, browser_download_url} of assets.sort((a,b) => {
+              if (a.name > b.name) return 1;
+              if (b.name > a.name) return -1;
+              return 0;
+            })) {
+              if (name.endsWith('yml') || name.endsWith('blockmap')) continue;
+              totalDownloads += download_count;
+              const link = Object.assign(document.createElement('a'), {
+                href: browser_download_url,
+                textContent: name
+              });
+              const row = document.createElement('tr');
+
+              const downloadCell = document.createElement('td');
+              downloadCell.appendChild(link);
+              row.appendChild(downloadCell);
+
+              row.appendChild(Object.assign(document.createElement('td'), {
+                textContent: download_count
+              }));
+              table.appendChild(row);
+            }
+
+            const tagLink = document.createElement('a');
+            tagLink.href = html_url;
+            tagLink.textContent = '*';
+
+            const header = document.createElement('h2');
+            header.textContent = `${tag_name} `;
+            header.appendChild(tagLink);
+
+            if (prerelease) {
+              const small = document.createElement('span');
+              small.textContent = ' !!';
+              header.appendChild(small);
+            }
+
+            main.appendChild(header);
+            main.appendChild(table);
+            main.appendChild(Object.assign(document.createElement('p'), {
+              textContent: `Total downloads: ${totalDownloads}`
+            }));
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          alert(err);
+        });
+    </script>
+  </body>
+</html>
