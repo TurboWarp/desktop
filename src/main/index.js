@@ -25,6 +25,14 @@ let privacyWindow = null;
 
 const allowedToAccessFiles = new Set();
 
+const extensionNames = new Map();
+extensionNames.set('svg', 'SVG Image');
+extensionNames.set('png', 'PNG Image');
+extensionNames.set('wav', 'WAV Sound');
+extensionNames.set('sprite3', 'Scratch 3 Sprite');
+extensionNames.set('txt', 'Text Document');
+extensionNames.set('webm', 'WebM Video');
+
 if (isMac) {
   Menu.setApplicationMenu(Menu.buildFromTemplate([
     { role: 'appMenu' },
@@ -174,6 +182,21 @@ function createWindow(url, options) {
 
     const menu = Menu.buildFromTemplate(menuItems);
     menu.popup();
+  });
+
+  window.webContents.session.on('will-download', (event, item, webContents) => {
+    const extension = pathUtil.extname(item.getFilename()).replace(/^\./, '');
+    const extensionName = extensionNames.get(extension);
+    if (extensionName) {
+      item.setSaveDialogOptions({
+        filters: [
+          {
+            name: extensionName,
+            extensions: [extension]
+          }
+        ]
+      });
+    }
   });
 
   return window;
