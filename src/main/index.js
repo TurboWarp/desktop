@@ -158,7 +158,7 @@ function createWindow(url, options) {
         enabled: hasText,
         click: () => {
           clipboard.writeText(text);
-          webContents.cut();
+          window.webContents.cut();
         }
       });
     }
@@ -175,7 +175,7 @@ function createWindow(url, options) {
         id: 'Paste',
         label: '&Paste',
         click: () => {
-          webContents.paste();
+          window.webContents.paste();
         }
       });
     }
