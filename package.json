@@ -120,8 +120,7 @@
         "default",
         "camera",
         "audio-playback",
-        "audio-record",
-        "bluetooth-control"
+        "audio-record"
       ]
     },
     "fileAssociations": [
