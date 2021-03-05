@@ -6,7 +6,6 @@ import util from 'util';
 import {format as formatUrl} from 'url'
 import {version} from '../../package.json';
 import checkForUpdate from './update-checker';
-import setupContextMenu from './context-menu';
 import getTranslation from './translations';
 
 const readFile = util.promisify(fs.readFile);
@@ -125,8 +124,57 @@ function createWindow(url, options) {
     });
   }
 
-  const webContents = window.webContents;
-  setupContextMenu(webContents);
+  window.webContents.on('context-menu', (event, params) => {
+    const text = params.selectionText;
+    const hasText = !!text;
+    const menuItems = [];
+
+    if (params.isEditable && params.misspelledWord) {
+      menuItems.push({
+        id: 'learnSpelling',
+        label: '&Learn Spelling',
+        visible: params.isEditable && params.misspelledWord,
+        click() {
+          webContents.session.addWordToSpellCheckerDictionary(params.misspelledWord);
+        }
+      });
+      menuItems.push({
+        type: 'separator'
+      });
+    }
+
+    if (params.isEditable) {
+      menuItems.push({
+        id: 'cut',
+        label: 'Cu&t',
+        enabled: hasText,
+        click: () => {
+          clipboard.writeText(text);
+          webContents.cut();
+        }
+      });
+    }
+    menuItems.push({
+      id: 'copy',
+      label: '&Copy',
+      enabled: hasText,
+      click: () => {
+        clipboard.writeText(text);
+      }
+    });
+    if (params.isEditable) {
+      menuItems.push({
+        id: 'Paste',
+        label: '&Paste',
+        click: () => {
+          webContents.paste();
+        }
+      });
+    }
+
+    const menu = Menu.buildFromTemplate(menuItems);
+    menu.popup();
+  });
 
   return window;
 }
