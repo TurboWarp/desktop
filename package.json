@@ -140,7 +140,9 @@
   },
   "electronWebpack": {
     "main": {
-      "extraEntries": ["@/preload.js"]
+      "extraEntries": [
+        "@/preload.js"
+      ]
     },
     "renderer": {
       "webpackConfig": "webpack.renderer.js",
