@@ -37,14 +37,17 @@
         padding-right: 8px;
         padding-left: 8px;
       }
-      body:not([loaded]) section:not(.always-visible) {
+      body:not([loaded]) section:not(.visible-loading) {
         display: none;
+      }
+      body:not([loaded]) .transparent-loading {
+        color: transparent;
       }
       section > div {
         width: 100%;
         max-width: 942px;
       }
-      code {
+      code, .code {
         font-family: monospace;
         font-size: 1rem;
         padding: 3px;
@@ -170,15 +173,6 @@
       .faq {
         margin-bottom: 32px;
       }
-      .faq-questions {
-        display: flex;
-        flex-wrap: wrap;
-      }
-      .faq-question {
-        padding-right: 4px;
-        min-width: 350px;
-        flex: 0 50%;
-      }
 
       .picture-container {
         flex-direction: column;
@@ -205,7 +199,7 @@
         a {
           color: #4af;
         }
-        code {
+        code, .code {
           background-color: #222;
         }
         a code {
@@ -229,21 +223,21 @@
   </head>
 
   <body os="" arch="">
-    <section class="header always-visible">
+    <section class="header visible-loading">
       <div>
         <h1 class="header-title">
           <img src="images/icon.png" width="64" height="64" aria-hidden="true">
           <div>TurboWarp Desktop</div>
         </h1>
-        <p>Use TurboWarp from an app on your desktop, even when you're offline.</p>
-        <p><i>TurboWarp is not affiliated with Scratch.</i></p>
+        <p data-l10n="header.subtitle" class="transparent-loading">Use TurboWarp from an app on your desktop, even when you're offline.</p>
+        <p class="transparent-loading"><i data-l10n="header.affiliation">TurboWarp is not affiliated with Scratch, the Scratch Team, or the Scratch Foundation.</i></p>
         <noscript><p>This page requires JavaScript.</p></noscript>
       </div>
     </section>
 
-    <section class="select-os always-visible">
+    <section class="select-os">
       <div class="select-os-inner">
-        <span class="select-os-label">Choose your OS:</span>
+        <span class="select-os-label" data-l10n="select">Choose your OS:</span>
         <button class="os-button-windows">
           <!-- Icon from Font Awesome https://fontawesome.com/icons/windows?style=brands -->
           <!-- https://creativecommons.org/licenses/by/4.0/ -->
@@ -289,25 +283,21 @@
 
     <section class="os os-windows">
       <div>
-        <h2>Install TurboWarp Desktop for Windows</h2>
+        <h2 data-l10n="windows.header">Install TurboWarp Desktop for Windows</h2>
         <ol class="steps">
           <li class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-Setup-{version}.exe">Download the installer.</a>
+              <a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-Setup-{version}.exe" data-l10n="windows.download">Download the installer.</a>
             </div>
           </li>
           <li class="step">
             <div class="step-number">2</div>
-            <div class="step-content">
-              Run the .exe file.
-            </div>
+            <div class="step-content" data-l10n="windows.run">Run the .exe file.</div>
           </li>
           <li class="step">
             <div class="step-number">3</div>
-            <div class="step-content">
-              If a Windows SmartScreen alert appears, click "More info" then "Run anyways"
-            </div>
+            <div class="step-content" data-l10n="windows.smartscreen">If a Windows SmartScreen alert appears, click "More info" then "Run anyways"</div>
           </li>
         </ol>
       </div>
@@ -315,25 +305,22 @@
 
     <section class="os os-mac">
       <div>
-        <h2>Install TurboWarp Desktop for macOS</h2>
+        <h2 data-l10n="mac.header">Install TurboWarp Desktop for macOS</h2>
         <ol class="steps">
           <li class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-Setup-{version}.dmg">Download the installer.</a>
+              <a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-Setup-{version}.dmg" data-l10n="mac.step1">Download the installer.</a>
             </div>
           </li>
           <li class="step">
             <div class="step-number">2</div>
-            <div class="step-content">
-              Open the .dmg file. Move TurboWarp Desktop into Applications.
-            </div>
+            <div class="step-content" data-l10n="mac.step2">Open the .dmg file. Move TurboWarp Desktop into Applications.</div>
           </li>
           <li class="step">
             <div class="step-number">3</div>
-            <div class="step-content">
-              Our binaries are <a href="https://github.com/TurboWarp/desktop/issues/4">not notarized</a>, so additional steps are required.
-              Open Finder, navigate to Applications, right click TurboWarp Desktop and select "Open" and then "Open" again.
+            <div class="step-content" data-l10n="mac.step3">
+              Our binaries are <a href="https://github.com/TurboWarp/desktop/issues/4">not notarized</a>, so additional steps are required. Open Finder, navigate to Applications, right click TurboWarp Desktop and select "Open" and then "Open" again.
             </div>
           </li>
         </ol>
@@ -342,17 +329,17 @@
 
     <section class="os os-linux">
       <div>
-        <h2>Install TurboWarp Desktop for Debian and Ubuntu</h2>
+        <h2 data-l10n="debian.header">Install TurboWarp Desktop for Debian and Ubuntu</h2>
         <ol class="steps">
           <li class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <div class="arch-amd64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-amd64-{version}.deb">Download package. (x86 64-bit)</a></div>
-              <div class="arch-ia32"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-i386-{version}.deb">Download package. (ARM 32-bit)</a></div>
-              <div class="arch-arm64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-arm64-{version}.deb">Download package. (ARM 64-bit)</a></div>
-              <div class="arch-armv7l"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-armv7l-{version}.deb">Download package. (ARMv7l)</a></div>
-              <div class="arch-not-unknown">Alternative downloads for other architectures:</div>
-              <div class="arch-unknown">Download the package for your system's architecture:</div>
+              <div class="arch-amd64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-amd64-{version}.deb" data-l10n="debian.download">Download package. (<span data-notranslate data-l10n-subkey="arch">x86 64-bit</span>)</a></div>
+              <div class="arch-ia32"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-i386-{version}.deb" data-l10n="debian.download">Download package. (<span data-notranslate data-l10n-subkey="arch">ARM 32-bit</span>)</a></div>
+              <div class="arch-arm64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-arm64-{version}.deb" data-l10n="debian.download">Download package. (<span data-notranslate data-l10n-subkey="arch">ARM 64-bit</span>)</a></div>
+              <div class="arch-armv7l"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-armv7l-{version}.deb" data-l10n="debian.download">Download package. (<span data-notranslate data-l10n-subkey="arch">ARMv7l</span>)</a></div>
+              <div class="arch-not-unknown" data-l10n="alternative">Alternative downloads for other architectures:</div>
+              <div class="arch-unknown" data-l10n="unknown">Download the package for your system's architecture:</div>
               <ul>
                 <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-amd64-{version}.deb">x86 64-bit</a></li>
                 <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-i386-{version}.deb">x86 32-bit</a></li>
@@ -363,23 +350,23 @@
           </li>
           <li class="step">
             <div class="step-number">2</div>
-            <div class="step-content">
+            <div class="step-content" data-l10n="debian.step2">
               Install the .deb file with your distribution's package manager.
             </div>
           </li>
         </ol>
 
-        <h2>Install TurboWarp Desktop with AppImage</h2>
+        <h2 data-l10n="appimage.header">Install TurboWarp Desktop with AppImage</h2>
         <ol class="steps">
           <li class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <div class="arch-amd64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-linux-x86_64-{version}.AppImage">Download app. (x86 64-bit)</a></div>
-              <div class="arch-ia32"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-linux-i386-{version}.AppImage">Download app. (ARM 32-bit)</a></div>
-              <div class="arch-arm64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-linux-arm64-{version}.AppImage">Download app. (ARM 64-bit)</a></div>
-              <div class="arch-armv7l"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-linux-armv7l-{version}.AppImage">Download app. (ARMv7l)</a></div>
-              <div class="arch-not-unknown">Alternative downloads for other architectures:</div>
-              <div class="arch-unknown">Download the app for your system's architecture:</div>
+              <div class="arch-amd64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-linux-x86_64-{version}.AppImage" data-l10n="appimage.download">Download app. (<span data-notranslate data-l10n-subkey="arch">x86 64-bit</span>)</a></div>
+              <div class="arch-ia32"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-linux-i386-{version}.AppImage" data-l10n="appimage.download">Download app. (<span data-notranslate data-l10n-subkey="arch">x86 32-bit</span>)</a></div>
+              <div class="arch-arm64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-linux-arm64-{version}.AppImage" data-l10n="appimage.download">Download app. (<span data-notranslate data-l10n-subkey="arch">ARM 64-bit</span>)</a></div>
+              <div class="arch-armv7l"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-linux-armv7l-{version}.AppImage" data-l10n="appimage.download">Download app. (<span data-notranslate data-l10n-subkey="arch">ARMv7l</span>)</a></div>
+              <div class="arch-not-unknown" data-l10n="alternative">Alternative downloads for other architectures:</div>
+              <div class="arch-unknown" data-l10n="unknown">Download the package for your system's architecture:</div>
               <ul>
                 <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-linux-x86_64-{version}.AppImage">x86 64-bit</a></li>
                 <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-linux-i386-{version}.AppImage">x86 32-bit</a></li>
@@ -390,25 +377,25 @@
           </li>
           <li class="step">
             <div class="step-number">2</div>
-            <div class="step-content">
-              Mark as executable. (<code class="command">chmod +x *.AppImage</code> or a checkbox in right click > Properties > Permissions)
+            <div class="step-content" data-l10n="appimage.step2">
+              Mark as executable. (<code class="command" data-notranslate>chmod +x *.AppImage</code> or a checkbox in right click > Properties > Permissions)
             </div>
           </li>
           <li class="step">
             <div class="step-number">3</div>
-            <div class="step-content">
+            <div class="step-content" data-l10n="appimage.step3">
               Run the .AppImage
             </div>
           </li>
         </ol>
 
-        <h2>Install TurboWarp Desktop with Snap</h2>
-        <p>TurboWarp is published in the Snap store with the name <a href="https://snapcraft.io/turbowarp-desktop"><code>turbowarp-desktop</code></a>. Currently only x86 64-bit is supported. Certain Scratch features (microphone, camera, and bluetooth) may require manual connections.</p>
+        <h2 data-l10n="snap.header">Install TurboWarp Desktop with Snap</h2>
+        <p data-l10n="snap.description">TurboWarp is published in the Snap Store with the name <a href="https://snapcraft.io/turbowarp-desktop" class="code" data-notranslate>turbowarp-desktop</a>. Currently only x86 64-bit is supported. Certain Scratch features (microphone, camera, and bluetooth) may require manual connections.</p>
         <ol class="steps">
           <li class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <a href="https://snapcraft.io/docs/installing-snapd">Install snapd.</a>
+              <a href="https://snapcraft.io/docs/installing-snapd" data-l10n="snap.step1">Install snapd.</a>
             </div>
           </li>
           <li class="step">
@@ -423,40 +410,41 @@
 
     <section>
       <div>
-        <p>Bugs should be reported <a href="https://github.com/TurboWarp/desktop/issues">on GitHub</a> or <a href="https://scratch.mit.edu/users/GarboMuffin/#comments">on Scratch</a>.</p>
+        <p data-l10n="bugs">Bugs should be reported <a href="https://github.com/TurboWarp/desktop/issues">on GitHub</a> or <a href="https://scratch.mit.edu/users/GarboMuffin/#comments">on Scratch</a>.</p>
       </div>
     </section>
 
     <section class="faq">
       <div class="faq-questions">
         <div class="faq-question">
-          <h2>Is TurboWarp Desktop faster than regular TurboWarp?</h2>
-          <p>Usually not, but it may be more stable as your computer won't unload it to save memory.</p>
+          <h2 data-l10n="faq.speed.header">Is TurboWarp Desktop faster than regular TurboWarp?</h2>
+          <p data-l10n="faq.speed.answer">Usually not, but it may be more stable as your computer won't unload it to save memory.</p>
         </div>
 
         <div class="faq-question">
-          <h2>How do I update?</h2>
-          <p>The app may periodically check for updates and notify you when one is available. To update, download the new installer and run it again.</p>
+          <h2 data-l10n="faq.update.header">How do I update?</h2>
+          <p data-l10n="faq.update.answer">The app may periodically check for updates and notify you when one is available. To update, download the new installer and run it again.</p>
         </div>
 
         <div class="faq-question">
-          <h2>Privacy policy</h2>
-          <p>Please read the <a href="privacy.html">very short privacy policy</a>.</p>
+          <h2 data-l10n="faq.privacy.header">Privacy policy</h2>
+          <p data-l10n="faq.privacy.answer">Please read the <a href="privacy.html">very short privacy policy</a>.</p>
         </div>
 
         <div class="faq-question">
-          <h2>Source code</h2>
-          <p>TurboWarp's source code is <a data-href="https://github.com/TurboWarp/">on GitHub</a>. TurboWarp Desktop is licensed under the GNU General Public License v3.0.</p>
+          <h2 data-l10n="faq.source.header">Source code</h2>
+          <p data-l10n="faq.source.answer">TurboWarp's source code is <a data-href="https://github.com/TurboWarp/">on GitHub</a>. TurboWarp Desktop is licensed under the GNU General Public License v3.0.</p>
         </div>
       </div>
     </section>
 
     <section class="picture-container">
-      <img class="picture picture-light" data-src="images/screenshot-light.png" width="1264" height="761" title="Project pictured: Full Sphere Path Tracer by piano_miles">
-      <img class="picture picture-dark" data-src="images/screenshot-dark.png" width="1264" height="761" title="Project pictured: Full Sphere Path Tracer by piano_miles">
-      <p class="picture-caption">Project pictured: <a href="https://scratch.mit.edu/projects/425020125/">Full Sphere Path Tracer by piano_miles</a></p>
+      <img class="picture picture-light" data-src="images/screenshot-light.png" width="1264" height="761" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
+      <img class="picture picture-dark" data-src="images/screenshot-dark.png" width="1264" height="761" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
+      <p class="picture-caption" data-l10n="picture.caption">Project pictured: <a href="https://scratch.mit.edu/projects/425020125/">Full Sphere Path Tracer by piano_miles</a></p>
     </section>
 
+    <script src="l10n.js"></script>
     <script>
       (function() {
         var VERSION = '0.1.0';
