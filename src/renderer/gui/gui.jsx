@@ -183,6 +183,6 @@ ReactDOM.render(<WrappedGUI
 GUI.setAppElement(appTarget);
 
 // Load addons
-require('scratch-gui/src/addons/entry');
+import('scratch-gui/src/addons/entry');
 
 export default WrappedGUI;
