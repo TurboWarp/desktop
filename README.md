@@ -41,7 +41,7 @@ Build:
 
 ```bash
 # Development
-npm run dev
+npm start
 
 # Production (output is in `dist` folder)
 npm run dist
