@@ -9,11 +9,6 @@ window.L = (function () {
     return el.textContent.trim().replace(/\s+/g, '_').replace(/[^a-z_0-9]/gi, '') || ('placeholder' + j);
   }
 
-  const DEBUG = false;
-  function dbg() {
-    return (dbg.counter = (dbg.counter || 0) + 1) % 10;
-  }
-
   function translate(language) {
     if (!allLanguageMessages[language]) language = language.split('-')[0];
     const messages = allLanguageMessages[language];
@@ -38,7 +33,6 @@ window.L = (function () {
         const message = messages[key + '.' + id];
         if (message) {
           node.textContent = message;
-          if (DEBUG) node.textContent = node.textContent.replace(/[\w]/g, dbg());
         }
       }
 
@@ -46,9 +40,8 @@ window.L = (function () {
 
       const messageParts = message.split(/{|}/g);
       for (let i = 0; i < messageParts.length; i++) {
-        let part = messageParts[i];
+        const part = messageParts[i];
         if (i % 2 === 0) {
-          if (DEBUG) part = part.replace(/[\w]/g, dbg());
           el.appendChild(document.createTextNode(part));
         } else {
           const node = namedNodes[part];
@@ -63,12 +56,11 @@ window.L = (function () {
 
     for (const el of translatableAttributes) {
       for (const [attribute, key] of el.getAttribute('data-l10n-attrib').split(',').map((i) => i.split('='))) {
-        let message = messages[key];
+        const message = messages[key];
         if (!message) {
           console.warn('Missing message: ' + key);
           continue;
         }
-        if (DEBUG) message = message.replace(/[\w]/g, dbg());
         el.setAttribute(attribute, message);
       }
     }
