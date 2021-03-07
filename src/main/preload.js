@@ -1,6 +1,9 @@
 const {contextBridge, ipcRenderer} = require('electron');
 
-// Renderer will use `window.electron` when importing electron
+contextBridge.exposeInMainWorld('TWD', {
+  sourceMapSupport: require('source-map-support/source-map-support.js')
+});
+
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
     send(...args) {

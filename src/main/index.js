@@ -88,7 +88,6 @@ function createWindow(url, options) {
   options.webPreferences = {
     contextIsolation: true,
     nodeIntegration: false,
-    sandbox: true,
     preload: pathUtil.resolve(pathUtil.join(__dirname, 'preload.js'))
   };
   const window = new BrowserWindow(options);
