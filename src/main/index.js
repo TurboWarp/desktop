@@ -176,14 +176,16 @@ function createWindow(url, options) {
         }
       });
     }
-    menuItems.push({
-      id: 'copy',
-      label: '&Copy',
-      enabled: hasText,
-      click: () => {
-        clipboard.writeText(text);
-      }
-    });
+    if (hasText || params.isEditable) {
+      menuItems.push({
+        id: 'copy',
+        label: '&Copy',
+        enabled: hasText,
+        click: () => {
+          clipboard.writeText(text);
+        }
+      });
+    }
     if (params.isEditable) {
       menuItems.push({
         id: 'Paste',
@@ -194,8 +196,10 @@ function createWindow(url, options) {
       });
     }
 
-    const menu = Menu.buildFromTemplate(menuItems);
-    menu.popup();
+    if (menuItems.length > 0) {
+      const menu = Menu.buildFromTemplate(menuItems);
+      menu.popup();
+    }
   });
 
   window.webContents.session.on('will-download', (event, item, webContents) => {
