@@ -7,7 +7,7 @@
     <script>
       window.require = (m) => {
         if (m === 'module') return {globalPaths: []};
-        if (m === 'source-map-support/source-map-support.js') return TWD.sourceMapSupport;
+        if (m === 'source-map-support/source-map-support.js') return {install(){}};
         throw new Error("That's something I can not allow.");
       };
     </script>
