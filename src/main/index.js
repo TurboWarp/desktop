@@ -82,6 +82,7 @@ function createWindow(url, options) {
   if (isLinux) {
     options.icon = pathUtil.join(__static, 'icon.png');
   }
+  options.useContentSize = true;
   options.minWidth = 200;
   options.minHeight = 200;
   options.webPreferences = {
