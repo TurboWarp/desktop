@@ -138,6 +138,19 @@ function createWindow(url, options) {
     const hasText = !!text;
     const menuItems = [];
 
+    if (params.linkURL) {
+      menuItems.push({
+        id: 'openLink',
+        label: 'Open Link',
+        click() {
+          shell.openExternal(params.linkURL);
+        }
+      });
+      menuItems.push({
+        type: 'separator'
+      });
+    }
+
     if (params.isEditable && params.misspelledWord) {
       menuItems.push({
         id: 'learnSpelling',
