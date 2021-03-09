@@ -275,17 +275,17 @@
 
     <section class="changelog">
       <div>
-        <h2>Changes since v0.0.4</h2>
+        <h2>Changes from v0.1.0 to v0.2.0</h2>
         <ul>
-          <li>Warp timer is now enabled by default. This may slightly reduce performance, but it greatly reduces the risk of crashes. It can be disabled in the Advanced menu.</li>
-          <li>The app now has an icon. It may take a little while for this to update in things like the start menu and taskbar.</li>
-          <li>More parts of the app's interface are now translatable.</li>
-          <li>Various bug fixes and improvements.</li>
-          <li>This website has been redesigned.</li>
-          <li class="os-linux">Linux: More formats and system architectures are supported.</li>
-          <li class="os-linux">Linux: Fixed icon.</li>
+          <li>Improved sandboxing and security</li>
+          <li>Updated TurboWarp: Interpolation, new addons, and more.</li>
+          <li>Fixed music and text to speech extensions</li>
+          <li>Various other bug fixes and improvements</li>
+          <li>Privacy policy has been slightly revised</li>
+          <li class="os-mac">macOS: The name of the .app has changed from "TurboWarp Desktop" to just "TurboWarp" -- you might have to manually delete the old "TurboWarp Desktop" after updating.</li>
+          <li class="os-linux">Linux: Fixed crash on startup in some distributions (eg. Debian 10)</li>
         </ul>
-        <p>To update, download the new installer and run it again.</p>
+        <p>To update, download and run the new installer below.</p>
       </div>
     </section>
 
@@ -296,7 +296,7 @@
           <li class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-Setup-{version}.exe" data-l10n="windows.download">Download the installer.</a>
+              <a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Setup-{version}.exe" data-l10n="windows.download">Download the installer.</a>
             </div>
           </li>
           <li class="step">
@@ -318,7 +318,7 @@
           <li class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-Setup-{version}.dmg" data-l10n="mac.step1">Download the installer.</a>
+              <a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Setup-{version}.dmg" data-l10n="mac.step1">Download the installer.</a>
             </div>
           </li>
           <li class="step">
@@ -342,17 +342,17 @@
           <li class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <div class="arch-amd64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-amd64-{version}.deb" data-l10n="debian.download">Download package. (<span data-notranslate data-l10n-subkey="arch">x86 64-bit</span>)</a></div>
-              <div class="arch-ia32"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-i386-{version}.deb" data-l10n="debian.download">Download package. (<span data-notranslate data-l10n-subkey="arch">ARM 32-bit</span>)</a></div>
-              <div class="arch-arm64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-arm64-{version}.deb" data-l10n="debian.download">Download package. (<span data-notranslate data-l10n-subkey="arch">ARM 64-bit</span>)</a></div>
-              <div class="arch-armv7l"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-armv7l-{version}.deb" data-l10n="debian.download">Download package. (<span data-notranslate data-l10n-subkey="arch">ARMv7l</span>)</a></div>
+              <div class="arch-amd64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-amd64-{version}.deb" data-l10n="debian.download">Download package. (<span data-notranslate data-l10n-subkey="arch">x86 64-bit</span>)</a></div>
+              <div class="arch-ia32"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-i386-{version}.deb" data-l10n="debian.download">Download package. (<span data-notranslate data-l10n-subkey="arch">ARM 32-bit</span>)</a></div>
+              <div class="arch-arm64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.deb" data-l10n="debian.download">Download package. (<span data-notranslate data-l10n-subkey="arch">ARM 64-bit</span>)</a></div>
+              <div class="arch-armv7l"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.deb" data-l10n="debian.download">Download package. (<span data-notranslate data-l10n-subkey="arch">ARMv7l</span>)</a></div>
               <div class="arch-not-unknown" data-l10n="alternative">Alternative downloads for other architectures:</div>
               <div class="arch-unknown" data-l10n="unknown">Download the package for your system's architecture:</div>
               <ul>
-                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-amd64-{version}.deb">x86 64-bit</a></li>
-                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-i386-{version}.deb">x86 32-bit</a></li>
-                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-arm64-{version}.deb">ARM 64-bit</a></li>
-                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp.Desktop-linux-armv7l-{version}.deb">ARMv7l</a></li>
+                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-amd64-{version}.deb">x86 64-bit</a></li>
+                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-i386-{version}.deb">x86 32-bit</a></li>
+                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.deb">ARM 64-bit</a></li>
+                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.deb">ARMv7l</a></li>
               </ul>
             </div>
           </li>
@@ -369,17 +369,17 @@
           <li class="step">
             <div class="step-number">1</div>
             <div class="step-content">
-              <div class="arch-amd64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-linux-x86_64-{version}.AppImage" data-l10n="appimage.download">Download app. (<span data-notranslate data-l10n-subkey="arch">x86 64-bit</span>)</a></div>
-              <div class="arch-ia32"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-linux-i386-{version}.AppImage" data-l10n="appimage.download">Download app. (<span data-notranslate data-l10n-subkey="arch">x86 32-bit</span>)</a></div>
-              <div class="arch-arm64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-linux-arm64-{version}.AppImage" data-l10n="appimage.download">Download app. (<span data-notranslate data-l10n-subkey="arch">ARM 64-bit</span>)</a></div>
-              <div class="arch-armv7l"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-linux-armv7l-{version}.AppImage" data-l10n="appimage.download">Download app. (<span data-notranslate data-l10n-subkey="arch">ARMv7l</span>)</a></div>
+              <div class="arch-amd64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-x86_64-{version}.AppImage" data-l10n="appimage.download">Download app. (<span data-notranslate data-l10n-subkey="arch">x86 64-bit</span>)</a></div>
+              <div class="arch-ia32"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-i386-{version}.AppImage" data-l10n="appimage.download">Download app. (<span data-notranslate data-l10n-subkey="arch">x86 32-bit</span>)</a></div>
+              <div class="arch-arm64"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.AppImage" data-l10n="appimage.download">Download app. (<span data-notranslate data-l10n-subkey="arch">ARM 64-bit</span>)</a></div>
+              <div class="arch-armv7l"><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.AppImage" data-l10n="appimage.download">Download app. (<span data-notranslate data-l10n-subkey="arch">ARMv7l</span>)</a></div>
               <div class="arch-not-unknown" data-l10n="alternative">Alternative downloads for other architectures:</div>
               <div class="arch-unknown" data-l10n="unknown">Download the package for your system's architecture:</div>
               <ul>
-                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-linux-x86_64-{version}.AppImage">x86 64-bit</a></li>
-                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-linux-i386-{version}.AppImage">x86 32-bit</a></li>
-                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-linux-arm64-{version}.AppImage">ARM 64-bit</a></li>
-                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Desktop-linux-armv7l-{version}.AppImage">ARMv7l</a></li>
+                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-x86_64-{version}.AppImage">x86 64-bit</a></li>
+                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-i386-{version}.AppImage">x86 32-bit</a></li>
+                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.AppImage">ARM 64-bit</a></li>
+                <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.AppImage">ARMv7l</a></li>
               </ul>
             </div>
           </li>
@@ -454,7 +454,7 @@
     <script>L.translate(navigator.language);</script>
     <script>
       (function() {
-        var VERSION = '0.1.0';
+        var VERSION = '0.2.0';
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'windows';
