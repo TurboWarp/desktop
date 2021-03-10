@@ -275,8 +275,9 @@
 
     <section class="changelog">
       <div>
-        <h2>Changes from v0.1.0 to v0.2.0</h2>
+        <h2>Changes from v0.1.0 to v0.2.1</h2>
         <ul>
+          <li>v0.2.1: Fix addon bugs, including some serious ones that broke projects</li>
           <li>Improved sandboxing and security</li>
           <li>Updated TurboWarp: Interpolation, new addons, and more.</li>
           <li>Fixed music and text to speech extensions</li>
@@ -286,12 +287,6 @@
           <li class="os-linux">Linux: Fixed crash on startup in some distributions (eg. Debian 10)</li>
         </ul>
         <p>To update, download and run the new installer below.</p>
-      </div>
-    </section>
-
-    <section>
-      <div>
-        <p><b>Known issue: The "Auto-show editor extensions" addon will cause projects to break. This will be fixed in an update released soon, until then you should not enable this addon.</b></p>
       </div>
     </section>
 
@@ -460,7 +455,7 @@
     <script>L.translate(navigator.language);</script>
     <script>
       (function() {
-        var VERSION = '0.2.0';
+        var VERSION = '0.2.1';
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'windows';
