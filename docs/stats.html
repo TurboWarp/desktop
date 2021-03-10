@@ -30,6 +30,10 @@
           while (main.firstChild) main.removeChild(main.firstChild);
 
           for (const {assets, tag_name, html_url, prerelease} of releases) {
+            if (prerelease) {
+              continue;
+            }
+
             const table = document.createElement('table');
             table.border = '1';
             let totalDownloads = 0;
@@ -73,12 +77,6 @@
             const header = document.createElement('h2');
             header.textContent = `${tag_name} `;
             header.appendChild(tagLink);
-
-            if (prerelease) {
-              const small = document.createElement('span');
-              small.textContent = ' !!';
-              header.appendChild(small);
-            }
 
             main.appendChild(header);
             main.appendChild(table);
