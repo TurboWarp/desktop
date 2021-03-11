@@ -360,7 +360,7 @@
           <li class="step">
             <div class="step-number">2</div>
             <div class="step-content" data-l10n="debian.step2">
-              Install the .deb file with your distribution's package manager.
+              Install the .deb file with <code class="command version-text" data-l10n-subkey="apt_install">sudo apt install ./TurboWarp-*-{version}.deb</code> or your distribution's app store.
             </div>
           </li>
         </ol>
@@ -491,6 +491,10 @@
         var links = document.querySelectorAll('a[data-href]');
         for (var i = 0; i < links.length; i++) {
           links[i].href = links[i].getAttribute('data-href').replace(/{version}/g, VERSION);
+        }
+        var versionTexts = document.querySelectorAll('.version-text');
+        for (var i = 0; i < versionTexts.length; i++) {
+          versionTexts[i].textContent = versionTexts[i].textContent.replace(/{version}/g, VERSION);
         }
 
         var images = document.querySelectorAll('img[data-src]');
