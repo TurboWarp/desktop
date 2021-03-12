@@ -33,6 +33,24 @@ extensionNames.set('sprite3', 'Scratch 3 Sprite');
 extensionNames.set('txt', 'Text Document');
 extensionNames.set('webm', 'WebM Video');
 
+const isSafeOpenExternal = (url) => {
+  try {
+    const parsedUrl = new URL(url);
+    // Don't allow file:// or other unsafe protocols
+    // Eventually this should be locked down further
+    if (
+      parsedUrl.origin === 'https://scratch.mit.edu' ||
+      parsedUrl.origin === 'https://desktop.turbowarp.org' ||
+      parsedUrl.origin === 'https://github.com'
+    ) {
+      return true;
+    }
+  } catch (e) {
+    // ignore
+  }
+  return false;
+};
+
 if (isMac) {
   Menu.setApplicationMenu(Menu.buildFromTemplate([
     { role: 'appMenu' },
@@ -143,7 +161,10 @@ function createWindow(url, options) {
         id: 'openLink',
         label: 'Open Link',
         click() {
-          shell.openExternal(params.linkURL);
+          const url = params.linkURL;
+          if (isSafeOpenExternal(url)) {
+            shell.openExternal(url);
+          }
         }
       });
       menuItems.push({
@@ -461,17 +482,8 @@ app.on('open-file', (event, path) => {
 app.on('web-contents-created', (event, contents) => {
   contents.on('new-window', (e, url) => {
     e.preventDefault();
-    try {
-      const parsedUrl = new URL(url);
-      if (
-        parsedUrl.origin === 'https://scratch.mit.edu' ||
-        parsedUrl.origin === 'https://desktop.turbowarp.org' ||
-        parsedUrl.origin === 'https://github.com'
-      ) {
-        shell.openExternal(url);
-      }
-    } catch (e) {
-      console.error(e);
+    if (isSafeOpenExternal(url)) {
+      shell.openExternal(url);
     }
   });
   contents.on('will-navigate', (e, url) => {
