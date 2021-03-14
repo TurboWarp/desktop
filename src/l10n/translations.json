@@ -59,6 +59,9 @@
         "tw.desktop.renderer.prompt.cancel": "Annulla",
         "tw.desktop.renderer.prompt.ok": "OK"
     },
+    "ko": {
+        "tw.desktop.main.windows.addonSettings": "애드온 설정"
+    },
     "pt": {
         "tw.desktop.main.menuBar.learnMore": "Saber mais",
         "tw.desktop.main.menuBar.newWindow": "Nova Janela",
