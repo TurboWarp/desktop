@@ -59,8 +59,28 @@
         "tw.desktop.renderer.prompt.cancel": "Annulla",
         "tw.desktop.renderer.prompt.ok": "OK"
     },
+    "ja": {
+        "tw.desktop.main.windows.addonSettings": "アドオン設定"
+    },
     "ko": {
-        "tw.desktop.main.windows.addonSettings": "애드온 설정"
+        "tw.desktop.main.menuBar.learnMore": "추가 정보",
+        "tw.desktop.main.menuBar.newWindow": "새 창",
+        "tw.desktop.main.unload.detail": "저장되지 않은 변경사항은 모두 사라집니다.",
+        "tw.desktop.main.unload.leave": "떠나기",
+        "tw.desktop.main.unload.message": "정말로 종료하시겠습니까?",
+        "tw.desktop.main.unload.stay": "머무르기",
+        "tw.desktop.main.updater.detail": "이 업데이트는 새로운 기능이나 버그픽스를 포함할 수 있습니다.",
+        "tw.desktop.main.updater.download": "업데이트 다운로드",
+        "tw.desktop.main.updater.ignore": "이 업데이트 알림을 다시 표시하지 않음",
+        "tw.desktop.main.updater.later": "나중에 알림",
+        "tw.desktop.main.updater.message": "업데이트를 이용 가능합니다 : v{version}",
+        "tw.desktop.main.updater.security.detail": "이 버전의 터보워프는 당신의 컴퓨터를 감염시킬 수 있는 위험요소로부터 매우 취약합니다. 업데이트가 강력히 권장됩니다.",
+        "tw.desktop.main.updater.security.message": "중요한 보안 업데이트를 이용 가능합니다: v{version}",
+        "tw.desktop.main.windows.about": "터보워프에 대하여",
+        "tw.desktop.main.windows.addonSettings": "애드온 설정",
+        "tw.desktop.main.windows.privacy": "개인정보 보호 정책",
+        "tw.desktop.renderer.prompt.cancel": "취소",
+        "tw.desktop.renderer.prompt.ok": "확인"
     },
     "pt": {
         "tw.desktop.main.menuBar.learnMore": "Saber mais",
