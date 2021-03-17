@@ -61,7 +61,7 @@ if (isMac) {
         {
           label: getTranslation('tw.desktop.main.menuBar.newWindow'),
           accelerator: 'Cmd+N',
-          click: async () => {
+          click: () => {
             createEditorWindow();
           }
         }
