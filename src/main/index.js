@@ -180,7 +180,7 @@ function createWindow(url, options) {
         label: '&Learn Spelling',
         visible: params.isEditable && params.misspelledWord,
         click() {
-          webContents.session.addWordToSpellCheckerDictionary(params.misspelledWord);
+          window.webContents.session.addWordToSpellCheckerDictionary(params.misspelledWord);
         }
       });
       menuItems.push({
