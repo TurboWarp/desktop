@@ -179,6 +179,8 @@ ReactDOM.render(<WrappedGUI
   onStorageInit={handleStorageInit}
   onVmInit={handleVmInit}
   onUpdateProjectTitle={handleUpdateProjectTitle}
+  backpackVisible
+  backpackHost="_local_"
 />, appTarget);
 GUI.setAppElement(appTarget);
 
