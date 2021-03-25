@@ -11,3 +11,6 @@ a {
 [theme="dark"] a {
   color: #4af;
 }
+p {
+  margin: 0;
+}
