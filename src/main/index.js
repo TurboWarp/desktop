@@ -446,12 +446,7 @@ ipcMain.on('export-addon-settings', async (event, settings) => {
     return;
   }
 
-  // Sometimes the system file pickers are stupid.
-  let path = result.filePath;
-  if (!path.endsWith('.json')) {
-    path += '.json';
-  }
-
+  const path = result.filePath;
   await writeFile(path, JSON.stringify(settings));
 });
 
