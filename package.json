@@ -110,6 +110,22 @@
         {
           "target": "appimage",
           "arch": "armv7l"
+        },
+        {
+          "target": "tar.gz",
+          "arch": "x64"
+        },
+        {
+          "target": "tar.gz",
+          "arch": "ia32"
+        },
+        {
+          "target": "tar.gz",
+          "arch": "arm64"
+        },
+        {
+          "target": "tar.gz",
+          "arch": "armv7l"
         }
       ]
     },
