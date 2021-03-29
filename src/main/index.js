@@ -84,8 +84,6 @@ if (isMac) {
   Menu.setApplicationMenu(null);
 }
 
-app.enableSandbox();
-
 function getURL(route) {
   if (isDevelopment) {
     return `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}/?route=${route}`;
