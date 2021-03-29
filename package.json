@@ -14,7 +14,9 @@
     "dist": "npm run compile && electron-builder",
     "dist:dir": "npm run compile && electron-builder --dir"
   },
-  "dependencies": {},
+  "dependencies": {
+    "source-map-support": "^0.5.19"
+  },
   "devDependencies": {
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.12.13",
