@@ -11,6 +11,7 @@ import {openLoadingProject, closeLoadingProject} from 'scratch-gui/src/reducers/
 import {setFileHandle} from 'scratch-gui/src/reducers/tw';
 import SettingStore from 'scratch-gui/src/addons/settings-store';
 import TWThemeHOC from 'scratch-gui/src/lib/tw-theme-hoc.jsx';
+import TWStateManagerHOC from 'scratch-gui/src/lib/tw-state-manager-hoc.jsx';
 import {WrappedFileHandle} from './filesystem-api-impl';
 import {localeChanged} from './translations';
 import './prompt-impl';
@@ -166,6 +167,7 @@ const DesktopHOC = function (WrappedComponent) {
 
 const WrappedGUI = compose(
   AppStateHOC,
+  TWStateManagerHOC,
   TWThemeHOC,
   DesktopHOC
 )(GUI);
