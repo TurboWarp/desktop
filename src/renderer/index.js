@@ -1,4 +1,5 @@
 import './normalize.css';
+import './prompt-impl';
 
 const searchParams = new URLSearchParams(location.search);
 const route = searchParams.get('route');

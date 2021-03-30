@@ -1,4 +1,5 @@
-import getTranslation from './translations';
+import {ipcRenderer} from 'electron';
+import getTranslation from './gui/translations';
 import styles from './prompt.css';
 
 let cancelButton;
@@ -68,3 +69,11 @@ window.prompt = (message, defaultValue) => new Promise((resolve, reject) => {
   input.focus();
   input.select();
 });
+
+window.alert = (message) => {
+  ipcRenderer.sendSync('alert', message);
+};
+
+window.confirm = (message) => {
+  return ipcRenderer.sendSync('confirm', message);
+};

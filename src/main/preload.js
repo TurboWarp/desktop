@@ -5,6 +5,9 @@ contextBridge.exposeInMainWorld('electron', {
     send(...args) {
       return ipcRenderer.send(...args);
     },
+    sendSync(...args) {
+      return ipcRenderer.sendSync(...args);
+    },
     invoke(...args) {
       return ipcRenderer.invoke(...args);
     },

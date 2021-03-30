@@ -460,6 +460,28 @@ ipcMain.on('reload-all', () => {
   }
 });
 
+ipcMain.on('alert', (event, message) => {
+  dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
+    message: '' + message,
+    buttons: [
+      getTranslation('tw.desktop.renderer.prompt.ok')
+    ]
+  });
+});
+
+ipcMain.on('confirm', (event, message) => {
+  const result = dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
+    message: '' + message,
+    buttons: [
+      getTranslation('tw.desktop.renderer.prompt.ok'),
+      getTranslation('tw.desktop.renderer.prompt.cancel')
+    ],
+    defaultId: 0,
+    cancelId: 1
+  }) === 0;
+  event.returnValue = result;
+});
+
 app.on('window-all-closed', () => {
   app.quit();
 });

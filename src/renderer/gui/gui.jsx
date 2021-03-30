@@ -13,7 +13,6 @@ import TWThemeHOC from 'scratch-gui/src/lib/tw-theme-hoc.jsx';
 import TWStateManagerHOC from 'scratch-gui/src/lib/tw-state-manager-hoc.jsx';
 import {WrappedFileHandle} from './filesystem-api-impl';
 import {localeChanged} from './translations';
-import './prompt-impl';
 import './gui.css';
 
 const handleStorageInit = (storage) => {
