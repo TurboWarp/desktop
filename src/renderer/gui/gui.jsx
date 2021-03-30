@@ -183,6 +183,7 @@ ReactDOM.render(<WrappedGUI
   onUpdateProjectTitle={handleUpdateProjectTitle}
   backpackVisible
   backpackHost="_local_"
+  routingStyle="none"
 />, appTarget);
 GUI.setAppElement(appTarget);
 
