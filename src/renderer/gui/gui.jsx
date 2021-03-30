@@ -4,7 +4,6 @@ import {compose} from 'redux';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {ipcRenderer} from 'electron';
-import pathUtil from 'path';
 import GUI from 'scratch-gui';
 import {AppStateHOC} from 'scratch-gui';
 import {openLoadingProject, closeLoadingProject} from 'scratch-gui/src/reducers/modals';
@@ -15,7 +14,7 @@ import TWStateManagerHOC from 'scratch-gui/src/lib/tw-state-manager-hoc.jsx';
 import {WrappedFileHandle} from './filesystem-api-impl';
 import {localeChanged} from './translations';
 import './prompt-impl';
-import styles from './gui.css';
+import './gui.css';
 
 const handleStorageInit = (storage) => {
   storage.addWebStore(
