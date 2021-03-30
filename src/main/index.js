@@ -482,7 +482,13 @@ app.on('web-contents-created', (event, contents) => {
     }
   });
   contents.on('will-navigate', (e, url) => {
-    if (url !== 'mailto:contact@turbowarp.org' && !url.startsWith(getURL('editor'))) {
+    try {
+      const newURL = new URL(url);
+      const baseURL = new URL(getURL('editor'));
+      if (url !== 'mailto:contact@turbowarp.org' && !newURL.href.startsWith(baseURL.href)) {
+        e.preventDefault();
+      }
+    } catch (e) {
       e.preventDefault();
     }
   });
