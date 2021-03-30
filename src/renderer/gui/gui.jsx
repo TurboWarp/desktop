@@ -173,6 +173,7 @@ const WrappedGUI = compose(
 )(GUI);
 
 const appTarget = require('../app-target');
+GUI.setAppElement(appTarget);
 ReactDOM.render(<WrappedGUI
   projectId={fileToOpen ? '' : '0'}
   canEditTitle
@@ -185,7 +186,6 @@ ReactDOM.render(<WrappedGUI
   backpackHost="_local_"
   routingStyle="none"
 />, appTarget);
-GUI.setAppElement(appTarget);
 
 // Load addons
 import('scratch-gui/src/addons/entry');
