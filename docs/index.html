@@ -301,16 +301,12 @@
 
     <section class="changelog">
       <div>
-        <h2>Changes from v0.1.0 to v0.2.1</h2>
+        <h2>Changes from v0.2.1 to v0.3.0</h2>
         <ul>
-          <li>v0.2.1: Fix addon bugs, including some serious ones that broke projects</li>
-          <li>Improved sandboxing and security</li>
-          <li>Updated TurboWarp: Interpolation, new addons, and more.</li>
-          <li>Fixed music and text to speech extensions</li>
-          <li>Various other bug fixes and improvements</li>
-          <li>Privacy policy has been slightly revised</li>
-          <li class="os-mac">macOS: The name of the .app has changed from "TurboWarp Desktop" to just "TurboWarp" -- you might have to manually delete the old "TurboWarp Desktop" after updating.</li>
-          <li class="os-linux">Linux: Fixed crash on startup in some distributions (eg. Debian 10)</li>
+          <li>TurboWarp updated: new advanced settings menu, backpack support, custom stage size, new addons, various bug fixes, and more</li>
+          <li>Fix potential sandbox escape vulnerability (thanks apple502j)</li>
+          <li>Various other bug fixes, improvements</li>
+          <li class="os-linux">Linux: tarball builds are now available <a href="https://github.com/TurboWarp/desktop/releases">on GitHub</a> (this page hasn't been updated yet)</li>
         </ul>
         <p>To update, download and run the new installer below.</p>
       </div>
@@ -608,7 +604,7 @@
     </script>
     <script>
       (function() {
-        var VERSION = '0.2.1';
+        var VERSION = '0.3.0';
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'windows';
