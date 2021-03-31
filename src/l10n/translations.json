@@ -60,7 +60,8 @@
         "tw.desktop.renderer.prompt.ok": "OK"
     },
     "ja": {
-        "tw.desktop.main.windows.addonSettings": "アドオン設定"
+        "tw.desktop.main.windows.addonSettings": "アドオン設定",
+        "tw.desktop.main.windows.privacy": "プライバシーポリシー"
     },
     "ko": {
         "tw.desktop.main.menuBar.learnMore": "추가 정보",
