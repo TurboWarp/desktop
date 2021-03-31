@@ -60,6 +60,13 @@
         "tw.desktop.renderer.prompt.ok": "OK"
     },
     "ja": {
+        "tw.desktop.main.menuBar.learnMore": "もっと知る",
+        "tw.desktop.main.unload.leave": "離れる",
+        "tw.desktop.main.unload.message": "本当に離れてもいいですか？",
+        "tw.desktop.main.unload.stay": "とどまる",
+        "tw.desktop.main.updater.detail": "このアップデートは新しい機能の追加やバグが修理されたかもしれません。",
+        "tw.desktop.main.updater.download": "アップデートをダウンロードする",
+        "tw.desktop.main.windows.about": "TurboWarpについて",
         "tw.desktop.main.windows.addonSettings": "アドオン設定",
         "tw.desktop.main.windows.privacy": "プライバシーポリシー"
     },
