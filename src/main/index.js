@@ -467,6 +467,7 @@ ipcMain.on('alert', (event, message) => {
       getTranslation('tw.desktop.renderer.prompt.ok')
     ]
   });
+  event.returnValue = 1;
 });
 
 ipcMain.on('confirm', (event, message) => {
