@@ -4,7 +4,7 @@
         "tw.desktop.main.menuBar.newWindow": "Neues Fenster",
         "tw.desktop.main.unload.detail": "Alle nicht gespeicherten Änderungen werden verloren gehen.",
         "tw.desktop.main.unload.leave": "Verlassen",
-        "tw.desktop.main.unload.message": "Bist du sicher, dass du beenden willst?",
+        "tw.desktop.main.unload.message": "Bist du sicher, dass du verlassen willst?",
         "tw.desktop.main.unload.stay": "Bleiben",
         "tw.desktop.main.updater.detail": "Dieses Update enthält neue Funktionen oder Verbesserungen.",
         "tw.desktop.main.updater.download": "Update herunterladen",
@@ -15,7 +15,7 @@
         "tw.desktop.main.updater.security.message": "Ein wichtiges Sicherheitsupdate ist verfügbar: v{version}",
         "tw.desktop.main.windows.about": "Über",
         "tw.desktop.main.windows.addonSettings": "Addon-Einstellungen",
-        "tw.desktop.main.windows.privacy": "Datenschutz",
+        "tw.desktop.main.windows.privacy": "Datenschutzerklärung",
         "tw.desktop.renderer.prompt.cancel": "Abbrechen",
         "tw.desktop.renderer.prompt.ok": "OK"
     },
