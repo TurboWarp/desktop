@@ -552,7 +552,7 @@ if (acquiredLock) {
   });
 
   app.on('activate', () => {
-    if (editorWindows.size === 0) {
+    if (app.isReady() && editorWindows.size === 0) {
       createEditorWindow();
     }
   });
