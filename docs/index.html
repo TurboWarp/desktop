@@ -301,13 +301,23 @@
 
     <section class="changelog">
       <div>
-        <h2>Changes from v0.2.1 to v0.3.0</h2>
+        <h2>Changes from v0.3.0 to v0.3.1</h2>
         <ul>
-          <li>TurboWarp updated: new advanced settings menu, backpack support, custom stage size, new addons, various bug fixes, and more</li>
-          <li>Fix potential sandbox escape vulnerability (thanks apple502j)</li>
-          <li>Various other bug fixes, improvements</li>
-          <li class="os-linux">Linux: tarball builds are now available <a href="https://github.com/TurboWarp/desktop/releases">on GitHub</a> (this page hasn't been updated yet)</li>
+          <li>Fixed extremely poor performance caused by folders addon</li>
+          <li>Fixed numerous prompts working incorrectly</li>
+          <li>TurboWarp updated: the default sprite is now a dango 🍡</li>
         </ul>
+        <div id="zerothreezero">
+          <h2>Changes from v0.2.1 to v0.3.0</h2>
+          <ul>
+            <li>TurboWarp updated: new advanced settings menu, backpack support, custom stage size, new addons, various bug fixes, and more</li>
+            <li>Fix potential sandbox escape vulnerability (thanks apple502j)</li>
+            <li>Various other bug fixes, improvements</li>
+            <li class="os-linux">Linux: tarball builds are now available <a href="https://github.com/TurboWarp/desktop/releases">on GitHub</a> (this page hasn't been updated yet)</li>
+          </ul>
+        </div>
+        <!-- if updating from 0.3.0, don't show 0.2.1 to 0.3.0 changelog -->
+        <script>if (location.search.indexOf('from=0.3.0') !== -1) document.querySelector('#zerothreezero').hidden = true;</script>
         <p>To update, download and run the new installer below.</p>
       </div>
     </section>
@@ -599,7 +609,7 @@
     </script>
     <script>
       (function() {
-        var VERSION = '0.3.0';
+        var VERSION = '0.3.1';
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'windows';
