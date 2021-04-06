@@ -144,7 +144,8 @@
       {
         "ext": "sb3",
         "name": "Scratch 3 Project",
-        "role": "Editor"
+        "role": "Editor",
+        "mimeType": "application/x.scratch.sb3"
       }
     ],
     "publish": [
