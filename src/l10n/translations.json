@@ -68,7 +68,8 @@
         "tw.desktop.main.updater.download": "アップデートをダウンロードする",
         "tw.desktop.main.windows.about": "TurboWarpについて",
         "tw.desktop.main.windows.addonSettings": "アドオン設定",
-        "tw.desktop.main.windows.privacy": "プライバシーポリシー"
+        "tw.desktop.main.windows.privacy": "プライバシーポリシー",
+        "tw.desktop.renderer.prompt.cancel": "キャンセル"
     },
     "ko": {
         "tw.desktop.main.menuBar.learnMore": "추가 정보",
