@@ -131,6 +131,25 @@
         "tw.desktop.renderer.prompt.cancel": "Anulează",
         "tw.desktop.renderer.prompt.ok": "OK"
     },
+    "sl": {
+        "tw.desktop.main.menuBar.learnMore": "Več informacij",
+        "tw.desktop.main.menuBar.newWindow": "Novo okno",
+        "tw.desktop.main.unload.detail": "Neshranjene spremembe bodo izgubljene.",
+        "tw.desktop.main.unload.leave": "Zapusti",
+        "tw.desktop.main.unload.message": "Ste prepričani, da želite zapustiti urejevalnik?",
+        "tw.desktop.main.unload.stay": "Ostani",
+        "tw.desktop.main.updater.detail": "Ta posodobitev morda vsebuje nove funkcije ali popravi napake.",
+        "tw.desktop.main.updater.download": "Prenesi posodobitev",
+        "tw.desktop.main.updater.ignore": "Ne prikazuj več sporočil o tej posodobitvi",
+        "tw.desktop.main.updater.later": "Opomni me pozneje",
+        "tw.desktop.main.updater.message": "Na voljo je posodobitev: različica {version}",
+        "tw.desktop.main.updater.security.message": "Na voljo je pomembna varnostna posodobitev: različica {version}",
+        "tw.desktop.main.windows.about": "O TurboWarp",
+        "tw.desktop.main.windows.addonSettings": "Nastavitve dodatkov",
+        "tw.desktop.main.windows.privacy": "Politika zasebnosti",
+        "tw.desktop.renderer.prompt.cancel": "Prekliči",
+        "tw.desktop.renderer.prompt.ok": "V redu"
+    },
     "tr": {
         "tw.desktop.main.menuBar.learnMore": "Daha fazla bilgi edin",
         "tw.desktop.main.menuBar.newWindow": "Yeni Pencere",
