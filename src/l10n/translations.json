@@ -91,6 +91,11 @@
         "tw.desktop.renderer.prompt.cancel": "취소",
         "tw.desktop.renderer.prompt.ok": "확인"
     },
+    "nb": {
+        "tw.desktop.main.windows.about": "Om",
+        "tw.desktop.main.windows.addonSettings": "Innstillinger for utvidelser",
+        "tw.desktop.renderer.prompt.ok": "OK"
+    },
     "pt": {
         "tw.desktop.main.menuBar.learnMore": "Saber mais",
         "tw.desktop.main.menuBar.newWindow": "Nova Janela",
