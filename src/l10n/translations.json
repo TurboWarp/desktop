@@ -66,6 +66,7 @@
         "tw.desktop.main.unload.stay": "とどまる",
         "tw.desktop.main.updater.detail": "このアップデートは新しい機能の追加やバグが修理されたかもしれません。",
         "tw.desktop.main.updater.download": "アップデートをダウンロードする",
+        "tw.desktop.main.updater.later": "後で知らせる",
         "tw.desktop.main.windows.about": "TurboWarpについて",
         "tw.desktop.main.windows.addonSettings": "アドオン設定",
         "tw.desktop.main.windows.privacy": "プライバシーポリシー",
@@ -92,6 +93,13 @@
         "tw.desktop.renderer.prompt.ok": "확인"
     },
     "nb": {
+        "tw.desktop.main.menuBar.learnMore": "Lær mer",
+        "tw.desktop.main.menuBar.newWindow": "Nytt vindu",
+        "tw.desktop.main.unload.leave": "Slutt",
+        "tw.desktop.main.unload.message": "Er du sikker at du vil slutte?",
+        "tw.desktop.main.updater.download": "Last ned oppdatering",
+        "tw.desktop.main.updater.message": "En oppdatering er tilgjengelig: v{version}",
+        "tw.desktop.main.updater.security.detail": "Denne versjonen av TurboWarp kan være sårbar for en utnyttelse som setter datamaskinen din i fare for infeksjon. Oppdatering anbefales på det sterkeste.",
         "tw.desktop.main.windows.about": "Om",
         "tw.desktop.main.windows.addonSettings": "Innstillinger for utvidelser",
         "tw.desktop.renderer.prompt.ok": "OK"
