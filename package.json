@@ -12,7 +12,8 @@
     "start": "electron-webpack dev",
     "compile": "electron-webpack",
     "dist": "npm run compile && electron-builder",
-    "dist:dir": "npm run compile && electron-builder --dir"
+    "dist:dir": "npm run compile && electron-builder --dir",
+    "fetch": "node download-library-files.js"
   },
   "dependencies": {
     "source-map-support": "^0.5.19"

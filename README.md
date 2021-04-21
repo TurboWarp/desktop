@@ -34,7 +34,7 @@ npm ci
 Download library files: (Optional, but if you don't do this then the libraries won't work)
 
 ```
-node download-library-files.js
+npm run fetch
 ```
 
 Build:
