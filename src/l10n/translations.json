@@ -102,7 +102,28 @@
         "tw.desktop.main.updater.security.detail": "Denne versjonen av TurboWarp kan være sårbar for en utnyttelse som setter datamaskinen din i fare for infeksjon. Oppdatering anbefales på det sterkeste.",
         "tw.desktop.main.windows.about": "Om",
         "tw.desktop.main.windows.addonSettings": "Innstillinger for utvidelser",
+        "tw.desktop.main.windows.privacy": "Personvernregler",
         "tw.desktop.renderer.prompt.ok": "OK"
+    },
+    "nl": {
+        "tw.desktop.main.menuBar.learnMore": "Leer meer",
+        "tw.desktop.main.menuBar.newWindow": "Nieuw Venster",
+        "tw.desktop.main.unload.detail": "Alle niet bewaarde veranderingen zijn dan verloren.",
+        "tw.desktop.main.unload.leave": "Verlaat",
+        "tw.desktop.main.unload.message": "Ben je zeker dat je wilt afsluiten?",
+        "tw.desktop.main.unload.stay": "Blijf",
+        "tw.desktop.main.updater.detail": "Deze update bevat nieuwe functies of bug fixes.",
+        "tw.desktop.main.updater.download": "Download update",
+        "tw.desktop.main.updater.ignore": "Herinner me niet opnieuw voor deze update.",
+        "tw.desktop.main.updater.later": "Herinner me later",
+        "tw.desktop.main.updater.message": "Een update is beschikbaar: v{version}",
+        "tw.desktop.main.updater.security.detail": "Deze versie van TurboWarp is mogelijk kwetsbaar voor een exploit waardoor uw computer een risico op infectie loopt. Updaten wordt sterk aanbevolen. ",
+        "tw.desktop.main.updater.security.message": "Een belangrijke beveiliging update is beschikbaar:v{version} ",
+        "tw.desktop.main.windows.about": "Over",
+        "tw.desktop.main.windows.addonSettings": "Addons Instellingen",
+        "tw.desktop.main.windows.privacy": "Privacy Beleid",
+        "tw.desktop.renderer.prompt.cancel": "Annuleer",
+        "tw.desktop.renderer.prompt.ok": "Ok"
     },
     "pt": {
         "tw.desktop.main.menuBar.learnMore": "Saber mais",
