@@ -10,6 +10,7 @@ const FORCE_URGENT_UPDATE = false;
 const FORCE_UPDATE = false;
 
 const IGNORE_UPDATE_KEY = 'ignore_update';
+const CURRENT_VERSION_KEY = 'version';
 
 function log(...args) {
   console.log('update checker:', ...args);
@@ -107,6 +108,7 @@ function checkForUpdate() {
   if (process.env.SNAP) {
     return;
   }
+  set(CURRENT_VERSION_KEY, version);
   getLatestVersions()
     .then(({latest, oldestSafe}) => {
       if (FORCE_URGENT_UPDATE || lt(version, oldestSafe)) {
