@@ -32,8 +32,10 @@ function writeStore() {
 }
 
 export function set(key, value) {
-  store[key] = value;
-  writeStore();
+  if (store[key] !== value) {
+    store[key] = value;
+    writeStore();
+  }
 }
 
 export function get(key) {
