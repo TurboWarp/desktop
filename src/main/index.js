@@ -18,7 +18,7 @@ const isLinux = process.platform === 'linux';
 
 const editorWindows = new Set();
 const editorWindowTitle = `TurboWarp Desktop ${version}`;
-let fileToOpen = null;
+const filesToOpen = [];
 let aboutWindow = null;
 let settingsWindow = null;
 let privacyWindow = null;
@@ -244,10 +244,11 @@ function createWindow(url, options) {
 function createEditorWindow() {
   // Note: the route for this must be `editor`, otherwise the dev tools keyboard shortcuts will not work.
   let url = getURL('editor');
-  if (fileToOpen !== null) {
+
+  const fileToOpen = filesToOpen.shift();
+  if (typeof fileToOpen !== 'undefined') {
     url += `&file=${encodeURIComponent(fileToOpen)}`;
     allowedToAccessFiles.add(fileToOpen);
-    fileToOpen = null;
   }
 
   const window = createWindow(url, {
@@ -298,6 +299,16 @@ function createEditorWindow() {
   editorWindows.add(window);
 
   return window;
+}
+
+function autoCreateEditorWindows() {
+  if (filesToOpen.length) {
+    while (filesToOpen.length) {
+      createEditorWindow();
+    }
+  } else {
+    createEditorWindow();
+  }
 }
 
 function closeWhenPressEscape(window) {
@@ -490,7 +501,7 @@ app.on('window-all-closed', () => {
 // Handle file opening on macOS
 app.on('open-file', (event, path) => {
   event.preventDefault();
-  fileToOpen = path;
+  filesToOpen.push(path);
   // This event can be emitted before we create the main window or while we're already running.
   if (editorWindows.size > 0) {
     createEditorWindow();
@@ -527,28 +538,24 @@ function parseArgv(argv) {
   } else {
     argv.shift();
   }
-  if (argv[0]) {
-    return argv[0];
-  }
-  return null;
+  return argv;
 }
 
 // On windows and linux, parse argv to figure out which file to open.
 if (!isMac) {
-  const parsedArgv = parseArgv(process.argv);
-  if (parsedArgv) {
-    fileToOpen = pathUtil.resolve(parsedArgv);
+  for (const path of parseArgv(process.argv)) {
+    filesToOpen.push(pathUtil.resolve(path));
   }
 }
 
 const acquiredLock = app.requestSingleInstanceLock();
 if (acquiredLock) {
   app.on('second-instance', (event, argv, workingDirectory) => {
-    const parsedArgv = parseArgv(argv);
-    if (parsedArgv) {
-      fileToOpen = pathUtil.resolve(workingDirectory, parsedArgv);
+    for (const i of parseArgv(argv)) {
+      const resolvedPath = pathUtil.resolve(workingDirectory, i);
+      filesToOpen.push(resolvedPath);
     }
-    createEditorWindow();
+    autoCreateEditorWindows();
   });
 
   app.on('activate', () => {
@@ -559,7 +566,7 @@ if (acquiredLock) {
 
   app.on('ready', () => {
     checkForUpdate();
-    createEditorWindow();
+    autoCreateEditorWindows();
   });
 } else {
   app.quit();
