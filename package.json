@@ -138,7 +138,8 @@
         "default",
         "camera",
         "audio-playback",
-        "audio-record"
+        "audio-record",
+        "joystick"
       ]
     },
     "fileAssociations": [
