@@ -541,15 +541,12 @@ function parseArgv(argv) {
   return argv;
 }
 
-// On windows and linux, parse argv to figure out which file to open.
-if (!isMac) {
-  for (const path of parseArgv(process.argv)) {
-    filesToOpen.push(pathUtil.resolve(path));
-  }
-}
-
 const acquiredLock = app.requestSingleInstanceLock();
 if (acquiredLock) {
+  for (const path of parseArgv(process.argv)) {
+    filesToOpen.push(pathUtil.resolve(path));
+  }  
+
   app.on('second-instance', (event, argv, workingDirectory) => {
     for (const i of parseArgv(argv)) {
       const resolvedPath = pathUtil.resolve(workingDirectory, i);
