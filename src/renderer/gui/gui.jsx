@@ -6,11 +6,12 @@ import PropTypes from 'prop-types';
 import {ipcRenderer} from 'electron';
 import GUI from 'scratch-gui';
 import {AppStateHOC} from 'scratch-gui';
-import {openLoadingProject, closeLoadingProject} from 'scratch-gui/src/reducers/modals';
-import {setFileHandle} from 'scratch-gui/src/reducers/tw';
-import SettingStore from 'scratch-gui/src/addons/settings-store';
 import TWThemeHOC from 'scratch-gui/src/lib/tw-theme-hoc.jsx';
 import TWStateManagerHOC from 'scratch-gui/src/lib/tw-state-manager-hoc.jsx';
+import {openLoadingProject, closeLoadingProject} from 'scratch-gui/src/reducers/modals';
+import {setFileHandle} from 'scratch-gui/src/reducers/tw';
+import {defaultProjectId, onFetchedProjectData, onLoadedProject, requestNewProject, requestProjectUpload, setProjectId} from 'scratch-gui/src/reducers/project-state';
+import SettingStore from 'scratch-gui/src/addons/settings-store';
 import {WrappedFileHandle} from './filesystem-api-impl';
 import {localeChanged} from './translations';
 import './gui.css';
@@ -69,19 +70,29 @@ const DesktopHOC = function (WrappedComponent) {
       this.state = {
         title: null
       };
-      this.handleClickAddonSettings =this.handleClickAddonSettings.bind(this);
+      this.handleClickAddonSettings = this.handleClickAddonSettings.bind(this);
     }
     componentDidMount () {
       localeChanged(this.props.locale);
+
       if (mountedOnce) {
         return;
       }
       mountedOnce = true;
-      if (fileToOpen !== null) {
-        this.props.onLoadingStarted();
+
+      this.props.onLoadingStarted();
+      if (fileToOpen === null) {
+        this.props.onHasInitialProject(false, this.props.loadingState);
+        this.props.onLoadingCompleted();
+      } else {
+        this.props.onHasInitialProject(true, this.props.loadingState);
         ipcRenderer.invoke('read-file', fileToOpen)
-          .then((buffer) => this.props.vm.loadProject(buffer.buffer))
+          .then((projectData) => {
+            return this.props.vm.loadProject(projectData)
+          })
           .then(() => {
+            this.props.onLoadingCompleted();
+            this.props.onLoadedProject(this.props.loadingState, true);
             const title = getProjectTitle(fileToOpen);
             if (title) {
               this.setState({
@@ -93,12 +104,13 @@ const DesktopHOC = function (WrappedComponent) {
               this.props.onSetFileHandle(new WrappedFileHandle(fileToOpen));
             }
           })
-          .catch((err) => {
+          .catch(err => {
             console.error(err);
             alert(`Could not load project file: ${err}`);
-          })
-          .finally(() => {
-            this.props.onLoadingFinished();
+            this.props.onLoadingCompleted();
+            this.props.onLoadedProject(this.props.loadingState, false);
+            this.props.onHasInitialProject(false, this.props.loadingState);
+            this.props.onRequestNewProject();
           });
       }
     }
@@ -110,8 +122,13 @@ const DesktopHOC = function (WrappedComponent) {
     render() {
       const {
         locale,
+        loadingState,
+        onFetchedInitialProjectData,
+        onHasInitialProject,
+        onLoadedProject,
+        onLoadingCompleted,
         onLoadingStarted,
-        onLoadingFinished,
+        onRequestNewProject,
         onSetFileHandle,
         vm,
         ...props
@@ -141,8 +158,13 @@ const DesktopHOC = function (WrappedComponent) {
   }
   DesktopComponent.propTypes = {
     locale: PropTypes.string,
+    loadingState: PropTypes.string,
+    onFetchedInitialProjectData: PropTypes.func,
+    onHasInitialProject: PropTypes.func,
+    onLoadedProject: PropTypes.func,
+    onLoadingCompleted: PropTypes.func,
     onLoadingStarted: PropTypes.func,
-    onLoadingFinished: PropTypes.func,
+    onRequestNewProject: PropTypes.func,
     onSetFileHandle: PropTypes.func,
     vm: PropTypes.shape({
       loadProject: PropTypes.func
@@ -150,11 +172,23 @@ const DesktopHOC = function (WrappedComponent) {
   };
   const mapStateToProps = state => ({
     locale: state.locales.locale,
+    loadingState: state.scratchGui.projectState.loadingState,
     vm: state.scratchGui.vm
   });
   const mapDispatchToProps = dispatch => ({
     onLoadingStarted: () => dispatch(openLoadingProject()),
-    onLoadingFinished: () => dispatch(closeLoadingProject()),
+    onLoadingCompleted: () => dispatch(closeLoadingProject()),
+    onHasInitialProject: (hasInitialProject, loadingState) => {
+      if (hasInitialProject) {
+        return dispatch(requestProjectUpload(loadingState));
+      }
+      return dispatch(setProjectId(defaultProjectId));
+    },
+    onFetchedInitialProjectData: (projectData, loadingState) => dispatch(onFetchedProjectData(projectData, loadingState)),
+    onLoadedProject: (loadingState, loadSuccess) => {
+      return dispatch(onLoadedProject(loadingState, /* canSave */ false, loadSuccess));
+    },
+    onRequestNewProject: () => dispatch(requestNewProject(false)),
     onSetFileHandle: fileHandle => dispatch(setFileHandle(fileHandle))
   });
   return connect(
@@ -173,7 +207,6 @@ const WrappedGUI = compose(
 const appTarget = require('../app-target');
 GUI.setAppElement(appTarget);
 ReactDOM.render(<WrappedGUI
-  projectId={fileToOpen ? '' : '0'}
   canEditTitle
   isScratchDesktop
   canModifyCloudData={false}
