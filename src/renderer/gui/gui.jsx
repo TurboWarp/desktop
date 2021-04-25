@@ -218,6 +218,8 @@ ReactDOM.render(<WrappedGUI
   routingStyle="none"
 />, appTarget);
 
+require('./advanced-user-customizations');
+
 // Load addons
 import('scratch-gui/src/addons/entry');
 
