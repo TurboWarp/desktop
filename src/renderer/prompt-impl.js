@@ -1,5 +1,5 @@
 import {ipcRenderer} from 'electron';
-import getTranslation from './gui/translations';
+import {getTranslation} from './gui/translations';
 import styles from './prompt.css';
 
 let cancelButton;

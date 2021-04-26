@@ -13,7 +13,7 @@ import {setFileHandle} from 'scratch-gui/src/reducers/tw';
 import {defaultProjectId, onFetchedProjectData, onLoadedProject, requestNewProject, requestProjectUpload, setProjectId} from 'scratch-gui/src/reducers/project-state';
 import SettingStore from 'scratch-gui/src/addons/settings-store';
 import {WrappedFileHandle} from './filesystem-api-impl';
-import {localeChanged} from './translations';
+import {localeChanged, getTranslation} from './translations';
 import './gui.css';
 
 const handleStorageInit = (storage) => {
@@ -106,7 +106,7 @@ const DesktopHOC = function (WrappedComponent) {
           })
           .catch(err => {
             console.error(err);
-            alert(`Could not load project file: ${err}`);
+            alert(getTranslation('tw.desktop.renderer.failedToLoad').replace('{error}', '' + err));
             this.props.onLoadingCompleted();
             this.props.onLoadedProject(this.props.loadingState, false);
             this.props.onHasInitialProject(false, this.props.loadingState);
@@ -139,15 +139,15 @@ const DesktopHOC = function (WrappedComponent) {
           onClickAddonSettings={this.handleClickAddonSettings}
           onClickAbout={[
             {
-              title: 'About',
+              title: getTranslation('tw.desktop.renderer.about.about'),
               onClick: openAbout
             },
             {
-              title: 'Privacy Policy',
+              title: getTranslation('tw.desktop.renderer.about.privacy'),
               onClick: openPrivacyPolicy
             },
             {
-              title: 'Source Code',
+              title: getTranslation('tw.desktop.renderer.about.source'),
               onClick: openSourceCode
             }
           ]}

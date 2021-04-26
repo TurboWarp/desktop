@@ -15,6 +15,15 @@
   "tw.desktop.main.updater.ignore": "Don't remind me again for this update",
   "tw.desktop.main.updater.security.message": "An important security update is available: v{version}",
   "tw.desktop.main.updater.security.detail": "This version of TurboWarp may be vulnerable to an exploit that puts your computer at risk of infection. Updating is highly recommended.",
+  "tw.desktop.main.context.openLink": "Open link",
+  "tw.desktop.main.context.learnSpelling": "Learn spelling",
+  "tw.desktop.main.context.cut": "Cut",
+  "tw.desktop.main.context.copy": "Copy",
+  "tw.desktop.main.context.paste": "Paste",
   "tw.desktop.renderer.prompt.ok": "OK",
-  "tw.desktop.renderer.prompt.cancel": "Cancel"
+  "tw.desktop.renderer.prompt.cancel": "Cancel",
+  "tw.desktop.renderer.about.about": "About",
+  "tw.desktop.renderer.about.privacy": "Privacy Policy",
+  "tw.desktop.renderer.about.source": "Source Code",
+  "tw.desktop.renderer.failedToLoad": "Could not load project file: {error}"
 }

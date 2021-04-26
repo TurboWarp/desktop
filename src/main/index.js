@@ -159,7 +159,7 @@ function createWindow(url, options) {
     if (params.linkURL) {
       menuItems.push({
         id: 'openLink',
-        label: 'Open Link',
+        label: getTranslation('tw.desktop.main.context.openLink'),
         click() {
           const url = params.linkURL;
           if (isSafeOpenExternal(url)) {
@@ -175,7 +175,7 @@ function createWindow(url, options) {
     if (params.isEditable && params.misspelledWord) {
       menuItems.push({
         id: 'learnSpelling',
-        label: '&Learn Spelling',
+        label: getTranslation('tw.desktop.main.context.learnSpelling'),
         visible: params.isEditable && params.misspelledWord,
         click() {
           window.webContents.session.addWordToSpellCheckerDictionary(params.misspelledWord);
@@ -189,7 +189,7 @@ function createWindow(url, options) {
     if (params.isEditable) {
       menuItems.push({
         id: 'cut',
-        label: 'Cu&t',
+        label: getTranslation('tw.desktop.main.context.cut'),
         enabled: hasText,
         click: () => {
           clipboard.writeText(text);
@@ -200,7 +200,7 @@ function createWindow(url, options) {
     if (hasText || params.isEditable) {
       menuItems.push({
         id: 'copy',
-        label: '&Copy',
+        label: getTranslation('tw.desktop.main.context.copy'),
         enabled: hasText,
         click: () => {
           clipboard.writeText(text);
@@ -210,7 +210,7 @@ function createWindow(url, options) {
     if (params.isEditable) {
       menuItems.push({
         id: 'Paste',
-        label: '&Paste',
+        label: getTranslation('tw.desktop.main.context.paste'),
         click: () => {
           window.webContents.paste();
         }

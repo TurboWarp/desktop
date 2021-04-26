@@ -13,8 +13,6 @@ export const localeChanged = newLocale => {
   translations = getTranslations(locale);
 };
 
-const getTranslation = key => {
+export const getTranslation = key => {
   return translations[key] || key;
 };
-
-export default getTranslation;
