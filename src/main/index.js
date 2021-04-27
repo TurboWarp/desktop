@@ -545,7 +545,7 @@ const acquiredLock = app.requestSingleInstanceLock();
 if (acquiredLock) {
   for (const path of parseArgv(process.argv)) {
     filesToOpen.push(pathUtil.resolve(path));
-  }  
+  }
 
   app.on('second-instance', (event, argv, workingDirectory) => {
     for (const i of parseArgv(argv)) {
