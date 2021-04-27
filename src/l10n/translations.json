@@ -16,6 +16,9 @@
         "tw.desktop.main.windows.about": "Über",
         "tw.desktop.main.windows.addonSettings": "Addon-Einstellungen",
         "tw.desktop.main.windows.privacy": "Datenschutzerklärung",
+        "tw.desktop.renderer.about.about": "Über",
+        "tw.desktop.renderer.about.privacy": "Datenschutzerklärung",
+        "tw.desktop.renderer.about.source": "Quellcode",
         "tw.desktop.renderer.prompt.cancel": "Abbrechen",
         "tw.desktop.renderer.prompt.ok": "OK"
     },
@@ -36,8 +39,14 @@
         "tw.desktop.main.windows.about": "Acerca De",
         "tw.desktop.main.windows.addonSettings": "Ajustes de Addons",
         "tw.desktop.main.windows.privacy": "Política de Privacidad",
+        "tw.desktop.renderer.about.about": "Acerca De",
+        "tw.desktop.renderer.about.privacy": "Política de Privacidad",
+        "tw.desktop.renderer.about.source": "Código Fuente",
         "tw.desktop.renderer.prompt.cancel": "Cancelar",
         "tw.desktop.renderer.prompt.ok": "OK"
+    },
+    "fr": {
+        "tw.desktop.renderer.about.source": "Code source"
     },
     "it": {
         "tw.desktop.main.menuBar.learnMore": "Ulteriori informazioni",
@@ -56,6 +65,9 @@
         "tw.desktop.main.windows.about": "Info",
         "tw.desktop.main.windows.addonSettings": "Impostazioni Addon",
         "tw.desktop.main.windows.privacy": "Politica della Privacy",
+        "tw.desktop.renderer.about.about": "Info",
+        "tw.desktop.renderer.about.privacy": "Politica della Privacy",
+        "tw.desktop.renderer.about.source": "Codice Sorgente",
         "tw.desktop.renderer.prompt.cancel": "Annulla",
         "tw.desktop.renderer.prompt.ok": "OK"
     },
@@ -70,6 +82,9 @@
         "tw.desktop.main.windows.about": "TurboWarpについて",
         "tw.desktop.main.windows.addonSettings": "アドオン設定",
         "tw.desktop.main.windows.privacy": "プライバシーポリシー",
+        "tw.desktop.renderer.about.about": "TurboWarpについて",
+        "tw.desktop.renderer.about.privacy": "プライバシーポリシー",
+        "tw.desktop.renderer.about.source": "ソースコード",
         "tw.desktop.renderer.prompt.cancel": "キャンセル"
     },
     "ko": {
@@ -89,6 +104,9 @@
         "tw.desktop.main.windows.about": "TurboWarp에 대하여",
         "tw.desktop.main.windows.addonSettings": "애드온 설정",
         "tw.desktop.main.windows.privacy": "개인정보 보호 정책",
+        "tw.desktop.renderer.about.about": "TurboWarp에 대하여",
+        "tw.desktop.renderer.about.privacy": "개인정보 보호 정책",
+        "tw.desktop.renderer.about.source": "소스코드",
         "tw.desktop.renderer.prompt.cancel": "취소",
         "tw.desktop.renderer.prompt.ok": "확인"
     },
@@ -103,6 +121,9 @@
         "tw.desktop.main.windows.about": "Om",
         "tw.desktop.main.windows.addonSettings": "Innstillinger for utvidelser",
         "tw.desktop.main.windows.privacy": "Personvernregler",
+        "tw.desktop.renderer.about.about": "Om",
+        "tw.desktop.renderer.about.privacy": "Personvernregler",
+        "tw.desktop.renderer.about.source": "Kildekode",
         "tw.desktop.renderer.prompt.ok": "OK"
     },
     "nl": {
@@ -122,6 +143,9 @@
         "tw.desktop.main.windows.about": "Over",
         "tw.desktop.main.windows.addonSettings": "Addons Instellingen",
         "tw.desktop.main.windows.privacy": "Privacy Beleid",
+        "tw.desktop.renderer.about.about": "Over",
+        "tw.desktop.renderer.about.privacy": "Privacy Beleid",
+        "tw.desktop.renderer.about.source": "Broncode",
         "tw.desktop.renderer.prompt.cancel": "Annuleer",
         "tw.desktop.renderer.prompt.ok": "Ok"
     },
@@ -142,6 +166,9 @@
         "tw.desktop.main.windows.about": "Sobre",
         "tw.desktop.main.windows.addonSettings": "Configurações de Addon",
         "tw.desktop.main.windows.privacy": "Política de Privacidade",
+        "tw.desktop.renderer.about.about": "Sobre",
+        "tw.desktop.renderer.about.privacy": "Política de Privacidade",
+        "tw.desktop.renderer.about.source": "Código fonte",
         "tw.desktop.renderer.prompt.cancel": "Cancelar",
         "tw.desktop.renderer.prompt.ok": "OK"
     },
@@ -162,6 +189,9 @@
         "tw.desktop.main.windows.about": "Despre",
         "tw.desktop.main.windows.addonSettings": "Setările Addon-urilor",
         "tw.desktop.main.windows.privacy": "Politica de Confidențialitate",
+        "tw.desktop.renderer.about.about": "Despre",
+        "tw.desktop.renderer.about.privacy": "Politica de Confidențialitate",
+        "tw.desktop.renderer.about.source": "Cod sursă",
         "tw.desktop.renderer.prompt.cancel": "Anulează",
         "tw.desktop.renderer.prompt.ok": "OK"
     },
@@ -181,6 +211,9 @@
         "tw.desktop.main.windows.about": "O TurboWarp",
         "tw.desktop.main.windows.addonSettings": "Nastavitve dodatkov",
         "tw.desktop.main.windows.privacy": "Politika zasebnosti",
+        "tw.desktop.renderer.about.about": "O TurboWarp",
+        "tw.desktop.renderer.about.privacy": "Politika zasebnosti",
+        "tw.desktop.renderer.about.source": "Izvirna koda",
         "tw.desktop.renderer.prompt.cancel": "Prekliči",
         "tw.desktop.renderer.prompt.ok": "V redu"
     },
@@ -201,7 +234,13 @@
         "tw.desktop.main.windows.about": "Hakkında",
         "tw.desktop.main.windows.addonSettings": "Eklenti Ayarlar",
         "tw.desktop.main.windows.privacy": "Gizillik Politikası",
+        "tw.desktop.renderer.about.about": "Hakkında",
+        "tw.desktop.renderer.about.privacy": "Gizillik Politikası",
+        "tw.desktop.renderer.about.source": "Kaynak Kodu",
         "tw.desktop.renderer.prompt.cancel": "İptal",
         "tw.desktop.renderer.prompt.ok": "Tamam"
+    },
+    "zh-cn": {
+        "tw.desktop.renderer.about.source": "源代码"
     }
 }
