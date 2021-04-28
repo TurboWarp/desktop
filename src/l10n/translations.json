@@ -1,5 +1,10 @@
 {
     "de": {
+        "tw.desktop.main.context.copy": "Kopieren",
+        "tw.desktop.main.context.cut": "Ausschneiden",
+        "tw.desktop.main.context.learnSpelling": "Lerne Rechtschreibung",
+        "tw.desktop.main.context.openLink": "Link öffnen",
+        "tw.desktop.main.context.paste": "Einfügen",
         "tw.desktop.main.menuBar.learnMore": "Mehr erfahren",
         "tw.desktop.main.menuBar.newWindow": "Neues Fenster",
         "tw.desktop.main.unload.detail": "Alle nicht gespeicherten Änderungen werden verloren gehen.",
@@ -19,6 +24,7 @@
         "tw.desktop.renderer.about.about": "Über",
         "tw.desktop.renderer.about.privacy": "Datenschutzerklärung",
         "tw.desktop.renderer.about.source": "Quellcode",
+        "tw.desktop.renderer.failedToLoad": "Fehler beim Laden der Projektdatei: {error}",
         "tw.desktop.renderer.prompt.cancel": "Abbrechen",
         "tw.desktop.renderer.prompt.ok": "OK"
     },
@@ -49,6 +55,11 @@
         "tw.desktop.renderer.about.source": "Code source"
     },
     "it": {
+        "tw.desktop.main.context.copy": "Copia",
+        "tw.desktop.main.context.cut": "Taglia",
+        "tw.desktop.main.context.learnSpelling": "Impara l'Ortografia",
+        "tw.desktop.main.context.openLink": "Apri link",
+        "tw.desktop.main.context.paste": "Incolla",
         "tw.desktop.main.menuBar.learnMore": "Ulteriori informazioni",
         "tw.desktop.main.menuBar.newWindow": "Nuova Finestra",
         "tw.desktop.main.unload.detail": "Le modifiche non ancora salvate saranno perse.",
@@ -68,10 +79,14 @@
         "tw.desktop.renderer.about.about": "Info",
         "tw.desktop.renderer.about.privacy": "Politica della Privacy",
         "tw.desktop.renderer.about.source": "Codice Sorgente",
+        "tw.desktop.renderer.failedToLoad": "Errore nel caricamento del progetto: {error}",
         "tw.desktop.renderer.prompt.cancel": "Annulla",
         "tw.desktop.renderer.prompt.ok": "OK"
     },
     "ja": {
+        "tw.desktop.main.context.copy": "コピー",
+        "tw.desktop.main.context.cut": "切り取り",
+        "tw.desktop.main.context.paste": "ペースト",
         "tw.desktop.main.menuBar.learnMore": "もっと知る",
         "tw.desktop.main.unload.leave": "離れる",
         "tw.desktop.main.unload.message": "本当に離れてもいいですか？",
@@ -85,9 +100,15 @@
         "tw.desktop.renderer.about.about": "TurboWarpについて",
         "tw.desktop.renderer.about.privacy": "プライバシーポリシー",
         "tw.desktop.renderer.about.source": "ソースコード",
+        "tw.desktop.renderer.failedToLoad": "プロジェクトのファイルを読み込めませんでした: {error}",
         "tw.desktop.renderer.prompt.cancel": "キャンセル"
     },
     "ko": {
+        "tw.desktop.main.context.copy": "복사",
+        "tw.desktop.main.context.cut": "잘라내기",
+        "tw.desktop.main.context.learnSpelling": "스펠링 배우기",
+        "tw.desktop.main.context.openLink": "링크 열기",
+        "tw.desktop.main.context.paste": "붙여넣기",
         "tw.desktop.main.menuBar.learnMore": "추가 정보",
         "tw.desktop.main.menuBar.newWindow": "새 창",
         "tw.desktop.main.unload.detail": "저장되지 않은 변경사항은 모두 사라집니다.",
@@ -107,6 +128,7 @@
         "tw.desktop.renderer.about.about": "TurboWarp에 대하여",
         "tw.desktop.renderer.about.privacy": "개인정보 보호 정책",
         "tw.desktop.renderer.about.source": "소스코드",
+        "tw.desktop.renderer.failedToLoad": "프로젝트 파일을 불러올 수 없습니다: {error}",
         "tw.desktop.renderer.prompt.cancel": "취소",
         "tw.desktop.renderer.prompt.ok": "확인"
     },
@@ -150,6 +172,11 @@
         "tw.desktop.renderer.prompt.ok": "Ok"
     },
     "pt": {
+        "tw.desktop.main.context.copy": "Copiar",
+        "tw.desktop.main.context.cut": "Recortar",
+        "tw.desktop.main.context.learnSpelling": "Aprenda a Escrever",
+        "tw.desktop.main.context.openLink": "Abrir link",
+        "tw.desktop.main.context.paste": "Colar",
         "tw.desktop.main.menuBar.learnMore": "Saber mais",
         "tw.desktop.main.menuBar.newWindow": "Nova Janela",
         "tw.desktop.main.unload.detail": "Todas as mudanças não salvas serão perdidas.",
@@ -169,6 +196,7 @@
         "tw.desktop.renderer.about.about": "Sobre",
         "tw.desktop.renderer.about.privacy": "Política de Privacidade",
         "tw.desktop.renderer.about.source": "Código fonte",
+        "tw.desktop.renderer.failedToLoad": "Erro ao carregar arquivo do projeto: {error}",
         "tw.desktop.renderer.prompt.cancel": "Cancelar",
         "tw.desktop.renderer.prompt.ok": "OK"
     },
@@ -218,6 +246,11 @@
         "tw.desktop.renderer.prompt.ok": "V redu"
     },
     "tr": {
+        "tw.desktop.main.context.copy": "Kopyala",
+        "tw.desktop.main.context.cut": "Kes",
+        "tw.desktop.main.context.learnSpelling": "Yazımı Öğrenin",
+        "tw.desktop.main.context.openLink": "Linki aç",
+        "tw.desktop.main.context.paste": "Yapıştır",
         "tw.desktop.main.menuBar.learnMore": "Daha fazla bilgi edin",
         "tw.desktop.main.menuBar.newWindow": "Yeni Pencere",
         "tw.desktop.main.unload.detail": "Kaydedilmemiş tüm değişiklikler kaybolabilir.",
@@ -237,6 +270,7 @@
         "tw.desktop.renderer.about.about": "Hakkında",
         "tw.desktop.renderer.about.privacy": "Gizillik Politikası",
         "tw.desktop.renderer.about.source": "Kaynak Kodu",
+        "tw.desktop.renderer.failedToLoad": "Bu projeyi yükleyemiyoruz: {error}",
         "tw.desktop.renderer.prompt.cancel": "İptal",
         "tw.desktop.renderer.prompt.ok": "Tamam"
     },
