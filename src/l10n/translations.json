@@ -29,6 +29,7 @@
         "tw.desktop.renderer.prompt.ok": "OK"
     },
     "es": {
+        "tw.desktop.main.context.copy": "Copiar",
         "tw.desktop.main.menuBar.learnMore": "Ver más",
         "tw.desktop.main.menuBar.newWindow": "Nueva Ventana",
         "tw.desktop.main.unload.detail": "Cambios sin guardar serán perdidos.",
@@ -224,6 +225,10 @@
         "tw.desktop.renderer.prompt.ok": "OK"
     },
     "sl": {
+        "tw.desktop.main.context.copy": "Kopiraj",
+        "tw.desktop.main.context.cut": "Izreži",
+        "tw.desktop.main.context.openLink": "Odpri povezavo",
+        "tw.desktop.main.context.paste": "Prilepi",
         "tw.desktop.main.menuBar.learnMore": "Več informacij",
         "tw.desktop.main.menuBar.newWindow": "Novo okno",
         "tw.desktop.main.unload.detail": "Neshranjene spremembe bodo izgubljene.",
@@ -242,6 +247,7 @@
         "tw.desktop.renderer.about.about": "O TurboWarp",
         "tw.desktop.renderer.about.privacy": "Politika zasebnosti",
         "tw.desktop.renderer.about.source": "Izvirna koda",
+        "tw.desktop.renderer.failedToLoad": "Nalaganje datoteke projekta ni uspelo: {error}",
         "tw.desktop.renderer.prompt.cancel": "Prekliči",
         "tw.desktop.renderer.prompt.ok": "V redu"
     },
