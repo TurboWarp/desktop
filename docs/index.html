@@ -267,7 +267,7 @@
       </div>
     </section>
 
-    <section class="select-os">
+    <section class="select-os" id="select-os">
       <div class="select-os-inner">
         <span class="select-os-label" data-l10n="select">Choose your OS:</span>
         <div class="select-os-buttons">
@@ -672,6 +672,7 @@
 
         if (/from|to|changelog/i.test(location.search)) {
           document.body.setAttribute('changelog', 'true');
+          document.getElementById('select-os').scrollIntoView();
         }
 
         setOS(getOS());
