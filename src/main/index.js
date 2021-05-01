@@ -7,6 +7,7 @@ import {format as formatUrl} from 'url'
 import {version} from '../../package.json';
 import checkForUpdate from './update-checker';
 import getTranslation from './translations';
+import './advanced-user-customizations';
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
