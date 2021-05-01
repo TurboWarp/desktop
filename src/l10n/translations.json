@@ -172,6 +172,12 @@
         "tw.desktop.renderer.prompt.cancel": "Annuleer",
         "tw.desktop.renderer.prompt.ok": "Ok"
     },
+    "pl": {
+        "tw.desktop.main.windows.addonSettings": "Ustawienia Dodatków",
+        "tw.desktop.main.windows.privacy": "Polityka Prywatności",
+        "tw.desktop.renderer.about.privacy": "Polityka Prywatności",
+        "tw.desktop.renderer.about.source": "Kod Źródłowy"
+    },
     "pt": {
         "tw.desktop.main.context.copy": "Copiar",
         "tw.desktop.main.context.cut": "Recortar",
@@ -281,6 +287,32 @@
         "tw.desktop.renderer.prompt.ok": "Tamam"
     },
     "zh-cn": {
-        "tw.desktop.renderer.about.source": "源代码"
+        "tw.desktop.main.context.copy": "复制",
+        "tw.desktop.main.context.cut": "剪切",
+        "tw.desktop.main.context.learnSpelling": "学习拼写",
+        "tw.desktop.main.context.openLink": "打开链接",
+        "tw.desktop.main.context.paste": "粘贴",
+        "tw.desktop.main.menuBar.learnMore": "查看更多",
+        "tw.desktop.main.menuBar.newWindow": "新窗口",
+        "tw.desktop.main.unload.detail": "所有未保存的更改都将丢失。",
+        "tw.desktop.main.unload.leave": "离开",
+        "tw.desktop.main.unload.message": "你确定要退出吗？",
+        "tw.desktop.main.unload.stay": "留下",
+        "tw.desktop.main.updater.detail": "此更新可能包含新功能或漏洞修复。",
+        "tw.desktop.main.updater.download": "下载更新",
+        "tw.desktop.main.updater.ignore": "不要再提醒我此更新",
+        "tw.desktop.main.updater.later": "稍后提醒我",
+        "tw.desktop.main.updater.message": "更新可用：v{version}",
+        "tw.desktop.main.updater.security.detail": "此版本的TurboWarp可能容易受到攻击，从而使您的计算机面临感染风险。强烈建议更新。",
+        "tw.desktop.main.updater.security.message": "重要的安全更新可用：v{version}",
+        "tw.desktop.main.windows.about": "关于",
+        "tw.desktop.main.windows.addonSettings": "插件设置",
+        "tw.desktop.main.windows.privacy": "隐私政策",
+        "tw.desktop.renderer.about.about": "关于",
+        "tw.desktop.renderer.about.privacy": "隐私政策",
+        "tw.desktop.renderer.about.source": "源代码",
+        "tw.desktop.renderer.failedToLoad": "无法加载项目文件：{error}",
+        "tw.desktop.renderer.prompt.cancel": "取消",
+        "tw.desktop.renderer.prompt.ok": "确定"
     }
 }
