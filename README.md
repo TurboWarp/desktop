@@ -52,3 +52,17 @@ NODE_OPTIONS=--max-old-space-size=4096 npm run dist
 ## Website
 
 The website source code is in the `docs` folder.
+
+## Advanced customizations
+
+*(Not yet available in a release)*
+
+TurboWarp Desktop lets you configure custom JS and CSS. This is an advanced feature that is not officially supported or recommended -- use at your own risk.
+
+Find TurboWarp Desktop's data path:
+
+ - Windows: `%APPDATA%/TurboWarp`
+ - macOS: `~/Library/Application Support/TurboWarp`
+ - Linux (non-Snap): `~/.config/TurboWarp`
+
+Create the file `userscript.js` in this folder to configure custom JS. Create the file `userstyle.css` in this folder to configure custom CSS. Completely restart TurboWarp Desktop (including all windows) to apply.
