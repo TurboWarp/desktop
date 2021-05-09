@@ -2,7 +2,6 @@
     "de": {
         "tw.desktop.main.context.copy": "Kopieren",
         "tw.desktop.main.context.cut": "Ausschneiden",
-        "tw.desktop.main.context.learnSpelling": "Lerne Rechtschreibung",
         "tw.desktop.main.context.openLink": "Link öffnen",
         "tw.desktop.main.context.paste": "Einfügen",
         "tw.desktop.main.menuBar.learnMore": "Mehr erfahren",
@@ -81,7 +80,6 @@
     "it": {
         "tw.desktop.main.context.copy": "Copia",
         "tw.desktop.main.context.cut": "Taglia",
-        "tw.desktop.main.context.learnSpelling": "Impara l'Ortografia",
         "tw.desktop.main.context.openLink": "Apri link",
         "tw.desktop.main.context.paste": "Incolla",
         "tw.desktop.main.menuBar.learnMore": "Ulteriori informazioni",
@@ -137,7 +135,6 @@
     "ko": {
         "tw.desktop.main.context.copy": "복사",
         "tw.desktop.main.context.cut": "잘라내기",
-        "tw.desktop.main.context.learnSpelling": "스펠링 배우기",
         "tw.desktop.main.context.openLink": "링크 열기",
         "tw.desktop.main.context.paste": "붙여넣기",
         "tw.desktop.main.menuBar.learnMore": "추가 정보",
@@ -211,7 +208,6 @@
     "pt": {
         "tw.desktop.main.context.copy": "Copiar",
         "tw.desktop.main.context.cut": "Recortar",
-        "tw.desktop.main.context.learnSpelling": "Aprenda a Escrever",
         "tw.desktop.main.context.openLink": "Abrir link",
         "tw.desktop.main.context.paste": "Colar",
         "tw.desktop.main.menuBar.learnMore": "Saber mais",
@@ -263,7 +259,6 @@
     "sl": {
         "tw.desktop.main.context.copy": "Kopiraj",
         "tw.desktop.main.context.cut": "Izreži",
-        "tw.desktop.main.context.learnSpelling": "Dodaj v slovar za preverjanje črkovanja",
         "tw.desktop.main.context.openLink": "Odpri povezavo",
         "tw.desktop.main.context.paste": "Prilepi",
         "tw.desktop.main.menuBar.learnMore": "Več informacij",
@@ -291,7 +286,6 @@
     "tr": {
         "tw.desktop.main.context.copy": "Kopyala",
         "tw.desktop.main.context.cut": "Kes",
-        "tw.desktop.main.context.learnSpelling": "Yazımı Öğrenin",
         "tw.desktop.main.context.openLink": "Linki aç",
         "tw.desktop.main.context.paste": "Yapıştır",
         "tw.desktop.main.menuBar.learnMore": "Daha fazla bilgi edin",
@@ -320,7 +314,6 @@
     "zh-cn": {
         "tw.desktop.main.context.copy": "复制",
         "tw.desktop.main.context.cut": "剪切",
-        "tw.desktop.main.context.learnSpelling": "学习拼写",
         "tw.desktop.main.context.openLink": "打开链接",
         "tw.desktop.main.context.paste": "粘贴",
         "tw.desktop.main.menuBar.learnMore": "查看更多",
