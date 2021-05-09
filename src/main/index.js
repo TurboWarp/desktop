@@ -173,20 +173,6 @@ function createWindow(url, options) {
       });
     }
 
-    if (params.isEditable && params.misspelledWord) {
-      menuItems.push({
-        id: 'learnSpelling',
-        label: getTranslation('tw.desktop.main.context.learnSpelling'),
-        visible: params.isEditable && params.misspelledWord,
-        click() {
-          window.webContents.session.addWordToSpellCheckerDictionary(params.misspelledWord);
-        }
-      });
-      menuItems.push({
-        type: 'separator'
-      });
-    }
-
     if (params.isEditable) {
       menuItems.push({
         id: 'cut',

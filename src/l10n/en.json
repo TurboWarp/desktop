@@ -16,7 +16,6 @@
   "tw.desktop.main.updater.security.message": "An important security update is available: v{version}",
   "tw.desktop.main.updater.security.detail": "This version of TurboWarp may be vulnerable to an exploit that puts your computer at risk of infection. Updating is highly recommended.",
   "tw.desktop.main.context.openLink": "Open link",
-  "tw.desktop.main.context.learnSpelling": "Learn Spelling",
   "tw.desktop.main.context.cut": "Cut",
   "tw.desktop.main.context.copy": "Copy",
   "tw.desktop.main.context.paste": "Paste",
