@@ -39,6 +39,10 @@ const openPrivacyPolicy = () => {
   ipcRenderer.send('open-privacy-policy');
 };
 
+const openCredits = () => {
+  ipcRenderer.send('open-credits');
+};
+
 const handleUpdateProjectTitle = (title) => {
   document.title = title;
 };
@@ -139,16 +143,20 @@ const DesktopHOC = function (WrappedComponent) {
           onClickAddonSettings={this.handleClickAddonSettings}
           onClickAbout={[
             {
-              title: getTranslation('tw.desktop.renderer.about.about'),
+              title: getTranslation('tw.desktop.about'),
               onClick: openAbout
             },
             {
-              title: getTranslation('tw.desktop.renderer.about.privacy'),
+              title: getTranslation('tw.desktop.privacy'),
               onClick: openPrivacyPolicy
             },
             {
-              title: getTranslation('tw.desktop.renderer.about.source'),
+              title: getTranslation('tw.desktop.renderer.source'),
               onClick: openSourceCode
+            },
+            {
+              title: getTranslation('tw.desktop.renderer.credits'),
+              onClick: openCredits
             }
           ]}
           {...props}

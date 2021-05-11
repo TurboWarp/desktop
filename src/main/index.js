@@ -316,7 +316,7 @@ function closeWhenPressEscape(window) {
 
 function createAboutWindow() {
   const window = createWindow(getURL('about'), {
-    title: getTranslation('tw.desktop.main.windows.about'),
+    title: getTranslation('tw.desktop.about'),
     width: 800,
     height: 450,
     parent: BrowserWindow.getFocusedWindow(),
@@ -336,7 +336,8 @@ function createAboutWindow() {
 function createSettingsWindow(locale) {
   const url = `${getURL('settings')}&locale=${locale}`;
   const window = createWindow(url, {
-    title: getTranslation('tw.desktop.main.windows.addonSettings'),
+    // The window will update its title to be something localized
+    title: 'Addon Settings',
     width: 700,
     height: 650
   });
@@ -352,7 +353,7 @@ function createSettingsWindow(locale) {
 
 function createPrivacyWindow() {
   const window = createWindow(getURL('privacy'), {
-    title: getTranslation('tw.desktop.main.windows.privacy'),
+    title: getTranslation('tw.desktop.privacy'),
     width: 600,
     height: 450,
     parent: BrowserWindow.getFocusedWindow(),
@@ -426,6 +427,10 @@ ipcMain.on('open-privacy-policy', () => {
 
 ipcMain.on('open-source-code', () => {
   shell.openExternal('https://github.com/TurboWarp');
+});
+
+ipcMain.on('open-credits', () => {
+  shell.openExternal('https://turbowarp.org/credits.html');
 });
 
 ipcMain.on('export-addon-settings', async (event, settings) => {

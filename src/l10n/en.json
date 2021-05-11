@@ -1,7 +1,6 @@
 {
-  "tw.desktop.main.windows.addonSettings": "Addon Settings",
-  "tw.desktop.main.windows.about": "About",
-  "tw.desktop.main.windows.privacy": "Privacy Policy",
+  "tw.desktop.about": "About",
+  "tw.desktop.privacy": "Privacy Policy",
   "tw.desktop.main.menuBar.newWindow": "New Window",
   "tw.desktop.main.menuBar.learnMore": "Learn more",
   "tw.desktop.main.unload.stay": "Stay",
@@ -21,8 +20,7 @@
   "tw.desktop.main.context.paste": "Paste",
   "tw.desktop.renderer.prompt.ok": "OK",
   "tw.desktop.renderer.prompt.cancel": "Cancel",
-  "tw.desktop.renderer.about.about": "About",
-  "tw.desktop.renderer.about.privacy": "Privacy Policy",
-  "tw.desktop.renderer.about.source": "Source Code",
+  "tw.desktop.renderer.source": "Source Code",
+  "tw.desktop.renderer.credits": "Credits",
   "tw.desktop.renderer.failedToLoad": "Could not load project file: {error}"
 }
