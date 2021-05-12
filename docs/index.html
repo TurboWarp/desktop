@@ -301,20 +301,24 @@
 
     <section class="changelog">
       <div>
-        <h2>Changes from v0.3.1 to v0.4.0</h2>
+        <h2>Changes from v0.4.0 to v0.5.0</h2>
         <ul>
-          <li>New addons:
+          <li>Addons:
             <ul>
-              <li>Cat blocks</li>
-              <li>Gamepad support</li>
-              <li>Custom scripts area zoom settings</li>
-              <li>Change new sprite default position</li>
-              <li>Save blocks as image</li>
+              <li>New optional addon: Editor sound effects</li>
+              <li>New optional addon: Remove curved stage border</li>
+              <li>Addon enabled by default: Drag and drop files</li>
             </ul>
           </li>
-          <li>Various optimizations</li>
-          <li>Various bug fixes</li>
-          <li class="os-linux">Linux: Fixed mime type, fixed app category</li>
+          <li>The editor has been significantly optimized when editing large projects</li>
+          <li>Various long-term Scratch editor bugs have been fixed:
+            <ul>
+              <li>Duplicating a script no longer accidentally runs the script it's dropped onto</li>
+              <li>Comments attached to blocks will save their position properly when moved</li>
+            </ul>
+          </li>
+          <li>Various other bug fixes and optimizations</li>
+          <li>Advanced users: <a href="https://github.com/TurboWarp/desktop#advanced-customizations">Experimental userscript/userstyle support</a></li>
         </ul>
         <p class="os-windows">To update, download and run the new installer below.</p>
         <p class="os-mac">To update, download and install the new app below.</p>
@@ -609,7 +613,7 @@
     </script>
     <script>
       (function() {
-        var VERSION = '0.4.0';
+        var VERSION = '0.5.0';
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'windows';

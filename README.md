@@ -55,9 +55,7 @@ The website source code is in the `docs` folder.
 
 ## Advanced customizations
 
-*(Not yet available in a release)*
-
-TurboWarp Desktop lets you configure custom JS and CSS. This is an advanced feature that is not officially supported or recommended -- use at your own risk.
+TurboWarp Desktop lets you configure custom JS and CSS. This is an advanced feature that is not officially supported -- use at your own risk.
 
 Find TurboWarp Desktop's data path:
 
