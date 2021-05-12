@@ -4,7 +4,6 @@ import fs from 'fs';
 import writeFileAtomic from 'write-file-atomic';
 import util from 'util';
 import {format as formatUrl} from 'url'
-import {version} from '../../package.json';
 import checkForUpdate from './update-checker';
 import getTranslation from './translations';
 import './advanced-user-customizations';
@@ -18,7 +17,7 @@ const isWindows = process.platform === 'win32';
 const isLinux = process.platform === 'linux';
 
 const editorWindows = new Set();
-const editorWindowTitle = `TurboWarp Desktop ${version}`;
+const editorWindowTitle = `TurboWarp Desktop`;
 const filesToOpen = [];
 let aboutWindow = null;
 let settingsWindow = null;
