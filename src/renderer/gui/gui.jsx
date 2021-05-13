@@ -11,7 +11,7 @@ import TWStateManagerHOC from 'scratch-gui/src/lib/tw-state-manager-hoc.jsx';
 import {openLoadingProject, closeLoadingProject} from 'scratch-gui/src/reducers/modals';
 import {setFileHandle} from 'scratch-gui/src/reducers/tw';
 import {defaultProjectId, onFetchedProjectData, onLoadedProject, requestNewProject, requestProjectUpload, setProjectId} from 'scratch-gui/src/reducers/project-state';
-import SettingStore from 'scratch-gui/src/addons/settings-store';
+import SettingStore from 'scratch-gui/src/addons/settings-store-singleton';
 import {WrappedFileHandle} from './filesystem-api-impl';
 import {localeChanged, getTranslation} from './translations';
 import './gui.css';
