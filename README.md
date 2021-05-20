@@ -61,6 +61,6 @@ Find TurboWarp Desktop's data path:
 
  - Windows: `%APPDATA%/TurboWarp`
  - macOS: `~/Library/Application Support/TurboWarp`
- - Linux (non-Snap): `~/.config/TurboWarp`
+ - Linux (non-Snap): `~/.config/turbowarp-desktop`
 
 Create the file `userscript.js` in this folder to configure custom JS. Create the file `userstyle.css` in this folder to configure custom CSS. Completely restart TurboWarp Desktop (including all windows) to apply.
