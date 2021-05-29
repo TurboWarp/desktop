@@ -89,8 +89,7 @@ const typesToFilterList = (types) => types.map((type) => ({
 window.showSaveFilePicker = async (options) => {
   const result = await ipcRenderer.invoke('show-save-dialog', {
     filters: typesToFilterList(options.types),
-    // Non-standard property
-    defaultPath: options.fileName
+    defaultPath: options.suggestedName
   });
 
   if (result.canceled) {
