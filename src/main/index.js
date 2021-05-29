@@ -108,6 +108,7 @@ function createWindow(url, options) {
     nodeIntegration: false,
     preload: pathUtil.resolve(pathUtil.join(__dirname, 'preload.js'))
   };
+  options.show = false;
   const window = new BrowserWindow(options);
 
   window.loadURL(url);
@@ -222,6 +223,11 @@ function createWindow(url, options) {
         ]
       });
     }
+  });
+
+  window.on('ready-to-show', () => {
+    window.show();
+    window.focus();
   });
 
   return window;
@@ -404,24 +410,18 @@ ipcMain.on('open-about', () => {
   if (aboutWindow === null) {
     aboutWindow = createAboutWindow();
   }
-  aboutWindow.show();
-  aboutWindow.focus();
 });
 
 ipcMain.on('open-addon-settings', (event, {locale}) => {
   if (settingsWindow === null) {
     settingsWindow = createSettingsWindow(locale);
   }
-  settingsWindow.show();
-  settingsWindow.focus();
 });
 
 ipcMain.on('open-privacy-policy', () => {
   if (privacyWindow === null) {
     privacyWindow = createPrivacyWindow();
   }
-  privacyWindow.show();
-  privacyWindow.focus();
 });
 
 ipcMain.on('open-source-code', () => {
