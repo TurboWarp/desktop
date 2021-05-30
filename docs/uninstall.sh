@@ -14,7 +14,7 @@ read
 snap remove turbowarp-desktop
 
 # Debian/Ubuntu
-apt purge turbowarp-desktop
+apt purge -y turbowarp-desktop
 
 # Everything else
 rm /usr/share/applications/turbowarp-desktop.desktop

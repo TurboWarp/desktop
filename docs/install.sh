@@ -58,6 +58,7 @@ if command_exists apt; then
         fatal "Unknown architecture"
     fi
     wget -O "$TMPFILE" "https://github.com/TurboWarp/desktop/releases/download/v$VERSION/TurboWarp-linux-$filearch-$VERSION.deb"
+    chown _apt:root $TMPFILE
     apt install -y "$TMPFILE"
     install_complete
 fi
