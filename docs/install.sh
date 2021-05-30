@@ -21,11 +21,6 @@ if [ "$USER" != "root" ]; then
     fatal "Must be run as root."
 fi
 
-# TODO: see if there's other things that might be missing
-if ! command_exists wget; then
-    fatal "Missing dependency: wget"
-fi
-
 VERSION="0.5.0"
 ARCH="$(uname -m)"
 
@@ -59,7 +54,7 @@ if command_exists apt; then
         fatal "Unknown architecture"
     fi
     wget -O "$TMPFILE" "https://github.com/TurboWarp/desktop/releases/download/v$VERSION/TurboWarp-linux-$filearch-$VERSION.deb"
-    chown _apt:root $TMPFILE
+    chown _apt:root "$TMPFILE"
     apt install -y "$TMPFILE"
     install_complete
 fi
@@ -103,8 +98,8 @@ cat > /usr/share/mime/packages/turbowarp-desktop.xml << EOF
 </mime-type>
 </mime-info>
 EOF
-chmod 4755 '/opt/TurboWarp/chrome-sandbox'
-ln -sf '/opt/TurboWarp/turbowarp-desktop' '/usr/bin/turbowarp-desktop'
+chmod 4755 /opt/TurboWarp/chrome-sandbox
+ln -sf /opt/TurboWarp/turbowarp-desktop /usr/bin/turbowarp-desktop
 update-mime-database /usr/share/mime
 update-desktop-database /usr/share/applications
 gtk-update-icon-cache -f /usr/share/icons/hicolor/
