@@ -1,0 +1,29 @@
+#!/bin/bash
+
+if [ "$USER" != "root" ]; then
+    echo "Must be run as root."
+    exit 1
+fi
+
+echo "We're going to try to uninstall the app in a bunch of different ways."
+echo "You will probably see a bunch of errors, this is normal and can be ignored."
+echo "(Press enter to continue)"
+read
+
+# Snap
+snap remove turbowarp-desktop
+
+# Debian/Ubuntu
+apt purge turbowarp-desktop
+
+# Everything else
+rm /usr/share/applications/turbowarp-desktop.desktop
+rm /usr/share/mime/packages/turbowarp-desktop.xml
+rm /usr/share/icons/hicolor/512x512/apps/turbowarp-desktop.png
+rm -rf /opt/TurboWarp
+
+update-mime-database /usr/share/mime
+update-desktop-database /usr/share/applications
+gtk-update-icon-cache -f /usr/share/icons/hicolor/
+
+echo "Should be uninstalled."
