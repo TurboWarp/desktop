@@ -26,6 +26,7 @@ if ! command_exists wget; then
     fatal "Missing dependency: wget"
 fi
 
+VERSION="0.5.0"
 ARCH="$(uname -m)"
 
 echo "Version: $VERSION"
