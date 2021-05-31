@@ -27,20 +27,9 @@ ARCH="$(uname -m)"
 echo "Version: $VERSION"
 echo "System archictecture: $ARCH"
 
-# Snap
-# if command_exists snap; then
-#     echo "Snap detected, will try installing from snap..."
-#     snap install turbowarp-desktop
-#     echo "Making connections..."
-#     snap connect turbowarp-desktop:camera
-#     snap connect turbowarp-desktop:audio-record
-#     snap connect turbowarp-desktop:joystick
-#     install_complete
-# fi
-
 # Debian/Ubuntu
 if command_exists apt; then
-    echo "Detected Ubuntu/Debian based system"
+    echo "Detected Debian/Ubuntu based system"
     TMPFILE=$(mktemp --suffix=.deb)
     if [ "$ARCH" = "x86_64" ]; then
         filearch="amd64"
@@ -74,9 +63,9 @@ else
     fatal "Unknown architecture"
 fi
 wget -O "$TMPFILE" "https://github.com/TurboWarp/desktop/releases/download/v$VERSION/TurboWarp-linux-$filearch-$VERSION.tar.gz"
-wget -O /usr/share/icons/hicolor/512x512/apps/turbowarp-desktop.png https://raw.githubusercontent.com/TurboWarp/desktop/master/static/icon.png
 mkdir -p /opt/TurboWarp
 tar -xvf "$TMPFILE" --strip-components=1 -C /opt/TurboWarp
+cp /opt/TurboWarp/resources/static/icon.png /usr/share/icons/hicolor/512x512/apps/turbowarp-desktop.png
 cat > /usr/share/applications/turbowarp-desktop.desktop << EOF
 [Desktop Entry]
 Name=TurboWarp
