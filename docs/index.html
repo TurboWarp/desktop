@@ -584,6 +584,7 @@
           if (/android/i.test(navigator.userAgent)) return 'windows';
           if (/iphone|ipad|ipod/i.test(navigator.userAgent)) return 'windows';
           if (/linux/i.test(navigator.userAgent)) return 'linux';
+          if (/cros/i.test(navigator.userAgent)) return 'linux';
           if (/mac/i.test(navigator.userAgent)) return 'mac';
           return 'windows';
         }
