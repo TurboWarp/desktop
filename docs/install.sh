@@ -17,13 +17,15 @@ command_exists() {
     command -v "$1" &> /dev/null
 }
 
-if [ "$USER" != "root" ]; then
+if [ "$(uname -s)" != "Linux" ]; then
+    fatal "This doesn't look like Linux"
+fi
+if [ "$(whoami)" != "root" ]; then
     fatal "Must be run as root."
 fi
 
 VERSION="0.5.0"
 ARCH="$(uname -m)"
-
 echo "Version: $VERSION"
 echo "System archictecture: $ARCH"
 
