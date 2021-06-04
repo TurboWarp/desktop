@@ -47,6 +47,7 @@ if command_exists apt; then
     wget -O "$TMPFILE" "https://github.com/TurboWarp/desktop/releases/download/v$VERSION/TurboWarp-linux-$filearch-$VERSION.deb"
     chown _apt:root "$TMPFILE"
     apt install -y "$TMPFILE"
+    rm "$TMPFILE"
     install_complete
 fi
 
@@ -94,4 +95,5 @@ ln -sf /opt/TurboWarp/turbowarp-desktop /usr/bin/turbowarp-desktop
 update-mime-database /usr/share/mime
 update-desktop-database /usr/share/applications
 gtk-update-icon-cache -f /usr/share/icons/hicolor/
+rm "$TMPFILE"
 install_complete
