@@ -136,18 +136,6 @@ function createWindow(url, options) {
         e.preventDefault();
         createEditorWindow();
       }
-      // Ctrl+R and Ctrl+Shift+R to reload
-      if (
-        input.control &&
-        input.key.toLowerCase() === 'r'
-      ) {
-        e.preventDefault();
-        if (input.shift) {
-          window.webContents.reloadIgnoringCache();
-        } else {
-          window.webContents.reload();
-        }
-      }
     });
   }
 
