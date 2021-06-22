@@ -488,13 +488,11 @@ app.on('open-file', (event, path) => {
 });
 
 app.on('web-contents-created', (event, contents) => {
-  contents.setWindowOpenHandler((details) => {
-    if (isSafeOpenExternal(details.url)) {
-      setImmediate(() => {
-        shell.openExternal(details.url);
-      });
+  contents.on('new-window', (e, url) => {
+    e.preventDefault();
+    if (isSafeOpenExternal(url)) {
+      shell.openExternal(url);
     }
-    return {action: 'deny'};
   });
   contents.on('will-navigate', (e, url) => {
     try {
