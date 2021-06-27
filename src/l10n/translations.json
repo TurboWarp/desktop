@@ -145,7 +145,7 @@
         "tw.desktop.main.updater.download": "업데이트 다운로드",
         "tw.desktop.main.updater.ignore": "이 업데이트 알림을 다시 표시하지 않음",
         "tw.desktop.main.updater.later": "나중에 알림",
-        "tw.desktop.main.updater.message": "업데이트를 이용 가능합니다 : v{version}",
+        "tw.desktop.main.updater.message": "새로운 업데이트가 존재합니다 : v{version}",
         "tw.desktop.main.updater.security.detail": "이 버전의 TurboWarp는 당신의 컴퓨터를 감염시킬 수 있는 위험요소로부터 매우 취약합니다. 업데이트가 강력히 권장됩니다.",
         "tw.desktop.main.updater.security.message": "중요한 보안 업데이트를 이용 가능합니다: v{version}",
         "tw.desktop.privacy": "개인정보 보호 정책",
