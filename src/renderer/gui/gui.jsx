@@ -97,7 +97,6 @@ const fetchProjectFromURL = async (url) => {
 };
 
 const readInitialFile = async () => {
-  console.log(fileToOpen);
   if (isValidURL(fileToOpen)) {
     const match = fileToOpen.match(/^https:\/\/scratch\.mit\.edu\/projects\/(\d+)\/?$/);
     if (match) {
