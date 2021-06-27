@@ -2,6 +2,8 @@ import {ipcRenderer} from 'electron';
 import {getTranslation} from './gui/translations';
 import styles from './prompt.css';
 
+const INPUT_ID = 'prompt-impl-input';
+
 let cancelButton;
 
 document.addEventListener('keydown', (e) => {
@@ -22,12 +24,16 @@ window.prompt = (message, defaultValue) => new Promise((resolve, reject) => {
   content.className = styles.content;
 
   const title = document.createElement('h2');
-  title.textContent = message;
   title.className = styles.title;
+
+  const titleLabel = document.createElement('label');
+  titleLabel.textContent = message;
+  titleLabel.htmlFor = INPUT_ID;
 
   const input = document.createElement('input');
   input.value = defaultValue || '';
   input.className = styles.input;
+  input.id = INPUT_ID;
   input.onkeydown = e => {
     if (e.key === 'Enter') {
       okButton.click();
@@ -58,6 +64,7 @@ window.prompt = (message, defaultValue) => new Promise((resolve, reject) => {
     document.body.removeChild(container);
   };
 
+  title.appendChild(titleLabel);
   buttonContainer.appendChild(cancelButton);
   buttonContainer.appendChild(okButton);
   content.appendChild(title);
