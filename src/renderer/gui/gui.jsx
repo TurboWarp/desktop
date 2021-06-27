@@ -64,6 +64,36 @@ const getProjectTitle = (file) => {
   return match[1];
 };
 
+const isValidURL = (url) => {
+  try {
+    const _ = new URL(url);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+const fetchProjectFromURL = async (url) => {
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Unexpected status code: ${res.status}`);
+  }
+  return res.arrayBuffer();
+};
+
+const readInitialFile = async () => {
+  console.log(fileToOpen);
+  if (isValidURL(fileToOpen)) {
+    const match = fileToOpen.match(/^https:\/\/scratch\.mit\.edu\/projects\/(\d+)\/?$/);
+    if (match) {
+      const id = match[1];
+      return fetchProjectFromURL(`https://projects.scratch.mit.edu/${id}`);
+    }
+    throw new Error('Unsupported URL');
+  }
+  return ipcRenderer.invoke('read-file', fileToOpen);
+};
+
 const darkModeMedia = window.matchMedia('(prefers-color-scheme: dark)');
 darkModeMedia.onchange = () => document.body.setAttribute('theme', darkModeMedia.matches ? 'dark' : 'light');
 darkModeMedia.onchange();
@@ -95,7 +125,7 @@ const DesktopHOC = function (WrappedComponent) {
         this.props.onLoadingCompleted();
       } else {
         this.props.onHasInitialProject(true, this.props.loadingState);
-        ipcRenderer.invoke('read-file', fileToOpen)
+        readInitialFile()
           .then((projectData) => {
             return this.props.vm.loadProject(projectData)
           })

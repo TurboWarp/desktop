@@ -520,16 +520,25 @@ function parseArgv(argv) {
   return argv;
 }
 
+const resolveFilePath = (workingDirectory, file) => {
+  try {
+    // Absolute URLs should not be modified.
+    const _ = new URL(file);
+    return file;
+  } catch (e) {
+    return pathUtil.resolve(workingDirectory, file);
+  }
+};
+
 const acquiredLock = app.requestSingleInstanceLock();
 if (acquiredLock) {
   for (const path of parseArgv(process.argv)) {
-    filesToOpen.push(pathUtil.resolve(path));
+    filesToOpen.push(resolveFilePath('', path));
   }
 
   app.on('second-instance', (event, argv, workingDirectory) => {
     for (const i of parseArgv(argv)) {
-      const resolvedPath = pathUtil.resolve(workingDirectory, i);
-      filesToOpen.push(resolvedPath);
+      filesToOpen.push(resolveFilePath(workingDirectory, i));
     }
     autoCreateEditorWindows();
   });
