@@ -17,11 +17,26 @@ import {WrappedFileHandle} from './filesystem-api-impl';
 import {localeChanged, getTranslation} from './translations';
 import './gui.css';
 
+class StorageHelper {
+  constructor (parent, generateURL) {
+    this.parent = parent;
+    this.generateURL = generateURL;
+  }
+  load (assetType, assetId, dataFormat) {
+    return fetch(this.generateURL(`${assetId}.${dataFormat}`))
+      .then((r) => {
+        if (!r.ok) {
+          throw new Error('Asset does not exist here');
+        }
+        return r.arrayBuffer();
+      })
+      .then((data) => new this.parent.Asset(assetType, assetId, dataFormat, new Uint8Array(data)));
+  }
+}
+
 const handleStorageInit = (storage) => {
-  storage.addWebStore(
-    [storage.AssetType.ImageVector, storage.AssetType.ImageBitmap, storage.AssetType.Sound],
-    asset => `library-files/${asset.assetId}.${asset.dataFormat}`
-  );
+  storage.addHelper(new StorageHelper(storage, (asset) => `library-files/${asset}`));
+  storage.addHelper(new StorageHelper(storage, (asset) => `https://assets.scratch.mit.edu/internalapi/asset/${asset}/get/`));
 };
 
 AddonChannels.reloadChannel.addEventListener('message', () => {
