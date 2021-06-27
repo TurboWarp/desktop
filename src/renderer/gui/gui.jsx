@@ -81,8 +81,8 @@ const getProjectTitle = (file) => {
 
 const isValidURL = (url) => {
   try {
-    const _ = new URL(url);
-    return true;
+    const u = new URL(url);
+    return u.protocol === 'https:' || u.protocol === 'http:';
   } catch (e) {
     return false;
   }
@@ -104,7 +104,7 @@ const readInitialFile = async () => {
       const id = match[1];
       return fetchProjectFromURL(`https://projects.scratch.mit.edu/${id}`);
     }
-    throw new Error('Unsupported URL');
+    return fetchProjectFromURL(fileToOpen);
   }
   return ipcRenderer.invoke('read-file', fileToOpen);
 };
