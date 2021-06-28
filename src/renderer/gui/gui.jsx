@@ -180,9 +180,7 @@ const DesktopHOC = function (WrappedComponent) {
       }
     }
     handleClickAddonSettings() {
-      ipcRenderer.send('open-addon-settings', {
-        locale: this.props.locale.split('-')[0]
-      });
+      ipcRenderer.send('open-addon-settings');
     }
     render() {
       const {

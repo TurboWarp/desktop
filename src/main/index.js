@@ -320,8 +320,8 @@ function createAboutWindow() {
   return window;
 }
 
-function createSettingsWindow(locale) {
-  const url = `${getURL('settings')}&locale=${locale}`;
+function createSettingsWindow() {
+  const url = getURL('settings');
   const window = createWindow(url, {
     // The window will update its title to be something localized
     title: 'Addon Settings',
@@ -396,9 +396,9 @@ ipcMain.on('open-about', () => {
   aboutWindow.focus();
 });
 
-ipcMain.on('open-addon-settings', (event, {locale}) => {
+ipcMain.on('open-addon-settings', () => {
   if (settingsWindow === null) {
-    settingsWindow = createSettingsWindow(locale);
+    settingsWindow = createSettingsWindow();
   }
   settingsWindow.show();
   settingsWindow.focus();
