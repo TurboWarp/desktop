@@ -358,7 +358,7 @@ function createPrivacyWindow() {
 }
 
 ipcMain.handle('show-save-dialog', async (event, options) => {
-  const result = await dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), options);
+  const result = await dialog.showSaveDialog(BrowserWindow.fromWebContents(event.sender), options);
   if (!result.canceled) {
     allowedToAccessFiles.add(result.filePath);
   }
@@ -366,7 +366,7 @@ ipcMain.handle('show-save-dialog', async (event, options) => {
 });
 
 ipcMain.handle('show-open-dialog', async (event, options) => {
-  const result = await dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), options);
+  const result = await dialog.showOpenDialog(BrowserWindow.fromWebContents(event.sender), options);
   if (!result.canceled) {
     const [filePath] = result.filePaths;
     allowedToAccessFiles.add(filePath);
@@ -421,7 +421,7 @@ ipcMain.on('open-credits', () => {
 });
 
 ipcMain.on('export-addon-settings', async (event, settings) => {
-  const result = await dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), {
+  const result = await dialog.showSaveDialog(BrowserWindow.fromWebContents(event.sender), {
     defaultPath: 'turbowarp-addon-setting.json',
     filters: [
       {
@@ -455,17 +455,18 @@ ipcMain.on('set-file-changed', (event, changed) => {
 });
 
 ipcMain.on('alert', (event, message) => {
-  dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
+  dialog.showMessageBoxSync(BrowserWindow.fromWebContents(event.sender), {
     message: '' + message,
     buttons: [
       getTranslation('tw.desktop.renderer.prompt.ok')
     ]
   });
+  // set returnValue to something to reply so the renderer can resume
   event.returnValue = 1;
 });
 
 ipcMain.on('confirm', (event, message) => {
-  const result = dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
+  const result = dialog.showMessageBoxSync(BrowserWindow.fromWebContents(event.sender), {
     message: '' + message,
     buttons: [
       getTranslation('tw.desktop.renderer.prompt.ok'),
