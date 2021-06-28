@@ -1,4 +1,4 @@
-import {app, BrowserWindow, Menu, ipcMain, shell, dialog, clipboard} from 'electron'
+import {app, BrowserWindow, Menu, ipcMain, shell, dialog, clipboard, screen} from 'electron'
 import pathUtil from 'path'
 import fs from 'fs';
 import writeFileAtomic from 'write-file-atomic';
@@ -108,9 +108,14 @@ function createWindow(url, options) {
     nodeIntegration: false,
     preload: pathUtil.resolve(pathUtil.join(__dirname, 'preload.js'))
   };
-  const window = new BrowserWindow(options);
 
-  window.loadURL(url);
+  const activeScreen = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
+  const bounds = activeScreen.workArea;
+  options.x = bounds.x + ((bounds.width - options.width) / 2);
+  options.y = bounds.y + ((bounds.height - options.height) / 2);
+
+  const window = new BrowserWindow(options);
+  window.loadURL(url)
 
   if (!isMac) {
     // On Mac, shortcuts are handled by the menu bar.
