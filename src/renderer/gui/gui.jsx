@@ -226,10 +226,7 @@ const DesktopHOC = function (WrappedComponent) {
     }
   }
   DesktopComponent.propTypes = {
-    fileHandle: PropTypes.shape({
-      // see WrappedFileWritable filesystem-api-impl.js
-      path: PropTypes.string
-    }),
+    fileHandle: PropTypes.instanceOf(WrappedFileHandle),
     locale: PropTypes.string,
     loadingState: PropTypes.string,
     onFetchedInitialProjectData: PropTypes.func,

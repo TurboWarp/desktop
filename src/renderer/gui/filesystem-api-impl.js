@@ -20,7 +20,7 @@ const readAsArrayBuffer = (blob) => new Promise((resolve, reject) => {
 
 class WrappedFileWritable {
   constructor (path) {
-    // non-standard, used internally and by DesktopComponent
+    // non-standard, used internally
     this.path = path;
   }
 
@@ -38,6 +38,7 @@ class WrappedFileWritable {
 
 export class WrappedFileHandle {
   constructor (path) {
+    // non-standard, used internally and by DesktopComponent
     this.path = path;
     // part of public API
     this.name = getBasename(this.path);
