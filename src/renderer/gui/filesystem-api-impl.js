@@ -20,13 +20,14 @@ const readAsArrayBuffer = (blob) => new Promise((resolve, reject) => {
 
 class WrappedFileWritable {
   constructor (path) {
-    this._path = path;
+    // non-standard, used internally and by DesktopComponent
+    this.path = path;
   }
 
   async write (content) {
     if (content instanceof Blob) {
       const arrayBuffer = await readAsArrayBuffer(content);
-      await ipcRenderer.invoke('write-file', this._path, Buffer.from(new Uint8Array(arrayBuffer)));
+      await ipcRenderer.invoke('write-file', this.path, Buffer.from(new Uint8Array(arrayBuffer)));
     }
   }
 
@@ -37,19 +38,19 @@ class WrappedFileWritable {
 
 export class WrappedFileHandle {
   constructor (path) {
-    this._path = path;
+    this.path = path;
     // part of public API
-    this.name = getBasename(this._path);
+    this.name = getBasename(this.path);
   }
 
   async getFile () {
-    const data = await ipcRenderer.invoke('read-file', this._path);
+    const data = await ipcRenderer.invoke('read-file', this.path);
     const blob = new Blob([data.buffer]);
     return new File([blob], this.name);
   }
 
   async createWritable () {
-    return new WrappedFileWritable(this._path);
+    return new WrappedFileWritable(this.path);
   }
 }
 

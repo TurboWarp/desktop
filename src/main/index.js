@@ -444,6 +444,16 @@ ipcMain.on('addon-settings-changed', (event, newSettings) => {
   }
 });
 
+ipcMain.on('set-represented-file', (event, filename) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  win.setRepresentedFilename(filename || '');
+});
+
+ipcMain.on('set-file-changed', (event, changed) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  win.setDocumentEdited(changed);
+});
+
 ipcMain.on('reload-all', () => {
   for (const window of editorWindows) {
     window.reload();

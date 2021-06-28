@@ -167,6 +167,18 @@ const DesktopHOC = function (WrappedComponent) {
           });
       }
     }
+    componentDidUpdate (prevProps) {
+      if (this.props.projectChanged !== prevProps.projectChanged) {
+        ipcRenderer.send('set-file-changed', this.props.projectChanged);
+      }
+      if (this.props.fileHandle !== prevProps.fileHandle) {
+        if (this.props.fileHandle) {
+          ipcRenderer.send('set-represented-file', this.props.fileHandle.path);
+        } else {
+          ipcRenderer.send('set-represented-file', null);
+        }
+      }
+    }
     handleClickAddonSettings() {
       ipcRenderer.send('open-addon-settings', {
         locale: this.props.locale.split('-')[0]
@@ -214,6 +226,10 @@ const DesktopHOC = function (WrappedComponent) {
     }
   }
   DesktopComponent.propTypes = {
+    fileHandle: PropTypes.shape({
+      // see WrappedFileWritable filesystem-api-impl.js
+      path: PropTypes.string
+    }),
     locale: PropTypes.string,
     loadingState: PropTypes.string,
     onFetchedInitialProjectData: PropTypes.func,
@@ -223,13 +239,16 @@ const DesktopHOC = function (WrappedComponent) {
     onLoadingStarted: PropTypes.func,
     onRequestNewProject: PropTypes.func,
     onSetFileHandle: PropTypes.func,
+    projectChanged: PropTypes.bool,
     vm: PropTypes.shape({
       loadProject: PropTypes.func
     })
   };
   const mapStateToProps = state => ({
+    fileHandle: state.scratchGui.tw.fileHandle,
     locale: state.locales.locale,
     loadingState: state.scratchGui.projectState.loadingState,
+    projectChanged: state.scratchGui.projectChanged,
     vm: state.scratchGui.vm
   });
   const mapDispatchToProps = dispatch => ({
