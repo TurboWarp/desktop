@@ -454,12 +454,6 @@ ipcMain.on('set-file-changed', (event, changed) => {
   win.setDocumentEdited(changed);
 });
 
-ipcMain.on('reload-all', () => {
-  for (const window of editorWindows) {
-    window.reload();
-  }
-});
-
 ipcMain.on('alert', (event, message) => {
   dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
     message: '' + message,
