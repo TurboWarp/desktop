@@ -67,12 +67,6 @@ const handleUpdateProjectTitle = (title) => {
   document.title = title;
 };
 
-const handleVmInit = (vm) => {
-  vm.setCompilerOptions({
-    warpTimer: true
-  });
-};
-
 const getProjectTitle = (file) => {
   const match = file.match(/([^/\\]+)\.sb[2|3]?$/);
   if (!match) return null;
@@ -282,7 +276,6 @@ ReactDOM.render(<WrappedGUI
   isScratchDesktop
   canModifyCloudData={false}
   onStorageInit={handleStorageInit}
-  onVmInit={handleVmInit}
   onUpdateProjectTitle={handleUpdateProjectTitle}
   backpackVisible
   backpackHost="_local_"
