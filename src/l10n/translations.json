@@ -51,6 +51,14 @@
         "tw.desktop.renderer.prompt.ok": "OK",
         "tw.desktop.renderer.source": "Código Fuente"
     },
+    "fi": {
+        "tw.desktop.main.menuBar.learnMore": "Lukke lisää",
+        "tw.desktop.main.menuBar.newWindow": "Uusi ikuuna",
+        "tw.desktop.main.unload.leave": "määne",
+        "tw.desktop.main.unload.stay": "odoota",
+        "tw.desktop.privacy": "Privaatio Polisi",
+        "tw.desktop.renderer.prompt.ok": "OK"
+    },
     "fr": {
         "tw.desktop.about": "À propos",
         "tw.desktop.main.context.copy": "Copier",
@@ -309,6 +317,9 @@
         "tw.desktop.renderer.prompt.cancel": "Prekliči",
         "tw.desktop.renderer.prompt.ok": "V redu",
         "tw.desktop.renderer.source": "Izvirna koda"
+    },
+    "sv": {
+        "tw.desktop.renderer.source": "Källkod"
     },
     "tr": {
         "tw.desktop.about": "Hakkında",
