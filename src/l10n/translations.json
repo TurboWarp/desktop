@@ -365,7 +365,7 @@
         "tw.desktop.main.updater.ignore": "不要再提醒更新",
         "tw.desktop.main.updater.later": "稍后提醒我",
         "tw.desktop.main.updater.message": "有可用的更新：v{version}",
-        "tw.desktop.main.updater.security.detail": "此版本的TurboWarp易受攻击，使您的电脑面临感染风险。我们强烈建议更新。",
+        "tw.desktop.main.updater.security.detail": "此版本的 TurboWarp 易受攻击，使您的电脑面临感染风险。我们强烈建议更新。",
         "tw.desktop.main.updater.security.message": "有可用的重要安全更新：v{version}",
         "tw.desktop.privacy": "隐私政策",
         "tw.desktop.renderer.credits": "鸣谢",
