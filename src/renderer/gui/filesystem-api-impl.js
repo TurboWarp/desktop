@@ -46,8 +46,7 @@ export class WrappedFileHandle {
 
   async getFile () {
     const data = await ipcRenderer.invoke('read-file', this.path);
-    const blob = new Blob([data.buffer]);
-    return new File([blob], this.name);
+    return new File([data], this.name);
   }
 
   async createWritable () {
