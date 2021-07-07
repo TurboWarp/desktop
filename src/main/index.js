@@ -1,4 +1,4 @@
-import {app, BrowserWindow, Menu, ipcMain, shell, dialog, clipboard, screen} from 'electron'
+import {app, BrowserWindow, Menu, ipcMain, shell, dialog, clipboard, screen, net} from 'electron'
 import pathUtil from 'path'
 import fs from 'fs';
 import writeFileAtomic from 'write-file-atomic';
@@ -482,6 +482,30 @@ ipcMain.on('confirm', (event, message) => {
   }) === 0;
   event.returnValue = result;
 });
+
+ipcMain.handle('request-url', (event, url) => new Promise((resolve, reject) => {
+  const request = net.request(url);
+  request.on('response', (response) => {
+    const statusCode = response.statusCode;
+    if (statusCode !== 200) {
+      reject(new Error(`Unexpected status code: ${statusCode}`))
+      return;
+    }
+    const chunks = [];
+    response.on('data', (chunk) => {
+      chunks.push(chunk);
+    });
+    response.on('end', () => {
+      const buffer = Buffer.concat(chunks);
+      const slice = buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
+      resolve(slice);
+    });
+  });
+  request.on('error', (e) => {
+    reject(e);
+  });
+  request.end();
+}));
 
 app.on('window-all-closed', () => {
   app.quit();

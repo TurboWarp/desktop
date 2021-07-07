@@ -82,13 +82,7 @@ const isValidURL = (url) => {
   }
 };
 
-const fetchProjectFromURL = async (url) => {
-  const res = await fetch(url);
-  if (!res.ok) {
-    throw new Error(`Unexpected status code: ${res.status}`);
-  }
-  return res.arrayBuffer();
-};
+const fetchProjectFromURL = (url) => ipcRenderer.invoke('request-url', url);
 
 const readInitialFile = async () => {
   if (isValidURL(fileToOpen)) {
