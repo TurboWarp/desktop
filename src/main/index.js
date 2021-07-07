@@ -452,6 +452,9 @@ ipcMain.on('addon-settings-changed', (event, newSettings) => {
 ipcMain.on('set-represented-file', (event, filename) => {
   const win = BrowserWindow.fromWebContents(event.sender);
   win.setRepresentedFilename(filename || '');
+  if (filename) {
+    app.addRecentDocument(filename);
+  }
 });
 
 ipcMain.on('set-file-changed', (event, changed) => {
