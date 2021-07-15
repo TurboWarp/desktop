@@ -363,7 +363,10 @@ function createPrivacyWindow() {
 }
 
 ipcMain.handle('show-save-dialog', async (event, options) => {
-  const result = await dialog.showSaveDialog(BrowserWindow.fromWebContents(event.sender), options);
+  const result = await dialog.showSaveDialog(BrowserWindow.fromWebContents(event.sender), {
+    filters: options.filters,
+    defaultPath: options.suggestedName
+  });
   if (!result.canceled) {
     allowedToAccessFiles.add(result.filePath);
   }
@@ -371,7 +374,10 @@ ipcMain.handle('show-save-dialog', async (event, options) => {
 });
 
 ipcMain.handle('show-open-dialog', async (event, options) => {
-  const result = await dialog.showOpenDialog(BrowserWindow.fromWebContents(event.sender), options);
+  const result = await dialog.showOpenDialog(BrowserWindow.fromWebContents(event.sender), {
+    filters: options.filters,
+    properties: ['openFile']
+  });
   if (!result.canceled) {
     const [filePath] = result.filePaths;
     allowedToAccessFiles.add(filePath);

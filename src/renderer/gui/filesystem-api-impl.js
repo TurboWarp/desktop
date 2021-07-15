@@ -97,7 +97,7 @@ const storeFilePathInURL = (filePath) => {
 window.showSaveFilePicker = async (options) => {
   const result = await ipcRenderer.invoke('show-save-dialog', {
     filters: typesToFilterList(options.types),
-    defaultPath: options.suggestedName
+    suggestedName: options.suggestedName
   });
 
   if (result.canceled) {
@@ -111,7 +111,6 @@ window.showSaveFilePicker = async (options) => {
 
 window.showOpenFilePicker = async (options) => {
   const result = await ipcRenderer.invoke('show-open-dialog', {
-    properties: ['openFile'],
     filters: typesToFilterList(options.types)
   });
 
