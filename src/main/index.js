@@ -112,6 +112,10 @@ function createWindow(url, options) {
 
   const activeScreen = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
   const bounds = activeScreen.workArea;
+
+  options.width = Math.min(bounds.width, options.width);
+  options.height = Math.min(bounds.height, options.height);
+
   options.x = bounds.x + ((bounds.width - options.width) / 2);
   options.y = bounds.y + ((bounds.height - options.height) / 2);
 
