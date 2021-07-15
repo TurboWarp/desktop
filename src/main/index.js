@@ -7,6 +7,7 @@ import {format as formatUrl} from 'url'
 import checkForUpdate from './update-checker';
 import getTranslation from './translations';
 import './advanced-user-customizations';
+import * as store from './store';
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
@@ -362,13 +363,18 @@ function createPrivacyWindow() {
   return window;
 }
 
+const getLastAccessedDirectory = () => store.get('last_accessed_directory') || '';
+const setLastAccessedFile = (filePath) => store.set('last_accessed_directory', pathUtil.dirname(filePath));
+
 ipcMain.handle('show-save-dialog', async (event, options) => {
   const result = await dialog.showSaveDialog(BrowserWindow.fromWebContents(event.sender), {
     filters: options.filters,
-    defaultPath: options.suggestedName
+    defaultPath: pathUtil.join(getLastAccessedDirectory(), options.suggestedName)
   });
   if (!result.canceled) {
-    allowedToAccessFiles.add(result.filePath);
+    const {filePath} = result;
+    setLastAccessedFile(filePath);
+    allowedToAccessFiles.add(filePath);
   }
   return result;
 });
@@ -376,10 +382,12 @@ ipcMain.handle('show-save-dialog', async (event, options) => {
 ipcMain.handle('show-open-dialog', async (event, options) => {
   const result = await dialog.showOpenDialog(BrowserWindow.fromWebContents(event.sender), {
     filters: options.filters,
-    properties: ['openFile']
+    properties: ['openFile'],
+    defaultPath: getLastAccessedDirectory()
   });
   if (!result.canceled) {
     const [filePath] = result.filePaths;
+    setLastAccessedFile(filePath);
     allowedToAccessFiles.add(filePath);
   }
   return result;
