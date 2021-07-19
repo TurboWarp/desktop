@@ -319,7 +319,29 @@
         "tw.desktop.renderer.source": "Izvirna koda"
     },
     "sv": {
+        "tw.desktop.about": "Om",
+        "tw.desktop.main.context.copy": "Kopiera",
+        "tw.desktop.main.context.cut": "Klipp",
+        "tw.desktop.main.context.openLink": "Öppna länk",
+        "tw.desktop.main.context.paste": "Klistra in",
+        "tw.desktop.main.menuBar.learnMore": "Lär mer",
+        "tw.desktop.main.menuBar.newWindow": "Nytt fönster",
+        "tw.desktop.main.unload.detail": "Alla osparade ändringar kommer att försvinna ",
+        "tw.desktop.main.unload.leave": "Lämna",
+        "tw.desktop.main.unload.message": "Är du säker på att lämna?",
+        "tw.desktop.main.unload.stay": "Stanna",
+        "tw.desktop.main.updater.detail": "Den här uppdateringen kan innehålla nya funktioner eller buggfixar.",
+        "tw.desktop.main.updater.download": "Ladda ner uppdateringen",
+        "tw.desktop.main.updater.ignore": "Påminn mig inte om denna uppdateringen  ",
+        "tw.desktop.main.updater.later": "Påminn mig senare",
+        "tw.desktop.main.updater.message": "En uppdatering är tillgänglig: v {version}",
+        "tw.desktop.main.updater.security.detail": "Denna version av TurboWarp kan vara sårbar för ett utnyttjande som riskerar att infektera din dator. Uppdatering rekommenderas starkt.",
+        "tw.desktop.main.updater.security.message": "En viktig säkerhets uppdatering är tillgänglig: v {version}",
         "tw.desktop.privacy": "Integritetspolicy",
+        "tw.desktop.renderer.credits": "Krediter",
+        "tw.desktop.renderer.failedToLoad": "Kunde inte ladda ner filen: {error}",
+        "tw.desktop.renderer.prompt.cancel": "Avbryt",
+        "tw.desktop.renderer.prompt.ok": "OK",
         "tw.desktop.renderer.source": "Källkod"
     },
     "tr": {
@@ -373,5 +395,9 @@
         "tw.desktop.renderer.prompt.cancel": "取消",
         "tw.desktop.renderer.prompt.ok": "确定",
         "tw.desktop.renderer.source": "源代码"
+    },
+    "zh-tw": {
+        "tw.desktop.privacy": "隱私權政策",
+        "tw.desktop.renderer.source": "原始碼"
     }
 }
