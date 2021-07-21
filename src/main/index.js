@@ -42,6 +42,7 @@ const isSafeOpenExternal = (url) => {
     if (
       parsedUrl.origin === 'https://scratch.mit.edu' ||
       parsedUrl.origin === 'https://desktop.turbowarp.org' ||
+      parsedUrl.origin === 'https://docs.turbowarp.org' ||
       parsedUrl.origin === 'https://github.com'
     ) {
       return true;
