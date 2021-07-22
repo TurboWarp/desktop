@@ -301,16 +301,11 @@
 
     <section class="changelog">
       <div>
-        <h2>Changes from v0.6.0 to v0.7.0</h2>
+        <h2>Changes from v0.7.0 to v0.8.0</h2>
         <ul>
-          <li>New addon: debugger</li>
-          <li>Fixed possible <b>crash and data loss</b> when clicking on certain buttons, such as links in the toolbox</li>
-          <li>The "load restore point" button now asks before deleting your current project, preventing <b>accidental data loss</b></li>
-          <li>Fixed startup crash on some systems</li>
-          <li>Improved addon settings search</li>
-          <li>Significant updates to the "Gamepad support" addon</li>
-          <li>Simplified the default project</li>
-          <li>Various bug fixes and optimizations</li>
+          <li>Some projects run up to 40% faster (but most do not)</li>
+          <li>Various addon updates</li>
+          <li>Various bug fixes</li>
         </ul>
         <p class="os-windows" data-l10n="update.windows">To update, download and run the new installer below.</p>
         <p class="os-mac" data-l10n="update.mac">To update, download and install the new app below.</p>
@@ -603,7 +598,7 @@
     </script>
     <script>
       (function() {
-        var VERSION = '0.7.0';
+        var VERSION = '0.8.0';
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'windows';
