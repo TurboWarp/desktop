@@ -301,13 +301,22 @@
 
     <section class="changelog">
       <div>
-        <h2>Changes from v0.7.0 to v0.8.0</h2>
+        <h2>Changes from v0.8.0 to v0.8.1</h2>
         <ul>
-          <li>Some projects run up to 40% faster (but most do not)</li>
-          <li>Significantly reduced idle power consumption and CPU usage</li>
-          <li>Various addon updates</li>
-          <li>Various bug fixes</li>
+          <li>Fix backpack</li>
+          <li>Fix dropdowns breaking when, for example, the selected costume was deleted</li>
+          <li>Fix a few other bugs</li>
         </ul>
+        <div id="zeroeightzero">
+          <h2>Changes from v0.7.0 to v0.8.0</h2>
+          <ul>
+            <li>Some projects run up to 40% faster (but most do not)</li>
+            <li>Significantly reduced idle power consumption and CPU usage</li>
+            <li>Various addon updates</li>
+            <li>Various bug fixes</li>
+          </ul>
+        </div>
+        <script>if (location.search.includes('from=0.8.0')) document.querySelector('#zeroeightzero').style.display = 'none';</script>
         <p class="os-windows" data-l10n="update.windows">To update, download and run the new installer below.</p>
         <p class="os-mac" data-l10n="update.mac">To update, download and install the new app below.</p>
         <p class="os-linux" data-l10n="update.linux">If you installed TurboWarp Desktop from an app store or package manager such as the Snap Store, wait until the update is pushed to the store. Otherwise, run the new installer below.</p>
@@ -599,7 +608,7 @@
     </script>
     <script>
       (function() {
-        var VERSION = '0.8.0';
+        var VERSION = '0.8.1';
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'windows';
