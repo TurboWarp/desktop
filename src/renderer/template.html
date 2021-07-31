@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-eval' 'unsafe-inline' 'self' blob:; style-src 'unsafe-inline' 'self'; img-src 'self' data:; media-src 'self'; font-src data:; connect-src *">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-eval' 'unsafe-inline' 'self' blob:; style-src 'unsafe-inline' 'self'; img-src 'self' data:; media-src 'self'; font-src data:; connect-src * data: blob:">
     <!-- electron-webpack always inserts some weird scripts, stub require() to avoid errors -->
     <script>
       window.require = (m) => {
