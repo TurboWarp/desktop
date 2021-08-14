@@ -1,4 +1,24 @@
 {
+    "ar": {
+        "tw.desktop.about": "حول",
+        "tw.desktop.main.context.copy": "ينسخ",
+        "tw.desktop.main.context.cut": "يقطع",
+        "tw.desktop.main.context.openLink": "افتح الرابط",
+        "tw.desktop.main.context.paste": "معجون",
+        "tw.desktop.main.menuBar.learnMore": "يتعلم أكثر",
+        "tw.desktop.main.menuBar.newWindow": "نافذة جديدة",
+        "tw.desktop.main.unload.leave": "غادر",
+        "tw.desktop.main.unload.stay": "البقاء",
+        "tw.desktop.main.updater.download": "حمل التحديث",
+        "tw.desktop.main.updater.later": "ذكرني لاحقا",
+        "tw.desktop.main.updater.message": "تحديث متاح: v{version}",
+        "tw.desktop.privacy": "سياسة خاصة",
+        "tw.desktop.renderer.credits": "الاعتمادات",
+        "tw.desktop.renderer.failedToLoad": "تعذر تحميل ملف المشروع: {error}",
+        "tw.desktop.renderer.prompt.cancel": "إلغاء",
+        "tw.desktop.renderer.prompt.ok": "حسنا",
+        "tw.desktop.renderer.source": "مصدر الرمز"
+    },
     "de": {
         "tw.desktop.about": "Infos",
         "tw.desktop.main.context.copy": "Kopieren",
