@@ -172,6 +172,7 @@ const DesktopHOC = function (WrappedComponent) {
     }
     render() {
       const {
+        fileHandle,
         locale,
         loadingState,
         onFetchedInitialProjectData,
