@@ -48,9 +48,18 @@
     "appId": "org.turbowarp.desktop",
     "productName": "TurboWarp",
     "win": {
-      "artifactName": "${productName} Setup ${version}.${ext}",
+      "artifactName": "${productName} Setup ${version} ${arch}.${ext}",
       "icon": "build/icon.ico",
-      "target": "nsis"
+      "target": [
+        {
+          "target": "nsis",
+          "arch": "x64"
+        },
+        {
+          "target": "nsis",
+          "arch": "ia32"
+        }
+      ]
     },
     "nsis": {
       "oneClick": false,
