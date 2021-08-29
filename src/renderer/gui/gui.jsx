@@ -15,6 +15,7 @@ import SettingsStore from 'scratch-gui/src/addons/settings-store-singleton';
 import AddonChannels from 'scratch-gui/src/addons/channels';
 import {WrappedFileHandle} from './filesystem-api-impl';
 import {localeChanged, getTranslation} from './translations';
+import runAddons from 'scratch-gui/src/addons/entry';
 import './gui.css';
 
 class StorageHelper {
@@ -281,7 +282,6 @@ ReactDOM.render(<WrappedGUI
 
 require('./advanced-user-customizations');
 
-// Load addons
-import('scratch-gui/src/addons/entry');
+runAddons();
 
 export default WrappedGUI;
