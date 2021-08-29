@@ -157,6 +157,11 @@
         "tw.desktop.renderer.prompt.ok": "OK",
         "tw.desktop.renderer.source": "ソースコード"
     },
+    "ja-hira": {
+        "tw.desktop.privacy": "プライバシーポリシー",
+        "tw.desktop.renderer.credits": "クレジット",
+        "tw.desktop.renderer.source": "ソースコード"
+    },
     "ko": {
         "tw.desktop.about": "TurboWarp에 대하여",
         "tw.desktop.main.context.copy": "복사",
