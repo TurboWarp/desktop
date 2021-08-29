@@ -3,6 +3,8 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const merge = require('webpack-merge');
 
+process.env.TW_DISABLE_PLAIN_TEXT_LOADER = 'true';
+
 const libraryFilesFolder = path.resolve(__dirname, 'library-files');
 if (!fs.existsSync(libraryFilesFolder)) {
     fs.mkdirSync(libraryFilesFolder);
