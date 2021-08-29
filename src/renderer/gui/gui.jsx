@@ -269,7 +269,9 @@ GUI.setAppElement(appTarget);
 ReactDOM.render(<WrappedGUI
   canEditTitle
   isScratchDesktop
-  canModifyCloudData={false}
+  // Cloud variables can be created, but not used.
+  canModifyCloudData={true}
+  cloudHost="wss://clouddata.turbowarp.org"
   onStorageInit={handleStorageInit}
   onUpdateProjectTitle={handleUpdateProjectTitle}
   backpackVisible
