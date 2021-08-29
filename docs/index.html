@@ -55,7 +55,7 @@
       }
       section > div {
         width: 100%;
-        max-width: 942px;
+        max-width: 700px;
       }
       code, .code {
         font-family: monospace;
@@ -72,18 +72,41 @@
       }
 
       .header {
-        padding-top: 64px;
-        padding-bottom: 64px;
-        color: white;
-        background-color: hsla(0, 100%, 65%, 1);
+        padding-top: 32px;
+        padding-bottom: 32px;
+        color: black;
+        background-color: #ff4c4c;
+        text-align: center;
       }
       .header-title {
-        font-size: 32px;
+        margin: 32px 0;
+        font-size: 48px;
         display: flex;
         align-items: center;
+        justify-content: center;
+        font-weight: normal;
       }
       .header-title svg {
-        margin-right: 5px;
+        margin: 0 20px 0 0;
+        filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.25));
+        width: 96px;
+        height: 96px;
+        min-width: 96px;
+        min-height: 96px;
+      }
+      @media (max-width: 400px) {
+        .header-title {
+          flex-direction: column;
+          margin-top: 0;
+        }
+        .header-title svg {
+          margin: 0 0 20px 0;
+        }
+      }
+      .header-subtitles > * {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 700px;
       }
       .header a {
         color: inherit;
@@ -102,44 +125,45 @@
       }
 
       .select-os {
-        box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
         background: white;
         position: relative;
         z-index: 99;
         margin-bottom: 32px;
       }
       .select-os-inner {
-        margin: 20px 0;
         display: flex;
         align-items: center;
+        justify-content: center;
         flex-wrap: wrap;
         white-space: nowrap;
       }
-      .select-os-label {
-        margin-right: 16px;
-        font-weight: bold;
-      }
       .select-os-buttons {
+        margin-top: 16px;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+        justify-content: center;
       }
       .select-os-buttons button {
+        margin: 0 16px 16px 0;
         border: 0;
         cursor: pointer;
         color: white;
         font-size: .8rem;
         font-weight: bold;
         font-family: inherit;
-        margin-right: 16px;
         border-radius: 26px;
         background-color: rgba(0, 0, 0, 0.3);
         padding: 8px 18px;
         display: flex;
         align-items: center;
       }
+      .select-os-buttons button:hover {
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+      }
       .select-os-buttons button:active {
-        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.8);
       }
       .os-button-icon {
         margin-right: 5px;
@@ -150,7 +174,8 @@
       [os="mac"] .os-button-mac,
       [os="linux"] .os-button-linux,
       [os="chrome"] .os-button-chrome {
-        background-color: hsla(0, 100%, 65%, 1);
+        background-color: #ff4c4c;
+        color: black;
       }
 
       .os {
@@ -162,37 +187,91 @@
       body:not([os="chrome"]) .os-chrome {
         display: none;
       }
-      .steps {
-        display: flex;
-        flex-direction: column;
-        margin: 0;
-        padding: 0;
-      }
-      .step {
-        display: flex;
-        margin-bottom: 20px;
-      }
-      .step-number {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        color: white;
-        background-color: hsla(0, 100%, 65%, 1);
-        border-radius: 100%;
-        width: 32px;
-        height: 32px;
-        margin-right: 20px;
-      }
-      .step-content {
-        margin-top: 8px;
-      }
+
       .command::before {
         content: "$ ";
       }
 
-      .faq {
+      .download-button-outer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .download-button-inner {
+        display: flex;
+        align-items: center;
+        background-image: linear-gradient(#ff9494, #ff4c4c);
+        color: black !important;
+        text-decoration: none !important;
+        padding: 12px 18px;
+        font-weight: bold;
+        border-radius: 5px;
+      }
+      .download-button-inner:hover {
+        background-image: linear-gradient(#ff7979, #ff4c4c);
+      }
+      .download-button-inner:active {
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.6) inset;
+        background-image: linear-gradient(#ff5d5d, #ff4c4c);
+      }
+      .download-icon {
+        /* Icon from https://fontawesome.com/v5.15/icons/download?style=solid */
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="black" d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path></svg>');
+        margin-right: 10px;
+        width: 16px;
+        height: 16px;
+        min-width: 16px;
+        min-height: 16px;
+      }
+      .install-help {
+        margin: 32px 0 0 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .install-help p {
+        margin: 0 0 16px 0;
+      }
+
+      .icon {
+        background-color: #ff4c4c;
+        color: black;
+        width: 32px;
+        height: 32px;
+        margin: 0 12px;
+        border-radius: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .icon svg {
+        width: 20px;
+        height: 20px;
+      }
+      .links {
         margin-bottom: 32px;
+      }
+      .links-inner {
+        columns: 2;
+        column-gap: 0;
+      }
+      @media (max-width: 550px) {
+        .links-inner {
+          columns: 1;
+        }
+      }
+      .link {
+        color: inherit;
+        display: flex;
+        align-items: center;
+        padding: 15px 0;
+        transition: .2s background-color;
+      }
+      .link:hover {
+        background-color: #eee;
       }
 
       .picture-container {
@@ -212,9 +291,13 @@
         padding-top: 4px;
       }
 
+      :focus-visible {
+        outline: 2px solid black;
+      }
+
       @media (prefers-color-scheme: dark) {
         body {
-          background: #111;
+          background: #171717;
           color: #eee;
         }
         a {
@@ -230,11 +313,14 @@
           border-color: #333;
         }
         .select-os {
-          box-shadow: 0 0 3px rgba(255, 255, 255, 0.25);
-          background: #171717;
+          box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+          background: #1a1a1a;
         }
         .select-os-inner button {
           background-color: rgba(255, 255, 255, 0.2);
+        }
+        .link:hover {
+          background-color: #333;
         }
         .picture-dark {
           display: block;
@@ -242,15 +328,24 @@
         .picture-light {
           display: none;
         }
+        :focus-visible {
+          outline: 2px solid white;
+        }
       }
     </style>
   </head>
+
+  <!--
+    Some icons are from Font Awesome https://fontawesome.com/
+    For license information, visit https://creativecommons.org/licenses/by/4.0/
+    Icons have been minified by hand.
+  -->
 
   <body os="">
     <section class="header visible-loading">
       <div>
         <h1 class="header-title">
-          <svg aria-hidden="true" viewBox="0 0 1024 1024" height="64px" width="64px">
+          <svg aria-hidden="true" viewBox="0 0 1024 1024">
             <path d="m64 174.86735v641.13265c0 35.34622 28.653776 64 64 64h113.30332c9.32935 0 18.19416 4.07135 24.27337 11.14807l67.26992 78.30776c12.15843 14.15343 29.88806 22.29614 48.54676 22.29614h261.21326c18.6587 0 36.38832-8.14271 48.54676-22.29614l67.26992-78.30776c6.07921-7.07672 14.94402-11.14807 24.27337-11.14807h113.30332c35.34622 0 64-28.65378 64-64v-654.84694c0-35.34622-28.65378-64-64-64-0.38091 0-0.76182 0.0034-1.14268 0.0102l-767.99999 13.71429c-34.89522 0.62313-62.85733 29.08902-62.85733 63.9898z" fill="#cc3c3c" fill-rule="evenodd"/>
             <path d="m64 96v672c0 35.34622 28.653776 64 64 64h128.17394c9.97413 0 19.37789 4.65076 25.43168 12.5776l51.18313 67.01917c12.1076 15.85368 30.9151 25.1552 50.86336 25.1552h256.69578c19.94826 0 38.75576-9.30152 50.86336-25.1552l51.18312-67.01917c6.0538-7.92684 15.45756-12.5776 25.43169-12.5776h128.17394c35.34622 0 64-28.65378 64-64v-672c0-35.346224-28.65378-64-64-64h-768c-35.346224 0-64 28.653776-64 64z" fill="#ff4c4c" fill-rule="evenodd"/>
             <path d="m96 96v672c0 17.67311 14.32689 32 32 32h128.17394c19.94827 0 38.75577 9.30152 50.86337 25.1552l51.18312 67.01917c6.0538 7.92684 15.45755 12.5776 25.43168 12.5776h256.69578c9.97413 0 19.37788-4.65076 25.43168-12.5776l51.18312-67.01917c12.1076-15.85368 30.9151-25.1552 50.86337-25.1552h128.17394c17.67311 0 32-14.32689 32-32v-672c0-17.673112-14.32689-32-32-32h-768c-17.67311 0-32 14.326888-32 32zm-32 0c0-35.346224 28.653776-64 64-64h768c35.34622 0 64 28.653776 64 64v672c0 35.34622-28.65378 64-64 64h-128.17394c-9.97413 0-19.37789 4.65076-25.43169 12.5776l-51.18312 67.01917c-12.1076 15.85368-30.9151 25.1552-50.86336 25.1552h-256.69578c-19.94826 0-38.75576-9.30152-50.86336-25.1552l-51.18313-67.01917c-6.05379-7.92684-15.45755-12.5776-25.43168-12.5776h-128.17394c-35.346224 0-64-28.65378-64-64z" fill="#fff" fill-opacity=".2"/>
@@ -266,15 +361,16 @@
           </svg>
           <div>TurboWarp Desktop</div>
         </h1>
-        <noscript><p>This page requires JavaScript.</p></noscript>
-        <p data-l10n="header.subtitle" class="transparent-loading">Use <a href="https://turbowarp.org" data-notranslate>TurboWarp</a>, the Scratch mod with a compiler, dark mode, addons, and more, from an app on your desktop. It even works when you're offline.</p>
-        <p class="transparent-loading"><i data-l10n="header.affiliation">TurboWarp is not affiliated with Scratch, the Scratch Team, or the Scratch Foundation.</i></p>
+        <div class="header-subtitles">
+          <noscript><p>This page requires JavaScript.</p></noscript>
+          <p data-l10n="header.subtitle" class="transparent-loading">Use <a href="https://turbowarp.org" data-notranslate>TurboWarp</a>, the Scratch mod with a compiler, dark mode, addons, and more, from an app on your desktop. It even works when you're offline.</p>
+          <p class="transparent-loading"><i data-l10n="header.affiliation">TurboWarp is not affiliated with Scratch, the Scratch Team, or the Scratch Foundation.</i></p>
+        </div>
       </div>
     </section>
 
     <section class="select-os" id="select-os">
       <div class="select-os-inner">
-        <span class="select-os-label" data-l10n="select">Choose your OS:</span>
         <div class="select-os-buttons">
           <!-- All icons from https://fontawesome.com/ -->
           <!-- https://creativecommons.org/licenses/by/4.0/ -->
@@ -337,56 +433,42 @@
 
     <section class="os os-windows">
       <div>
-        <h2 data-l10n="windows.header">Install TurboWarp Desktop for Windows</h2>
-        <ol class="steps">
-          <li class="step">
-            <div class="step-number">1</div>
-            <div class="step-content">
-              <a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Setup-{version}.exe" data-l10n="windows.download">Download the installer.</a>
-            </div>
-          </li>
-          <li class="step">
-            <div class="step-number">2</div>
-            <div class="step-content" data-l10n="windows.run">Run the .exe file.</div>
-          </li>
-          <li class="step">
-            <div class="step-number">3</div>
-            <div class="step-content" data-l10n="windows.smartscreen">If a Windows SmartScreen alert appears, click "More info" then "Run anyways"</div>
-          </li>
-        </ol>
+        <div class="download-button-outer">
+          <a class="download-button-inner" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Setup-{version}.exe">
+            <div class="download-icon"></div>
+            <div data-l10n="win.download">Download for Windows (64-bit)</div>
+          </a>
+        </div>
+
+        <div class="install-help">
+          <div data-l10n="win.help">If a Windows SmartScreen alert appears, click "More info" then "Run anyways".</div>
+        </div>
       </div>
     </section>
 
     <section class="os os-mac">
       <div>
-        <h2 data-l10n="mac.header">Install TurboWarp Desktop for macOS</h2>
-        <ol class="steps">
-          <li class="step">
-            <div class="step-number">1</div>
-            <div class="step-content">
-              <a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Setup-{version}.dmg" data-l10n="mac.step1">Download the installer.</a>
-            </div>
-          </li>
-          <li class="step">
-            <div class="step-number">2</div>
-            <div class="step-content" data-l10n="mac.step2">Open the .dmg file. Move TurboWarp Desktop into Applications.</div>
-          </li>
-          <li class="step">
-            <div class="step-number">3</div>
-            <div class="step-content" data-l10n="mac.step3">
-              Our binaries are <a href="https://github.com/TurboWarp/desktop/issues/4">not notarized</a>, so additional steps are required. Open Finder, navigate to Applications, right click TurboWarp Desktop and select "Open" and then "Open" again.
-            </div>
-          </li>
-        </ol>
+        <div class="download-button-outer">
+          <a class="download-button-inner" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Setup-{version}.dmg">
+            <div class="download-icon"></div>
+            <div data-l10n="mac.download">Download for macOS (Universal)</div>
+          </a>
+        </div>
+
+        <div class="install-help">
+          <div data-l10n="mac.help">If a Gatekeeper prompt appears, open Finder, navigate to Applications, right click TurboWarp and select "Open" and then "Open" again.</div>
+        </div>
       </div>
     </section>
 
     <section class="os os-linux">
       <div>
-        <h2 data-l10n="linux.header">Automated installer</h2>
-        <p data-l10n="linux.run">Run this in a terminal:</p>
+        <p data-l10n="linux.choices">Linux users have some choices.</p>
+        <hr>
+
+        <h2 data-l10n="linux.terminal">Run this in a terminal</h2>
         <p><code class="command">sudo bash -c "$(wget -qO- https://desktop.turbowarp.org/install.sh)"</code></p>
-        <p data-l10n="linux.run2">Should work on any distribution and system. If it doesn't work, please <a href="https://github.com/TurboWarp/desktop/issues/new">let us know</a> (include the full log). Alternative downloads are available below.</p>
+        <p data-l10n="linux.anywhere">Works on any distribution.</p>
         <hr>
 
         <h2>Snap Store</h2>
@@ -398,72 +480,83 @@
         </p>
         <hr>
 
-        <h2 data-l10n="linux.manual">Manual installation</h2>
-        <p>deb files for Debian, Ubuntu, Linux Mint, Raspberry Pi OS, etc.:</p>
+        <h2>Debian, Ubuntu, Raspberry Pi OS, etc.:</h2>
         <ul>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-amd64-{version}.deb">x86 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-i386-{version}.deb">x86 32-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.deb">ARM 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.deb">ARMv7l</a></li>
         </ul>
-        <p>AppImage files:</p>
+        <hr>
+
+        <h2>AppImage</h2>
         <ul>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-x86_64-{version}.AppImage">x86 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-i386-{version}.AppImage">x86 32-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.AppImage">ARM 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.AppImage">ARMv7l</a></li>
         </ul>
-        <p>tar.gz files:</p>
+        <hr>
+
+        <h2>Tarball</h2>
         <ul>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-x64-{version}.tar.gz">x86 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-ia32-{version}.tar.gz">x86 32-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.tar.gz">ARM 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.tar.gz">ARMv7l</a></li>
         </ul>
+        <hr>
+
+        <h2 data-l10n="linux.uninstall">Uninstall</h2>
+        <p><code class="command">sudo bash -c "$(wget -qO- https://desktop.turbowarp.org/uninstall.sh)"</code></p>
       </div>
     </section>
 
     <section class="os os-chrome">
       <div>
-        <h2 data-l10n="chrome.header">Install TurboWarp as a PWA</h2>
-        <ol class="steps">
-          <li class="step">
-            <div class="step-number">1</div>
-            <div class="step-content">
-              <a data-href="https://turbowarp.org/" data-l10n="chrome.step1">Visit the TurboWarp website.</a>
-            </div>
-          </li>
-          <li class="step">
-            <div class="step-number">2</div>
-            <div class="step-content">
-              <div data-l10n="chrome.step2">Press the install button in the URL bar. It may take a few seconds to appear.</div>
-              <img data-src="pwa-install.png" width="620" height="258">
-            </div>
-          </li>
-        </ol>
+        <div class="download-button-outer">
+          <a class="download-button-inner" href="https://turbowarp.org/" target="_blank" rel="noopener">
+            <div data-l10n="pwa.open">Open the TurboWarp Website</div>
+          </a>
+        </div>
+
+        <div class="install-help">
+          <p data-l10n="pwa.help">Then press the install button in the URL. It may take a few seconds to appear.</p>
+          <img data-src="pwa-install.png" width="620" height="258">
+        </div>
       </div>
     </section>
 
-    <section class="faq">
-      <div class="faq-questions">
-        <div class="faq-question">
-          <p data-l10n="bugs">Bugs should be reported <a href="https://github.com/TurboWarp/desktop/issues">on GitHub</a> or <a href="https://scratch.mit.edu/users/GarboMuffin/#comments">on Scratch</a>.</p>
-        </div>
-
-        <div class="faq-question">
-          <h2 data-l10n="faq.speed.header">Is TurboWarp Desktop faster than regular TurboWarp?</h2>
-          <p data-l10n="faq.speed.answer">Usually not, but it may be more stable as your computer won't unload it to save memory.</p>
-        </div>
-
-        <div class="faq-question">
-          <h2 data-l10n="faq.privacy.header">Privacy policy</h2>
-          <p data-l10n="faq.privacy.answer">Please read the <a href="privacy.html">very short privacy policy</a>.</p>
-        </div>
-
-        <div class="faq-question">
-          <h2 data-l10n="faq.source.header">Source code</h2>
-          <p data-l10n="faq.source.answer">TurboWarp's source code is <a data-href="https://github.com/TurboWarp/">on GitHub</a>. TurboWarp Desktop is licensed under the GNU General Public License v3.0.</p>
-        </div>
+    <section class="links">
+      <div class="links-inner">
+        <a class="link" href="https://github.com/TurboWarp/desktop/">
+          <div class="icon">
+            <!-- Icon from https://fontawesome.com/v5.15/icons/code?style=solid -->
+            <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 640 512"><path fill="currentColor" d="M278.9 511.5l-61-17.7c-6.4-1.8-10-8.5-8.2-14.9L346.2 8.7c1.8-6.4 8.5-10 14.9-8.2l61 17.7c6.4 1.8 10 8.5 8.2 14.9L293.8 503.3c-1.9 6.4-8.5 10.1-14.9 8.2zm-114-112.2l43.5-46.4c4.6-4.9 4.3-12.7-.8-17.2L117 256l90.6-79.7c5.1-4.5 5.5-12.3.8-17.2l-43.5-46.4c-4.5-4.8-12.1-5.1-17-.5L3.8 247.2c-5.1 4.7-5.1 12.8 0 17.5l144.1 135.1c4.9 4.6 12.5 4.4 17-.5zm327.2.6l144.1-135.1c5.1-4.7 5.1-12.8 0-17.5L492.1 112.1c-4.8-4.5-12.4-4.3-17 .5L431.6 159c-4.6 4.9-4.3 12.7.8 17.2L523 256l-90.6 79.7c-5.1 4.5-5.5 12.3-.8 17.2l43.5 46.4c4.5 4.9 12.1 5.1 17 .6z"></path></svg>
+          </div>
+          <div data-l10n="source">Source code</div>
+        </a>
+        <a class="link" href="privacy.html">
+          <div class="icon">
+            <!-- Icon from https://fontawesome.com/v5.15/icons/file?style=solid -->
+            <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 384 512"><path fill="currentColor" d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg>
+          </div>
+          <div data-l10n="privacy">Privacy policy</div>
+        </a>
+        <a class="link" href="https://scratch.mit.edu/users/GarboMuffin/#comments">
+          <div class="icon">
+            <!-- Icon from https://fontawesome.com/v5.15/icons/bug?style=solid -->
+            <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 512 512"><path fill="currentColor" d="M511.988 288.9c-.478 17.43-15.217 31.1-32.653 31.1H424v16c0 21.864-4.882 42.584-13.6 61.145l60.228 60.228c12.496 12.497 12.496 32.758 0 45.255-12.498 12.497-32.759 12.496-45.256 0l-54.736-54.736C345.886 467.965 314.351 480 280 480V236c0-6.627-5.373-12-12-12h-24c-6.627 0-12 5.373-12 12v244c-34.351 0-65.886-12.035-90.636-32.108l-54.736 54.736c-12.498 12.497-32.759 12.496-45.256 0-12.496-12.497-12.496-32.758 0-45.255l60.228-60.228C92.882 378.584 88 357.864 88 336v-16H32.666C15.23 320 .491 306.33.013 288.9-.484 270.816 14.028 256 32 256h56v-58.745l-46.628-46.628c-12.496-12.497-12.496-32.758 0-45.255 12.498-12.497 32.758-12.497 45.256 0L141.255 160h229.489l54.627-54.627c12.498-12.497 32.758-12.497 45.256 0 12.496 12.497 12.496 32.758 0 45.255L424 197.255V256h56c17.972 0 32.484 14.816 31.988 32.9zM257 0c-61.856 0-112 50.144-112 112h224C369 50.144 318.856 0 257 0z"></path></svg>
+          </div>
+          <div data-l10n="scratchBugs">Report bugs on Scratch</div>
+        </a>
+        <a class="link" href="https://github.com/TurboWarp/desktop/issues">
+          <div class="icon">
+            <!-- Icon from https://fontawesome.com/v5.15/icons/bug?style=solid -->
+            <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 512 512"><path fill="currentColor" d="M511.988 288.9c-.478 17.43-15.217 31.1-32.653 31.1H424v16c0 21.864-4.882 42.584-13.6 61.145l60.228 60.228c12.496 12.497 12.496 32.758 0 45.255-12.498 12.497-32.759 12.496-45.256 0l-54.736-54.736C345.886 467.965 314.351 480 280 480V236c0-6.627-5.373-12-12-12h-24c-6.627 0-12 5.373-12 12v244c-34.351 0-65.886-12.035-90.636-32.108l-54.736 54.736c-12.498 12.497-32.759 12.496-45.256 0-12.496-12.497-12.496-32.758 0-45.255l60.228-60.228C92.882 378.584 88 357.864 88 336v-16H32.666C15.23 320 .491 306.33.013 288.9-.484 270.816 14.028 256 32 256h56v-58.745l-46.628-46.628c-12.496-12.497-12.496-32.758 0-45.255 12.498-12.497 32.758-12.497 45.256 0L141.255 160h229.489l54.627-54.627c12.498-12.497 32.758-12.497 45.256 0 12.496 12.497 12.496 32.758 0 45.255L424 197.255V256h56c17.972 0 32.484 14.816 31.988 32.9zM257 0c-61.856 0-112 50.144-112 112h224C369 50.144 318.856 0 257 0z"></path></svg>
+          </div>
+          <div data-l10n="githubBugs">Report bugs on GitHub</div>
+        </a>
       </div>
     </section>
 
