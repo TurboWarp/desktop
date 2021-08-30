@@ -24,7 +24,7 @@ if [ "$(whoami)" != "root" ]; then
     fatal "Must be run as root."
 fi
 
-VERSION="0.8.1"
+VERSION="0.9.0"
 ARCH="$(uname -m)"
 echo "Version: $VERSION"
 echo "System archictecture: $ARCH"

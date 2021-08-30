@@ -416,22 +416,16 @@
 
     <section class="changelog">
       <div>
-        <h2>Changes from v0.8.0 to v0.8.1</h2>
+        <h2>Changes from v0.8.1 to v0.9.0</h2>
         <ul>
-          <li>Fix backpack</li>
-          <li>Fix dropdowns breaking when, for example, the selected costume was deleted</li>
-          <li>Fix a few other bugs</li>
+          <li>New addon: Paint costume by default</li>
+          <li>New addon: Hide delete button</li>
+          <li>New addon: Do not automatically space overlapping scripts</li>
+          <li class="os-windows">Windows: We now support 32-bit systems</li>
+          <li>You can now create cloud variables. However, they won't actually work unless uploaded to Scratch or a tool such as the TurboWarp Packager</li>
+          <li>Various bug fixes</li>
+          <li>Updated translations</li>
         </ul>
-        <div id="zeroeightzero">
-          <h2>Changes from v0.7.0 to v0.8.0</h2>
-          <ul>
-            <li>Some projects run up to 40% faster (but most do not)</li>
-            <li>Significantly reduced idle power consumption and CPU usage</li>
-            <li>Various addon updates</li>
-            <li>Various bug fixes</li>
-          </ul>
-        </div>
-        <script>if (location.search.includes('from=0.8.0')) document.querySelector('#zeroeightzero').style.display = 'none';</script>
         <p class="os-windows" data-l10n="update.windows">To update, download and run the new installer below.</p>
         <p class="os-mac" data-l10n="update.mac">To update, download and install the new app below.</p>
         <p class="os-linux" data-l10n="update.linux">If you installed TurboWarp Desktop from an app store or package manager such as the Snap Store, wait until the update is pushed to the store. Otherwise, run the new installer below.</p>
@@ -441,14 +435,15 @@
     <section class="os os-windows">
       <div>
         <div class="download-button-outer">
-          <a class="download-button-inner" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Setup-{version}.exe">
+          <a class="download-button-inner" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Setup-{version}-x64.exe">
             <div class="download-icon"></div>
             <div data-l10n="win.download">Download for Windows (64-bit)</div>
           </a>
         </div>
 
         <div class="install-help">
-          <div data-l10n="win.help">If a Windows SmartScreen alert appears, click "More info" then "Run anyways".</div>
+          <p><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Setup-{version}-ia32.exe" data-l10n="win.32">Alternative download for 32-bit systems</a></p>
+          <p data-l10n="win.help">If a Windows SmartScreen alert appears, click "More info" then "Run anyways".</p>
         </div>
       </div>
     </section>
@@ -719,7 +714,7 @@
     </script>
     <script>
       (function() {
-        var VERSION = '0.8.1';
+        var VERSION = '0.9.0';
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'windows';
