@@ -39,15 +39,23 @@ const isSafeOpenExternal = (url) => {
   try {
     const parsedUrl = new URL(url);
     // Don't allow file:// or other unsafe protocols
-    // Eventually this should be locked down further
     if (
-      parsedUrl.origin === 'https://scratch.mit.edu' ||
-      parsedUrl.origin === 'https://desktop.turbowarp.org' ||
-      parsedUrl.origin === 'https://docs.turbowarp.org' ||
-      parsedUrl.origin === 'https://github.com'
+      parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:'
     ) {
-      return true;
+      return false;
     }
+    // We want to be extra careful, so we'll also limit the domains
+    // Not sure if this really does anything meaningful...
+    if (
+      parsedUrl.origin !== 'https://scratch.mit.edu' &&
+      parsedUrl.origin !== 'https://desktop.turbowarp.org' &&
+      parsedUrl.origin !== 'https://docs.turbowarp.org' &&
+      parsedUrl.origin !== 'https://github.com' &&
+      parsedUrl.href !== 'https://www.youtube.com/griffpatch'
+    ) {
+      return false;
+    }
+    return true;
   } catch (e) {
     // ignore
   }
