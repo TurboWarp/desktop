@@ -3,7 +3,8 @@ import pathUtil from 'path'
 import fs from 'fs';
 import writeFileAtomic from 'write-file-atomic';
 import util from 'util';
-import {format as formatUrl} from 'url'
+import {format as formatUrl} from 'url';
+import manifest from '../../package.json';
 import checkForUpdate from './update-checker';
 import getTranslation from './translations';
 import './advanced-user-customizations';
@@ -559,6 +560,15 @@ app.on('web-contents-created', (event, contents) => {
     }
   });
 });
+
+// We might have a user agent like:
+// Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) turbowarp-desktop/0.8.0 Chrome/91.0.4472.124 Electron/13.1.7 Safari/537.36
+// We want to remove the Electron/ and turbowarp-desktop/ parts.
+app.userAgentFallback = app.userAgentFallback
+  .replace(/Electron\/[0-9.]+/, '')
+  .replace(`${manifest.name}/${manifest.version}`, '')
+  .replace(/ {2,}/g, ' '); 
+console.log(app.userAgentFallback);
 
 function parseArgv(argv) {
   // argv in production: ["turbowarp.exe", "..."]
