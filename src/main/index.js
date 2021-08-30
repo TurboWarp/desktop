@@ -568,7 +568,6 @@ app.userAgentFallback = app.userAgentFallback
   .replace(/Electron\/[0-9.]+/, '')
   .replace(`${manifest.name}/${manifest.version}`, '')
   .replace(/ {2,}/g, ' '); 
-console.log(app.userAgentFallback);
 
 function parseArgv(argv) {
   // argv in production: ["turbowarp.exe", "..."]
