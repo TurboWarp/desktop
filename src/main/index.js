@@ -181,6 +181,21 @@ function createWindow(url, options) {
         e.preventDefault();
         window.webContents.setZoomLevel(0);
       }
+      // F11 to toggle fullscreen
+      if (
+        input.key === 'F11'
+      ) {
+        e.preventDefault();
+        window.setFullScreen(!window.isFullScreen());
+      }
+      // Escape to exit fullscreen
+      if (
+        input.key === 'Escape' &&
+        window.isFullScreen()
+      ) {
+        e.preventDefault();
+        window.setFullScreen(false);
+      }
     });
   }
 
