@@ -161,6 +161,7 @@ function createWindow(url, options) {
         input.control &&
         input.key === '='
       ) {
+        e.preventDefault();
         window.webContents.setZoomLevel(window.webContents.getZoomLevel() + 1);
       }
       // Ctrl+Minus/Underscore to zoom out
@@ -168,6 +169,7 @@ function createWindow(url, options) {
         input.control &&
         input.key === '-'
       ) {
+        e.preventDefault();
         window.webContents.setZoomLevel(window.webContents.getZoomLevel() - 1);
       }
       // Ctrl+0 to reset zoom
@@ -175,6 +177,7 @@ function createWindow(url, options) {
         input.control &&
         input.key === '0'
       ) {
+        e.preventDefault();
         window.webContents.setZoomLevel(0);
       }
     });
