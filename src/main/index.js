@@ -156,6 +156,27 @@ function createWindow(url, options) {
         e.preventDefault();
         createEditorWindow();
       }
+      // Ctrl+Equals/Plus to zoom in
+      if (
+        input.control &&
+        input.key === '='
+      ) {
+        window.webContents.setZoomLevel(window.webContents.getZoomLevel() + 1);
+      }
+      // Ctrl+Minus/Underscore to zoom out
+      if (
+        input.control &&
+        input.key === '-'
+      ) {
+        window.webContents.setZoomLevel(window.webContents.getZoomLevel() - 1);
+      }
+      // Ctrl+0 to reset zoom
+      if (
+        input.control &&
+        input.key === '0'
+      ) {
+        window.webContents.setZoomLevel(0);
+      }
     });
   }
 
