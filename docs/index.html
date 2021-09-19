@@ -200,6 +200,7 @@
         align-items: center;
         justify-content: center;
         text-align: center;
+        margin: 0 0 32px 0;
       }
       .download-button-inner {
         display: flex;
@@ -228,7 +229,6 @@
         min-height: 16px;
       }
       .install-help {
-        margin: 32px 0 0 0;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -441,8 +441,14 @@
           </a>
         </div>
 
+        <div class="download-button-outer">
+          <a class="download-button-inner" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Setup-{version}-ia32.exe">
+            <div class="download-icon"></div>
+            <div data-l10n="win.32">Alternative download for 32-bit systems</div>
+          </a>
+        </div>
+
         <div class="install-help">
-          <p><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Setup-{version}-ia32.exe" data-l10n="win.32">Alternative download for 32-bit systems</a></p>
           <p data-l10n="win.help">If a Windows SmartScreen alert appears, click "More info" then "Run anyways".</p>
         </div>
       </div>
