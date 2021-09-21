@@ -450,6 +450,8 @@
         "tw.desktop.renderer.source": "源代码"
     },
     "zh-tw": {
+        "tw.desktop.about": "關於",
+        "tw.desktop.main.menuBar.newWindow": "新視窗",
         "tw.desktop.privacy": "隱私權政策",
         "tw.desktop.renderer.source": "原始碼"
     }
