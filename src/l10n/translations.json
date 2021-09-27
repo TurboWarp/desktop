@@ -85,7 +85,7 @@
         "tw.desktop.main.unload.stay": "Permanecer",
         "tw.desktop.main.updater.detail": "Esta actualización puede contener nuevas funciones y arreglos de bugs.",
         "tw.desktop.main.updater.download": "Descargar actualización",
-        "tw.desktop.main.updater.ignore": "No me recuerdes de nuevo de esta actualizació",
+        "tw.desktop.main.updater.ignore": "No me recuerdes de nuevo de esta actualización",
         "tw.desktop.main.updater.later": "Recuérdeme más tarde",
         "tw.desktop.main.updater.message": "Actualización disponible: v{version}",
         "tw.desktop.main.updater.security.detail": "Esta versión de TurboWarp puede ser vulnerable a un exploit que pone a su computadora en riesgo de una infección. Se recomienda altamente actualizar.",
