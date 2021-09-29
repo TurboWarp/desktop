@@ -11,6 +11,7 @@ const FORCE_UPDATE = false;
 
 const IGNORE_UPDATE_KEY = 'ignore_update';
 const CURRENT_VERSION_KEY = 'version';
+const DISABLE_UPDATE_KEY = 'disable_update_checker';
 
 function log(...args) {
   console.log('update checker:', ...args);
@@ -106,6 +107,9 @@ function urgentUpdateAvailable(latestVersion) {
 function checkForUpdate() {
   // Snap handles updates on its own
   if (process.env.SNAP) {
+    return;
+  }
+  if (get(DISABLE_UPDATE_KEY)) {
     return;
   }
   set(CURRENT_VERSION_KEY, version);
