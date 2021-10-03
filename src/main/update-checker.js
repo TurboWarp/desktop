@@ -105,6 +105,7 @@ function urgentUpdateAvailable(latestVersion) {
 }
 
 function checkForUpdate() {
+  return;
   // Snap handles updates on its own
   if (process.env.SNAP) {
     return;

@@ -58,8 +58,19 @@
         {
           "target": "nsis",
           "arch": "ia32"
+        },
+        {
+          "target": "appx",
+          "arch": "x64"
         }
       ]
+    },
+    "appx": {
+      "applicationId": "TurboWarp",
+      "displayName": "TurboWarp",
+      "identityName": "45747ThomasWeber.TurboWarpDesktop",
+      "publisher": "CN=18FA7D4F-01BF-49F2-BF56-782DCEA49C69",
+      "publisherDisplayName": "Thomas Weber"
     },
     "nsis": {
       "oneClick": false,
