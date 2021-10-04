@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const merge = require('webpack-merge');
+const DefinePlugin = require('webpack').DefinePlugin;
 
 process.env.TW_DISABLE_PLAIN_TEXT_LOADER = 'true';
 
@@ -74,7 +75,12 @@ module.exports = defaultConfig => {
                     to: 'library-files'
                 }
                 // TODO: copy extension worker?
-            ])
+            ]),
+            ...(process.env.TW_DISABLE_UPDATE_CHECKER ? [
+                new DefinePlugin({
+                    'process.env.TW_DISABLE_UPDATE_CHECKER': '"1"'
+                })
+            ] : [])
         ],
         resolve: {
             alias: {
