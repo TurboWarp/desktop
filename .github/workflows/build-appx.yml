@@ -23,8 +23,8 @@ jobs:
       env:
         NODE_OPTIONS: --max-old-space-size=4096
         TW_DISABLE_UPDATE_CHECKER: "1"
-    - name: Package and Publish
-      run: npx --no-install electron-builder --windows appx
+    - name: Package
+      run: npx --no-install electron-builder --windows appx --publish never
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
