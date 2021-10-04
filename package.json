@@ -70,7 +70,8 @@
       "displayName": "TurboWarp",
       "identityName": "45747ThomasWeber.TurboWarpDesktop",
       "publisher": "CN=18FA7D4F-01BF-49F2-BF56-782DCEA49C69",
-      "publisherDisplayName": "Thomas Weber"
+      "publisherDisplayName": "Thomas Weber",
+      "showNameOnTiles": true
     },
     "nsis": {
       "oneClick": false,
