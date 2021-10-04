@@ -109,6 +109,11 @@ function checkForUpdate() {
   if (process.env.SNAP) {
     return;
   }
+  // Updates can be disabled via build-time or runtime environment variable
+  if (process.env.TW_DISABLE_UPDATE_CHECKER) {
+    return;
+  }
+  // Updates can be disabled via config
   if (get(DISABLE_UPDATE_KEY)) {
     return;
   }
