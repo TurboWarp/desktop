@@ -1,10 +1,12 @@
+# TODO: merge this into release.yml once we know it works
+
 name: Build appx
 
 on:
   workflow_dispatch:
 
 jobs:
-  release-appx:
+  build-appx:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
@@ -21,6 +23,8 @@ jobs:
       env:
         NODE_OPTIONS: --max-old-space-size=4096
         TW_DISABLE_UPDATE_CHECKER: "1"
+    - name: Package and Publish
+      run: npx --no-install electron-builder --windows appx
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
