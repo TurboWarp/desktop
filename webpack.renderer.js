@@ -74,7 +74,6 @@ module.exports = defaultConfig => {
                     from: libraryFilesFolder,
                     to: 'library-files'
                 }
-                // TODO: copy extension worker?
             ]),
             ...(process.env.TW_DISABLE_UPDATE_CHECKER ? [
                 new DefinePlugin({
