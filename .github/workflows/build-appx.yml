@@ -1,0 +1,28 @@
+name: Build appx
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release-appx:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14.x
+    - name: Install Dependencies
+      run: npm ci
+    - name: Download Library Files
+      run: npm run fetch
+    - name: Compile
+      run: npm run compile
+      env:
+        NODE_OPTIONS: --max-old-space-size=4096
+        TW_DISABLE_UPDATE_CHECKER: "1"
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: appx
+        path: dist/*.appx
