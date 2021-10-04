@@ -58,10 +58,6 @@
         {
           "target": "nsis",
           "arch": "ia32"
-        },
-        {
-          "target": "appx",
-          "arch": "x64"
         }
       ]
     },
