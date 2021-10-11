@@ -453,6 +453,7 @@
         "tw.desktop.about": "關於",
         "tw.desktop.main.menuBar.newWindow": "新視窗",
         "tw.desktop.privacy": "隱私權政策",
+        "tw.desktop.renderer.credits": "感謝",
         "tw.desktop.renderer.source": "原始碼"
     }
 }
