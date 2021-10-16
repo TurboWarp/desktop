@@ -48,6 +48,10 @@ AddonChannels.changeChannel.addEventListener('message', e => {
   SettingsStore.setStoreWithVersionCheck(e.data);
 });
 
+const openAddonSettings = () => {
+  ipcRenderer.send('open-addon-settings');
+};
+
 const openNewWindow = () => {
   ipcRenderer.send('open-new-window');
 };
@@ -116,7 +120,6 @@ const DesktopHOC = function (WrappedComponent) {
       this.state = {
         title: null
       };
-      this.handleClickAddonSettings = this.handleClickAddonSettings.bind(this);
     }
     componentDidMount () {
       localeChanged(this.props.locale);
@@ -172,9 +175,6 @@ const DesktopHOC = function (WrappedComponent) {
         }
       }
     }
-    handleClickAddonSettings() {
-      ipcRenderer.send('open-addon-settings');
-    }
     render() {
       const {
         fileHandle,
@@ -193,7 +193,7 @@ const DesktopHOC = function (WrappedComponent) {
       return (
         <WrappedComponent
           projectTitle={this.state.title}
-          onClickAddonSettings={this.handleClickAddonSettings}
+          onClickAddonSettings={openAddonSettings}
           onClickNewWindow={openNewWindow}
           onClickAbout={[
             {
