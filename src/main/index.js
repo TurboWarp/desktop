@@ -461,6 +461,10 @@ ipcMain.handle('write-file', async (event, file, content) => {
   await writeFileAtomic(file, content);
 });
 
+ipcMain.on('open-new-window', () => {
+  createEditorWindow();
+});
+
 ipcMain.on('open-about', () => {
   if (aboutWindow === null) {
     aboutWindow = createAboutWindow();

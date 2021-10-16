@@ -48,6 +48,10 @@ AddonChannels.changeChannel.addEventListener('message', e => {
   SettingsStore.setStoreWithVersionCheck(e.data);
 });
 
+const openNewWindow = () => {
+  ipcRenderer.send('open-new-window');
+};
+
 const openAbout = () => {
   ipcRenderer.send('open-about');
 };
@@ -190,6 +194,7 @@ const DesktopHOC = function (WrappedComponent) {
         <WrappedComponent
           projectTitle={this.state.title}
           onClickAddonSettings={this.handleClickAddonSettings}
+          onClickNewWindow={openNewWindow}
           onClickAbout={[
             {
               title: getTranslation('tw.desktop.about'),
