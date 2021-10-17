@@ -46,6 +46,12 @@
         "tw.desktop.renderer.source": "Zdrojový kód"
     },
     "de": {
+        "files.png": "PNG-Bild",
+        "files.sprite3": "Scratch 3-Figur",
+        "files.svg": "SVG-BIld",
+        "files.txt": "Text-Dokument",
+        "files.wav": "WAV-Klang",
+        "files.webm": "WebM-Video",
         "tw.desktop.about": "Infos",
         "tw.desktop.main.context.copy": "Kopieren",
         "tw.desktop.main.context.cut": "Ausschneiden",
@@ -132,6 +138,12 @@
         "tw.desktop.renderer.source": "Code source"
     },
     "it": {
+        "files.png": "Immagine PNG",
+        "files.sprite3": "Sprite di Scratch 3",
+        "files.svg": "Immagine SVG",
+        "files.txt": "Documento di Testo",
+        "files.wav": "Suono WAV",
+        "files.webm": "Video WebM",
         "tw.desktop.about": "Info",
         "tw.desktop.main.context.copy": "Copia",
         "tw.desktop.main.context.cut": "Taglia",
@@ -158,6 +170,12 @@
         "tw.desktop.renderer.source": "Codice Sorgente"
     },
     "ja": {
+        "files.png": "PNGの画像",
+        "files.sprite3": "Scratch3のスプライト",
+        "files.svg": "SVGの画像",
+        "files.txt": "テキストドキュメント",
+        "files.wav": "WAVの音",
+        "files.webm": "WebMのビデオ",
         "tw.desktop.about": "TurboWarpについて",
         "tw.desktop.main.context.copy": "コピー",
         "tw.desktop.main.context.cut": "切り取り",
@@ -321,6 +339,12 @@
         "tw.desktop.renderer.source": "Cod sursă"
     },
     "ru": {
+        "files.png": "PNG изображение",
+        "files.sprite3": "Спрайт Scratch 3",
+        "files.svg": "SVG изображение",
+        "files.txt": "Текстовый Документ",
+        "files.wav": "Звук WAV",
+        "files.webm": "Видео WebM",
         "tw.desktop.about": "Информация",
         "tw.desktop.main.context.copy": "Скопировать",
         "tw.desktop.main.context.cut": "Вырезать",
