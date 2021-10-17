@@ -6,7 +6,7 @@ import util from 'util';
 import {format as formatUrl} from 'url';
 import manifest from '../../package.json';
 import checkForUpdate from './update-checker';
-import getTranslation from './translations';
+import {getTranslation, getTranslationOrNull} from './translations';
 import './advanced-user-customizations';
 import * as store from './store';
 
@@ -26,14 +26,6 @@ let settingsWindow = null;
 let privacyWindow = null;
 
 const allowedToAccessFiles = new Set();
-
-const extensionNames = new Map();
-extensionNames.set('svg', 'SVG Image');
-extensionNames.set('png', 'PNG Image');
-extensionNames.set('wav', 'WAV Sound');
-extensionNames.set('sprite3', 'Scratch 3 Sprite');
-extensionNames.set('txt', 'Text Document');
-extensionNames.set('webm', 'WebM Video');
 
 const isSafeOpenExternal = (url) => {
   try {
@@ -258,8 +250,8 @@ function createWindow(url, options) {
   });
 
   window.webContents.session.on('will-download', (event, item, webContents) => {
-    const extension = pathUtil.extname(item.getFilename()).replace(/^\./, '');
-    const extensionName = extensionNames.get(extension);
+    const extension = pathUtil.extname(item.getFilename()).replace(/^\./, '').toLowerCase();
+    const extensionName = getTranslationOrNull(`files.${extension}`);
     if (extensionName) {
       item.setSaveDialogOptions({
         filters: [

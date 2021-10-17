@@ -2,7 +2,7 @@ import {net, dialog, shell, BrowserWindow} from 'electron';
 import lt from 'semver/functions/lt';
 import {version} from '../../package.json';
 import {get, set} from './store';
-import getTranslation from './translations';
+import {getTranslation} from './translations';
 
 // Flags for debugging.
 // Please make sure these are both `false` in release.

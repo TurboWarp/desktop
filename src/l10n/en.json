@@ -22,5 +22,11 @@
   "tw.desktop.renderer.prompt.cancel": "Cancel",
   "tw.desktop.renderer.source": "Source Code",
   "tw.desktop.renderer.credits": "Credits",
-  "tw.desktop.renderer.failedToLoad": "Could not load project file: {error}"
+  "tw.desktop.renderer.failedToLoad": "Could not load project file: {error}",
+  "files.svg": "SVG Image",
+  "files.png": "PNG Image",
+  "files.wav": "WAV Sound",
+  "files.sprite3": "Scratch 3 Sprite",
+  "files.txt": "Text Document",
+  "files.webm": "WebM Video"
 }

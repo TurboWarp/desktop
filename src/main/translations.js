@@ -21,8 +21,10 @@ ipcMain.on('locale-changed', (event, newLocale) => {
   translations = getTranslations(locale);
 });
 
-const getTranslation = key => {
+export const getTranslation = key => {
   return translations[key] || key;
 };
 
-export default getTranslation;
+export const getTranslationOrNull = key => {
+  return translations[key] || null;
+};
