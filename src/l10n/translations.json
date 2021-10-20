@@ -292,6 +292,12 @@
         "tw.desktop.renderer.source": "Kod Źródłowy"
     },
     "pt": {
+        "files.png": "Imagem PNG",
+        "files.sprite3": "Ator do Scratch 3.0",
+        "files.svg": "Imagem SVG",
+        "files.txt": "Documento de Texto",
+        "files.wav": "Som WAV",
+        "files.webm": "Vídeo WebM",
         "tw.desktop.about": "Sobre",
         "tw.desktop.main.context.copy": "Copiar",
         "tw.desktop.main.context.cut": "Recortar",
