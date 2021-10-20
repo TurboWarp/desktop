@@ -72,7 +72,8 @@
     },
     "nsis": {
       "oneClick": false,
-      "deleteAppDataOnUninstall": true
+      "deleteAppDataOnUninstall": true,
+      "allowToChangeInstallationDirectory": true
     },
     "mac": {
       "artifactName": "${productName} Setup ${version}.${ext}",
