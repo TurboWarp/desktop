@@ -105,12 +105,8 @@ function urgentUpdateAvailable(latestVersion) {
 }
 
 function checkForUpdate() {
-  // Snap handles updates on its own
-  if (process.env.SNAP) {
-    return;
-  }
-  // Updates can be disabled via build-time or runtime environment variable
-  if (process.env.TW_DISABLE_UPDATE_CHECKER) {
+  // Update checker must be enabled at build-time
+  if (!process.env.TW_ENABLE_UPDATE_CHECKER) {
     return;
   }
   // Updates can be disabled via config

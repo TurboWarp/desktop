@@ -25,5 +25,6 @@ jobs:
       run: npm run compile
       env:
         NODE_OPTIONS: --max-old-space-size=4096
+        TW_ENABLE_UPDATE_CHECKER: "1"
     - name: Build
       run: npx --no-install electron-builder --publish never

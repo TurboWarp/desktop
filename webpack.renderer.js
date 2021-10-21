@@ -72,12 +72,7 @@ module.exports = defaultConfig => {
                     from: libraryFilesFolder,
                     to: 'library-files'
                 }
-            ]),
-            ...(process.env.TW_DISABLE_UPDATE_CHECKER ? [
-                new DefinePlugin({
-                    'process.env.TW_DISABLE_UPDATE_CHECKER': '"1"'
-                })
-            ] : [])
+            ])
         ],
         resolve: {
             alias: {
