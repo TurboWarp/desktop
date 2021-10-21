@@ -4,11 +4,6 @@ import {version} from '../../package.json';
 import {get, set} from './store';
 import {getTranslation} from './translations';
 
-// Flags for debugging.
-// Please make sure these are both `false` in release.
-const FORCE_URGENT_UPDATE = false;
-const FORCE_UPDATE = false;
-
 const IGNORE_UPDATE_KEY = 'ignore_update';
 const CURRENT_VERSION_KEY = 'version';
 const DISABLE_UPDATE_KEY = 'disable_update_checker';
@@ -116,9 +111,9 @@ function checkForUpdate() {
   set(CURRENT_VERSION_KEY, version);
   getLatestVersions()
     .then(({latest, oldestSafe}) => {
-      if (FORCE_URGENT_UPDATE || lt(version, oldestSafe)) {
+      if (lt(version, oldestSafe)) {
         urgentUpdateAvailable(latest);
-      } else if (FORCE_UPDATE || lt(version, latest)) {
+      } else if (lt(version, latest)) {
         updateAvailable(latest);
       }
     })
