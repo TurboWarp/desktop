@@ -18,12 +18,8 @@ jobs:
         node-version: 14.x
     - name: Install Dependencies
       run: npm ci
-    - name: Compile
-      run: npm run compile
-      env:
-        NODE_OPTIONS: --max-old-space-size=4096
-    - name: Package
-      run: npx electron-builder --linux tar.gz --publish never
+    - name: Compile and package
+      run: npm run dist -- --linux tar.gz --publish never
       env:
         NODE_OPTIONS: --max-old-space-size=4096
     - uses: actions/upload-artifact@v2
