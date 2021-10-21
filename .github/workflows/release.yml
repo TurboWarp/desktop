@@ -23,11 +23,9 @@ jobs:
       run: npm ci
     - name: Download Library Files
       run: npm run fetch
-    - name: Compile
-      run: npm run compile
+    - name: Compile and package
+      run: npm run dist -- --publish always
       env:
         NODE_OPTIONS: --max-old-space-size=4096
-    - name: Package and Publish
-      run: npx --no-install electron-builder --publish always
-      env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TW_ENABLE_UPDATE_CHECKER: "1"

@@ -21,10 +21,7 @@ jobs:
       run: npm ci
     - name: Download Library Files
       run: npm run fetch
-    - name: Compile
-      run: npm run compile
+    - name: Compile and package
+      run: npm run dist -- --publish never
       env:
         NODE_OPTIONS: --max-old-space-size=4096
-        TW_ENABLE_UPDATE_CHECKER: "1"
-    - name: Build
-      run: npx --no-install electron-builder --publish never

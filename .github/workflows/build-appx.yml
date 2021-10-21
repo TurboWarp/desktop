@@ -18,12 +18,10 @@ jobs:
       run: npm ci
     - name: Download Library Files
       run: npm run fetch
-    - name: Compile
-      run: npm run compile
+    - name: Compile and package
+      run: npm run dist -- --windows appx --publish never --x64 --ia32
       env:
         NODE_OPTIONS: --max-old-space-size=4096
-    - name: Package
-      run: npx --no-install electron-builder --windows appx --publish never --x64 --ia32
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
