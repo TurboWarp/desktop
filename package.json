@@ -1,6 +1,6 @@
 {
   "name": "turbowarp-desktop",
-  "description": "Desktop app for TurboWarp",
+  "description": "Scratch mod with a compiler, dark mode, a bunch of addons, and more.",
   "version": "0.11.0",
   "license": "GPL-3.0",
   "author": {
