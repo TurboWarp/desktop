@@ -266,6 +266,9 @@
         "tw.desktop.renderer.source": "Broncode"
     },
     "pl": {
+        "files.png": "Obraz PNG",
+        "files.svg": "Obraz SVG",
+        "files.wav": "Dźwięk WAV",
         "tw.desktop.about": "O",
         "tw.desktop.main.context.copy": "Kopiuj",
         "tw.desktop.main.context.cut": "Wytnij",
@@ -454,6 +457,12 @@
         "tw.desktop.renderer.source": "Kaynak Kodu"
     },
     "zh-cn": {
+        "files.png": "PNG图像",
+        "files.sprite3": "Scratch 3 角色",
+        "files.svg": "SVG图像",
+        "files.txt": "文字文件",
+        "files.wav": "WAV音频",
+        "files.webm": "WebM影片",
         "tw.desktop.about": "关于",
         "tw.desktop.main.context.copy": "复制",
         "tw.desktop.main.context.cut": "剪切",
