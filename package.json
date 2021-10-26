@@ -1,7 +1,7 @@
 {
   "name": "turbowarp-desktop",
-  "description": "Desktop app for TurboWarp",
-  "version": "0.11.0",
+  "description": "Scratch mod with a compiler, dark mode, a bunch of addons, and more.",
+  "version": "0.11.1",
   "license": "GPL-3.0",
   "author": {
     "email": "contact@turbowarp.org",
@@ -67,7 +67,7 @@
       "identityName": "45747ThomasWeber.TurboWarpDesktop",
       "publisher": "CN=18FA7D4F-01BF-49F2-BF56-782DCEA49C69",
       "publisherDisplayName": "Thomas Weber",
-      "backgroundColor": "transparent",
+      "backgroundColor": "#ff9999",
       "showNameOnTiles": true
     },
     "nsis": {
