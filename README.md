@@ -55,13 +55,14 @@ The website source code is in the `docs` folder.
 
 ## Advanced customizations
 
-TurboWarp Desktop lets you configure custom JS and CSS. This is an advanced feature that is not officially supported -- use at your own risk.
+TurboWarp Desktop lets you configure custom JS and CSS.
 
 Find TurboWarp Desktop's data path:
 
- - Windows: `%APPDATA%/TurboWarp`
+ - Windows (except Microsoft Store): `%APPDATA%/TurboWarp`
+ - Microsoft Store: Open `%LOCALAPPDATA%/Packages`, find the folder with the word `TurboWarpDesktop` in it, then open `LocalCache/Roaming/turbowarp-desktop`
  - macOS: `~/Library/Application Support/TurboWarp`
- - Linux (non-Snap): `~/.config/turbowarp-desktop`
+ - Linux (except Snap): `~/.config/turbowarp-desktop`
 
 Create the file `userscript.js` in this folder to configure custom JS. Create the file `userstyle.css` in this folder to configure custom CSS. Completely restart TurboWarp Desktop (including all windows) to apply.
 
