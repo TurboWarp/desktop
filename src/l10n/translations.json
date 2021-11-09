@@ -456,6 +456,14 @@
         "tw.desktop.renderer.prompt.ok": "Tamam",
         "tw.desktop.renderer.source": "Kaynak Kodu"
     },
+    "uk": {
+        "tw.desktop.main.unload.leave": "Вийти",
+        "tw.desktop.main.unload.message": "Ви впевнені, що хочете вийти?",
+        "tw.desktop.main.unload.stay": "Залишитися",
+        "tw.desktop.main.updater.download": "Завантажити оновлення",
+        "tw.desktop.main.updater.message": "Доступне оновлення: v{version}",
+        "tw.desktop.main.updater.security.message": "Доступне важливе оновлення безпеки: v{version}"
+    },
     "zh-cn": {
         "files.png": "PNG图像",
         "files.sprite3": "Scratch 3 角色",
