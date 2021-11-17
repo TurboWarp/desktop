@@ -68,6 +68,10 @@ const openPrivacyPolicy = () => {
   ipcRenderer.send('open-privacy-policy');
 };
 
+const onDesktopSettings = () => {
+  ipcRenderer.send('open-desktop-settings');
+};
+
 const openCredits = () => {
   ipcRenderer.send('open-credits');
 };
@@ -203,6 +207,10 @@ const DesktopHOC = function (WrappedComponent) {
             {
               title: getTranslation('tw.desktop.privacy'),
               onClick: openPrivacyPolicy
+            },
+            {
+              title: getTranslation('tw.desktop.settings'),
+              onClick: onDesktopSettings
             },
             {
               title: getTranslation('tw.desktop.renderer.source'),

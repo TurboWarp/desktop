@@ -24,6 +24,7 @@ const filesToOpen = [];
 let aboutWindow = null;
 let addonSettingsWindow = null;
 let privacyWindow = null;
+let desktopSettingsWindow = null;
 
 const allowedToAccessFiles = new Set();
 
@@ -302,6 +303,7 @@ function createEditorWindow() {
       if (aboutWindow) aboutWindow.close();
       if (addonSettingsWindow) addonSettingsWindow.close();
       if (privacyWindow) privacyWindow.close();
+      if (desktopSettingsWindow) desktopSettingsWindow.close();
     }
   });
 
@@ -408,6 +410,22 @@ function createPrivacyWindow() {
   privacyWindow.focus();
 }
 
+function createDesktopSettingsWindow() {
+  if (!desktopSettingsWindow) {
+    desktopSettingsWindow = createWindow(getURL('desktop-settings'), {
+      title: getTranslation('tw.desktop.settings'),
+      width: 500,
+      height: 300
+    });
+    desktopSettingsWindow.on('closed', () => {
+      desktopSettingsWindow = null;
+    });
+    closeWhenPressEscape(desktopSettingsWindow);
+  }
+  desktopSettingsWindow.show();
+  desktopSettingsWindow.focus();
+}
+
 const getLastAccessedDirectory = () => store.get('last_accessed_directory') || '';
 const setLastAccessedFile = (filePath) => store.set('last_accessed_directory', pathUtil.dirname(filePath));
 
@@ -466,6 +484,10 @@ ipcMain.on('open-addon-settings', () => {
 
 ipcMain.on('open-privacy-policy', () => {
   createPrivacyWindow()
+});
+
+ipcMain.on('open-desktop-settings', () => {
+  createDesktopSettingsWindow();
 });
 
 ipcMain.on('open-source-code', () => {

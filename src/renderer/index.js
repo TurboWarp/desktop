@@ -12,6 +12,8 @@ if (route === 'editor') {
   import('./addon-settings/addon-settings.jsx');
 } else if (route === 'privacy') {
   import('./privacy/privacy.jsx');
+} else if (route === 'desktop-settings') {
+  import('./desktop-settings/desktop-settings.jsx');
 } else {
   alert(`Invalid route: ${route}`);
 }

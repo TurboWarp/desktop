@@ -1,4 +1,4 @@
-import {net, dialog, shell, BrowserWindow} from 'electron';
+import {net, dialog, shell, BrowserWindow, ipcMain} from 'electron';
 import lt from 'semver/functions/lt';
 import {version} from '../../package.json';
 import {get, set} from './store';
@@ -11,6 +11,34 @@ const DISABLE_UPDATE_KEY = 'disable_update_checker';
 function log(...args) {
   console.log('update checker:', ...args);
 }
+
+function canUpdateCheckerBeEnabled() {
+  return !!process.env.TW_ENABLE_UPDATE_CHECKER;
+}
+
+function isUpdateCheckerEnabled() {
+  if (!canUpdateCheckerBeEnabled()) {
+    return false;
+  }
+  if (get(DISABLE_UPDATE_KEY)) {
+    return false;
+  }
+  return true;
+}
+
+function setUpdateCheckerEnabled(enabled) {
+  set(DISABLE_UPDATE_KEY, !enabled);
+}
+
+ipcMain.on('update-checker/can-be-enabled', (event) => {
+  event.returnValue = canUpdateCheckerBeEnabled();
+});
+ipcMain.on('update-checker/get-is-enabled', (event) => {
+  event.returnValue = isUpdateCheckerEnabled();
+});
+ipcMain.handle('update-checker/set-is-enabled', (event, enabled) => {
+  setUpdateCheckerEnabled(enabled);
+});
 
 function getLatestVersions() {
   return new Promise((resolve, reject) => {
@@ -100,12 +128,7 @@ function urgentUpdateAvailable(latestVersion) {
 }
 
 function checkForUpdate() {
-  // Update checker must be enabled at build-time
-  if (!process.env.TW_ENABLE_UPDATE_CHECKER) {
-    return;
-  }
-  // Updates can be disabled via config
-  if (get(DISABLE_UPDATE_KEY)) {
+  if (!isUpdateCheckerEnabled()) {
     return;
   }
   set(CURRENT_VERSION_KEY, version);
