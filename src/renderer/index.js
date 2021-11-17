@@ -9,7 +9,7 @@ if (route === 'editor') {
 } else if (route === 'about') {
   import('./about/about.jsx');
 } else if (route === 'settings') {
-  import('./settings/settings.jsx');
+  import('./addon-settings/addon-settings.jsx');
 } else if (route === 'privacy') {
   import('./privacy/privacy.jsx');
 } else {
