@@ -431,6 +431,12 @@
         "tw.desktop.renderer.source": "Källkod"
     },
     "tr": {
+        "files.png": "PNG Fotoğrafı",
+        "files.sprite3": "Scratch 3 Kukla",
+        "files.svg": "SVG Fotoğrafı",
+        "files.txt": "Metin Belgesi",
+        "files.wav": "WAV Sesi",
+        "files.webm": "WebM Video",
         "tw.desktop.about": "Hakkında",
         "tw.desktop.main.context.copy": "Kopyala",
         "tw.desktop.main.context.cut": "Kes",
