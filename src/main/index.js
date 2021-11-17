@@ -22,7 +22,7 @@ const editorWindows = new Set();
 const editorWindowTitle = `TurboWarp Desktop`;
 const filesToOpen = [];
 let aboutWindow = null;
-let settingsWindow = null;
+let addonSettingsWindow = null;
 let privacyWindow = null;
 
 const allowedToAccessFiles = new Set();
@@ -300,7 +300,7 @@ function createEditorWindow() {
     editorWindows.delete(window);
     if (editorWindows.size === 0) {
       if (aboutWindow) aboutWindow.close();
-      if (settingsWindow) settingsWindow.close();
+      if (addonSettingsWindow) addonSettingsWindow.close();
       if (privacyWindow) privacyWindow.close();
     }
   });
@@ -354,59 +354,58 @@ function closeWhenPressEscape(window) {
 }
 
 function createAboutWindow() {
-  const window = createWindow(getURL('about'), {
-    title: getTranslation('tw.desktop.about'),
-    width: 800,
-    height: 450,
-    parent: BrowserWindow.getFocusedWindow(),
-    minimizable: false,
-    maximizable: false
-  });
-
-  window.on('closed', () => {
-    aboutWindow = null;
-  });
-
-  closeWhenPressEscape(window);
-
-  return window;
+  if (!aboutWindow) {
+    aboutWindow = createWindow(getURL('about'), {
+      title: getTranslation('tw.desktop.about'),
+      width: 800,
+      height: 450,
+      parent: BrowserWindow.getFocusedWindow(),
+      minimizable: false,
+      maximizable: false
+    });
+    aboutWindow.on('closed', () => {
+      aboutWindow = null;
+    });
+    closeWhenPressEscape(aboutWindow);
+  }
+  aboutWindow.show();
+  aboutWindow.focus();
 }
 
-function createSettingsWindow() {
-  const url = getURL('settings');
-  const window = createWindow(url, {
-    // The window will update its title to be something localized
-    title: 'Addon Settings',
-    width: 700,
-    height: 650
-  });
-
-  window.on('closed', () => {
-    settingsWindow = null;
-  });
-
-  closeWhenPressEscape(window);
-
-  return window;
+function createAddonSettingsWindow() {
+  if (!addonSettingsWindow) {
+    addonSettingsWindow = createWindow(getURL('settings'), {
+      // The window will update its title to be something localized
+      title: 'Addon Settings',
+      width: 700,
+      height: 650
+    });
+    addonSettingsWindow.on('close', () => {
+      addonSettingsWindow = null;
+    });
+    closeWhenPressEscape(addonSettingsWindow);
+  }
+  addonSettingsWindow.show();
+  addonSettingsWindow.focus();
 }
 
 function createPrivacyWindow() {
-  const window = createWindow(getURL('privacy'), {
-    title: getTranslation('tw.desktop.privacy'),
-    width: 600,
-    height: 450,
-    parent: BrowserWindow.getFocusedWindow(),
-    minimizable: false,
-    maximizable: false
-  });
-
-  window.on('closed', () => {
-    privacyWindow = null;
-  });
-
-  closeWhenPressEscape(window);
-
-  return window;
+  if (!privacyWindow) {
+    privacyWindow = createWindow(getURL('privacy'), {
+      title: getTranslation('tw.desktop.privacy'),
+      width: 600,
+      height: 450,
+      parent: BrowserWindow.getFocusedWindow(),
+      minimizable: false,
+      maximizable: false
+    });
+    privacyWindow.on('closed', () => {
+      privacyWindow = null;
+    });
+    closeWhenPressEscape(privacyWindow);
+  }
+  privacyWindow.show();
+  privacyWindow.focus();
 }
 
 const getLastAccessedDirectory = () => store.get('last_accessed_directory') || '';
@@ -458,27 +457,15 @@ ipcMain.on('open-new-window', () => {
 });
 
 ipcMain.on('open-about', () => {
-  if (aboutWindow === null) {
-    aboutWindow = createAboutWindow();
-  }
-  aboutWindow.show();
-  aboutWindow.focus();
+  createAboutWindow();
 });
 
 ipcMain.on('open-addon-settings', () => {
-  if (settingsWindow === null) {
-    settingsWindow = createSettingsWindow();
-  }
-  settingsWindow.show();
-  settingsWindow.focus();
+  createAddonSettingsWindow();
 });
 
 ipcMain.on('open-privacy-policy', () => {
-  if (privacyWindow === null) {
-    privacyWindow = createPrivacyWindow();
-  }
-  privacyWindow.show();
-  privacyWindow.focus();
+  createPrivacyWindow()
 });
 
 ipcMain.on('open-source-code', () => {
