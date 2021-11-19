@@ -188,7 +188,8 @@
       body:not([os="windows"]) .os-windows,
       body:not([os="mac"]) .os-mac,
       body:not([os="linux"]) .os-linux,
-      body:not([os="chrome"]) .os-chrome {
+      body:not([os="chrome"]) .os-chrome,
+      body[os="mac"] .os-not-mac {
         display: none;
       }
 
@@ -283,10 +284,16 @@
         text-align: center;
         align-items: center;
       }
-      .picture {
+      .picture-container picture {
+        width: 100%;
+        height: 100%;
+        filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+      }
+      .picture-container picture img {
         width: 100%;
         height: 100%;
         max-width: 1280px;
+        margin: auto;
       }
       .picture-dark {
         display: none;
@@ -417,19 +424,15 @@
 
     <section class="changelog">
       <div>
-        <h2>Changes from v0.10.1 to v0.11.0</h2>
+        <h2>Changes from v0.11.0 to v0.12.0</h2>
         <ul>
-          <li>New addons: Duplicate script with Alt key (enabled by default), Do not shift pasted items</li>
-          <li>There is now a File &gt; New window button</li>
-          <li>Custom extensions are now supported</li>
-          <li>Many addon bug fixes</li>
+          <li>Improved dark mode</li>
+          <li>New addons: Switch variables between "For all sprites" and "For this sprite only", Editor comment previews (enabled by default), Disable compiler in editor (dangerous)</li>
+          <li>Scratch Cat and friends have been added back to the builtin sprite libraries. This does not imply an endorsement from Scratch.</li>
+          <li>Update checker can now be disabled from the new "(?)" > Desktop Settings menu</li>
+          <li>Various bug fixes</li>
           <li>Updated translations</li>
         </ul>
-        <div class="os-windows">
-          <p>Additionally, TurboWarp Desktop is <a href="https://www.microsoft.com/store/apps/9P4DPZGV5ZKL?cid=changelog">now available on the Microsoft Store</a>. If you want to use the Microsoft Store version instead, manually uninstall the old version first to make sure there won't be any problems.</p>
-          <p>The Microsoft Store version supports automatic updates and won't trigger SmartScreen warnings, but updates may occasionally be slightly delayed as each update has to manually be approved by Microsoft.</p>
-          <p>You don't have to use the Microsoft Store version if you don't want to. The installer programs will always be available.</p>
-        </div>
         <p class="os-windows" data-l10n="update.windows">To update, download and run the new installer below.</p>
         <p class="os-mac" data-l10n="update.mac">To update, download and install the new app below.</p>
         <p class="os-linux" data-l10n="update.linux">If you installed TurboWarp Desktop from an app store or package manager such as the Snap Store, wait until the update is pushed to the store. Otherwise, run the new installer below.</p>
@@ -438,10 +441,6 @@
 
     <section class="os os-windows">
       <div>
-        <div class="install-help msstore">
-          <p data-l10n="msstore">TurboWarp Desktop is now available on the Microsoft Store.</p>
-        </div>
-
         <div class="download-button-outer">
           <a href="https://www.microsoft.com/store/apps/9P4DPZGV5ZKL?cid=storebadge&ocid=badge">
             <img data-src="microsoft-store.png" alt="Get it from Microsoft" height="60">
@@ -527,10 +526,10 @@
         <h2 data-l10n="linux.terminal">Run this in a terminal</h2>
         <p><code class="command">sudo bash -c "$(wget -qO- https://desktop.turbowarp.org/install.sh)"</code></p>
         <p data-l10n="linux.anywhere">Works on any distribution.</p>
-        <hr>
-
-        <h2 data-l10n="linux.uninstall">Uninstall</h2>
-        <p><code class="command">sudo bash -c "$(wget -qO- https://desktop.turbowarp.org/uninstall.sh)"</code></p>
+        <details>
+          <summary data-l10n="linux.uninstall">Uninstall</summary>
+          <p><code class="command">sudo bash -c "$(wget -qO- https://desktop.turbowarp.org/uninstall.sh)"</code></p>
+        </details>
       </div>
     </section>
 
@@ -583,8 +582,22 @@
     </section>
 
     <section class="picture-container">
-      <img class="picture picture-light" data-src="screenshot-light.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
-      <img class="picture picture-dark" data-src="screenshot-dark.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
+      <picture class="os-not-mac picture-light">
+        <source data-srcset="screenshot-win-light.webp" type="image/webp">
+        <img data-src="screenshot-win-light.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
+      </picture>
+      <picture class="os-not-mac picture-dark">
+        <source data-srcset="screenshot-win-dark.webp" type="image/webp">
+        <img data-src="screenshot-win-dark.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
+      </picture>
+      <picture class="os-mac picture-light">
+        <source data-srcset="screenshot-mac-light.webp" type="image/webp">
+        <img data-src="screenshot-mac-light.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
+      </picture>
+      <picture class="os-mac picture-dark">
+        <source data-srcset="screenshot-mac-dark.webp" type="image/webp">
+        <img data-src="screenshot-mac-dark.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
+      </picture>
       <p class="picture-caption" data-l10n="picture.caption">Project pictured: <a href="https://scratch.mit.edu/projects/425020125/" data-l10n-subkey="project">Full Sphere Path Tracer by piano_miles</a></p>
     </section>
 
@@ -735,7 +748,7 @@
     </script>
     <script>
       (function() {
-        var VERSION = '0.11.0';
+        var VERSION = '0.12.0';
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'windows';
@@ -771,12 +784,16 @@
           versionTexts[i].textContent = versionTexts[i].textContent.replace(/{version}/g, VERSION);
         }
 
-        var images = document.querySelectorAll('img[data-src]');
+        function loadLazyImage(el) {
+          if (el.getAttribute('data-src')) el.src = el.getAttribute('data-src');
+          if (el.getAttribute('data-srcset')) el.srcset = el.getAttribute('data-srcset');
+        }
+        var images = document.querySelectorAll('source[data-srcset], img[data-src]');
         var observer = window.IntersectionObserver && new IntersectionObserver(function (entries) {
           for (var i = 0; i < entries.length; i++) {
             var entry = entries[i];
-            if (entry.isIntersecting && !entry.target.src) {
-              entry.target.src = entry.target.getAttribute('data-src');
+            if (entry.intersectionRatio > 0 && !entry.target.src && !entry.target.srcset) {
+              loadLazyImage(entry.target);
             }
           }
         }, {
@@ -786,14 +803,13 @@
           if (observer) {
             observer.observe(images[i]);
           } else {
-            images[i].src = images[i].getAttribute('data-src');
+            loadLazyImage(images[i]);
           }
         }
 
         if (/from|to|changelog/i.test(location.search)) {
           document.body.setAttribute('changelog', 'true');
           document.getElementById('select-os').scrollIntoView();
-          document.querySelector('.msstore').style.display = 'none';
         }
 
         setOS(getOS());
