@@ -207,6 +207,12 @@
         "tw.desktop.renderer.source": "ソースコード"
     },
     "ko": {
+        "files.png": "PNG 이미지",
+        "files.sprite3": "Scratch 3.0 스프라이트",
+        "files.svg": "SVG 이미지",
+        "files.txt": "텍스트 문서",
+        "files.wav": "WAV 음원",
+        "files.webm": "WEBM 비디오",
         "tw.desktop.about": "TurboWarp에 대하여",
         "tw.desktop.main.context.copy": "복사",
         "tw.desktop.main.context.cut": "잘라내기",
