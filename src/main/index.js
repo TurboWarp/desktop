@@ -18,10 +18,10 @@ const isMac = process.platform === 'darwin';
 const isWindows = process.platform === 'win32';
 const isLinux = process.platform === 'linux';
 
-const editorWindows = new Set();
 const editorWindowTitle = `TurboWarp Desktop`;
 const filesToOpen = [];
 
+const editorWindows = new Set();
 let aboutWindow = null;
 let addonSettingsWindow = null;
 let privacyWindow = null;
@@ -274,16 +274,6 @@ const createEditorWindow = () => {
   editorWindows.add(window);
 
   return window;
-};
-
-const autoCreateEditorWindows = () => {
-  if (filesToOpen.length) {
-    while (filesToOpen.length) {
-      createEditorWindow();
-    }
-  } else {
-    createEditorWindow();
-  }
 };
 
 const closeWhenPressEscape = (window) => {
@@ -660,31 +650,41 @@ app.userAgentFallback = app.userAgentFallback
   .replace(`${manifest.name}/${manifest.version}`, '')
   .replace(/ {2,}/g, ' '); 
 
-const parseArgv = (argv) => {
-  // argv in production: ["turbowarp.exe", "..."]
-  // argv in dev: ["electron.exe", "--inspect=", "main.js", "..."] (--inspect will be gone after removing arguments)
-  argv = argv.slice().filter((i) => !i.startsWith('--'));
-  if (isDevelopment) {
-    argv.shift();
-    argv.shift();
-  } else {
-    argv.shift();
-  }
-  return argv;
-}
-
-const resolveFilePath = (workingDirectory, file) => {
-  try {
-    // Absolute URLs should not be modified.
-    const _ = new URL(file);
-    return file;
-  } catch (e) {
-    return pathUtil.resolve(workingDirectory, file);
-  }
-};
-
 const acquiredLock = app.requestSingleInstanceLock();
 if (acquiredLock) {
+  const autoCreateEditorWindows = () => {
+    if (filesToOpen.length) {
+      while (filesToOpen.length) {
+        createEditorWindow();
+      }
+    } else {
+      createEditorWindow();
+    }
+  };
+  
+  const parseArgv = (argv) => {
+    // argv in production: ["turbowarp.exe", "..."]
+    // argv in dev: ["electron.exe", "--inspect=", "main.js", "..."] (--inspect will be gone after removing arguments)
+    argv = argv.slice().filter((i) => !i.startsWith('--'));
+    if (isDevelopment) {
+      argv.shift();
+      argv.shift();
+    } else {
+      argv.shift();
+    }
+    return argv;
+  };
+  
+  const resolveFilePath = (workingDirectory, file) => {
+    try {
+      // If the file is a full absolute URL, pass it through unmodified.
+      const _ = new URL(file);
+      return file;
+    } catch (e) {
+      return pathUtil.resolve(workingDirectory, file);
+    }
+  };
+  
   for (const path of parseArgv(process.argv)) {
     filesToOpen.push(resolveFilePath('', path));
   }
