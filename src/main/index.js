@@ -51,7 +51,12 @@ const isSafeOpenExternal = (url) => {
       parsedUrl.origin !== 'https://desktop.turbowarp.org' &&
       parsedUrl.origin !== 'https://docs.turbowarp.org' &&
       parsedUrl.origin !== 'https://github.com' &&
-      parsedUrl.href !== 'https://www.youtube.com/griffpatch'
+      // Addons
+      parsedUrl.href !== 'https://www.youtube.com/griffpatch' &&
+      // Packager
+      parsedUrl.origin !== 'https://experiments.turbowarp.org' &&
+      parsedUrl.origin !== 'https://turbowarp.org' &&
+      parsedUrl.origin !== 'https://fosshost.org'
     ) {
       return false;
     }
@@ -107,7 +112,7 @@ function getURL(route) {
   });
 }
 
-function createWindow(url, options) {
+const getWindowOptions = (options) => {
   if (isLinux) {
     options.icon = pathUtil.join(__static, 'icon.png');
   }
@@ -129,8 +134,11 @@ function createWindow(url, options) {
 
   options.x = bounds.x + ((bounds.width - options.width) / 2);
   options.y = bounds.y + ((bounds.height - options.height) / 2);
+  return options;
+};
 
-  const window = new BrowserWindow(options);
+const createWindow = (url, options) => {
+  const window = new BrowserWindow(getWindowOptions(options));
   window.loadURL(url);
 
   if (!isMac) {
@@ -365,6 +373,23 @@ function createDesktopSettingsWindow() {
   desktopSettingsWindow.focus();
 }
 
+function createPackagerWindow() {
+  const window = createWindow(getURL('packager'), {
+    // title will be updated by window
+    title: 'TurboWarp Packager for Scratch',
+    width: 800,
+    height: 700
+  });
+  window.webContents.on('did-finish-load', () => {
+    readFile(pathUtil.resolve(__static, 'packager.html'))
+      .then((contents) => window.webContents.send('loaded-html', contents))
+      .catch((error) => {
+        console.error(error);
+        window.webContents.send('error-loading-html', '' + error);
+      });
+  });
+}
+
 const getLastAccessedDirectory = () => store.get('last_accessed_directory') || '';
 const setLastAccessedFile = (filePath) => store.set('last_accessed_directory', pathUtil.dirname(filePath));
 
@@ -427,6 +452,10 @@ ipcMain.on('open-privacy-policy', () => {
 
 ipcMain.on('open-desktop-settings', () => {
   createDesktopSettingsWindow();
+});
+
+ipcMain.on('open-packager', () => {
+  createPackagerWindow();
 });
 
 ipcMain.on('open-source-code', () => {

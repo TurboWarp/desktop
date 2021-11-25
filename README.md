@@ -24,14 +24,14 @@ git clone https://github.com/TurboWarp/desktop turbowarp-desktop
 cd turbowarp-desktop
 ```
 
-Install dependencies:
+Install dependencies after each update:
 
 ```bash
-# This will take a while and it may seem to get stuck at some point. This is normal if your internet isn't the fastest.
+# This will take a while.
 npm ci
 ```
 
-Download library files: (Optional, but if you don't do this then the libraries won't work)
+Download library files and packager HTML after each update: (Optional, but if you don't do this then some features may not work)
 
 ```
 npm run fetch

@@ -72,6 +72,10 @@ const onDesktopSettings = () => {
   ipcRenderer.send('open-desktop-settings');
 };
 
+const openPackager = () => {
+  ipcRenderer.send('open-packager');
+};
+
 const openCredits = () => {
   ipcRenderer.send('open-credits');
 };
@@ -211,6 +215,10 @@ const DesktopHOC = function (WrappedComponent) {
             {
               title: getTranslation('tw.desktop.settings'),
               onClick: onDesktopSettings
+            },
+            {
+              title: 'TurboWarp Packager',
+              onClick: openPackager
             },
             {
               title: getTranslation('tw.desktop.renderer.source'),
