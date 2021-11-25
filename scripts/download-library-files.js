@@ -1,9 +1,9 @@
 const fs = require('fs');
 const pathUtil = require('path');
-const fetch = require('node-fetch');
 const Limiter = require('async-limiter');
 const https = require('https');
 const crypto = require('crypto');
+const {fetch} = require('./lib');
 const promisify = require('util').promisify;
 const writeFile = promisify(fs.writeFile);
 
@@ -41,23 +41,6 @@ const httpsAgent = new https.Agent({
 
 const usedFiles = new Set();
 
-const persistentFetch = async (url, opts) => {
-  let err;
-  for (let i = 0; i < 3; i++) {
-    try {
-      const response = await fetch(url, opts);
-      if (response.status !== 200) {
-        throw new Error(`${md5ext}: Unexpected status code: ${response.status}`);
-      }
-      return response;
-    } catch (e) {
-      if (i === 0) err = e;
-      console.warn(`Attempt to fetch ${url} failed, trying again...`);
-    }
-  }
-  throw err;
-};
-
 const downloadAsset = async (asset) => {
   const md5ext = asset.md5ext;
   if (usedFiles.has(md5ext)) {
@@ -71,7 +54,7 @@ const downloadAsset = async (asset) => {
   }
 
   console.log(`Downloading: ${md5ext}`);
-  const response = await persistentFetch(`https://assets.scratch.mit.edu/${md5ext}`, {
+  const response = await fetch(`https://assets.scratch.mit.edu/${md5ext}`, {
     agent: httpsAgent
   });
   const arrayBuffer = await response.buffer();
