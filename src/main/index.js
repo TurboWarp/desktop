@@ -297,7 +297,6 @@ const createAboutWindow = () => {
       title: getTranslation('tw.desktop.about'),
       width: 800,
       height: 450,
-      parent: BrowserWindow.getFocusedWindow(),
       minimizable: false,
       maximizable: false
     });
@@ -333,7 +332,6 @@ const createPrivacyWindow = () => {
       title: getTranslation('tw.desktop.privacy'),
       width: 600,
       height: 450,
-      parent: BrowserWindow.getFocusedWindow(),
       minimizable: false,
       maximizable: false
     });
