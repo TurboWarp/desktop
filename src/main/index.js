@@ -303,10 +303,6 @@ function createEditorWindow() {
     height: 800
   });
 
-  if (isDevelopment) {
-    window.webContents.openDevTools();
-  }
-
   window.on('page-title-updated', (event, title, explicitSet) => {
     event.preventDefault();
     if (explicitSet && title) {
