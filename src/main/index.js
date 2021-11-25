@@ -4,7 +4,6 @@ import fs from 'fs';
 import writeFileAtomic from 'write-file-atomic';
 import util from 'util';
 import {format as formatUrl} from 'url';
-import manifest from '../../package.json';
 import checkForUpdate from './update-checker';
 import {getTranslation, getTranslationOrNull} from './translations';
 import './advanced-user-customizations';
