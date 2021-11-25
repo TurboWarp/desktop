@@ -1,0 +1,37 @@
+body {
+  background: #111;
+}
+
+main > * {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+iframe {
+  border: none;
+}
+
+.exporting {
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  user-select: none;
+}
+
+.exporting-text {
+  color: white;
+  font-size: 40px;
+  pointer-events: none;
+  margin-bottom: 20px;
+}
+
+.cancel {
+
+}

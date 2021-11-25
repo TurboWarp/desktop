@@ -113,6 +113,13 @@ const readInitialFile = async () => {
   return ipcRenderer.invoke('read-file', fileToOpen);
 };
 
+const readBlobAsArrayBuffer = (blob) => new Promise((resolve, reject) => {
+  const fr = new FileReader();
+  fr.onload = () => resolve(fr.result);
+  fr.onerror = () => reject(new Error('Cannot read blob as array buffer'));
+  fr.readAsArrayBuffer(blob);
+});
+
 const darkModeMedia = window.matchMedia('(prefers-color-scheme: dark)');
 darkModeMedia.onchange = () => document.body.setAttribute('theme', darkModeMedia.matches ? 'dark' : 'light');
 darkModeMedia.onchange();
@@ -128,8 +135,11 @@ const DesktopHOC = function (WrappedComponent) {
       this.state = {
         title: null
       };
+      this.handleExportProjectOverIPC = this.handleExportProjectOverIPC.bind(this);
     }
     componentDidMount () {
+      ipcRenderer.on('export-project/start', this.handleExportProjectOverIPC);
+
       localeChanged(this.props.locale);
 
       if (mountedOnce) {
@@ -181,6 +191,23 @@ const DesktopHOC = function (WrappedComponent) {
         } else {
           ipcRenderer.send('set-represented-file', null);
         }
+      }
+    }
+    componentWillUnmount () {
+      ipcRenderer.removeListener('export-project/start', this.handleExportProjectOverIPC);
+    }
+    async handleExportProjectOverIPC (event) {
+      ipcRenderer.sendTo(event.senderId, 'export-project/ack');
+      try {
+        const blob = await this.props.vm.saveProjectSb3();
+        const data = await readBlobAsArrayBuffer(blob);
+        ipcRenderer.sendTo(event.senderId, 'export-project/done', {
+          data,
+          name: document.title
+        });
+      } catch (e) {
+        console.error(e);
+        ipcRenderer.sendTo(event.senderId, 'export-project/error', '' + e);
       }
     }
     render() {
@@ -247,7 +274,8 @@ const DesktopHOC = function (WrappedComponent) {
     onSetFileHandle: PropTypes.func,
     projectChanged: PropTypes.bool,
     vm: PropTypes.shape({
-      loadProject: PropTypes.func
+      loadProject: PropTypes.func,
+      saveProjectSb3: PropTypes.func
     })
   };
   const mapStateToProps = state => ({

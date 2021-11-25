@@ -136,6 +136,22 @@ const getWindowOptions = (options) => {
   return options;
 };
 
+const closeWindowWhenPressEscape = (window) => {
+  window.webContents.on('before-input-event', (e, input) => {
+    if (
+      input.type === 'keyDown' &&
+      input.key === 'Escape' &&
+      !input.control &&
+      !input.alt &&
+      !input.meta &&
+      !input.isAutoRepeat &&
+      !input.isComposing
+    ) {
+      window.close();
+    }
+  });
+};
+
 const createWindow = (url, options) => {
   const window = new BrowserWindow(getWindowOptions(options));
   window.loadURL(url);
@@ -275,22 +291,6 @@ const createEditorWindow = () => {
   return window;
 };
 
-const closeWhenPressEscape = (window) => {
-  window.webContents.on('before-input-event', (e, input) => {
-    if (
-      input.type === 'keyDown' &&
-      input.key === 'Escape' &&
-      !input.control &&
-      !input.alt &&
-      !input.meta &&
-      !input.isAutoRepeat &&
-      !input.isComposing
-    ) {
-      window.close();
-    }
-  });
-};
-
 const createAboutWindow = () => {
   if (!aboutWindow) {
     aboutWindow = createWindow(getURL('about'), {
@@ -303,7 +303,7 @@ const createAboutWindow = () => {
     aboutWindow.on('closed', () => {
       aboutWindow = null;
     });
-    closeWhenPressEscape(aboutWindow);
+    closeWindowWhenPressEscape(aboutWindow);
   }
   aboutWindow.show();
   aboutWindow.focus();
@@ -320,7 +320,7 @@ const createAddonSettingsWindow = () => {
     addonSettingsWindow.on('close', () => {
       addonSettingsWindow = null;
     });
-    closeWhenPressEscape(addonSettingsWindow);
+    closeWindowWhenPressEscape(addonSettingsWindow);
   }
   addonSettingsWindow.show();
   addonSettingsWindow.focus();
@@ -338,7 +338,7 @@ const createPrivacyWindow = () => {
     privacyWindow.on('closed', () => {
       privacyWindow = null;
     });
-    closeWhenPressEscape(privacyWindow);
+    closeWindowWhenPressEscape(privacyWindow);
   }
   privacyWindow.show();
   privacyWindow.focus();
@@ -354,27 +354,19 @@ const createDesktopSettingsWindow = () => {
     desktopSettingsWindow.on('closed', () => {
       desktopSettingsWindow = null;
     });
-    closeWhenPressEscape(desktopSettingsWindow);
+    closeWindowWhenPressEscape(desktopSettingsWindow);
   }
   desktopSettingsWindow.show();
   desktopSettingsWindow.focus();
 };
 
-const createPackagerWindow = () => {
-  const window = createWindow(getURL('packager'), {
-    // title will be updated by window
-    title: 'TurboWarp Packager for Scratch',
+const createPackagerWindow = (editorWindowId) => {
+  const window = createWindow(`${getURL('packager')}&editor_id=${editorWindowId}`, {
+    title: 'TurboWarp Packager',
     width: 800,
     height: 700
   });
-  window.webContents.on('did-finish-load', () => {
-    readFile(pathUtil.resolve(__static, 'packager.html'))
-      .then((contents) => window.webContents.send('loaded-html', contents))
-      .catch((error) => {
-        console.error(error);
-        window.webContents.send('error-loading-html', '' + error);
-      });
-  });
+  return window;
 };
 
 const getLastAccessedDirectory = () => store.get('last_accessed_directory') || '';
@@ -441,9 +433,11 @@ ipcMain.on('open-desktop-settings', () => {
   createDesktopSettingsWindow();
 });
 
-ipcMain.on('open-packager', () => {
-  createPackagerWindow();
+ipcMain.on('open-packager', (event) => {
+  createPackagerWindow(event.sender.id);
 });
+
+ipcMain.handle('get-packager-html', () => readFile(pathUtil.join(__static, 'packager.html')));
 
 ipcMain.on('open-source-code', () => {
   shell.openExternal('https://github.com/TurboWarp');
