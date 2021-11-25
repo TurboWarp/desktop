@@ -7,16 +7,16 @@ const crypto = require('crypto');
 const promisify = require('util').promisify;
 const writeFile = promisify(fs.writeFile);
 
-const libraryFiles = pathUtil.join(__dirname, 'library-files');
+const libraryFiles = pathUtil.join(__dirname, '..', 'library-files');
 if (!fs.existsSync(libraryFiles)) {
   console.log('Making library files folder');
   fs.mkdirSync(libraryFiles);
 }
 
-const costumesManifest = pathUtil.join(__dirname, 'node_modules', 'scratch-gui', 'src', 'lib', 'libraries', 'costumes.json');
-const backdropManifest = pathUtil.join(__dirname, 'node_modules', 'scratch-gui', 'src', 'lib', 'libraries', 'backdrops.json');
-const spriteManifest = pathUtil.join(__dirname, 'node_modules', 'scratch-gui', 'src', 'lib', 'libraries', 'sprites.json');
-const soundManifest = pathUtil.join(__dirname, 'node_modules', 'scratch-gui', 'src', 'lib', 'libraries', 'sounds.json');
+const costumesManifest = pathUtil.join(__dirname, '..', 'node_modules', 'scratch-gui', 'src', 'lib', 'libraries', 'costumes.json');
+const backdropManifest = pathUtil.join(__dirname, '..', 'node_modules', 'scratch-gui', 'src', 'lib', 'libraries', 'backdrops.json');
+const spriteManifest = pathUtil.join(__dirname, '..', 'node_modules', 'scratch-gui', 'src', 'lib', 'libraries', 'sprites.json');
+const soundManifest = pathUtil.join(__dirname, '..', 'node_modules', 'scratch-gui', 'src', 'lib', 'libraries', 'sounds.json');
 if (!fs.existsSync(costumesManifest)) {
   throw new Error('costumes.json does not exist -- did you forget a step?');
 }
