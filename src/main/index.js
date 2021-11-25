@@ -155,87 +155,8 @@ const closeWindowWhenPressEscape = (window) => {
 const createWindow = (url, options) => {
   const window = new BrowserWindow(getWindowOptions(options));
   window.loadURL(url);
-
-  if (!isMac) {
-    // On Mac, shortcuts are handled by the menu bar.
-    window.webContents.on('before-input-event', (e, input) => {
-      if (input.isAutoRepeat || input.isComposing || input.type !== 'keyDown' || input.meta) {
-        return;
-      }
-      // Ctrl+Shift+I to open dev tools
-      if (
-        input.control &&
-        input.shift &&
-        input.key.toLowerCase() === 'i' &&
-        !input.alt
-      ) {
-        e.preventDefault();
-        window.webContents.toggleDevTools();
-      }
-      // Ctrl+N to open new window
-      if (
-        input.control &&
-        input.key.toLowerCase() === 'n'
-      ) {
-        e.preventDefault();
-        createEditorWindow();
-      }
-      // Ctrl+Equals/Plus to zoom in
-      if (
-        input.control &&
-        input.key === '='
-      ) {
-        e.preventDefault();
-        window.webContents.setZoomLevel(window.webContents.getZoomLevel() + 1);
-      }
-      // Ctrl+Minus/Underscore to zoom out
-      if (
-        input.control &&
-        input.key === '-'
-      ) {
-        e.preventDefault();
-        window.webContents.setZoomLevel(window.webContents.getZoomLevel() - 1);
-      }
-      // Ctrl+0 to reset zoom
-      if (
-        input.control &&
-        input.key === '0'
-      ) {
-        e.preventDefault();
-        window.webContents.setZoomLevel(0);
-      }
-      // F11 to toggle fullscreen
-      if (
-        input.key === 'F11'
-      ) {
-        e.preventDefault();
-        window.setFullScreen(!window.isFullScreen());
-      }
-      // Escape to exit fullscreen
-      if (
-        input.key === 'Escape' &&
-        window.isFullScreen()
-      ) {
-        e.preventDefault();
-        window.setFullScreen(false);
-      }
-      // Ctrl+R and Ctrl+Shift+R to reload
-      if (
-        input.control &&
-        input.key.toLowerCase() === 'r'
-      ) {
-        e.preventDefault();
-        if (input.shift) {
-          window.webContents.reloadIgnoringCache();
-        } else {
-          window.webContents.reload();
-        }
-      }
-    });
-  }
-
   return window;
-}
+};
 
 const createEditorWindow = () => {
   // Note: the route for this must be `editor`, otherwise the dev tools keyboard shortcuts will not work.
@@ -601,6 +522,86 @@ app.on('web-contents-created', (event, webContents) => {
       menu.popup();
     }
   });
+
+  if (!isMac) {
+    // On Mac, shortcuts are handled by the menu bar.
+    webContents.on('before-input-event', (e, input) => {
+      if (input.isAutoRepeat || input.isComposing || input.type !== 'keyDown' || input.meta) {
+        return;
+      }
+      const window = BrowserWindow.fromWebContents(webContents);
+      // Ctrl+Shift+I to open dev tools
+      if (
+        input.control &&
+        input.shift &&
+        input.key.toLowerCase() === 'i' &&
+        !input.alt
+      ) {
+        e.preventDefault();
+        webContents.toggleDevTools();
+      }
+      // Ctrl+N to open new window
+      if (
+        input.control &&
+        input.key.toLowerCase() === 'n'
+      ) {
+        e.preventDefault();
+        createEditorWindow();
+      }
+      // Ctrl+Equals/Plus to zoom in
+      if (
+        input.control &&
+        input.key === '='
+      ) {
+        e.preventDefault();
+        webContents.setZoomLevel(webContents.getZoomLevel() + 1);
+      }
+      // Ctrl+Minus/Underscore to zoom out
+      if (
+        input.control &&
+        input.key === '-'
+      ) {
+        e.preventDefault();
+        webContents.setZoomLevel(webContents.getZoomLevel() - 1);
+      }
+      // Ctrl+0 to reset zoom
+      if (
+        input.control &&
+        input.key === '0'
+      ) {
+        e.preventDefault();
+        webContents.setZoomLevel(0);
+      }
+      // F11 to toggle fullscreen
+      if (
+        input.key === 'F11'
+      ) {
+        e.preventDefault();
+        window.setFullScreen(!window.isFullScreen());
+      }
+      // Escape to exit fullscreen
+      if (
+        input.key === 'Escape' &&
+        window.isFullScreen()
+      ) {
+        e.preventDefault();
+        window.setFullScreen(false);
+      }
+      // Ctrl+R and Ctrl+Shift+R to reload
+      if (
+        input.control &&
+        input.key.toLowerCase() === 'r'
+      ) {
+        e.preventDefault();
+        if (input.shift) {
+          webContents.reloadIgnoringCache();
+        } else {
+          webContents.reload();
+        }
+      }
+    });
+  }
+
   webContents.session.on('will-download', (event, item, webContents) => {
     const extension = pathUtil.extname(item.getFilename()).replace(/^\./, '').toLowerCase();
     const extensionName = getTranslationOrNull(`files.${extension}`);
@@ -615,6 +616,7 @@ app.on('web-contents-created', (event, webContents) => {
       });
     }
   });
+
   webContents.setWindowOpenHandler((details) => {
     if (isSafeOpenExternal(details.url)) {
       setImmediate(() => {
@@ -623,6 +625,7 @@ app.on('web-contents-created', (event, webContents) => {
     }
     return {action: 'deny'};
   });
+
   webContents.on('will-navigate', (e, url) => {
     if (isSafeOpenExternal(url)) {
       e.preventDefault();
