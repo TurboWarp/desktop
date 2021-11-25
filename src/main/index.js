@@ -589,9 +589,10 @@ app.on('web-contents-created', (event, webContents) => {
         e.preventDefault();
         webContents.setZoomLevel(0);
       }
-      // F11 to toggle fullscreen
+      // F11 and alt+enter to toggle fullscreen
       if (
-        input.key === 'F11'
+        input.key === 'F11' ||
+        (input.key === 'Enter' && input.alt)
       ) {
         e.preventDefault();
         window.setFullScreen(!window.isFullScreen());
