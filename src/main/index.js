@@ -288,6 +288,22 @@ const createPackagerWindow = (editorWindowId) => {
     width: 800,
     height: 700
   });
+  window.webContents.setWindowOpenHandler((details) => {
+    if (details.url !== 'about:blank') {
+      return {
+        action: 'deny'
+      };
+    }
+    return {
+      action: 'allow',
+      overrideBrowserWindowOptions: getWindowOptions({
+        // title will be updated by window
+        title: 'Preview',
+        width: 480,
+        height: 360
+      })
+    };
+  });
   return window;
 };
 

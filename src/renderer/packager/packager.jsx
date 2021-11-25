@@ -2,9 +2,37 @@ import {ipcRenderer} from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import styles from './packager.css';
-import appendHTML from '!raw-loader!./append.html';
 
 const editorWindowId = +(new URLSearchParams(location.search).get('editor_id'));
+
+const loadHTML = (iframe, html) => {
+  iframe.contentDocument.write(html);
+  iframe.contentDocument.close();
+
+  iframe.contentWindow.open = (url) => {
+    // Electron isn't able to open blob: URIs directly, so we'll open a blank window and write the blob to it manually.
+    const newWindow = window.open('about:blank');
+    fetch(url)
+      .then((r) => r.text())
+      .then((text) => {
+        newWindow.document.write(text);
+      });
+    return newWindow;
+  };
+};
+
+const setProject = (iframe, data, name) => {
+  const fileTypeRadio = iframe.contentDocument.querySelector('input[type=radio][value=file]');
+  fileTypeRadio.click();
+
+  const file = new File([data], `${name}.sb3`);
+  const dataTransfer = new DataTransfer();
+  dataTransfer.items.add(file);
+
+  const fileInput = iframe.contentDocument.querySelector('input[type=file]');
+  fileInput.files = dataTransfer.files;
+  fileInput.dispatchEvent(new Event('change'));
+};
 
 class PackagerWindow extends React.Component {
   constructor (props) {
@@ -24,11 +52,7 @@ class PackagerWindow extends React.Component {
     });
     ipcRenderer.on('export-project/done', (event, {data, name}) => {
       if (this.state.waitingForEditor) {
-        this.iframe.contentWindow.postMessage({
-          type: 'load-project',
-          data,
-          name
-        });
+        setProject(this.iframe, data, name);
         this.setState({
           waitingForEditor: false
         });
@@ -43,8 +67,7 @@ class PackagerWindow extends React.Component {
   }
   frameRef (iframe) {
     this.iframe = iframe;
-    this.iframe.contentDocument.write(this.props.html);
-    this.iframe.contentDocument.close();
+    loadHTML(this.iframe, this.props.html);
   }
   handleCancelWaitingForEditor () {
     this.setState({
@@ -75,8 +98,10 @@ class PackagerWindow extends React.Component {
 
 ipcRenderer.invoke('get-packager-html')
   .then((raw) => {
-    const decoded = new TextDecoder().decode(raw) + appendHTML;
-    ReactDOM.render(<PackagerWindow html={decoded} />, require('../app-target'));
+    const decoded = new TextDecoder().decode(raw);
+    ReactDOM.render((
+      <PackagerWindow html={decoded} />
+    ), require('../app-target'));
   })
   .catch((err) => {
     console.error(err);
