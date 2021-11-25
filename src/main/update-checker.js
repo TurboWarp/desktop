@@ -8,15 +8,15 @@ const IGNORE_UPDATE_KEY = 'ignore_update';
 const CURRENT_VERSION_KEY = 'version';
 const DISABLE_UPDATE_KEY = 'disable_update_checker';
 
-function log(...args) {
+const log = (...args) => {
   console.log('update checker:', ...args);
-}
+};
 
-function canUpdateCheckerBeEnabled() {
+const canUpdateCheckerBeEnabled = () => {
   return !!process.env.TW_ENABLE_UPDATE_CHECKER;
-}
+};
 
-function isUpdateCheckerEnabled() {
+const isUpdateCheckerEnabled = () => {
   if (!canUpdateCheckerBeEnabled()) {
     return false;
   }
@@ -24,11 +24,11 @@ function isUpdateCheckerEnabled() {
     return false;
   }
   return true;
-}
+};
 
-function setUpdateCheckerEnabled(enabled) {
+const setUpdateCheckerEnabled = (enabled) => {
   set(DISABLE_UPDATE_KEY, !enabled);
-}
+};
 
 ipcMain.on('update-checker/can-be-enabled', (event) => {
   event.returnValue = canUpdateCheckerBeEnabled();
@@ -40,7 +40,7 @@ ipcMain.handle('update-checker/set-is-enabled', (event, enabled) => {
   setUpdateCheckerEnabled(enabled);
 });
 
-function getLatestVersions() {
+const getLatestVersions = () => {
   return new Promise((resolve, reject) => {
     const request = net.request('https://desktop.turbowarp.org/version.json');
     request.on('response', (response) => {
@@ -77,13 +77,13 @@ function getLatestVersions() {
 
     request.end();
   });
-}
+};
 
-function getUpdateURL(current, latest) {
+const getUpdateURL = (current, latest) => {
   return `https://desktop.turbowarp.org/update_available.html?from=${encodeURIComponent(current)}&to=${encodeURIComponent(latest)}`;
-}
+};
 
-async function updateAvailable(latestVersion) {
+const updateAvailable = async (latestVersion) => {
   const ignoredUpdate = get(IGNORE_UPDATE_KEY);
   if (ignoredUpdate !== null && ignoredUpdate === latestVersion) {
     log('not showing update message: ignored by user');
@@ -108,9 +108,9 @@ async function updateAvailable(latestVersion) {
   } else if (choice.checkboxChecked) {
     set(IGNORE_UPDATE_KEY, latestVersion);
   }
-}
+};
 
-function urgentUpdateAvailable(latestVersion) {
+const urgentUpdateAvailable = (latestVersion) => {
   const choice = dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
     type: 'warning',
     buttons: [
@@ -125,9 +125,9 @@ function urgentUpdateAvailable(latestVersion) {
   if (choice === 0) {
     shell.openExternal(getUpdateURL(version, latestVersion));
   }
-}
+};
 
-function checkForUpdate() {
+const checkForUpdate = () => {
   if (!isUpdateCheckerEnabled()) {
     return;
   }
@@ -143,6 +143,6 @@ function checkForUpdate() {
     .catch((err) => {
       console.error(err);
     });
-}
+};
 
 export default checkForUpdate;

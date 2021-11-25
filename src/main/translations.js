@@ -7,9 +7,9 @@ const STORAGE_KEY = 'locale';
 let locale = get(STORAGE_KEY) || 'en';
 let translations = getTranslations(locale);
 
-function log(...args) {
+const log = (...args) => {
   console.log('translations:', ...args);
-}
+};
 
 ipcMain.on('locale-changed', (event, newLocale) => {
   if (newLocale === locale) {

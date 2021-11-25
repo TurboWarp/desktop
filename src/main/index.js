@@ -100,7 +100,7 @@ if (isMac) {
   Menu.setApplicationMenu(null);
 }
 
-function getURL(route) {
+const getURL = (route) => {
   if (isDevelopment) {
     return `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}/?route=${route}`;
   }
@@ -110,7 +110,7 @@ function getURL(route) {
     search: `route=${route}`,
     slashes: true
   });
-}
+};
 
 const getWindowOptions = (options) => {
   if (isLinux) {
@@ -222,7 +222,7 @@ const createWindow = (url, options) => {
   return window;
 }
 
-function createEditorWindow() {
+const createEditorWindow = () => {
   // Note: the route for this must be `editor`, otherwise the dev tools keyboard shortcuts will not work.
   let url = getURL('editor');
 
@@ -274,9 +274,9 @@ function createEditorWindow() {
   editorWindows.add(window);
 
   return window;
-}
+};
 
-function autoCreateEditorWindows() {
+const autoCreateEditorWindows = () => {
   if (filesToOpen.length) {
     while (filesToOpen.length) {
       createEditorWindow();
@@ -284,9 +284,9 @@ function autoCreateEditorWindows() {
   } else {
     createEditorWindow();
   }
-}
+};
 
-function closeWhenPressEscape(window) {
+const closeWhenPressEscape = (window) => {
   window.webContents.on('before-input-event', (e, input) => {
     if (
       input.type === 'keyDown' &&
@@ -300,9 +300,9 @@ function closeWhenPressEscape(window) {
       window.close();
     }
   });
-}
+};
 
-function createAboutWindow() {
+const createAboutWindow = () => {
   if (!aboutWindow) {
     aboutWindow = createWindow(getURL('about'), {
       title: getTranslation('tw.desktop.about'),
@@ -319,9 +319,9 @@ function createAboutWindow() {
   }
   aboutWindow.show();
   aboutWindow.focus();
-}
+};
 
-function createAddonSettingsWindow() {
+const createAddonSettingsWindow = () => {
   if (!addonSettingsWindow) {
     addonSettingsWindow = createWindow(getURL('settings'), {
       // The window will update its title to be something localized
@@ -336,9 +336,9 @@ function createAddonSettingsWindow() {
   }
   addonSettingsWindow.show();
   addonSettingsWindow.focus();
-}
+};
 
-function createPrivacyWindow() {
+const createPrivacyWindow = () => {
   if (!privacyWindow) {
     privacyWindow = createWindow(getURL('privacy'), {
       title: getTranslation('tw.desktop.privacy'),
@@ -355,9 +355,9 @@ function createPrivacyWindow() {
   }
   privacyWindow.show();
   privacyWindow.focus();
-}
+};
 
-function createDesktopSettingsWindow() {
+const createDesktopSettingsWindow = () => {
   if (!desktopSettingsWindow) {
     desktopSettingsWindow = createWindow(getURL('desktop-settings'), {
       title: getTranslation('tw.desktop.settings'),
@@ -371,9 +371,9 @@ function createDesktopSettingsWindow() {
   }
   desktopSettingsWindow.show();
   desktopSettingsWindow.focus();
-}
+};
 
-function createPackagerWindow() {
+const createPackagerWindow = () => {
   const window = createWindow(getURL('packager'), {
     // title will be updated by window
     title: 'TurboWarp Packager for Scratch',
@@ -388,7 +388,7 @@ function createPackagerWindow() {
         window.webContents.send('error-loading-html', '' + error);
       });
   });
-}
+};
 
 const getLastAccessedDirectory = () => store.get('last_accessed_directory') || '';
 const setLastAccessedFile = (filePath) => store.set('last_accessed_directory', pathUtil.dirname(filePath));
@@ -660,7 +660,7 @@ app.userAgentFallback = app.userAgentFallback
   .replace(`${manifest.name}/${manifest.version}`, '')
   .replace(/ {2,}/g, ' '); 
 
-function parseArgv(argv) {
+const parseArgv = (argv) => {
   // argv in production: ["turbowarp.exe", "..."]
   // argv in dev: ["electron.exe", "--inspect=", "main.js", "..."] (--inspect will be gone after removing arguments)
   argv = argv.slice().filter((i) => !i.startsWith('--'));
