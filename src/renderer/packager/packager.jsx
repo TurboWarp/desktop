@@ -9,8 +9,8 @@ const loadHTML = (iframe, html) => {
   iframe.contentDocument.write(html);
   iframe.contentDocument.close();
 
+  // Electron isn't able to open blob: URIs directly, so we instead open a blank window and write the blob manually.
   iframe.contentWindow.open = (url) => {
-    // Electron isn't able to open blob: URIs directly, so we'll open a blank window and write the blob to it manually.
     const newWindow = window.open('about:blank');
     fetch(url)
       .then((r) => r.text())
@@ -22,16 +22,24 @@ const loadHTML = (iframe, html) => {
 };
 
 const setProject = (iframe, data, name) => {
+  // Switch to file mode
   const fileTypeRadio = iframe.contentDocument.querySelector('input[type=radio][value=file]');
   fileTypeRadio.click();
-
+  
+  // Upload project to file input
   const file = new File([data], `${name}.sb3`);
   const dataTransfer = new DataTransfer();
   dataTransfer.items.add(file);
-
   const fileInput = iframe.contentDocument.querySelector('input[type=file]');
   fileInput.files = dataTransfer.files;
   fileInput.dispatchEvent(new Event('change'));
+
+  // Start loading the project
+  // We need a delay to avoid cancellation-related issues
+  setTimeout(() => {
+    const loadButton = iframe.contentDocument.querySelector('.card button');
+    loadButton.click();
+  });
 };
 
 class PackagerWindow extends React.Component {
