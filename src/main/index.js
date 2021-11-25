@@ -131,7 +131,7 @@ function createWindow(url, options) {
   options.y = bounds.y + ((bounds.height - options.height) / 2);
 
   const window = new BrowserWindow(options);
-  window.loadURL(url)
+  window.loadURL(url);
 
   if (!isMac) {
     // On Mac, shortcuts are handled by the menu bar.
@@ -210,79 +210,6 @@ function createWindow(url, options) {
       }
     });
   }
-
-  window.webContents.on('context-menu', (event, params) => {
-    const text = params.selectionText;
-    const hasText = !!text;
-    const menuItems = [];
-
-    if (params.linkURL) {
-      menuItems.push({
-        id: 'openLink',
-        label: getTranslation('tw.desktop.main.context.openLink'),
-        click() {
-          const url = params.linkURL;
-          if (isSafeOpenExternal(url)) {
-            shell.openExternal(url);
-          }
-        }
-      });
-      menuItems.push({
-        type: 'separator'
-      });
-    }
-
-    if (params.isEditable) {
-      menuItems.push({
-        id: 'cut',
-        label: getTranslation('tw.desktop.main.context.cut'),
-        enabled: hasText,
-        click: () => {
-          clipboard.writeText(text);
-          window.webContents.cut();
-        }
-      });
-    }
-    if (hasText || params.isEditable) {
-      menuItems.push({
-        id: 'copy',
-        label: getTranslation('tw.desktop.main.context.copy'),
-        enabled: hasText,
-        click: () => {
-          clipboard.writeText(text);
-        }
-      });
-    }
-    if (params.isEditable) {
-      menuItems.push({
-        id: 'Paste',
-        label: getTranslation('tw.desktop.main.context.paste'),
-        click: () => {
-          window.webContents.paste();
-        }
-      });
-    }
-
-    if (menuItems.length > 0) {
-      const menu = Menu.buildFromTemplate(menuItems);
-      menu.popup();
-    }
-  });
-
-  window.webContents.session.on('will-download', (event, item, webContents) => {
-    const extension = pathUtil.extname(item.getFilename()).replace(/^\./, '').toLowerCase();
-    const extensionName = getTranslationOrNull(`files.${extension}`);
-    if (extensionName) {
-      item.setSaveDialogOptions({
-        filters: [
-          {
-            name: extensionName,
-            extensions: [extension]
-          }
-        ]
-      });
-    }
-  });
 
   return window;
 }
@@ -606,8 +533,79 @@ app.on('open-file', (event, path) => {
   }
 });
 
-app.on('web-contents-created', (event, contents) => {
-  contents.setWindowOpenHandler((details) => {
+app.on('web-contents-created', (event, webContents) => {
+  webContents.on('context-menu', (event, params) => {
+    const text = params.selectionText;
+    const hasText = !!text;
+    const menuItems = [];
+
+    if (params.linkURL) {
+      menuItems.push({
+        id: 'openLink',
+        label: getTranslation('tw.desktop.main.context.openLink'),
+        click() {
+          const url = params.linkURL;
+          if (isSafeOpenExternal(url)) {
+            shell.openExternal(url);
+          }
+        }
+      });
+      menuItems.push({
+        type: 'separator'
+      });
+    }
+
+    if (params.isEditable) {
+      menuItems.push({
+        id: 'cut',
+        label: getTranslation('tw.desktop.main.context.cut'),
+        enabled: hasText,
+        click: () => {
+          clipboard.writeText(text);
+          webContents.cut();
+        }
+      });
+    }
+    if (hasText || params.isEditable) {
+      menuItems.push({
+        id: 'copy',
+        label: getTranslation('tw.desktop.main.context.copy'),
+        enabled: hasText,
+        click: () => {
+          clipboard.writeText(text);
+        }
+      });
+    }
+    if (params.isEditable) {
+      menuItems.push({
+        id: 'Paste',
+        label: getTranslation('tw.desktop.main.context.paste'),
+        click: () => {
+          webContents.paste();
+        }
+      });
+    }
+
+    if (menuItems.length > 0) {
+      const menu = Menu.buildFromTemplate(menuItems);
+      menu.popup();
+    }
+  });
+  webContents.session.on('will-download', (event, item, webContents) => {
+    const extension = pathUtil.extname(item.getFilename()).replace(/^\./, '').toLowerCase();
+    const extensionName = getTranslationOrNull(`files.${extension}`);
+    if (extensionName) {
+      item.setSaveDialogOptions({
+        filters: [
+          {
+            name: extensionName,
+            extensions: [extension]
+          }
+        ]
+      });
+    }
+  });
+  webContents.setWindowOpenHandler((details) => {
     if (isSafeOpenExternal(details.url)) {
       setImmediate(() => {
         shell.openExternal(details.url);
@@ -615,14 +613,11 @@ app.on('web-contents-created', (event, contents) => {
     }
     return {action: 'deny'};
   });
-  contents.on('will-navigate', (e, url) => {
-    try {
-      const newURL = new URL(url);
-      const baseURL = new URL(getURL('editor'));
-      if (url !== 'mailto:contact@turbowarp.org' && !newURL.href.startsWith(baseURL.href)) {
-        e.preventDefault();
-      }
-    } catch (e) {
+  webContents.on('will-navigate', (e, url) => {
+    if (isSafeOpenExternal(url)) {
+      e.preventDefault();
+      shell.openExternal(url);
+    } else if (url !== 'mailto:contact@turbowarp.org') {
       e.preventDefault();
     }
   });
