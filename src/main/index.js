@@ -21,10 +21,17 @@ const isLinux = process.platform === 'linux';
 const editorWindows = new Set();
 const editorWindowTitle = `TurboWarp Desktop`;
 const filesToOpen = [];
+
 let aboutWindow = null;
 let addonSettingsWindow = null;
 let privacyWindow = null;
 let desktopSettingsWindow = null;
+const closeAllNonEditorWindows = () => [
+  aboutWindow,
+  addonSettingsWindow,
+  privacyWindow,
+  desktopSettingsWindow
+].filter((i) => i).forEach((i) => i.close())
 
 const allowedToAccessFiles = new Set();
 
@@ -312,10 +319,7 @@ function createEditorWindow() {
   window.on('closed', () => {
     editorWindows.delete(window);
     if (editorWindows.size === 0) {
-      if (aboutWindow) aboutWindow.close();
-      if (addonSettingsWindow) addonSettingsWindow.close();
-      if (privacyWindow) privacyWindow.close();
-      if (desktopSettingsWindow) desktopSettingsWindow.close();
+      closeAllNonEditorWindows();
     }
   });
 
