@@ -645,11 +645,13 @@ app.on('web-contents-created', (event, webContents) => {
   });
 
   webContents.on('will-navigate', (e, url) => {
-    if (isSafeOpenExternal(url)) {
+    if (url === 'mailto:contact@turbowarp.org') {
+      // do nothing, let the OS figure out how to handle opening it
+    } else {
       e.preventDefault();
-      shell.openExternal(url);
-    } else if (url !== 'mailto:contact@turbowarp.org') {
-      e.preventDefault();
+      if (isSafeOpenExternal(url)) {
+        shell.openExternal(url);
+      }
     }
   });
 });
