@@ -29,5 +29,7 @@
   "files.wav": "WAV Sound",
   "files.sprite3": "Scratch 3 Sprite",
   "files.txt": "Text Document",
-  "files.webm": "WebM Video"
+  "files.webm": "WebM Video",
+  "files.html": "HTML File",
+  "files.zip": "Zip File"
 }
