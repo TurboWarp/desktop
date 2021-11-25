@@ -5,6 +5,9 @@ contextBridge.exposeInMainWorld('electron', {
     send(...args) {
       return ipcRenderer.send(...args);
     },
+    sendTo(...args) {
+      return ipcRenderer.sendTo(...args);
+    },
     sendSync(...args) {
       return ipcRenderer.sendSync(...args);
     },
@@ -13,6 +16,12 @@ contextBridge.exposeInMainWorld('electron', {
     },
     on(...args) {
       return ipcRenderer.on(...args);
-    }
+    },
+    once(...args) {
+      return ipcRenderer.once(...args);
+    },
+    removeListener(...args) {
+      return ipcRenderer.removeListener(...args);
+    },
   }
 });
