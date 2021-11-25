@@ -111,6 +111,22 @@ const getURL = (route) => {
   });
 };
 
+const closeWindowWhenPressEscape = (window) => {
+  window.webContents.on('before-input-event', (e, input) => {
+    if (
+      input.type === 'keyDown' &&
+      input.key === 'Escape' &&
+      !input.control &&
+      !input.alt &&
+      !input.meta &&
+      !input.isAutoRepeat &&
+      !input.isComposing
+    ) {
+      window.close();
+    }
+  });
+};
+
 const getWindowOptions = (options) => {
   if (isLinux) {
     options.icon = pathUtil.join(__static, 'icon.png');
@@ -133,23 +149,8 @@ const getWindowOptions = (options) => {
 
   options.x = bounds.x + ((bounds.width - options.width) / 2);
   options.y = bounds.y + ((bounds.height - options.height) / 2);
-  return options;
-};
 
-const closeWindowWhenPressEscape = (window) => {
-  window.webContents.on('before-input-event', (e, input) => {
-    if (
-      input.type === 'keyDown' &&
-      input.key === 'Escape' &&
-      !input.control &&
-      !input.alt &&
-      !input.meta &&
-      !input.isAutoRepeat &&
-      !input.isComposing
-    ) {
-      window.close();
-    }
-  });
+  return options;
 };
 
 const createWindow = (url, options) => {
