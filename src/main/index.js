@@ -291,8 +291,12 @@ const createPackagerWindow = (editorWindowId) => {
     width: 700,
     height: 700
   });
+  closeWindowWhenPressEscape(window);
   window.on('page-title-updated', (e) => {
     e.preventDefault();
+  });
+  window.webContents.on('did-create-window', (newWindow) => {
+    closeWindowWhenPressEscape(newWindow);
   });
   window.webContents.setWindowOpenHandler((details) => {
     if (details.url !== 'about:blank') {
