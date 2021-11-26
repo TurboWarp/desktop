@@ -228,20 +228,20 @@ const DesktopHOC = function (WrappedComponent) {
           onClickNewWindow={openNewWindow}
           onClickAbout={[
             {
-              title: getTranslation('about'),
-              onClick: openAbout
-            },
-            {
-              title: getTranslation('privacy'),
-              onClick: openPrivacyPolicy
+              title: getTranslation('packager'),
+              onClick: openPackager
             },
             {
               title: getTranslation('desktop-settings'),
               onClick: onDesktopSettings
             },
             {
-              title: 'TurboWarp Packager',
-              onClick: openPackager
+              title: getTranslation('privacy'),
+              onClick: openPrivacyPolicy
+            },
+            {
+              title: getTranslation('about'),
+              onClick: openAbout
             },
             {
               title: getTranslation('source'),
