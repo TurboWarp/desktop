@@ -67,6 +67,17 @@ const isSafeOpenExternal = (url) => {
   return false;
 };
 
+const defaultWindowOpenHandler = (details) => {
+  if (isSafeOpenExternal(details.url)) {
+    setImmediate(() => {
+      shell.openExternal(details.url);
+    });
+  }
+  return {
+    action: 'deny'
+  }
+};
+
 if (isMac) {
   Menu.setApplicationMenu(Menu.buildFromTemplate([
     { role: 'appMenu' },
@@ -295,24 +306,22 @@ const createPackagerWindow = (editorWindowId) => {
   window.on('page-title-updated', (e) => {
     e.preventDefault();
   });
-  window.webContents.on('did-create-window', (newWindow) => {
-    closeWindowWhenPressEscape(newWindow);
-  });
   window.webContents.setWindowOpenHandler((details) => {
-    if (details.url !== 'about:blank') {
+    if (details.url === 'about:blank') {
+      // Opening preview window
       return {
-        action: 'deny'
+        action: 'allow',
+        overrideBrowserWindowOptions: getWindowOptions({
+          title: 'Preview',
+          width: 640,
+          height: 480
+        })
       };
     }
-    return {
-      action: 'allow',
-      overrideBrowserWindowOptions: getWindowOptions({
-        // title will be updated by window
-        title: 'Preview',
-        width: 640,
-        height: 480
-      })
-    };
+    return defaultWindowOpenHandler(details);
+  });
+  window.webContents.on('did-create-window', (newWindow) => {
+    closeWindowWhenPressEscape(newWindow);
   });
   return window;
 };
@@ -648,14 +657,7 @@ app.on('web-contents-created', (event, webContents) => {
     }
   });
 
-  webContents.setWindowOpenHandler((details) => {
-    if (isSafeOpenExternal(details.url)) {
-      setImmediate(() => {
-        shell.openExternal(details.url);
-      });
-    }
-    return {action: 'deny'};
-  });
+  webContents.setWindowOpenHandler(defaultWindowOpenHandler);
 
   webContents.on('will-navigate', (e, url) => {
     if (url === 'mailto:contact@turbowarp.org') {
