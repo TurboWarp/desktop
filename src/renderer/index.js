@@ -15,7 +15,7 @@ if (route === 'editor') {
 } else if (route === 'desktop-settings') {
   import('./desktop-settings/desktop-settings.jsx');
 } else if (route === 'packager') {
-  import('./packager/packager.jsx');
+  import('./packager/packager.js');
 } else {
   alert(`Invalid route: ${route}`);
 }
