@@ -53,6 +53,7 @@ const isSafeOpenExternal = (url) => {
       // Addons
       parsedUrl.href !== 'https://www.youtube.com/griffpatch' &&
       // Packager
+      parsedUrl.origin !== 'https://packager.turbowarp.org' &&
       parsedUrl.origin !== 'https://experiments.turbowarp.org' &&
       parsedUrl.origin !== 'https://turbowarp.org' &&
       parsedUrl.origin !== 'https://fosshost.org'
