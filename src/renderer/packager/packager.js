@@ -64,13 +64,7 @@ const setProject = (data, name) => {
   const fileInput = document.querySelector('input[type=file]');
   fileInput.files = dataTransfer.files;
   fileInput.dispatchEvent(new Event('change'));
-
-  // Start loading the project
-  // We need a delay to avoid cancellation-related issues
-  setTimeout(() => {
-    const loadButton = document.querySelector('.card button');
-    loadButton.click();
-  });
+  // Packager will automatically start loading after selecting a file
 };
 
 const getPackagerHTML = () => ipcRenderer.invoke('get-packager-html')
