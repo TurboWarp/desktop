@@ -62,7 +62,7 @@ const downloadAsset = async (asset) => {
   const expectedHash = asset.assetId;
   const hash = crypto.createHash('md5').update(new Uint8Array(arrayBuffer)).digest("hex")
   if (hash !== expectedHash) {
-    throw new Error(`${md5ext}: Hash mismatch; expected ${expectedHash} but found ${hash}`);
+    throw new Error(`${md5ext}: Hash mismatch: expected ${expectedHash} but found ${hash}`);
   }
 
   await writeFile(path, Buffer.from(arrayBuffer));
