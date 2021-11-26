@@ -490,12 +490,13 @@ app.on('web-contents-created', (event, webContents) => {
     const hasText = !!text;
     const menuItems = [];
 
+    const url = params.linkURL;
     if (params.linkURL) {
       menuItems.push({
         id: 'openLink',
         label: getTranslation('context.open-link'),
+        enabled: !url.startsWith('blob:'),
         click() {
-          const url = params.linkURL;
           if (isSafeOpenExternal(url)) {
             shell.openExternal(url);
           }
