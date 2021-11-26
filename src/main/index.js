@@ -121,7 +121,9 @@ const closeWindowWhenPressEscape = (window) => {
       !input.alt &&
       !input.meta &&
       !input.isAutoRepeat &&
-      !input.isComposing
+      !input.isComposing &&
+      // set by logic in web-contents-created
+      !e.didJustLeaveFullScreen
     ) {
       window.close();
     }
@@ -608,6 +610,8 @@ app.on('web-contents-created', (event, webContents) => {
         window.isFullScreen()
       ) {
         e.preventDefault();
+        // used by closeWindowWhenPressEscape
+        e.didJustLeaveFullScreen = true;
         window.setFullScreen(false);
       }
       // Ctrl+R and Ctrl+Shift+R to reload
