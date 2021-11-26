@@ -14,7 +14,7 @@ import {defaultProjectId, onFetchedProjectData, onLoadedProject, requestNewProje
 import SettingsStore from 'scratch-gui/src/addons/settings-store-singleton';
 import AddonChannels from 'scratch-gui/src/addons/channels';
 import {WrappedFileHandle} from './filesystem-api-impl';
-import {localeChanged, getTranslation} from './translations';
+import {localeChanged, getTranslation} from '../translations';
 import runAddons from 'scratch-gui/src/addons/entry';
 import './gui.css';
 

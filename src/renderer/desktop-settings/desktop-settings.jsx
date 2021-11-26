@@ -1,7 +1,7 @@
 import {ipcRenderer} from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import {getTranslation} from '../translations';
 import styles from './desktop-settings.css';
 
 class DesktopSettings extends React.Component {
@@ -28,7 +28,7 @@ class DesktopSettings extends React.Component {
   render () {
     return (
       <main>
-        <h1>Desktop Settings</h1>
+        <h1>{getTranslation('desktop-settings')}</h1>
         <div>
           <label>
             <input
@@ -37,22 +37,25 @@ class DesktopSettings extends React.Component {
               disabled={!this.state.canUpdateCheckerBeEnabled}
               checked={this.state.isUpdateCheckerEnabled}
             />
-            {' Enable update checker'}
+            {' '}
+            {getTranslation('settings.enable-update-checker')}
           </label>
           {' '}
           <a
             onClick={this.handleOpenPrivacyPolicy}
             href="#"
-          >{'(privacy)'}</a>
+          >
+            {getTranslation('settings.privacy-link')}
+          </a>
         </div>
         {this.state.canUpdateCheckerBeEnabled ? (
           this.state.isUpdateCheckerEnabled ? (
             null
           ) : (
-            <p>{'Disabling the update checker is not recommended.'}</p>
+            <p>{getTranslation('settings.disabled-update-checker')}</p>
           )
         ) : (
-          <p>{'The update checker is not enabled in this build. Updates are probably handled by the store you installed the app from.'}</p>
+          <p>{getTranslation('settings.build-time-disabled-update-checker')}</p>
         )}
       </main>
     );

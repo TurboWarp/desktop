@@ -1,5 +1,5 @@
 import {ipcRenderer} from 'electron';
-import getTranslations from '../../l10n/index';
+import getTranslations from '../l10n/index';
 
 let locale = navigator.language;
 let translations = getTranslations(locale);

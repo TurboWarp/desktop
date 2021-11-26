@@ -1,4 +1,5 @@
 import {ipcRenderer} from 'electron';
+import {getTranslation} from '../translations';
 
 const editorWindowId = +(new URLSearchParams(location.search).get('editor_id'));
 
@@ -19,14 +20,14 @@ loadingProjectOuter.style.textAlign = 'center';
 loadingProjectOuter.style.userSelect = 'none';
 
 const loadingProjectText = document.createElement('div');
-loadingProjectText.textContent = 'Loading project...';
+loadingProjectText.textContent = getTranslation('packager.loading');
 loadingProjectText.style.color = 'white';
 loadingProjectText.style.fontSize = '32px';
 loadingProjectText.style.marginBottom = '20px';
 loadingProjectOuter.appendChild(loadingProjectText);
 
 const cancelLoadingProject = document.createElement('button');
-cancelLoadingProject.textContent = 'Cancel';
+cancelLoadingProject.textContent = getTranslation('prompt.cancel');
 let loadingCancelled = false;
 cancelLoadingProject.addEventListener('click', () => {
   loadingCancelled = true;
