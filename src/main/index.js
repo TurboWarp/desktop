@@ -285,8 +285,11 @@ const createDesktopSettingsWindow = () => {
 const createPackagerWindow = (editorWindowId) => {
   const window = createWindow(`${getURL('packager')}&editor_id=${editorWindowId}`, {
     title: 'TurboWarp Packager',
-    width: 800,
+    width: 700,
     height: 700
+  });
+  window.on('page-title-updated', (e) => {
+    e.preventDefault();
   });
   window.webContents.setWindowOpenHandler((details) => {
     if (details.url !== 'about:blank') {
@@ -299,8 +302,8 @@ const createPackagerWindow = (editorWindowId) => {
       overrideBrowserWindowOptions: getWindowOptions({
         // title will be updated by window
         title: 'Preview',
-        width: 480,
-        height: 360
+        width: 640,
+        height: 480
       })
     };
   });

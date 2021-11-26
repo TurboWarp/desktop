@@ -34,10 +34,11 @@ cancelLoadingProject.addEventListener('click', () => {
 });
 loadingProjectOuter.appendChild(cancelLoadingProject);
 
+// The packager's preview feature tries to open blob: URIs, but Electron doesn't support that,
+// so we'll force it to instead open a blank window and write the blob manually.
+const nativeOpen = window.open;
 window.open = (url) => {
-  // The packager's preview feature tries to open blob: URIs, but Electron doesn't support that,
-  // so we'll instead open a blank window and write the blob manually.
-  const newWindow = window.open('about:blank');
+  const newWindow = nativeOpen('about:blank');
   fetch(url)
     .then((r) => r.text())
     .then((text) => {
