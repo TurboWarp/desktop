@@ -173,7 +173,7 @@ const DesktopHOC = function (WrappedComponent) {
           })
           .catch(err => {
             console.error(err);
-            alert(getTranslation('tw.desktop.renderer.failedToLoad').replace('{error}', '' + err));
+            alert(getTranslation('failed-to-load').replace('{error}', '' + err));
             this.props.onLoadingCompleted();
             this.props.onLoadedProject(this.props.loadingState, false);
             this.props.onHasInitialProject(false, this.props.loadingState);
@@ -232,15 +232,15 @@ const DesktopHOC = function (WrappedComponent) {
           onClickNewWindow={openNewWindow}
           onClickAbout={[
             {
-              title: getTranslation('tw.desktop.about'),
+              title: getTranslation('about'),
               onClick: openAbout
             },
             {
-              title: getTranslation('tw.desktop.privacy'),
+              title: getTranslation('privacy'),
               onClick: openPrivacyPolicy
             },
             {
-              title: getTranslation('tw.desktop.settings'),
+              title: getTranslation('desktop-settings'),
               onClick: onDesktopSettings
             },
             {
@@ -248,11 +248,11 @@ const DesktopHOC = function (WrappedComponent) {
               onClick: openPackager
             },
             {
-              title: getTranslation('tw.desktop.renderer.source'),
+              title: getTranslation('source'),
               onClick: openSourceCode
             },
             {
-              title: getTranslation('tw.desktop.renderer.credits'),
+              title: getTranslation('credits'),
               onClick: openCredits
             }
           ]}

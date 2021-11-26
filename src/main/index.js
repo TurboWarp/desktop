@@ -74,7 +74,7 @@ if (isMac) {
       submenu: [
         { role: 'quit' },
         {
-          label: getTranslation('tw.desktop.main.menuBar.newWindow'),
+          label: getTranslation('menu.new-window'),
           accelerator: 'Cmd+N',
           click: () => {
             createEditorWindow();
@@ -89,7 +89,7 @@ if (isMac) {
       role: 'help',
       submenu: [
         {
-          label: getTranslation('tw.desktop.main.menuBar.learnMore'),
+          label: getTranslation('menu.learn-more'),
           click: () => shell.openExternal('https://desktop.turbowarp.org/')
         }
       ]
@@ -195,13 +195,13 @@ const createEditorWindow = () => {
     const choice = dialog.showMessageBoxSync(window, {
       type: 'info',
       buttons: [
-        getTranslation('tw.desktop.main.unload.stay'),
-        getTranslation('tw.desktop.main.unload.leave')
+        getTranslation('unload.stay'),
+        getTranslation('unload.leave')
       ],
       cancelId: 0,
       defaultId: 0,
-      message: getTranslation('tw.desktop.main.unload.message'),
-      detail: getTranslation('tw.desktop.main.unload.detail')
+      message: getTranslation('unload.message'),
+      detail: getTranslation('unload.detail')
     });
     if (choice === 1) {
       e.preventDefault();
@@ -216,7 +216,7 @@ const createEditorWindow = () => {
 const createAboutWindow = () => {
   if (!aboutWindow) {
     aboutWindow = createWindow(getURL('about'), {
-      title: getTranslation('tw.desktop.about'),
+      title: getTranslation('about'),
       width: 800,
       height: 450,
       minimizable: false,
@@ -251,7 +251,7 @@ const createAddonSettingsWindow = () => {
 const createPrivacyWindow = () => {
   if (!privacyWindow) {
     privacyWindow = createWindow(getURL('privacy'), {
-      title: getTranslation('tw.desktop.privacy'),
+      title: getTranslation('privacy'),
       width: 600,
       height: 450,
       minimizable: false,
@@ -269,7 +269,7 @@ const createPrivacyWindow = () => {
 const createDesktopSettingsWindow = () => {
   if (!desktopSettingsWindow) {
     desktopSettingsWindow = createWindow(getURL('desktop-settings'), {
-      title: getTranslation('tw.desktop.settings'),
+      title: getTranslation('desktop-settings'),
       width: 500,
       height: 300
     });
@@ -423,7 +423,7 @@ ipcMain.on('alert', (event, message) => {
   dialog.showMessageBoxSync(BrowserWindow.fromWebContents(event.sender), {
     message: '' + message,
     buttons: [
-      getTranslation('tw.desktop.renderer.prompt.ok')
+      getTranslation('prompt.ok')
     ]
   });
   // set returnValue to something to reply so the renderer can resume
@@ -434,8 +434,8 @@ ipcMain.on('confirm', (event, message) => {
   const result = dialog.showMessageBoxSync(BrowserWindow.fromWebContents(event.sender), {
     message: '' + message,
     buttons: [
-      getTranslation('tw.desktop.renderer.prompt.ok'),
-      getTranslation('tw.desktop.renderer.prompt.cancel')
+      getTranslation('prompt.ok'),
+      getTranslation('prompt.cancel')
     ],
     defaultId: 0,
     cancelId: 1
@@ -490,7 +490,7 @@ app.on('web-contents-created', (event, webContents) => {
     if (params.linkURL) {
       menuItems.push({
         id: 'openLink',
-        label: getTranslation('tw.desktop.main.context.openLink'),
+        label: getTranslation('context.open-link'),
         click() {
           const url = params.linkURL;
           if (isSafeOpenExternal(url)) {
@@ -506,7 +506,7 @@ app.on('web-contents-created', (event, webContents) => {
     if (params.isEditable) {
       menuItems.push({
         id: 'cut',
-        label: getTranslation('tw.desktop.main.context.cut'),
+        label: getTranslation('context.cut'),
         enabled: hasText,
         click: () => {
           clipboard.writeText(text);
@@ -517,7 +517,7 @@ app.on('web-contents-created', (event, webContents) => {
     if (hasText || params.isEditable) {
       menuItems.push({
         id: 'copy',
-        label: getTranslation('tw.desktop.main.context.copy'),
+        label: getTranslation('context.copy'),
         enabled: hasText,
         click: () => {
           clipboard.writeText(text);
@@ -527,7 +527,7 @@ app.on('web-contents-created', (event, webContents) => {
     if (params.isEditable) {
       menuItems.push({
         id: 'Paste',
-        label: getTranslation('tw.desktop.main.context.paste'),
+        label: getTranslation('context.paste'),
         click: () => {
           webContents.paste();
         }

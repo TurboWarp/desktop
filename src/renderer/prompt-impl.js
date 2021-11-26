@@ -45,7 +45,7 @@ window.prompt = (message, defaultValue) => new Promise((resolve, reject) => {
 
   const okButton = document.createElement('button');
   okButton.className = styles.buttonOk;
-  okButton.textContent = getTranslation('tw.desktop.renderer.prompt.ok');
+  okButton.textContent = getTranslation('prompt.ok');
   okButton.onclick = () => {
     cleanup();
     resolve(input.value);
@@ -53,7 +53,7 @@ window.prompt = (message, defaultValue) => new Promise((resolve, reject) => {
 
   cancelButton = document.createElement('button');
   cancelButton.className = styles.buttonCancel;
-  cancelButton.textContent = getTranslation('tw.desktop.renderer.prompt.cancel');
+  cancelButton.textContent = getTranslation('prompt.cancel');
   cancelButton.onclick = () => {
     cleanup();
     resolve(null);

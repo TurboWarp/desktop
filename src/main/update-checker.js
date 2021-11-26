@@ -93,13 +93,13 @@ const updateAvailable = async (latestVersion) => {
   const choice = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
     type: 'info',
     buttons: [
-      getTranslation('tw.desktop.main.updater.download'),
-      getTranslation('tw.desktop.main.updater.later')
+      getTranslation('updater.download'),
+      getTranslation('updater.later')
     ],
     cancelId: 1,
-    message: getTranslation('tw.desktop.main.updater.message').replace('{version}', latestVersion),
-    detail: getTranslation('tw.desktop.main.updater.detail'),
-    checkboxLabel: getTranslation('tw.desktop.main.updater.ignore'),
+    message: getTranslation('updater.message').replace('{version}', latestVersion),
+    detail: getTranslation('updater.detail'),
+    checkboxLabel: getTranslation('updater.ignore'),
     checkboxChecked: false
   });
 
@@ -114,12 +114,12 @@ const urgentUpdateAvailable = (latestVersion) => {
   const choice = dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
     type: 'warning',
     buttons: [
-      getTranslation('tw.desktop.main.updater.download'),
-      getTranslation('tw.desktop.main.updater.later')
+      getTranslation('updater.download'),
+      getTranslation('updater.later')
     ],
     cancelId: 1,
-    message: getTranslation('tw.desktop.main.updater.security.message').replace('{version}', latestVersion),
-    detail: getTranslation('tw.desktop.main.updater.security.detail')
+    message: getTranslation('updater.security.message').replace('{version}', latestVersion),
+    detail: getTranslation('updater.security.detail')
   });
 
   if (choice === 0) {
