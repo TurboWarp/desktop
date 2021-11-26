@@ -381,10 +381,6 @@ ipcMain.on('open-source-code', () => {
   shell.openExternal('https://github.com/TurboWarp');
 });
 
-ipcMain.on('open-credits', () => {
-  shell.openExternal('https://turbowarp.org/credits.html');
-});
-
 ipcMain.on('export-addon-settings', async (event, settings) => {
   const result = await dialog.showSaveDialog(BrowserWindow.fromWebContents(event.sender), {
     defaultPath: 'turbowarp-addon-setting.json',

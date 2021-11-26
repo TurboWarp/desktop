@@ -27,7 +27,6 @@
   "prompt.cancel": "Cancel",
   "packager.loading": "Loading project...",
   "source": "Source Code",
-  "credits": "Credits",
   "failed-to-load": "Could not load project file: {error}",
   "files.svg": "SVG Image",
   "files.png": "PNG Image",

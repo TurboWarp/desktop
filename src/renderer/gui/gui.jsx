@@ -76,10 +76,6 @@ const openPackager = () => {
   ipcRenderer.send('open-packager');
 };
 
-const openCredits = () => {
-  ipcRenderer.send('open-credits');
-};
-
 const handleUpdateProjectTitle = (title) => {
   document.title = title;
 };
@@ -250,10 +246,6 @@ const DesktopHOC = function (WrappedComponent) {
             {
               title: getTranslation('source'),
               onClick: openSourceCode
-            },
-            {
-              title: getTranslation('credits'),
-              onClick: openCredits
             }
           ]}
           {...props}
