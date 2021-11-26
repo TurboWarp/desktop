@@ -4,26 +4,11 @@ import {getTranslation} from '../translations';
 const editorWindowId = +(new URLSearchParams(location.search).get('editor_id'));
 
 const loadingProjectOuter = document.createElement('div');
-// Due to how the packager HTML is loaded, it's easiest to use inline styles here
-loadingProjectOuter.style.position = 'absolute';
-loadingProjectOuter.style.top = '0';
-loadingProjectOuter.style.left = '0';
-loadingProjectOuter.style.width = '100%';
-loadingProjectOuter.style.height = '100%';
-loadingProjectOuter.style.zIndex = '10';
-loadingProjectOuter.style.background = 'rgba(0, 0, 0, 0.8)';
-loadingProjectOuter.style.display = 'flex';
-loadingProjectOuter.style.flexDirection = 'column';
-loadingProjectOuter.style.alignItems = 'center';
-loadingProjectOuter.style.justifyContent = 'center';
-loadingProjectOuter.style.textAlign = 'center';
-loadingProjectOuter.style.userSelect = 'none';
+loadingProjectOuter.className = 'loading-project-outer';
 
 const loadingProjectText = document.createElement('div');
 loadingProjectText.textContent = getTranslation('packager.loading');
-loadingProjectText.style.color = 'white';
-loadingProjectText.style.fontSize = '32px';
-loadingProjectText.style.marginBottom = '20px';
+loadingProjectText.className = 'loading-project-text';
 loadingProjectOuter.appendChild(loadingProjectText);
 
 const cancelLoadingProject = document.createElement('button');
@@ -31,8 +16,41 @@ cancelLoadingProject.textContent = getTranslation('prompt.cancel');
 let loadingCancelled = false;
 cancelLoadingProject.addEventListener('click', () => {
   loadingCancelled = true;
+  loadingProjectOuter.remove();
 });
 loadingProjectOuter.appendChild(cancelLoadingProject);
+
+// Because of how the packager is loaded, this is the easiest way to add CSS for the loading screen
+const loadingProjectStyles = document.createElement('style');
+loadingProjectStyles.textContent = `
+.loading-project-outer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  user-select: none;
+}
+.loading-project-text {
+  color: black;
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+[theme="dark"] .loading-project-outer {
+  background: rgba(0, 0, 0, 0.8);
+}
+[theme="dark"] .loading-project-text {
+  color: white;
+}
+`;
+loadingProjectOuter.appendChild(loadingProjectStyles);
 
 // The packager's preview feature tries to open blob: URIs, but Electron doesn't support that,
 // so we'll force it to instead open a blank window and write the blob manually.
