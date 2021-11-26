@@ -29,3 +29,14 @@ jobs:
         NODE_OPTIONS: --max-old-space-size=4096
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         TW_ENABLE_UPDATE_CHECKER: "1"
+    - name: Package appx
+      if: runner.os == 'Windows'
+      run: npm run dist -- --windows appx --publish never --x64 --ia32
+      env:
+        NODE_OPTIONS: --max-old-space-size=4096
+    - name: Upload artifacts
+      if: runner.os == 'Windows'
+      uses: actions/upload-artifact@v2
+      with:
+        name: appx
+        path: dist/*.appx
