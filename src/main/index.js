@@ -466,6 +466,10 @@ ipcMain.handle('request-url', (event, url) => new Promise((resolve, reject) => {
   request.end();
 }));
 
+ipcMain.on('reload', (event) => {
+  event.sender.reload();
+});
+
 app.on('window-all-closed', () => {
   app.quit();
 });
