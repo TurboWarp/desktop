@@ -1,5 +1,5 @@
 import {ipcMain} from 'electron'
-import getTranslations from '../l10n/index';
+import {getTranslations} from '../l10n/';
 import {get, set} from './store';
 
 const STORAGE_KEY = 'locale';

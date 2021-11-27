@@ -1,7 +1,7 @@
 import englishTranslations from './en.json';
 import otherTranslations from './translations.json';
 
-const getTranslations = locale => {
+export const getTranslations = locale => {
   const result = Object.assign({}, englishTranslations);
   const possible = [locale];
   if (locale.includes('-')) {
@@ -17,4 +17,7 @@ const getTranslations = locale => {
   return result;
 };
 
-export default getTranslations;
+export const getLanguages = () => [
+  'en',
+  ...Object.keys(otherTranslations)
+];
