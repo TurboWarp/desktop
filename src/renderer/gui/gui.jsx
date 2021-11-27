@@ -136,11 +136,10 @@ const DesktopHOC = function (WrappedComponent) {
         title: null
       };
       this.handleExportProjectOverIPC = this.handleExportProjectOverIPC.bind(this);
+      localeChanged(this.props.locale);
     }
     componentDidMount () {
       ipcRenderer.on('export-project/start', this.handleExportProjectOverIPC);
-
-      localeChanged(this.props.locale);
 
       if (mountedOnce) {
         return;
