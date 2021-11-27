@@ -41,7 +41,7 @@ const handleStorageInit = (storage) => {
 };
 
 AddonChannels.reloadChannel.addEventListener('message', () => {
-  ipcRenderer.send('reload');
+  location.reload();
 });
 
 AddonChannels.changeChannel.addEventListener('message', e => {

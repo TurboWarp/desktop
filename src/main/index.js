@@ -486,10 +486,6 @@ ipcMain.handle('request-url', (event, url) => new Promise((resolve, reject) => {
   request.end();
 }));
 
-ipcMain.on('reload', (event) => {
-  event.sender.reload();
-});
-
 app.on('window-all-closed', () => {
   app.quit();
 });
@@ -665,12 +661,22 @@ app.on('web-contents-created', (event, webContents) => {
 
   webContents.on('will-navigate', (e, url) => {
     if (url === 'mailto:contact@turbowarp.org') {
-      // do nothing, let the OS figure out how to handle opening it
-    } else {
-      e.preventDefault();
-      if (isSafeOpenExternal(url)) {
-        shell.openExternal(url);
+      // If clicking on the contact email address, we'll let the OS figure out how to open it
+      return;
+    }
+    try {
+      const newURL = new URL(url);
+      const baseURL = new URL(getURL('editor'));
+      if (newURL.href.startsWith(baseURL.href)) {
+        // editor is probably reloading itself (for example, changing custom stage size), let it
+      } else {
+        e.preventDefault();
+        if (isSafeOpenExternal(url)) {
+          shell.openExternal(url);
+        }
       }
+    } catch (e) {
+      e.preventDefault();
     }
   });
 });
