@@ -18,6 +18,10 @@ import {localeChanged, getTranslation} from '../translations';
 import runAddons from 'scratch-gui/src/addons/entry';
 import './gui.css';
 
+if (!navigator.userAgent.includes('Mac OS')) {
+  require('./dark-scrollbars.css');
+}
+
 class StorageHelper {
   constructor (parent, generateURL) {
     this.parent = parent;
