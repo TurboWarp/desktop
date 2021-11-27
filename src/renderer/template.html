@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <!-- electron-webpack always inserts some weird scripts, stub require() to avoid errors -->
+    <!-- electron-webpack always inserts some weird scripts, so we stub require() to avoid errors -->
     <script>
       window.require = (m) => {
         if (m === 'module') return {globalPaths: []};
@@ -35,8 +35,21 @@
     <div id="app"></div>
     <script>
       (function () {
-        try {var localTheme = localStorage.getItem('tw:theme');} catch (e) {}
-        if (localTheme ? localTheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches) document.querySelector('#splash').setAttribute('splash-theme', 'dark');
+        let theme = null;
+        const params = new URLSearchParams(location.search);
+        const route = params.get('route');
+        if (route === 'editor') {
+          theme = localStorage.getItem('tw:theme');
+        } else if (route === 'packager') {
+          theme = localStorage.getItem('P4.theme');
+        } else {
+          // other pages do not support dark mode, so don't display a flash of dark
+          theme = 'light';
+        }
+        if (theme === null) {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.querySelector('#splash').setAttribute('splash-theme', theme);
       })();
     </script>
   </body>
