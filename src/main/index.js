@@ -17,7 +17,7 @@ const isMac = process.platform === 'darwin';
 const isWindows = process.platform === 'win32';
 const isLinux = process.platform === 'linux';
 
-const editorWindowTitle = `TurboWarp Desktop`;
+const appTitle = 'TurboWarp Desktop';
 const filesToOpen = [];
 
 const editorWindows = new Set();
@@ -184,7 +184,7 @@ const createEditorWindow = () => {
   }
 
   const window = createWindow(url, {
-    title: editorWindowTitle,
+    title: appTitle,
     width: 1280,
     height: 800
   });
@@ -192,9 +192,9 @@ const createEditorWindow = () => {
   window.on('page-title-updated', (event, title, explicitSet) => {
     event.preventDefault();
     if (explicitSet && title) {
-      window.setTitle(`${title} - ${editorWindowTitle}`);
+      window.setTitle(`${title} - ${appTitle}`);
     } else {
-      window.setTitle(editorWindowTitle);
+      window.setTitle(appTitle);
     }
   });
 
@@ -436,10 +436,12 @@ ipcMain.on('set-file-changed', (event, changed) => {
 
 ipcMain.on('alert', (event, message) => {
   dialog.showMessageBoxSync(BrowserWindow.fromWebContents(event.sender), {
+    title: appTitle,
     message: '' + message,
     buttons: [
       getTranslation('prompt.ok')
-    ]
+    ],
+    noLink: true
   });
   // set returnValue to something to reply so the renderer can resume
   event.returnValue = 1;
@@ -447,13 +449,15 @@ ipcMain.on('alert', (event, message) => {
 
 ipcMain.on('confirm', (event, message) => {
   const result = dialog.showMessageBoxSync(BrowserWindow.fromWebContents(event.sender), {
+    title: appTitle,
     message: '' + message,
     buttons: [
       getTranslation('prompt.ok'),
       getTranslation('prompt.cancel')
     ],
     defaultId: 0,
-    cancelId: 1
+    cancelId: 1,
+    noLink: true
   }) === 0;
   event.returnValue = result;
 });
