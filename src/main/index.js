@@ -293,7 +293,8 @@ const createPackagerWindow = (editorWebContents) => {
   const window = createWindow(`${getURL('packager')}&editor_id=${editorWebContents.id}`, {
     title: 'TurboWarp Packager',
     width: 700,
-    height: 700
+    height: 700,
+    parent: BrowserWindow.fromWebContents(editorWebContents)
   });
   closeWindowWhenPressEscape(window);
   window.on('page-title-updated', (e) => {
@@ -307,7 +308,8 @@ const createPackagerWindow = (editorWebContents) => {
         overrideBrowserWindowOptions: getWindowOptions({
           title: 'Preview',
           width: 640,
-          height: 480
+          height: 480,
+          parent: window
         })
       };
     }
