@@ -424,13 +424,14 @@
 
     <section class="changelog">
       <div>
-        <h2>Changes from v0.11.0 to v0.12.0</h2>
+        <h2>Changes from v0.12.0 to v0.13.0</h2>
         <ul>
-          <li>Improved dark mode</li>
-          <li>New addons: Switch variables between "For all sprites" and "For this sprite only", Editor comment previews (enabled by default), Disable compiler in editor (dangerous)</li>
-          <li>Scratch Cat and friends have been added back to the builtin sprite libraries. This does not imply an endorsement from Scratch.</li>
-          <li>Update checker can now be disabled from the new "(?)" > Desktop Settings menu</li>
-          <li>Various bug fixes</li>
+          <li>TurboWarp Desktop now includes an offline version of the <a href="https://packager.turbowarp.org/">TurboWarp Packager</a> for converting your projects to formats such as HTML, Zip, or executable files. Press (?) > TurboWarp Packager to open it. It will automatically open the project you have open in the editor. This feature is still very experimental.</li>
+          <li>New addon: Two-column category menu</li>
+          <li>New addon: Running block border (only works when compiler disabled; in the "Dangerous" section)</li>
+          <li class="os-windows">Windows: Scrollbars are now dark in dark mode</li>
+          <li class="os-linux">Linux: Scrollbars are now dark in dark mode</li>
+          <li>Fixed a lot of bugs</li>
           <li>Updated translations</li>
         </ul>
         <p class="os-windows" data-l10n="update.windows">To update, download and run the new installer below.</p>
@@ -748,7 +749,7 @@
     </script>
     <script>
       (function() {
-        var VERSION = '0.12.0';
+        var VERSION = '0.13.0';
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'windows';
