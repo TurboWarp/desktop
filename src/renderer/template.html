@@ -38,7 +38,7 @@
         let theme = null;
         const params = new URLSearchParams(location.search);
         const route = params.get('route');
-        if (route === 'editor') {
+        if (route === 'editor' || route === 'settings') {
           theme = localStorage.getItem('tw:theme');
         } else if (route === 'packager') {
           theme = localStorage.getItem('P4.theme');
