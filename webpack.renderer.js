@@ -7,6 +7,12 @@ const libraryFilesFolder = path.resolve(__dirname, 'library-files');
 if (!fs.existsSync(libraryFilesFolder)) {
     fs.mkdirSync(libraryFilesFolder);
 }
+if (!fs.existsSync(path.join(libraryFilesFolder, '0a7b872042cecaf30cc154c0144f002b.svg'))) {
+    console.warn('You are missing library files, so the builtin sprite, costume, backdrop, and sound libraries will not work. Run `npm run fetch` to download them.');
+}
+if (!fs.existsSync(path.join(__dirname, 'static', 'packager.html'))) {
+    console.warn('You are missing the packager HTML, the builtin packager will not work. Run `npm run fetch` to download it.');
+}
 
 module.exports = defaultConfig => {
     defaultConfig.module.rules = [];
