@@ -107,4 +107,7 @@ const getProjectFromEditor = () => {
 getPackagerHTML().then((html) => {
   loadHTML(html);
   getProjectFromEditor();
+}).catch((err) => {
+  alert(err);
+  close();
 });
