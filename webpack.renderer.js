@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const merge = require('webpack-merge');
-const DefinePlugin = require('webpack').DefinePlugin;
 
 const libraryFilesFolder = path.resolve(__dirname, 'library-files');
 if (!fs.existsSync(libraryFilesFolder)) {
