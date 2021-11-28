@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {ipcRenderer} from 'electron';
 
 import Settings from 'scratch-gui/src/addons/settings/settings.jsx';
+import '../dark-scrollbars';
 
 const onExportSettings = settings => {
   ipcRenderer.send('export-addon-settings', settings);

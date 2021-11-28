@@ -16,11 +16,8 @@ import AddonChannels from 'scratch-gui/src/addons/channels';
 import {WrappedFileHandle} from './filesystem-api-impl';
 import {localeChanged, getTranslation} from '../translations';
 import runAddons from 'scratch-gui/src/addons/entry';
+import '../dark-scrollbars';
 import './gui.css';
-
-if (!navigator.userAgent.includes('Mac OS')) {
-  require('./dark-scrollbars.css');
-}
 
 class StorageHelper {
   constructor (parent, generateURL) {
