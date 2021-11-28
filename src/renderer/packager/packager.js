@@ -66,6 +66,7 @@ window.open = (url) => {
 };
 
 const loadHTML = (html) => {
+  document.open();
   document.write(html);
   document.close();
 };
