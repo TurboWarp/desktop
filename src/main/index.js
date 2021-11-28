@@ -176,19 +176,16 @@ const createWindow = (url, options) => {
 const createEditorWindow = () => {
   // Note: the route for this must be `editor`, otherwise the dev tools keyboard shortcuts will not work.
   let url = getURL('editor');
-
   const fileToOpen = filesToOpen.shift();
   if (typeof fileToOpen !== 'undefined') {
     url += `&file=${encodeURIComponent(fileToOpen)}`;
     allowedToAccessFiles.add(fileToOpen);
   }
-
   const window = createWindow(url, {
     title: appTitle,
     width: 1280,
     height: 800
   });
-
   window.on('page-title-updated', (event, title, explicitSet) => {
     event.preventDefault();
     if (explicitSet && title) {
@@ -197,14 +194,12 @@ const createEditorWindow = () => {
       window.setTitle(appTitle);
     }
   });
-
   window.on('closed', () => {
     editorWindows.delete(window);
     if (editorWindows.size === 0) {
       closeAllNonEditorWindows();
     }
   });
-
   window.webContents.on('will-prevent-unload', (e) => {
     const choice = dialog.showMessageBoxSync(window, {
       type: 'info',
@@ -221,9 +216,7 @@ const createEditorWindow = () => {
       e.preventDefault();
     }
   });
-
   editorWindows.add(window);
-
   return window;
 };
 
@@ -296,8 +289,8 @@ const createDesktopSettingsWindow = () => {
   desktopSettingsWindow.focus();
 };
 
-const createPackagerWindow = (editorWindowId) => {
-  const window = createWindow(`${getURL('packager')}&editor_id=${editorWindowId}`, {
+const createPackagerWindow = (editorWebContents) => {
+  const window = createWindow(`${getURL('packager')}&editor_id=${editorWebContents.id}`, {
     title: 'TurboWarp Packager',
     width: 700,
     height: 700
@@ -391,7 +384,7 @@ ipcMain.on('open-desktop-settings', () => {
 });
 
 ipcMain.on('open-packager', (event) => {
-  createPackagerWindow(event.sender.id);
+  createPackagerWindow(event.sender);
 });
 
 ipcMain.handle('get-packager-html', () => readFile(pathUtil.join(__static, 'packager.html')));
