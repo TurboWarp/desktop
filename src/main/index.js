@@ -202,6 +202,7 @@ const createEditorWindow = () => {
   });
   window.webContents.on('will-prevent-unload', (e) => {
     const choice = dialog.showMessageBoxSync(window, {
+      title: APP_NAME,
       type: 'info',
       buttons: [
         getTranslation('unload.stay'),

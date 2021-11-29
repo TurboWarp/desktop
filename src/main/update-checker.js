@@ -1,6 +1,7 @@
 import {net, dialog, shell, BrowserWindow, ipcMain} from 'electron';
 import lt from 'semver/functions/lt';
 import {version} from '../../package.json';
+import {APP_NAME} from './brand';
 import {get, set} from './store';
 import {getTranslation} from './translations';
 
@@ -91,6 +92,7 @@ const updateAvailable = async (latestVersion) => {
   }
 
   const choice = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+    title: APP_NAME,
     type: 'info',
     buttons: [
       getTranslation('updater.download'),
@@ -112,6 +114,7 @@ const updateAvailable = async (latestVersion) => {
 
 const urgentUpdateAvailable = (latestVersion) => {
   const choice = dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
+    title: APP_NAME,
     type: 'warning',
     buttons: [
       getTranslation('updater.download'),
