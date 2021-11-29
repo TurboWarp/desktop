@@ -6,6 +6,7 @@ import util from 'util';
 import {format as formatUrl} from 'url';
 import checkForUpdate from './update-checker';
 import {getTranslation, getTranslationOrNull} from './translations';
+import {APP_NAME} from './brand';
 import './advanced-user-customizations';
 import * as store from './store';
 
@@ -17,7 +18,6 @@ const isMac = process.platform === 'darwin';
 const isWindows = process.platform === 'win32';
 const isLinux = process.platform === 'linux';
 
-const appTitle = 'TurboWarp Desktop';
 const filesToOpen = [];
 
 const editorWindows = new Set();
@@ -182,16 +182,16 @@ const createEditorWindow = () => {
     allowedToAccessFiles.add(fileToOpen);
   }
   const window = createWindow(url, {
-    title: appTitle,
+    title: APP_NAME,
     width: 1280,
     height: 800
   });
   window.on('page-title-updated', (event, title, explicitSet) => {
     event.preventDefault();
     if (explicitSet && title) {
-      window.setTitle(`${title} - ${appTitle}`);
+      window.setTitle(`${title} - ${APP_NAME}`);
     } else {
-      window.setTitle(appTitle);
+      window.setTitle(APP_NAME);
     }
   });
   window.on('closed', () => {
@@ -431,7 +431,7 @@ ipcMain.on('set-file-changed', (event, changed) => {
 
 ipcMain.on('alert', (event, message) => {
   dialog.showMessageBoxSync(BrowserWindow.fromWebContents(event.sender), {
-    title: appTitle,
+    title: APP_NAME,
     message: '' + message,
     buttons: [
       getTranslation('prompt.ok')
@@ -444,7 +444,7 @@ ipcMain.on('alert', (event, message) => {
 
 ipcMain.on('confirm', (event, message) => {
   const result = dialog.showMessageBoxSync(BrowserWindow.fromWebContents(event.sender), {
-    title: appTitle,
+    title: APP_NAME,
     message: '' + message,
     buttons: [
       getTranslation('prompt.ok'),
