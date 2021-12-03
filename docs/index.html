@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -15,7 +16,7 @@
     <meta property="og:image:width" content="1280" />
     <meta property="og:image:height" content="800" />
     <meta name="twitter:card" content="summary_large_image" />
-    <style>
+    <style>      
       * {
         box-sizing: border-box;
       }
@@ -76,7 +77,7 @@
         padding-top: 32px;
         padding-bottom: 32px;
         color: black;
-        background-color: #ff4c4c;
+        background-color: #c92e2e;
         text-align: center;
       }
       .header-title {
@@ -160,10 +161,13 @@
         display: flex;
         align-items: center;
       }
+      .select-os-buttons button:focus{
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.8); 
+      }
       .select-os-buttons button:last-child {
         margin-right: 0;
       }
-      .select-os-buttons button:hover {
+      .select-os-buttons button:hover{
         box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
       }
       .select-os-buttons button:active {
@@ -203,6 +207,9 @@
         justify-content: center;
         text-align: center;
         margin: 0 0 32px 0;
+      }
+      .download-button-inner:focus{
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.8); 
       }
       .download-button-inner {
         display: flex;
@@ -268,12 +275,18 @@
           columns: 1;
         }
       }
+      .links-container{
+        border: 2.5px solid #eee;
+        border-radius: 2px;
+      }
       .link {
         color: inherit;
         display: flex;
         align-items: center;
         padding: 15px 0;
         transition: .2s background-color;
+        text-decoration: none;
+        border: 0.0001px solid #eee;
       }
       .link:hover {
         background-color: #eee;
@@ -285,8 +298,8 @@
         align-items: center;
       }
       .picture-container picture {
-        width: 100%;
-        height: 100%;
+        width: 50%;
+        height: 50%;
         filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
       }
       .picture-container picture img {
@@ -294,6 +307,9 @@
         height: 100%;
         max-width: 1280px;
         margin: auto;
+      }
+      .githubBugs,.scratchBugs,.source,.privacy:hover,.githubBugs,.scratchBugs,.source,.privacy:focus{
+        text-decoration: none;
       }
       .picture-dark {
         display: none;
@@ -548,9 +564,9 @@
         </div>
       </div>
     </section>
-
+<!-- githubBugs, privacy, source,scratchBugs -->
     <section class="links">
-      <div class="links-inner">
+      <div class="links-inner links-container">
         <a class="link" href="https://github.com/TurboWarp/desktop/">
           <div class="icon">
             <!-- Icon from https://fontawesome.com/v5.15/icons/code?style=solid -->
@@ -583,25 +599,24 @@
     </section>
 
     <section class="picture-container">
-      <picture class="os-not-mac picture-light">
+      <picture onclick="window.location = 'screenshot-win-light.webp'" class="os-not-mac picture-light">
         <source data-srcset="screenshot-win-light.webp" type="image/webp">
         <img data-src="screenshot-win-light.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
       </picture>
-      <picture class="os-not-mac picture-dark">
+      <picture onclick="window.location = 'screenshot-win-dark.webp'"class="os-not-mac picture-dark">
         <source data-srcset="screenshot-win-dark.webp" type="image/webp">
         <img data-src="screenshot-win-dark.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
       </picture>
-      <picture class="os-mac picture-light">
+      <picture onclick="window.location = 'screen-shot-mac-light.webp'" class="os-mac picture-light">
         <source data-srcset="screenshot-mac-light.webp" type="image/webp">
         <img data-src="screenshot-mac-light.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
       </picture>
-      <picture class="os-mac picture-dark">
+      <picture onclick="window.location = 'screen-shot-mac-dark.webp'" class="os-mac picture-dark">
         <source data-srcset="screenshot-mac-dark.webp" type="image/webp">
         <img data-src="screenshot-mac-dark.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
       </picture>
       <p class="picture-caption" data-l10n="picture.caption">Project pictured: <a href="https://scratch.mit.edu/projects/425020125/" data-l10n-subkey="project">Full Sphere Path Tracer by piano_miles</a></p>
     </section>
-
     <script>
       window.L = (function () {
         const allLanguageMessages = /*===*/{
@@ -623,8 +638,6 @@
 "vi":{"header.subtitle":"Sử dụng {TurboWarp}, một phần mềm chỉnh sửa cho Scratch với trình biên dịch, chế độ tối, addons, và nhiều hơn nữa, từ một ứng dụng trên bàn làm việc của bạn. Nó có thể hoạt động kể cả khi bạn không trực tuyến."},
 "zh-cn":{"githubBugs":"在 Github 报告错误","header.affiliation":"TurboWarp 不属于 Scratch、Scratch 团队或 Scratch 基金会。","header.subtitle":"在你的电脑上使用 {TurboWarp}，一个拥有编译器、深色模式、插件等功能的 Scratch 修改版。它甚至还能在你离线的时候运行。","linux.anywhere":"适用于任何发行版。","linux.choices":"Linux 用户有一些选择","linux.snapTitle":"从 Snap Store 获取","linux.terminal":"在终端中运行它","linux.uninstall":"卸载","mac.download":"下载 macOS 版本","mac.help":"如果出现门禁提示，打开访达，导航到应用程序，右键单击 TurboWarp 并选择“打开”，然后再次选择“打开”。","picture.caption":"图片中的作品：{project}","picture.caption.project":"由 piano_miles 制作的 Full Sphere Path Tracer","picture.title":"图片中的作品：由 piano_miles 制作的 Full Sphere Path Tracer","privacy":"隐私政策","pwa.help":"然后按地址栏中的安装按钮。 可能需要几秒钟才会出现。","pwa.open":"打开 Turbowarp 网站","scratchBugs":"在 Scratch 网站报告错误","source":"源代码","update.linux":"如果你从像 Snap Store 一样的应用商店或包管理器安装了 TurboWarp Desktop，请等待更新推送到该商店。否则，请运行下面的新安装程序。","update.mac":"在下面下载并安装新的应用程序以更新。","update.windows":"在下面下载并运行新的安装程序以更新。","win.32":"用于32位系统的备选下载","win.download":"下载 Windows 64位版本","win.help":"如果出现 Windows SmartScreen 警报，请单击\"更多信息\"，然后单击\"仍然运行\""},
 "zh-tw":{"header.affiliation":"TurboWarp 並不隸屬於 Scratch、Scratch 團隊或 Scratch 基金會。","header.subtitle":"{TurboWarp}，運行更快且帶有黑暗模式、附加元件及其他好用功能的 Scratch，離線亦可運行。","linux.snapTitle":"從 Snap Store 安裝","picture.caption":"上圖專案：{project}","picture.caption.project":"Full Sphere Path Tracer，作者：piano_miles","picture.title":"上圖專案：Full Sphere Path Tracer，作者：piano_miles","privacy":"隱私政策","source":"原始碼","update.linux":"若你是從應用商店或軟體套件管理系統（如 Snap Store）安裝 TurboWarp 的，就必須等到它放上更新。或者，運行下方的安裝程式。","update.mac":"下載並安裝新版程式以更新。","update.windows":"下載並運行下方的新版安裝程式以更新。"},
-}/*===*/;
-
         const translatableElements = document.querySelectorAll('[data-l10n]');
         const translatableAttributes = document.querySelectorAll('[data-l10n-attrib]');
 
@@ -745,7 +758,7 @@
           translate,
           genl10n
         };
-      })();
+      }();
       L.translate(navigator.language.toLowerCase());
     </script>
     <script>
