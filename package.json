@@ -22,7 +22,7 @@
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.13.13",
     "css-loader": "^5.0.2",
-    "electron": "^16.0.2",
+    "electron": "^16.0.4",
     "electron-builder": "22.14.5",
     "electron-webpack": "^2.8.2",
     "intl-messageformat": "^9.4.7",
