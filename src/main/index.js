@@ -260,8 +260,8 @@ const createPrivacyWindow = () => {
   if (!privacyWindow) {
     privacyWindow = createWindow(getURL('privacy'), {
       title: getTranslation('privacy'),
-      width: 600,
-      height: 450,
+      width: 800,
+      height: 700,
       minimizable: false,
       maximizable: false
     });

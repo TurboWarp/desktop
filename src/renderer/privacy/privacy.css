@@ -10,3 +10,11 @@ main {
   min-height: 100vh;
   border: 20px solid hsla(0, 100%, 65%, 1);
 }
+a {
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+}
+a:active {
+  color: red;
+}
