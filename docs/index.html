@@ -424,14 +424,18 @@
 
     <section class="changelog">
       <div>
-        <h2>Changes from v0.12.0 to v0.13.0</h2>
+        <h2>Changes from v0.13.0 to v0.14.0</h2>
         <ul>
-          <li>TurboWarp Desktop now includes an offline version of the <a href="https://packager.turbowarp.org/">TurboWarp Packager</a> for converting your projects to formats such as HTML, Zip, or executable files. Press the button in the top right corner > TurboWarp Packager to open it. It will automatically open the project you have open in the editor. This feature is still very experimental.</li>
-          <li>New addon: Two-column category menu</li>
-          <li>New addon: Running block border (only works when compiler disabled; in the "Dangerous" section)</li>
-          <li class="os-windows">Windows: Scrollbars are now dark in dark mode</li>
-          <li class="os-linux">Linux: Scrollbars are now dark in dark mode</li>
-          <li>Fixed a lot of bugs</li>
+          <li>New addon: Snap scripts to grid</li>
+          <li>New addon: Keep block comment connections straight</li>
+          <li>Significantly improved compiler performance in some projects</li>
+          <li>Using ctrl+z in the script editor or costume editor will no longer also undo unrelated text input changes</li>
+          <li>Added ctrl+y as shortcut for redo in addition to ctrl+shift+z</li>
+          <li>The Onion skinning addon is significantly faster</li>
+          <li>The Auto-hiding block palette and Two-column category menu addons are more compatible</li>
+          <li>Improved responsiveness of color pickers</li>
+          <li><a href="https://github.com/TurboWarp/packager/releases/tag/v0.4.0">Updated builtin packager: new options, improved progress bars, various bug fixes</a></li>
+          <li>Various bug fixes</li>
           <li>Updated translations</li>
         </ul>
         <p class="os-windows" data-l10n="update.windows">To update, download and run the new installer below.</p>
@@ -750,7 +754,7 @@
     </script>
     <script>
       (function() {
-        var VERSION = '0.13.0';
+        var VERSION = '0.14.0';
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'windows';
