@@ -688,7 +688,7 @@ if (acquiredLock) {
       createEditorWindow();
     }
   };
-  
+
   const parseArgv = (argv) => {
     // argv in production: ["turbowarp.exe", "..."]
     // argv in dev: ["electron.exe", "--inspect=", "main.js", "..."] (--inspect will be gone after removing arguments)
@@ -701,7 +701,7 @@ if (acquiredLock) {
     }
     return argv;
   };
-  
+
   const resolveFilePath = (workingDirectory, file) => {
     try {
       // If the file is a full absolute URL, pass it through unmodified.
@@ -711,7 +711,7 @@ if (acquiredLock) {
       return pathUtil.resolve(workingDirectory, file);
     }
   };
-  
+
   for (const path of parseArgv(process.argv)) {
     filesToOpen.push(resolveFilePath('', path));
   }
