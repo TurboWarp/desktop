@@ -9,6 +9,7 @@ import {getTranslation, getTranslationOrNull} from './translations';
 import {APP_NAME} from './brand';
 import './advanced-user-customizations';
 import * as store from './store';
+import parseArgs from './parse-args';
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
@@ -689,19 +690,6 @@ if (acquiredLock) {
     }
   };
 
-  const parseArgv = (argv) => {
-    // argv in production: ["turbowarp.exe", "..."]
-    // argv in dev: ["electron.exe", "--inspect=", "main.js", "..."] (--inspect will be gone after removing arguments)
-    argv = argv.slice().filter((i) => !i.startsWith('--'));
-    if (isDevelopment) {
-      argv.shift();
-      argv.shift();
-    } else {
-      argv.shift();
-    }
-    return argv;
-  };
-
   const resolveFilePath = (workingDirectory, file) => {
     try {
       // If the file is a full absolute URL, pass it through unmodified.
@@ -712,12 +700,12 @@ if (acquiredLock) {
     }
   };
 
-  for (const path of parseArgv(process.argv)) {
+  for (const path of parseArgs(process.argv)) {
     filesToOpen.push(resolveFilePath('', path));
   }
 
   app.on('second-instance', (event, argv, workingDirectory) => {
-    for (const i of parseArgv(argv)) {
+    for (const i of parseArgs(argv)) {
       filesToOpen.push(resolveFilePath(workingDirectory, i));
     }
     autoCreateEditorWindows();
