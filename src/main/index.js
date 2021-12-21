@@ -10,14 +10,10 @@ import {APP_NAME} from './brand';
 import './advanced-user-customizations';
 import * as store from './store';
 import parseArgs from './parse-args';
+import {isDevelopment, isMac, isLinux, staticDir} from './environment';
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
-
-const isDevelopment = process.env.NODE_ENV !== 'production';
-const isMac = process.platform === 'darwin';
-const isWindows = process.platform === 'win32';
-const isLinux = process.platform === 'linux';
 
 const filesToOpen = [];
 
@@ -144,7 +140,7 @@ const closeWindowWhenPressEscape = (window) => {
 
 const getWindowOptions = (options) => {
   if (isLinux) {
-    options.icon = pathUtil.join(__static, 'icon.png');
+    options.icon = pathUtil.join(staticDir, 'icon.png');
   }
   options.useContentSize = true;
   options.minWidth = 200;
@@ -391,7 +387,7 @@ ipcMain.on('open-packager', (event) => {
   createPackagerWindow(event.sender);
 });
 
-ipcMain.handle('get-packager-html', () => readFile(pathUtil.join(__static, 'packager.html')));
+ipcMain.handle('get-packager-html', () => readFile(pathUtil.join(staticDir, 'packager.html')));
 
 ipcMain.on('open-source-code', () => {
   shell.openExternal('https://github.com/TurboWarp');
