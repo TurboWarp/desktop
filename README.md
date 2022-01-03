@@ -68,4 +68,4 @@ Create the file `userscript.js` in this folder to configure custom JS. Create th
 
 ## Update checker
 
-TurboWarp Desktop includes a simple update checker. This update checker is disabled by default on local builds. To manally enable it, set the `TW_ENABLE_UPDATE_CHECKER` environment variable to `1` at build-time. In builds with the update checker enabled, the checker can be disabled through the "(?) > Desktop Settings" menu.
+TurboWarp Desktop includes a simple update checker. This update checker is disabled by default on local builds. To manally enable it, set the `TW_ENABLE_UPDATE_CHECKER` environment variable to `1` at build-time. In builds with the update checker enabled, the checker can be disabled through the "(?) > Desktop Settings" menu or by setting the `TW_DISABLE_UPDATE_CHECKER` environment variable to `1` at runtime.
