@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2021 Thomas Weber -->
+<component type="desktop-application">
+  <id>org.turbowarp.TurboWarp</id>
+  <launchable type="desktop-id">org.turbowarp.TurboWarp.desktop</launchable>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0</project_license>
+  <name>TurboWarp</name>
+  <summary>A mod of Scratch with a compiler to run projects faster, dark mode, a bunch of addons, and more.</summary>
+  <description>
+    <p>A mod of Scratch with a compiler to run projects faster, dark mode for your eyes, a bunch of addons to improve the editor, and more.</p>
+    <p>Features:</p>
+    <ul>
+      <li>Runs projects up to 20x faster than Scratch</li>
+      <li>Uses significantly less memory and energy than Scratch when idle</li>
+      <li>Dark mode</li>
+      <li>Developer tools, searchable dropdowns, onion skinning</li>
+      <li>Many more addons and customizability options</li>
+      <li>Native filesystem and file explorer integration</li>
+      <li>Less lag when editing large projects</li>
+      <li>Optional support for interpolation, 60 FPS, high quality pen, infinite clones</li>
+      <li>Backpack</li>
+      <li>and more</li>
+    </ul>
+    <p>You can also use TurboWarp in your browser at https://turbowarp.org/editor</p>
+    <p>Project shown in screenshots is https://scratch.mit.edu/projects/425020125/</p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <caption>Light mode</caption>
+      <image>https://desktop.turbowarp.org/screenshot-win-light.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Dark mode</caption>
+      <image>https://desktop.turbowarp.org/screenshot-win-dark.png</image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://desktop.turbowarp.org/</url>
+  <url type="bugtracker">https://github.com/TurboWarp/desktop/issues</url>
+  <url type="translate">https://docs.turbowarp.org/translate</url>
+  <content_rating type="oars-1.1">
+    <content_attribute id="social-info">mild</content_attribute>
+  </content_rating>
+  <releases>
+    <release version="0.14.0" date="2021-12-19" />
+  </releases>
+</component>
