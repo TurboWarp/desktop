@@ -14,15 +14,15 @@ const log = (...args) => {
 };
 
 const canUpdateCheckerBeEnabled = () => {
+  if (process.env.TW_DISABLE_UPDATE_CHECKER) {
+    return false;
+  }
   // Note: This value is replaced at build-time
   return !!process.env.TW_ENABLE_UPDATE_CHECKER;
 };
 
 const isUpdateCheckerEnabled = () => {
   if (!canUpdateCheckerBeEnabled()) {
-    return false;
-  }
-  if (process.env.TW_DISABLE_UPDATE_CHECKER) {
     return false;
   }
   if (get(DISABLE_UPDATE_KEY)) {
