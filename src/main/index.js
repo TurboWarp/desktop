@@ -503,6 +503,20 @@ app.on('web-contents-created', (event, webContents) => {
     const hasText = !!text;
     const menuItems = [];
 
+    if (params.misspelledWord && params.dictionarySuggestions.length > 0) {
+      for (const word of params.dictionarySuggestions) {
+        menuItems.push({
+          label: word,
+          click: () => {
+            webContents.replaceMisspelling(word);
+          }
+        });
+      }
+      menuItems.push({
+        type: 'separator'
+      });
+    }
+
     const url = params.linkURL;
     if (params.linkURL) {
       menuItems.push({
