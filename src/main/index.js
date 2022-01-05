@@ -295,8 +295,11 @@ const createPackagerWindow = (editorWebContents) => {
     parent: BrowserWindow.fromWebContents(editorWebContents)
   });
   closeWindowWhenPressEscape(window);
-  window.on('page-title-updated', (e) => {
+  window.on('page-title-updated', (e, title) => {
     e.preventDefault();
+    // title will be something like "Project - TurboWarp Packager for Scratch"
+    // the for Scratch looks ugly in a native window, so remove that
+    window.setTitle(title.replace(/ for Scratch$/, ''));
   });
   window.webContents.setWindowOpenHandler((details) => {
     if (details.url === 'about:blank') {
