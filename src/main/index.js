@@ -479,6 +479,10 @@ ipcMain.handle('request-url', (event, url) => new Promise((resolve, reject) => {
   request.end();
 }));
 
+ipcMain.on('open-user-data', () => {
+  shell.showItemInFolder(app.getPath('userData'));
+});
+
 app.on('window-all-closed', () => {
   app.quit();
 });

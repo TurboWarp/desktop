@@ -13,6 +13,7 @@ class DesktopSettings extends React.Component {
     };
     this.handleChangeUpdateCheckerEnabled = this.handleChangeUpdateCheckerEnabled.bind(this);
     this.handleOpenPrivacyPolicy = this.handleOpenPrivacyPolicy.bind(this);
+    this.handleOpenUserData = this.handleOpenUserData.bind(this);
   }
   handleChangeUpdateCheckerEnabled (e) {
     const enabled = e.target.checked;
@@ -24,6 +25,9 @@ class DesktopSettings extends React.Component {
   handleOpenPrivacyPolicy (e) {
     e.preventDefault();
     ipcRenderer.send('open-privacy-policy');
+  }
+  handleOpenUserData () {
+    ipcRenderer.send('open-user-data');
   }
   render () {
     return (
@@ -57,6 +61,11 @@ class DesktopSettings extends React.Component {
         ) : (
           <p>{getTranslation('settings.build-time-disabled-update-checker')}</p>
         )}
+        <div>
+          <button onClick={this.handleOpenUserData}>
+            {getTranslation('settings.open-user-data')}
+          </button>
+        </div>
       </main>
     );
   }
