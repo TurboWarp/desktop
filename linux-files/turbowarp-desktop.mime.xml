@@ -2,6 +2,6 @@
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
 <mime-type type="application/x.scratch.sb3">
   <glob pattern="*.sb3"/>
-  <icon name="turbowarp-desktop"/>
+  <icon name="org.turbowarp.TurboWarp"/>
 </mime-type>
 </mime-info>
