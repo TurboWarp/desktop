@@ -58,22 +58,6 @@
         width: 100%;
         max-width: 700px;
       }
-      code, .code {
-        font-family: monospace;
-        font-size: 1rem;
-        padding: 3px;
-        background: #e6e6e6;
-        border-radius: 3px;
-      }
-      hr {
-        width: 100%;
-        height: 0;
-        border: none;
-        border-top: 1px dashed #aaa;
-      }
-      summary {
-        cursor: pointer;
-      }
 
       .header {
         padding-top: 32px;
@@ -322,12 +306,6 @@
         a {
           color: #4af;
         }
-        code, .code {
-          background-color: #222;
-        }
-        a code {
-          color: #4af;
-        }
         hr {
           border-color: #333;
         }
@@ -491,58 +469,47 @@
 
     <section class="os os-linux">
       <div>
-        <p data-l10n="linux.choices">Linux users have some choices.</p>
-        <hr>
+        <p data-l10n="linux.1">On most Linux distributions, the recommended way to install TurboWarp is to search for "TurboWarp" in your distributions software manager and choose the first option that appears.</p>
+        <p data-l10n="linux.2">If you're an advanced user or if it doesn't appear, more choices are available:</p>
 
         <h2>Snap Store</h2>
-        <p>
-          <a href="https://snapcraft.io/turbowarp-desktop">
-            <!-- Image from https://github.com/snapcore/snap-store-badges -->
-            <img data-src="snap-store.png" width="182" height="56" alt="Get it from the Snap Store" title="Get it from the Snap Store" data-l10n-attrib="alt=linux.snapTitle,title=linux.snapTitle" style="display: inline;">
-          </a>
-        </p>
-        <hr>
+        <a href="https://snapcraft.io/turbowarp-desktop">
+          <!-- Image from https://github.com/snapcore/snap-store-badges -->
+          <img data-src="snap-store.svg" width="182" height="56" alt="Get it from the Snap Store" title="Get it from the Snap Store" data-l10n-attrib="alt=linux.snapTitle,title=linux.snapTitle">
+        </a>
 
-        <h2>Debian, Ubuntu, Raspberry Pi OS...:</h2>
+        <h2>Flathub/Flatpak</h2>
+        <a href="https://flathub.org/apps/details/org.turbowarp.TurboWarp">
+          <!-- Image from https://flathub.org/badges -->
+          <img data-src="flathub.svg" width="182" height="56" alt="Download on Flathub" title="Download on Flathub">
+        </a>
+
+        <h2>.deb</h2>
         <ul>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-amd64-{version}.deb">x86 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-i386-{version}.deb">x86 32-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.deb">ARM 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.deb">ARMv7l</a></li>
         </ul>
-        <hr>
 
         <h2>Arch User Repository</h2>
-        <p>
-          <a href="https://aur.archlinux.org/packages/turbowarp-desktop-bin/">turbowarp-desktop-bin</a>
-        </p>
-        <hr>
+        <p data-l10n="linux.aur">The official package is <a href="https://aur.archlinux.org/packages/turbowarp-desktop-bin/" data-notranslate data-l10n-subkey="package-link">turbowarp-desktop-bin</a>.</p>
 
-        <h2>AppImage</h2>
+        <h2>.AppImage</h2>
         <ul>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-x86_64-{version}.AppImage">x86 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-i386-{version}.AppImage">x86 32-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.AppImage">ARM 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.AppImage">ARMv7l</a></li>
         </ul>
-        <hr>
 
-        <h2>Tarball</h2>
+        <h2>.tar.gz</h2>
         <ul>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-x64-{version}.tar.gz">x86 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-ia32-{version}.tar.gz">x86 32-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.tar.gz">ARM 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.tar.gz">ARMv7l</a></li>
         </ul>
-        <hr>
-
-        <h2 data-l10n="linux.terminal">Run this in a terminal</h2>
-        <p><code class="command">sudo bash -c "$(wget -qO- https://desktop.turbowarp.org/install.sh)"</code></p>
-        <p data-l10n="linux.anywhere">Works on any distribution.</p>
-        <details>
-          <summary data-l10n="linux.uninstall">Uninstall</summary>
-          <p><code class="command">sudo bash -c "$(wget -qO- https://desktop.turbowarp.org/uninstall.sh)"</code></p>
-        </details>
       </div>
     </section>
 
