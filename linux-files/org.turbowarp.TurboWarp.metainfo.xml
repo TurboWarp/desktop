@@ -28,11 +28,11 @@
   <screenshots>
     <screenshot type="default">
       <caption>Light mode</caption>
-      <image>https://desktop.turbowarp.org/screenshot-win-light.png</image>
+      <image width="1280" height="800">https://desktop.turbowarp.org/screenshot-win-light.png</image>
     </screenshot>
     <screenshot>
       <caption>Dark mode</caption>
-      <image>https://desktop.turbowarp.org/screenshot-win-dark.png</image>
+      <image width="1280" height="800">https://desktop.turbowarp.org/screenshot-win-dark.png</image>
     </screenshot>
   </screenshots>
   <url type="homepage">https://desktop.turbowarp.org/</url>
