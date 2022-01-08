@@ -1,5 +1,13 @@
 #!/bin/bash
 
+echo "!!! WARNING !!!"
+echo "  This script is deprecated: using it is highly discouraged."
+echo "  Whenever possible, please use the other install methods listed on the https://desktop.turbowarp.org/ website."
+echo "  Most of these methods can be uninstalled by simply searching for TurboWarp in your software manager and clicking remove."
+echo ""
+echo "Press enter to continue."
+read
+
 if [ "$USER" != "root" ]; then
     echo "Must be run as root."
     exit 1

@@ -2,6 +2,14 @@
 
 set -euo pipefail
 
+echo "!!! WARNING !!!"
+echo "  This script is deprecated: using it is highly discouraged."
+echo "  Whenever possible, please use the other install methods listed on the https://desktop.turbowarp.org/ website."
+echo "  The other methods are typically more secure, often support automatic updates, integrate better into the rest of your system, and can be easily uninstalled."
+echo ""
+echo "Press enter to continue."
+read
+
 fatal() {
     echo "Error: $@"
     echo "Open an issue for help: https://github.com/TurboWarp/desktop/issues/new (please include full log)"
