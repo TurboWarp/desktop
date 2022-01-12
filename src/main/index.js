@@ -140,7 +140,7 @@ const closeWindowWhenPressEscape = (window) => {
 
 const getWindowOptions = (options) => {
   if (isLinux) {
-    options.icon = pathUtil.join(staticDir, 'icon.png');
+    options.icon = pathUtil.join(staticDir, 'icon.svg');
   }
   options.useContentSize = true;
   options.minWidth = 200;
