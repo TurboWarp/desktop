@@ -18,6 +18,12 @@
     </style>
   </head>
   <body>
+    <p>These download counts do not include the following officially supported marketplaces:</p>
+    <ul>
+      <li><a href="https://www.microsoft.com/en-us/p/turbowarp/9p4dpzgv5zkl">Microsoft Store</a></li>
+      <li><a href="https://snapcraft.io/turbowarp-desktop">Snap Store</a></li>
+      <li><a href="https://flathub.org/apps/details/org.turbowarp.TurboWarp">Flathub</a></li>
+    </ul>
     <main><p>Loading...</p></main>
     <script>
       fetch('https://api.github.com/repos/TurboWarp/desktop/releases')
@@ -47,7 +53,22 @@
             }));
             table.appendChild(headerRow);
 
-            for (const {download_count, name, browser_download_url} of assets.sort((a,b) => {
+            const getExtensionPriority = (name) => {
+              const extensionOrder = [
+                'exe',
+                'dmg',
+                'dmg.zip', // used by some old versions
+                'deb',
+                'tar.gz',
+                'AppImage'
+              ];
+              return extensionOrder.findIndex((i) => name.endsWith(i));
+            };
+            for (const {download_count, name, browser_download_url} of assets.sort((a, b) => {
+              const extA = getExtensionPriority(a.name);
+              const extB = getExtensionPriority(b.name);
+              if (extA > extB) return 1;
+              if (extA < extB) return -1;
               if (a.name > b.name) return 1;
               if (b.name > a.name) return -1;
               return 0;
