@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="robots" content="noindex">
+    <title>TurboWarp Desktop Download Statistics</title>
     <style>
       body {
         font-family: sans-serif;
@@ -11,14 +11,35 @@
       }
       a {
         text-decoration: none;
+        color: blue;
       }
       a:hover {
         text-decoration: underline;
       }
+      a:active {
+        color: red;
+      }
+      table, tr, td, th {
+        border: 1px solid black;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          color-scheme: dark;
+          background: #111;
+          color: #eee;
+        }
+        table, tr, td, th {
+          border-color: #555;
+        }
+        a {
+          color: #4af;
+        }
+      }
     </style>
   </head>
   <body>
-    <p>These download counts do not include the following officially supported marketplaces:</p>
+    <p>Estimated download counts for TurboWarp Desktop based on GitHub releases download Statistics.</p>
+    <p>These estimates do not include certain significant app stores:</p>
     <ul>
       <li><a href="https://www.microsoft.com/en-us/p/turbowarp/9p4dpzgv5zkl">Microsoft Store</a></li>
       <li><a href="https://snapcraft.io/turbowarp-desktop">Snap Store</a></li>
@@ -35,13 +56,18 @@
           const main = document.querySelector('main');
           while (main.firstChild) main.removeChild(main.firstChild);
 
-          for (const {assets, tag_name, html_url, prerelease} of releases) {
+          let previousPublish = new Date();
+          for (const {assets, tag_name, html_url, prerelease, published_at} of releases) {
             if (prerelease) {
               continue;
             }
 
+            const published = new Date(published_at);
+            const daysAsLatestVersion = (previousPublish.getTime() - published.getTime()) / (1000 * 60 * 60 * 24);
+            previousPublish = published;
+
             const table = document.createElement('table');
-            table.border = '1';
+            const downloadsByPlatform = new Map();
             let totalDownloads = 0;
 
             const headerRow = document.createElement('tr');
@@ -53,6 +79,11 @@
             }));
             table.appendChild(headerRow);
 
+            const getPlatform = (name) => {
+              if (name.endsWith('exe')) return 'Windows';
+              if (name.endsWith('dmg') || name.endsWith('dmg.zip')) return 'macOS';
+              return 'Linux';
+            };
             const getExtensionPriority = (name) => {
               const extensionOrder = [
                 'exe',
@@ -64,6 +95,18 @@
               ];
               return extensionOrder.findIndex((i) => name.endsWith(i));
             };
+            const makeRow = () => {
+              const row = document.createElement('tr');
+              const name = document.createElement('td');
+              const data = document.createElement('td');
+              row.appendChild(name);
+              row.appendChild(data);
+              table.appendChild(row);
+              return {
+                nameElement: name,
+                dataElement: data
+              };
+            };
             for (const {download_count, name, browser_download_url} of assets.sort((a, b) => {
               const extA = getExtensionPriority(a.name);
               const extB = getExtensionPriority(b.name);
@@ -74,21 +117,35 @@
               return 0;
             })) {
               if (name.endsWith('yml') || name.endsWith('blockmap')) continue;
+
               totalDownloads += download_count;
+              const platform = getPlatform(name);
+              downloadsByPlatform.set(platform, (downloadsByPlatform.get(platform) || 0) + download_count);
+
+              const {nameElement, dataElement} = makeRow();
               const link = Object.assign(document.createElement('a'), {
                 href: browser_download_url,
                 textContent: name
               });
-              const row = document.createElement('tr');
+              nameElement.appendChild(link);
+              dataElement.textContent = download_count;
+            }
 
-              const downloadCell = document.createElement('td');
-              downloadCell.appendChild(link);
-              row.appendChild(downloadCell);
+            for (const platform of ['Windows', 'macOS', 'Linux']) {
+              const downloads = downloadsByPlatform.get(platform) || 0;
+              if (downloads === 0) continue;
 
-              row.appendChild(Object.assign(document.createElement('td'), {
-                textContent: download_count
-              }));
-              table.appendChild(row);
+              const {nameElement, dataElement} = makeRow();
+              nameElement.textContent = `All ${platform}`;
+              nameElement.style.fontStyle = 'italic';
+              const percent = downloads / totalDownloads * 100;
+              dataElement.textContent = `${Math.round(percent)}%`;
+            }
+
+            {
+              const {nameElement, dataElement} = makeRow();
+              nameElement.textContent = 'Total';
+              dataElement.textContent = totalDownloads;
             }
 
             const tagLink = document.createElement('a');
@@ -101,9 +158,6 @@
 
             main.appendChild(header);
             main.appendChild(table);
-            main.appendChild(Object.assign(document.createElement('p'), {
-              textContent: `Total downloads: ${totalDownloads}`
-            }));
           }
         })
         .catch((err) => {
