@@ -3,10 +3,11 @@ const DefinePlugin = require('webpack').DefinePlugin;
 
 module.exports = defaultConfig => {
     return merge.smart(defaultConfig, {
-        plugins: process.env.TW_ENABLE_UPDATE_CHECKER ? [
+        plugins: [
             new DefinePlugin({
-                'process.env.TW_ENABLE_UPDATE_CHECKER': '"1"'
+                'process.env.TW_EXTRA_BUILD_INFO': JSON.stringify(process.env.TW_EXTRA_BUILD_INFO),
+                'process.env.TW_ENABLE_UPDATE_CHECKER': JSON.stringify(process.env.TW_ENABLE_UPDATE_CHECKER),
             })
-        ] : []
+        ]
     });
 };
