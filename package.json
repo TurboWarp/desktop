@@ -1,7 +1,7 @@
 {
   "name": "turbowarp-desktop",
   "description": "Scratch mod with a compiler, dark mode, a bunch of addons, and more.",
-  "version": "0.14.1",
+  "version": "1.0.0",
   "license": "GPL-3.0",
   "author": {
     "email": "contact@turbowarp.org",
@@ -101,7 +101,9 @@
       "synopsis": "Mod of Scratch with a compiler and more features.",
       "description": "TurboWarp is a Scratch mod with a compiler to run projects faster, dark mode for your eyes, a bunch of addons to improve the editor, and more.",
       "category": "Development",
-      "extraFiles": ["linux-files"],
+      "extraFiles": [
+        "linux-files"
+      ],
       "target": [
         {
           "target": "deb",
