@@ -147,9 +147,6 @@ const getWindowOptions = (options) => {
   options.minWidth = 200;
   options.minHeight = 200;
   options.webPreferences = {
-    contextIsolation: true,
-    nodeIntegration: false,
-    nativeWindowOpen: true,
     preload: pathUtil.resolve(pathUtil.join(__dirname, 'preload.js'))
   };
 
