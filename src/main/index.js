@@ -9,6 +9,7 @@ import {getTranslation, getTranslationOrNull} from './translations';
 import {APP_NAME} from './brand';
 import './advanced-user-customizations';
 import * as store from './store';
+import './crash';
 import parseArgs from './parse-args';
 import {isDevelopment, isMac, isLinux, staticDir} from './environment';
 

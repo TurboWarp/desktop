@@ -30,6 +30,7 @@
   "packager.loading": "Loading project from editor...",
   "source": "Source Code",
   "failed-to-load": "Could not load project file: {error}",
+  "crash.renderer": "Renderer process crashed: {reason} ({code})",
   "files.svg": "SVG Image",
   "files.png": "PNG Image",
   "files.wav": "WAV Sound",
