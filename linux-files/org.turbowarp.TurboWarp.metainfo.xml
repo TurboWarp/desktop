@@ -52,6 +52,7 @@
     <content_attribute id="social-info">mild</content_attribute>
   </content_rating>
   <releases>
+    <release version="1.0.0" date="2022-1-15" />
     <release version="0.14.0" date="2021-12-19" />
   </releases>
 </component>

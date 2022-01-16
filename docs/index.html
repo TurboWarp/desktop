@@ -404,20 +404,27 @@
 
     <section class="changelog">
       <div>
-        <h2>Changes from v0.13.0 to v0.14.0</h2>
+        <h2>What's new in v1.0.0</h2>
+        <p>We finally increased the first digit of the version number from a 0 to a 1.</p>
         <ul>
-          <li>New addon: Snap scripts to grid</li>
-          <li>New addon: Keep block comment connections straight</li>
-          <li>Significantly improved compiler performance in some projects</li>
-          <li>Using ctrl+z in the script editor or costume editor will no longer also undo unrelated text input changes</li>
-          <li>Added ctrl+y as shortcut for redo in addition to ctrl+shift+z</li>
-          <li>The Onion skinning addon is significantly faster</li>
-          <li>The Auto-hiding block palette and Two-column category menu addons are more compatible</li>
-          <li>Improved responsiveness of color pickers</li>
-          <li><a href="https://github.com/TurboWarp/packager/releases/tag/v0.4.0">Updated builtin packager: new options, improved progress bars, various bug fixes</a></li>
+          <li>The costume editor now supports dark mode.</li>
+          <li>If a dark background makes it hard to edit your costumes, it's possible to change the theme of the costume editor without effecting the rest of the interface.</li>
+          <li>Significantly optimized memory use of costumes.</li>
+          <li>Improved project exporting to compress project.json by up to to 30%.</li>
+          <li>Many compiler optimizations and compatibility fixes.</li>
+          <li>When you right click on a misspelled word detected by the spellchecker, you will now see some suggested replacements.</li>
+          <li><a href="https://github.com/TurboWarp/packager/releases/tag/v0.5.0">Updated integrated packager</a></li>
           <li>Various bug fixes</li>
           <li>Updated translations</li>
         </ul>
+        <div class="os-linux">
+          <h2>Linux-specific changes</h2>
+          <ul>
+            <li>TurboWarp Desktop is now available on Flathub as <a href="https://flathub.org/apps/details/org.turbowarp.TurboWarp">org.turbowarp.TurboWarp</a>. This is the recommended way to install the app on Linux Mint, Pop!_OS, Fedora.</li>
+            <li>TurboWarp Desktop is now available on the Arch User Repository as <a href="https://aur.archlinux.org/packages/turbowarp-desktop-bin/">turbowarp-desktop-bin</a>. This is the recommended way to install the app on Arch Linux, Manjaro, etc.</li>
+            <li>The old "pipe curl into sudo bash" install script has been deprecated.</li>
+          </ul>
+        </div>
         <p class="os-windows" data-l10n="update.windows">To update, download and run the new installer below.</p>
         <p class="os-mac" data-l10n="update.mac">To update, download and install the new app below.</p>
         <p class="os-linux" data-l10n="update.linux">If you installed TurboWarp Desktop from an app store or package manager such as the Snap Store, wait until the update is pushed to the store. Otherwise, run the new installer below.</p>
@@ -724,7 +731,7 @@
     </script>
     <script>
       (function() {
-        var VERSION = '0.14.0';
+        var VERSION = '1.0.0';
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'windows';
