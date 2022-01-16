@@ -28,7 +28,6 @@ contextBridge.exposeInMainWorld('electron', {
 
 contextBridge.exposeInMainWorld('TWD', {
   versions: {
-    electron: process.versions.electron,
-    extra: process.env.TW_EXTRA_BUILD_INFO
+    electron: process.versions.electron
   }
 });

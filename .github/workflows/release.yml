@@ -34,7 +34,6 @@ jobs:
       run: npm run dist -- --windows appx --publish never --x64 --ia32
       env:
         NODE_OPTIONS: --max-old-space-size=4096
-        TW_EXTRA_BUILD_INFO: "GH-Release"
     - name: Upload artifacts
       if: runner.os == 'Windows'
       uses: actions/upload-artifact@v2

@@ -5,13 +5,10 @@ import {version} from '../../../package.json';
 import licenseText from '!!raw-loader!../../../LICENSE';
 import styles from './about.css';
 
-// TWD is set by preload.js
-const {extra, electron} = TWD.versions;
-
 const info = [];
 info.push(`v${version}`);
-if (extra) info.push(extra);
-info.push(`Electron v${electron}`);
+// TWD is set by preload script
+info.push(`Electron v${TWD.versions.electron}`);
 
 ReactDOM.render((
   <main>

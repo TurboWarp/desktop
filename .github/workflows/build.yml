@@ -25,4 +25,3 @@ jobs:
       run: npm run dist -- --publish never
       env:
         NODE_OPTIONS: --max-old-space-size=4096
-        TW_EXTRA_BUILD_INFO: "GH-Manual"
