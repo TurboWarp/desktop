@@ -29,5 +29,7 @@ contextBridge.exposeInMainWorld('electron', {
 contextBridge.exposeInMainWorld('TWD', {
   versions: {
     electron: process.versions.electron
-  }
+  },
+  platform: process.platform,
+  arch: process.arch
 });

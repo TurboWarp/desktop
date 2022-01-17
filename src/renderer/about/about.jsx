@@ -8,6 +8,7 @@ import styles from './about.css';
 const info = [];
 info.push(`v${version}`);
 // TWD is set by preload script
+info.push(`${TWD.platform} ${TWD.arch}`);
 info.push(`Electron v${TWD.versions.electron}`);
 
 ReactDOM.render((
