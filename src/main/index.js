@@ -498,6 +498,23 @@ app.on('open-file', (event, path) => {
   }
 });
 
+app.on('session-created', (session) => {
+  session.on('will-download', (event, item, webContents) => {
+    const extension = pathUtil.extname(item.getFilename()).replace(/^\./, '').toLowerCase();
+    const extensionName = getTranslationOrNull(`files.${extension}`);
+    if (extensionName) {
+      item.setSaveDialogOptions({
+        filters: [
+          {
+            name: extensionName,
+            extensions: [extension]
+          }
+        ]
+      });
+    }
+  });
+})
+
 app.on('web-contents-created', (event, webContents) => {
   webContents.on('context-menu', (event, params) => {
     const text = params.selectionText;
@@ -653,21 +670,6 @@ app.on('web-contents-created', (event, webContents) => {
       }
     });
   }
-
-  webContents.session.on('will-download', (event, item, webContents) => {
-    const extension = pathUtil.extname(item.getFilename()).replace(/^\./, '').toLowerCase();
-    const extensionName = getTranslationOrNull(`files.${extension}`);
-    if (extensionName) {
-      item.setSaveDialogOptions({
-        filters: [
-          {
-            name: extensionName,
-            extensions: [extension]
-          }
-        ]
-      });
-    }
-  });
 
   webContents.setWindowOpenHandler(defaultWindowOpenHandler);
 
