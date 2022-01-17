@@ -680,7 +680,8 @@ app.on('web-contents-created', (event, webContents) => {
       const newURL = new URL(url);
       const baseURL = new URL(getURL('editor'));
       if (newURL.href.startsWith(baseURL.href)) {
-        // editor is probably reloading itself (for example, changing custom stage size), let it
+        // Let the editor reload itself
+        // For example, reloading to apply settings
       } else {
         e.preventDefault();
         if (isSafeOpenExternal(url)) {
