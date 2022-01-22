@@ -1,6 +1,7 @@
 import {app} from 'electron';
 import fs from 'fs';
 import pathUtil from 'path';
+import writeFileAtomic from 'write-file-atomic';
 
 /**
  * @fileoverview Simple persistent key/value JSON data store.
@@ -23,18 +24,18 @@ const readStore = () => {
 
 let store = readStore();
 
-const writeStore = () => {
+const writeStore = async () => {
   try {
-    fs.writeFileSync(STORE_PATH, JSON.stringify(store));
+    await writeFileAtomic(STORE_PATH, JSON.stringify(store));
   } catch (e) {
     console.error('could not write store', e);
   }
 };
 
-export const set = (key, value) => {
+export const set = async (key, value) => {
   if (store[key] !== value) {
     store[key] = value;
-    writeStore();
+    await writeStore();
   }
 };
 
