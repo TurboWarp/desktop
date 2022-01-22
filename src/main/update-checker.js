@@ -6,8 +6,8 @@ import {get, set} from './store';
 import {getTranslation} from './translations';
 
 const IGNORE_UPDATE_KEY = 'ignore_update';
-const CURRENT_VERSION_KEY = 'version';
 const DISABLE_UPDATE_KEY = 'disable_update_checker';
+const LAST_UPDATE_CHECK_KEY = 'last_update_check';
 
 const log = (...args) => {
   console.log('update checker:', ...args);
@@ -138,7 +138,19 @@ const checkForUpdate = () => {
   if (!isUpdateCheckerEnabled()) {
     return;
   }
-  set(CURRENT_VERSION_KEY, version);
+
+  // Limits how often we check for updates.
+  // We do not want to make unnecessary requests to remote servers.
+  const now = Date.now();
+  const lastCheckedThreshold = now - 1000 * 60 * 60 * 6;
+  const lastCheckedForUpdates = get(LAST_UPDATE_CHECK_KEY) || 0;
+  if (lastCheckedForUpdates > lastCheckedThreshold) {
+    log('checked for update too recently');
+    return;
+  }
+  set(LAST_UPDATE_CHECK_KEY, now);
+  log('checking for updates');
+
   getLatestVersions()
     .then(({latest, oldestSafe}) => {
       if (lt(version, oldestSafe)) {
