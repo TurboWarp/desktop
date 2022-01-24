@@ -102,15 +102,19 @@
       }
 
       .changelog {
-        display: none;
         margin-bottom: 32px;
-        background-color: #ffeedf;
-      }
-      [changelog="true"] .changelog {
-        display: flex;
       }
       .changelog li {
         margin-top: 4px;
+      }
+      [full-changelog] .changelog {
+        background-color: #ffeedf;
+      }
+      .changelog-install-info {
+        display: none;
+      }
+      [full-changelog] .changelog-install-info {
+        display: block;
       }
 
       .select-os {
@@ -314,7 +318,7 @@
           color: white;
           background-color: rgba(255, 255, 255, 0.2);
         }
-        .changelog {
+        [full-changelog] .changelog {
           background-color: #273235;
         }
         .link:hover {
@@ -402,9 +406,9 @@
       </div>
     </section>
 
-    <section class="changelog">
+    <section class="changelog" id="changelog">
       <div>
-        <h2>What's new in v1.0.0</h2>
+        <h2>What's new in v1.0.0 (2022-1-15)</h2>
         <p>We finally increased the first digit of the version number from a 0 to a 1.</p>
         <ul>
           <li>The costume editor now supports dark mode.</li>
@@ -425,9 +429,11 @@
             <li>The old "pipe curl into sudo bash" install script has been deprecated.</li>
           </ul>
         </div>
-        <p class="os-windows" data-l10n="update.windows">To update, download and run the new installer below.</p>
-        <p class="os-mac" data-l10n="update.mac">To update, download and install the new app below.</p>
-        <p class="os-linux" data-l10n="update.linux">If you installed TurboWarp Desktop from an app store or package manager such as the Snap Store, wait until the update is pushed to the store. Otherwise, run the new installer below.</p>
+        <div class="changelog-install-info">
+          <p class="os-windows" data-l10n="update.windows">To update, download and run the new installer below.</p>
+          <p class="os-mac" data-l10n="update.mac">To update, download and install the new app below.</p>
+          <p class="os-linux" data-l10n="update.linux">If you installed TurboWarp Desktop from an app store or package manager such as the Snap Store, wait until the update is pushed to the store. Otherwise, run the new installer below.</p>
+        </div>
       </div>
     </section>
 
@@ -581,6 +587,8 @@
       </picture>
       <p class="picture-caption" data-l10n="picture.caption">Project pictured: <a href="https://scratch.mit.edu/projects/425020125/" data-l10n-subkey="project">Full Sphere Path Tracer by piano_miles</a></p>
     </section>
+
+    <div id="alternative-changelog-spot"></div>
 
     <script>
       window.L = (function () {
@@ -791,8 +799,10 @@
         }
 
         if (/from|to|changelog/i.test(location.search)) {
-          document.body.setAttribute('changelog', 'true');
+          document.body.setAttribute('full-changelog', 'true');
           document.getElementById('select-os').scrollIntoView();
+        } else {
+          document.getElementById('alternative-changelog-spot').appendChild(document.getElementById('changelog'));
         }
 
         setOS(getOS());
