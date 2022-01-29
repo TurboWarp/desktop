@@ -1,15 +1,18 @@
 const fs = require('fs');
 const crypto = require('crypto');
 const pathUtil = require('path');
+const zlib = require('zlib');
 const {fetch} = require('./lib');
 const packagerInfo = require('./packager.json');
 
-const path = pathUtil.join(__dirname, '..', 'static', 'packager.html');
+const path = pathUtil.join(__dirname, '..', 'static', 'packager.html.br');
 const sha256 = (buffer) => crypto.createHash('sha256').update(buffer).digest('hex');
 
 const isAlreadyDownloaded = () => {
   try {
-    if (sha256(fs.readFileSync(path)) === packagerInfo.sha256) {
+    const compressed = fs.readFileSync(path);
+    const decompressed = zlib.brotliDecompressSync(compressed);
+    if (sha256(decompressed) === packagerInfo.sha256) {
       return true;
     }
   } catch (e) {
@@ -30,7 +33,7 @@ if (!isAlreadyDownloaded()) {
       if (packagerInfo.sha256 !== sha256) {
         throw new Error(`Hash mismatch: expected ${packagerInfo.sha256} but found ${sha256}`);
       }
-      fs.writeFileSync(pathUtil.join(__dirname, '..', 'static', 'packager.html'), buffer);
+      fs.writeFileSync(path, zlib.brotliCompressSync(buffer));
       console.timeEnd('Download packager');
     })
     .catch((err) => {

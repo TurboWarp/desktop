@@ -4,6 +4,7 @@ import fs from 'fs';
 import writeFileAtomic from 'write-file-atomic';
 import util from 'util';
 import {format as formatUrl} from 'url';
+import zlib from 'zlib';
 import checkForUpdate from './update-checker';
 import {getTranslation, getTranslationOrNull} from './translations';
 import {APP_NAME} from './brand';
@@ -15,6 +16,7 @@ import {isDevelopment, isMac, isLinux, staticDir} from './environment';
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
+const brotliDecompress = util.promisify(zlib.brotliDecompress);
 
 const filesToOpen = [];
 
@@ -388,7 +390,11 @@ ipcMain.on('open-packager', (event) => {
   createPackagerWindow(event.sender);
 });
 
-ipcMain.handle('get-packager-html', () => readFile(pathUtil.join(staticDir, 'packager.html')));
+ipcMain.handle('get-packager-html', async () => {
+  const compressed = await readFile(pathUtil.join(staticDir, 'packager.html.br'));
+  const uncomressed = await brotliDecompress(compressed);
+  return uncomressed;
+});
 
 ipcMain.on('open-source-code', () => {
   shell.openExternal('https://github.com/TurboWarp');
