@@ -1,22 +1,27 @@
 const fs = require('fs');
 const pathUtil = require('path');
 const Limiter = require('async-limiter');
-const https = require('https');
 const crypto = require('crypto');
-const {fetch} = require('./lib');
 const promisify = require('util').promisify;
-const writeFile = promisify(fs.writeFile);
+const zlib = require('zlib');
 
-const libraryFiles = pathUtil.join(__dirname, '..', 'library-files');
+const compress = promisify(zlib.brotliCompress);
+const writeFile = promisify(fs.writeFile);
+const {fetch} = require('./lib');
+
+const libraryFiles = pathUtil.join(__dirname, '..', 'static', 'library-files');
 if (!fs.existsSync(libraryFiles)) {
   console.log('Making library files folder');
-  fs.mkdirSync(libraryFiles);
+  fs.mkdirSync(libraryFiles, {
+    recursive: true
+  });
 }
 
-const costumesManifest = pathUtil.join(__dirname, '..', 'node_modules', 'scratch-gui', 'src', 'lib', 'libraries', 'costumes.json');
-const backdropManifest = pathUtil.join(__dirname, '..', 'node_modules', 'scratch-gui', 'src', 'lib', 'libraries', 'backdrops.json');
-const spriteManifest = pathUtil.join(__dirname, '..', 'node_modules', 'scratch-gui', 'src', 'lib', 'libraries', 'sprites.json');
-const soundManifest = pathUtil.join(__dirname, '..', 'node_modules', 'scratch-gui', 'src', 'lib', 'libraries', 'sounds.json');
+const guiLibraryFolder = pathUtil.join(__dirname, '..', 'node_modules', 'scratch-gui', 'src', 'lib', 'libraries');
+const costumesManifest = pathUtil.join(guiLibraryFolder, 'costumes.json');
+const backdropManifest = pathUtil.join(guiLibraryFolder, 'backdrops.json');
+const spriteManifest = pathUtil.join(guiLibraryFolder, 'sprites.json');
+const soundManifest = pathUtil.join(guiLibraryFolder, 'sounds.json');
 if (!fs.existsSync(costumesManifest)) {
   throw new Error('costumes.json does not exist -- did you forget a step?');
 }
@@ -35,37 +40,36 @@ const backdrops = JSON.parse(fs.readFileSync(backdropManifest));
 const sprites = JSON.parse(fs.readFileSync(spriteManifest));
 const sounds = JSON.parse(fs.readFileSync(soundManifest));
 
-const httpsAgent = new https.Agent({
-	keepAlive: true
-});
+const md5 = (buffer) => crypto.createHash('md5').update(new Uint8Array(buffer)).digest('hex');
 
-const usedFiles = new Set();
+const allCompressedFiles = [];
 
 const downloadAsset = async (asset) => {
   const md5ext = asset.md5ext;
-  if (usedFiles.has(md5ext)) {
-    return;
+  if (!/^[0-9a-f]+\.[a-z]+$/gi.test(md5ext)) {
+    throw new Error(`invalid md5ext: ${md5ext}`);
   }
-  usedFiles.add(md5ext);
-  const path = pathUtil.join(libraryFiles, md5ext);
-  if (fs.existsSync(path)) {
-    console.log(`Already exists: ${md5ext}`);
+
+  const compressedName = `${md5ext}.br`;
+  allCompressedFiles.push(compressedName);
+  const compressedPath = pathUtil.join(libraryFiles, compressedName);
+  if (fs.existsSync(compressedPath)) {
+    console.log(`Already downloaded: ${md5ext}`);
     return;
   }
 
   console.log(`Downloading: ${md5ext}`);
-  const response = await fetch(`https://assets.scratch.mit.edu/${md5ext}`, {
-    agent: httpsAgent
-  });
-  const arrayBuffer = await response.buffer();
+  const response = await fetch(`https://assets.scratch.mit.edu/${md5ext}`);
+  const uncompressed = await response.buffer();
 
   const expectedHash = asset.assetId;
-  const hash = crypto.createHash('md5').update(new Uint8Array(arrayBuffer)).digest("hex")
+  const hash = md5(uncompressed);
   if (hash !== expectedHash) {
     throw new Error(`${md5ext}: Hash mismatch: expected ${expectedHash} but found ${hash}`);
   }
 
-  await writeFile(path, Buffer.from(arrayBuffer));
+  const compressed = await compress(uncompressed);
+  await writeFile(compressedPath, Buffer.from(compressed));
 };
 
 const limiter = new Limiter({
@@ -101,7 +105,7 @@ console.time('Download assets');
 
 limiter.onDone(() => {
   for (const file of fs.readdirSync(libraryFiles)) {
-    if (!usedFiles.has(file)) {
+    if (!allCompressedFiles.includes(file)) {
       console.warn(`Extraneous: ${file}`);
     }
   }

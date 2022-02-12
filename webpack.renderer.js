@@ -72,10 +72,6 @@ module.exports = defaultConfig => {
                 {
                     from: 'node_modules/scratch-blocks/media',
                     to: 'static/blocks-media'
-                },
-                {
-                    from: libraryFilesFolder,
-                    to: 'library-files'
                 }
             ])
         ],

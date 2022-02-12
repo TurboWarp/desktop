@@ -1,6 +1,12 @@
+const https = require('https');
 const fetch = require('node-fetch');
 
-const persistentFetch = async (url, opts) => {
+const httpsAgent = new https.Agent({
+  keepAlive: true
+});
+
+const persistentFetch = async (url, opts = {}) => {
+  opts.agent = httpsAgent;
   let err;
   for (let i = 0; i < 3; i++) {
     try {
