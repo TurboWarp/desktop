@@ -1,9 +1,10 @@
 #!/bin/bash
 
 echo "!!! WARNING !!!"
-echo "  This script is deprecated: using it is highly discouraged."
-echo "  Whenever possible, please use the other install methods listed on the https://desktop.turbowarp.org/ website."
-echo "  Most of these methods can be uninstalled by simply searching for TurboWarp in your software manager and clicking remove."
+echo "  This script is deprecated: using it is highly discouraged and it may cease to function in the near future."
+echo "  If you used one of the recommended installation methods, then use your system's package manager (eg. apt, pacman, flatpak, snap) to uninstall the app."
+echo "  On many distributions, if you right-click on the app's launcher, there's an easy way to uninstall it without touching a terminal."
+echo "  If you need help uninstalling TurboWarp, please reach out: https://github.com/TurboWarp/desktop/discussions or email contact [at] turbowarp.org"
 echo ""
 echo "Press enter to continue."
 read
