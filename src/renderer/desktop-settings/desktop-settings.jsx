@@ -33,7 +33,7 @@ class DesktopSettings extends React.Component {
     return (
       <main>
         <h1>{getTranslation('desktop-settings')}</h1>
-        <div>
+        <p>
           <label>
             <input
               type="checkbox"
@@ -51,7 +51,7 @@ class DesktopSettings extends React.Component {
           >
             {getTranslation('settings.privacy-link')}
           </a>
-        </div>
+        </p>
         {this.state.canUpdateCheckerBeEnabled ? (
           this.state.isUpdateCheckerEnabled ? (
             null
@@ -61,11 +61,11 @@ class DesktopSettings extends React.Component {
         ) : (
           <p>{getTranslation('settings.build-time-disabled-update-checker')}</p>
         )}
-        <div>
+        <p>
           <button onClick={this.handleOpenUserData}>
             {getTranslation('settings.open-user-data')}
           </button>
-        </div>
+        </p>
       </main>
     );
   }
