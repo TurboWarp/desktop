@@ -52,6 +52,23 @@
     <content_attribute id="social-info">mild</content_attribute>
   </content_rating>
   <releases>
+    <release version="1.1.0" date="2022-2-13">
+      <description>
+        <ul>
+          <li>New addon: Customizable block text style</li>
+          <li>New addon: Search sprites by name</li>
+          <li>New addon: Enhanced full screen</li>
+          <li>The right-click menu on a variable monitor now has an option to hide it</li>
+          <li>Stage size can now be changed without reloading the editor</li>
+          <li>Stage size can now be stored in a project</li>
+          <li>Fix storing gamepad settings in projects</li>
+          <li>Fix onion skinning layers being slightly misplaced</li>
+          <li>Improve sound editor performance on very large sounds</li>
+          <li>Updated packager</li>
+          <li>Many bug fixes</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.0" date="2022-1-15">
       <description>
         <ul>
