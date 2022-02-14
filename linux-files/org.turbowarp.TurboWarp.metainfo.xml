@@ -52,7 +52,7 @@
     <content_attribute id="social-info">mild</content_attribute>
   </content_rating>
   <releases>
-    <release version="1.1.0" date="2022-2-13">
+    <release version="1.1.1" date="2022-2-13">
       <description>
         <ul>
           <li>New addon: Customizable block text style</li>
