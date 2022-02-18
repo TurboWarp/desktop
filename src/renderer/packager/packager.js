@@ -80,7 +80,8 @@ const setProject = (data, name) => {
   const file = new File([data], `${name}.sb3`);
   const dataTransfer = new DataTransfer();
   dataTransfer.items.add(file);
-  const fileInput = document.querySelector('input[type=file]');
+  // TODO: we need to make this more resilient
+  const fileInput = document.querySelector('#app input[type=file]');
   fileInput.files = dataTransfer.files;
   fileInput.dispatchEvent(new Event('change'));
   // Packager will automatically start loading after selecting a file
