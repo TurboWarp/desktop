@@ -37,7 +37,7 @@ class StorageHelper {
 }
 
 const handleStorageInit = (storage) => {
-  storage.addHelper(new StorageHelper(storage, (asset) => `library-files/${asset}`));
+  storage.addHelper(new StorageHelper(storage, (asset) => `tw-library-files://library-files/${asset}`));
   storage.addHelper(new StorageHelper(storage, (asset) => `https://assets.scratch.mit.edu/internalapi/asset/${asset}/get/`));
 };
 
