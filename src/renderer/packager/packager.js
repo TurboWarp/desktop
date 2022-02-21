@@ -73,15 +73,14 @@ const loadHTML = (html) => {
 
 const setProject = (data, name) => {
   // Switch to file mode
-  const fileTypeRadio = document.querySelector('input[type=radio][value=file]');
+  const fileTypeRadio = document.querySelector('.file-input-option input[type=radio]');
   fileTypeRadio.click();
-  
+
   // Upload project to file input
   const file = new File([data], `${name}.sb3`);
   const dataTransfer = new DataTransfer();
   dataTransfer.items.add(file);
-  // TODO: we need to make this more resilient
-  const fileInput = document.querySelector('#app input[type=file]');
+  const fileInput = document.querySelector('.file-input-option input[type=file]');
   fileInput.files = dataTransfer.files;
   fileInput.dispatchEvent(new Event('change'));
   // Packager will automatically start loading after selecting a file

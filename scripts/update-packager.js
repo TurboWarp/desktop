@@ -14,6 +14,7 @@ const run = async () => {
     src: packagerURL,
     sha256,
   }, null, 2));
+  console.log('This has only updated metadata; you still need to actually download the packager with download-packager.js');
 };
 
 run()
