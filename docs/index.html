@@ -267,25 +267,19 @@
       }
 
       .picture-container {
+        max-width: 1296px; /* 1280px + 2 * 8px padding */
+        margin: auto;
         flex-direction: column;
         text-align: center;
-        align-items: center;
       }
-      .picture-container > a {
-        display: block;
+      .picture-container > a,
+      .picture-container picture,
+      .picture-container img {
         height: 100%;
         width: 100%;
       }
       .picture-container picture {
-        width: 100%;
-        height: 100%;
         filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
-      }
-      .picture-container picture img {
-        width: 100%;
-        height: 100%;
-        max-width: 1280px;
-        margin: auto;
       }
       .picture-dark {
         display: none;
@@ -561,26 +555,26 @@
     </section>
 
     <section class="picture-container">
-      <a class="os-not-mac" href="screenshot-win-light.png" target="_blank" rel="noopener noreferrer">
-        <picture class="picture-light">
+      <a class="os-not-mac picture-light" href="screenshot-win-light.png" target="_blank" rel="noopener noreferrer">
+        <picture>
           <source data-srcset="screenshot-win-light.webp" type="image/webp">
           <img data-src="screenshot-win-light.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
         </picture>
       </a>
-      <a class="os-not-mac" href="screenshot-win-dark.png" target="_blank" rel="noopener noreferrer">
-        <picture class="picture-dark">
+      <a class="os-not-mac picture-dark" href="screenshot-win-dark.png" target="_blank" rel="noopener noreferrer">
+        <picture>
           <source data-srcset="screenshot-win-dark.webp" type="image/webp">
           <img data-src="screenshot-win-dark.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
         </picture>
       </a>
-      <a class="os-mac" href="screenshot-mac-light.png" target="_blank" rel="noopener noreferrer">
-        <picture class="os-mac picture-light">
+      <a class="os-mac picture-light" href="screenshot-mac-light.png" target="_blank" rel="noopener noreferrer">
+        <picture>
           <source data-srcset="screenshot-mac-light.webp" type="image/webp">
           <img data-src="screenshot-mac-light.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
         </picture>
       </a>
-      <a class="os-mac" href="screenshot-mac-dark.png" target="_blank" rel="noopener noreferrer">
-        <picture class="os-mac picture-dark">
+      <a class="os-mac picture-dark" href="screenshot-mac-dark.png" target="_blank" rel="noopener noreferrer">
+        <picture>
           <source data-srcset="screenshot-mac-dark.webp" type="image/webp">
           <img data-src="screenshot-mac-dark.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
         </picture>
