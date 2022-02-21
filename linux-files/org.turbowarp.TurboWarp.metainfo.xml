@@ -52,6 +52,16 @@
     <content_attribute id="social-info">mild</content_attribute>
   </content_rating>
   <releases>
+    <release version="1.1.2" date="2022-2-20">
+      <description>
+        <ul>
+          <li>Fixed automatically loading project in packager</li>
+          <li>Fixed significant lag when displaying variable monitors caused by the "Hide new variables" addon</li>
+          <li>Fixed builtin sound library not working when offline or in certain regions of the world (China)</li>
+          <li>"Remove Miscellaneous Limits" now also disables mouse X and Y coordinate rounding</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.1.1" date="2022-2-13">
       <description>
         <ul>
