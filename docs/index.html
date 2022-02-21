@@ -408,19 +408,12 @@
 
     <section class="changelog" id="changelog">
       <div>
-        <h2>What's new in v1.1.1 (2022-2-13)</h2>
+        <h2>What's new in v1.1.2 (2022-2-20)</h2>
         <ul>
-          <li>New addon: Customizable block text style</li>
-          <li>New addon: Search sprites by name</li>
-          <li>New addon: Enhanced full screen</li>
-          <li>The right-click menu on a variable monitor now has an option to hide it</li>
-          <li>Stage size can now be changed without reloading the editor</li>
-          <li>Stage size can now be stored in a project</li>
-          <li>Fix storing gamepad settings in projects</li>
-          <li>Fix onion skinning layers being slightly misplaced</li>
-          <li>Improve sound editor performance on very large sounds</li>
-          <li>Updated packager</li>
-          <li>Many bug fixes</li>
+          <li>Fixed automatically loading project in packager</li>
+          <li>Fixed significant lag when displaying variable monitors caused by the "Hide new variables" addon</li>
+          <li>Fixed builtin sound library not working when offline or in certain regions of the world (China)</li>
+          <li>"Remove Miscellaneous Limits" now also disables mouse X and Y coordinate rounding</li>
         </ul>
         <p><a href="https://github.com/TurboWarp/desktop/releases" data-l10n="releases">Older release notes available on GitHub.</a></p>
         <div class="changelog-install-info">
@@ -741,7 +734,7 @@
     </script>
     <script>
       (function() {
-        var VERSION = '1.1.1';
+        var VERSION = '1.1.2';
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'windows';
