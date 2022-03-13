@@ -1,4 +1,4 @@
-import {app, BrowserWindow, Menu, ipcMain, shell, dialog, clipboard, screen, net} from 'electron'
+import {app, BrowserWindow, Menu, ipcMain, shell, dialog, clipboard, screen, net, session} from 'electron'
 import pathUtil from 'path'
 import fs from 'fs';
 import writeFileAtomic from 'write-file-atomic';
@@ -323,11 +323,12 @@ const createPackagerWindow = (editorWebContents) => {
 
 const createDataWindow = (url) => {
   const window = createWindow(url, {
-    title: APP_NAME,
+    title: 'data: URL',
     width: 480,
     height: 360,
     webPreferences: {
-      preload: null
+      preload: null,
+      session: session.fromPartition('unsafe-data-url')
     }
   });
   closeWindowWhenPressEscape(window);
