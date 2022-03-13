@@ -21,7 +21,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.13.13",
-    "@turbowarp/electron-webpack": "^2.9.0",
+    "@turbowarp/electron-webpack": "^2.9.1",
     "css-loader": "^5.0.2",
     "electron": "^17.1.2",
     "electron-builder": "22.14.13",
@@ -45,6 +45,7 @@
     "email": "contact@turbowarp.org"
   },
   "build": {
+    "extends": "file:node_modules/@turbowarp/electron-webpack/out/electron-builder.js",
     "appId": "org.turbowarp.desktop",
     "productName": "TurboWarp",
     "win": {
