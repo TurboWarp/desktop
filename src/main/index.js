@@ -703,6 +703,8 @@ app.on('web-contents-created', (event, webContents) => {
   });
 });
 
+app.enableSandbox();
+
 const acquiredLock = app.requestSingleInstanceLock();
 if (acquiredLock) {
   const autoCreateEditorWindows = () => {
