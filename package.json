@@ -21,10 +21,10 @@
   "devDependencies": {
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.13.13",
+    "@turbowarp/electron-webpack": "^2.9.0",
     "css-loader": "^5.0.2",
     "electron": "^17.1.2",
     "electron-builder": "22.14.13",
-    "electron-webpack": "^2.8.2",
     "intl-messageformat": "^9.4.7",
     "postcss": "^8.3.5",
     "postcss-import": "^14.0.0",
