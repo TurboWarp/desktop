@@ -26,11 +26,13 @@ let aboutWindow = null;
 let addonSettingsWindow = null;
 let privacyWindow = null;
 let desktopSettingsWindow = null;
+const dataWindows = new Set();
 const closeAllNonEditorWindows = () => [
   aboutWindow,
   addonSettingsWindow,
   privacyWindow,
-  desktopSettingsWindow
+  desktopSettingsWindow,
+  ...dataWindows
 ].filter((i) => i).forEach((i) => i.close())
 
 const allowedToAccessFiles = new Set();
@@ -45,11 +47,24 @@ const isSafeOpenExternal = (url) => {
   return false;
 };
 
+const isDataURL = (url) => {
+  try {
+    const parsedUrl = new URL(url);
+    return parsedUrl.protocol === 'data:';
+  } catch (e) {
+    // ignore
+  }
+  return false;
+};
+
 const defaultWindowOpenHandler = (details) => {
   if (isSafeOpenExternal(details.url)) {
     setImmediate(() => {
       shell.openExternal(details.url);
     });
+  }
+  if (isDataURL(details.url)) {
+    createDataWindow(details.url);
   }
   return {
     action: 'deny'
@@ -304,6 +319,22 @@ const createPackagerWindow = (editorWebContents) => {
     closeWindowWhenPressEscape(newWindow);
   });
   return window;
+};
+
+const createDataWindow = (url) => {
+  const window = createWindow(url, {
+    title: APP_NAME,
+    width: 480,
+    height: 360,
+    webPreferences: {
+      preload: null
+    }
+  });
+  closeWindowWhenPressEscape(window);
+  window.on('closed', () => {
+    dataWindows.delete(window);
+  });
+  dataWindows.add(window);
 };
 
 const getLastAccessedDirectory = () => store.get('last_accessed_directory') || '';
