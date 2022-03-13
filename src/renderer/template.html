@@ -2,14 +2,6 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <!-- electron-webpack always inserts some weird scripts, so we stub require() to avoid errors -->
-    <script>
-      window.require = (m) => {
-        if (m === 'module') return {globalPaths: []};
-        if (m === 'source-map-support/source-map-support.js') return {install(){}};
-        throw new Error("That's something I can not allow.");
-      };
-    </script>
     <style>
       #splash {
         position: absolute; width: 100%; height: 100%; top: 0; left: 0;
