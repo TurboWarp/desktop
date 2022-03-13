@@ -38,30 +38,7 @@ const allowedToAccessFiles = new Set();
 const isSafeOpenExternal = (url) => {
   try {
     const parsedUrl = new URL(url);
-    // Don't allow file:// or other unsafe protocols
-    if (
-      parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:'
-    ) {
-      return false;
-    }
-    // We want to be extra careful, so we'll also limit the domains
-    // Not sure if this really does anything meaningful...
-    if (
-      parsedUrl.origin !== 'https://scratch.mit.edu' &&
-      parsedUrl.origin !== 'https://desktop.turbowarp.org' &&
-      parsedUrl.origin !== 'https://docs.turbowarp.org' &&
-      parsedUrl.origin !== 'https://github.com' &&
-      // Addons
-      parsedUrl.href !== 'https://www.youtube.com/griffpatch' &&
-      // Packager
-      parsedUrl.origin !== 'https://packager.turbowarp.org' &&
-      parsedUrl.origin !== 'https://experiments.turbowarp.org' &&
-      parsedUrl.origin !== 'https://turbowarp.org' &&
-      parsedUrl.origin !== 'https://fosshost.org'
-    ) {
-      return false;
-    }
-    return true;
+    return parsedUrl.protocol === 'https:' || parsedUrl.protocol === 'http:';
   } catch (e) {
     // ignore
   }
