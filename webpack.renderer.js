@@ -1,4 +1,3 @@
-const fs = require('fs');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const merge = require('webpack-merge');
