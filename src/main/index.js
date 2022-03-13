@@ -149,9 +149,11 @@ const getWindowOptions = (options) => {
   options.useContentSize = true;
   options.minWidth = 200;
   options.minHeight = 200;
-  options.webPreferences = {
-    preload: pathUtil.resolve(pathUtil.join(__dirname, 'preload.js'))
-  };
+  options.webPreferences ||= {};
+  if (typeof options.webPreferences.preload === 'undefined') {
+    // only undefined should be replaced as null is interpreted as "no preload script"
+    options.webPreferences.preload = pathUtil.resolve(__dirname, 'preload.js')
+  }
 
   const activeScreen = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
   const bounds = activeScreen.workArea;
@@ -299,7 +301,7 @@ const createPackagerWindow = (editorWebContents) => {
   window.on('page-title-updated', (e, title) => {
     e.preventDefault();
     // title will be something like "Project - TurboWarp Packager for Scratch"
-    // the for Scratch looks ugly in a native window, so remove that
+    // the "for Scratch" looks ugly in a native window, so remove that
     window.setTitle(title.replace(/ for Scratch$/, ''));
   });
   window.webContents.setWindowOpenHandler((details) => {
@@ -311,7 +313,11 @@ const createPackagerWindow = (editorWebContents) => {
           title: 'Loading Preview',
           width: 640,
           height: 480,
-          parent: window
+          parent: window,
+          webPreferences: {
+            // preview window can have arbitrary custom JS and should not have access to special APIs
+            preload: null
+          }
         })
       };
     }
