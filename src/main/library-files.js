@@ -50,8 +50,7 @@ app.whenReady().then(() => {
           mimeType: data.type
         });
       })
-      .catch((err) => {
-        console.error('Cannot read library file', err);
+      .catch(() => {
         callback({
           statusCode: 404
         });
