@@ -29,7 +29,7 @@
   "packager": "TurboWarp Packager (Convert Project)",
   "packager.loading": "Loading project from editor...",
   "source": "Source Code",
-  "failed-to-load": "Could not load project file: {error}",
+  "failed-to-load": "Could not load project: {error}",
   "crash.renderer": "Renderer process crashed: {reason} ({code})",
   "files.svg": "SVG Image",
   "files.png": "PNG Image",
