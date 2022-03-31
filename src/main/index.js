@@ -14,6 +14,7 @@ import './crash';
 import parseArgs from './parse-args';
 import {isDevelopment, isMac, isLinux, staticDir} from './environment';
 import './library-files';
+import './user-agent';
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
