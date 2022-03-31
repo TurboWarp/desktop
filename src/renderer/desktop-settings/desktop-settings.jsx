@@ -10,9 +10,11 @@ class DesktopSettings extends React.Component {
     this.state = {
       canUpdateCheckerBeEnabled: ipcRenderer.sendSync('update-checker/can-be-enabled'),
       isUpdateCheckerEnabled: ipcRenderer.sendSync('update-checker/get-is-enabled'),
+      isHardwareAccelerationEnabled: ipcRenderer.sendSync('hardware-acceleration/get-is-enabled')
     };
     this.handleChangeUpdateCheckerEnabled = this.handleChangeUpdateCheckerEnabled.bind(this);
     this.handleOpenPrivacyPolicy = this.handleOpenPrivacyPolicy.bind(this);
+    this.handleChangeHardwareAccelerationEnabled = this.handleChangeHardwareAccelerationEnabled.bind(this);
     this.handleOpenUserData = this.handleOpenUserData.bind(this);
   }
   handleChangeUpdateCheckerEnabled (e) {
@@ -25,6 +27,13 @@ class DesktopSettings extends React.Component {
   handleOpenPrivacyPolicy (e) {
     e.preventDefault();
     ipcRenderer.send('open-privacy-policy');
+  }
+  handleChangeHardwareAccelerationEnabled (e) {
+    const enabled = e.target.checked;
+    ipcRenderer.invoke('hardware-acceleration/set-is-enabled', enabled);
+    this.setState({
+      isHardwareAccelerationEnabled: enabled
+    });
   }
   handleOpenUserData () {
     ipcRenderer.send('open-user-data');
@@ -61,6 +70,19 @@ class DesktopSettings extends React.Component {
         ) : (
           <p>{getTranslation('settings.build-time-disabled-update-checker')}</p>
         )}
+
+        <p>
+          <label>
+            <input
+              type="checkbox"
+              checked={this.state.isHardwareAccelerationEnabled}
+              onChange={this.handleChangeHardwareAccelerationEnabled}
+            />
+            {' '}
+            {getTranslation('settings.hardware-acceleration')}
+          </label>
+        </p>
+
         <p>
           <button onClick={this.handleOpenUserData}>
             {getTranslation('settings.open-user-data')}
