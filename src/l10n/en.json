@@ -5,7 +5,6 @@
   "settings.enable-update-checker": "Enable update checker",
   "settings.privacy-link": "(privacy)",
   "settings.disabled-update-checker": "Disabling the update checker is not recommended.",
-  "settings.build-time-disabled-update-checker": "The update checker is forcibly disabled in this build. If you installed the app from a store such as the Microsoft Store, updates are handled by that store, not by the app.",
   "settings.open-user-data": "Open User Data Folder",
   "settings.hardware-acceleration": "Use Hardware Acceleration",
   "menu.new-window": "New Window",

@@ -42,33 +42,31 @@ class DesktopSettings extends React.Component {
     return (
       <main>
         <h1>{getTranslation('desktop-settings')}</h1>
-        <p>
-          <label>
-            <input
-              type="checkbox"
-              onChange={this.handleChangeUpdateCheckerEnabled}
-              disabled={!this.state.canUpdateCheckerBeEnabled}
-              checked={this.state.isUpdateCheckerEnabled}
-            />
-            {' '}
-            {getTranslation('settings.enable-update-checker')}
-          </label>
-          {' '}
-          <a
-            onClick={this.handleOpenPrivacyPolicy}
-            href="#"
-          >
-            {getTranslation('settings.privacy-link')}
-          </a>
-        </p>
-        {this.state.canUpdateCheckerBeEnabled ? (
-          this.state.isUpdateCheckerEnabled ? (
-            null
-          ) : (
-            <p>{getTranslation('settings.disabled-update-checker')}</p>
-          )
-        ) : (
-          <p>{getTranslation('settings.build-time-disabled-update-checker')}</p>
+        {this.state.canUpdateCheckerBeEnabled && (
+          <React.Fragment>
+            <p>
+              <label>
+                <input
+                  type="checkbox"
+                  onChange={this.handleChangeUpdateCheckerEnabled}
+                  disabled={!this.state.canUpdateCheckerBeEnabled}
+                  checked={this.state.isUpdateCheckerEnabled}
+                />
+                {' '}
+                {getTranslation('settings.enable-update-checker')}
+              </label>
+              {' '}
+              <a
+                onClick={this.handleOpenPrivacyPolicy}
+                href="#"
+              >
+                {getTranslation('settings.privacy-link')}
+              </a>
+            </p>
+            {!this.state.isUpdateCheckerEnabled && (
+              <p>{getTranslation('settings.disabled-update-checker')}</p>
+            )}
+          </React.Fragment>
         )}
 
         <p>
