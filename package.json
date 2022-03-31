@@ -49,7 +49,7 @@
     "appId": "org.turbowarp.desktop",
     "productName": "TurboWarp",
     "win": {
-      "artifactName": "${productName} Setup ${version} ${arch}.${ext}",
+      "artifactName": "${productName} Portable ${version} ${arch}.${ext}",
       "icon": "build/icon.ico",
       "target": [
         {
@@ -59,6 +59,9 @@
         {
           "target": "nsis",
           "arch": "ia32"
+        },
+        {
+          "target": "portable"
         }
       ]
     },
@@ -72,6 +75,7 @@
       "showNameOnTiles": true
     },
     "nsis": {
+      "artifactName": "${productName} Setup ${version} ${arch}.${ext}",
       "oneClick": false,
       "deleteAppDataOnUninstall": true,
       "allowToChangeInstallationDirectory": true
