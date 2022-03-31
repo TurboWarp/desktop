@@ -34,7 +34,7 @@ jobs:
       run: npm run dist -- --windows appx --publish never --x64 --ia32
       env:
         NODE_OPTIONS: --max-old-space-size=4096
-    - name: Upload artifacts
+    - name: Upload appx artifacts
       if: runner.os == 'Windows'
       uses: actions/upload-artifact@v2
       with:
