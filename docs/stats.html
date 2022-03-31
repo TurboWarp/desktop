@@ -56,7 +56,12 @@
           const main = document.querySelector('main');
           while (main.firstChild) main.removeChild(main.firstChild);
 
+          let totalTotalDownloads = 0;
+          const totalTotalDownloadsByPlatform = new Map();
+          const ALL_PLATFORMS = ['Windows', 'macOS', 'Linux'];
+
           let previousPublish = new Date();
+
           for (const {assets, tag_name, html_url, prerelease, published_at} of releases) {
             if (prerelease) {
               continue;
@@ -131,9 +136,13 @@
               dataElement.textContent = download_count;
             }
 
-            for (const platform of ['Windows', 'macOS', 'Linux']) {
+            totalTotalDownloads += totalDownloads;
+
+            for (const platform of ALL_PLATFORMS) {
               const downloads = downloadsByPlatform.get(platform) || 0;
               if (downloads === 0) continue;
+
+              totalTotalDownloadsByPlatform.set(platform, (totalTotalDownloadsByPlatform.get(platform) || 0) + downloads);
 
               const {nameElement, dataElement} = makeRow();
               nameElement.textContent = `All ${platform}`;
@@ -158,6 +167,26 @@
 
             main.appendChild(header);
             main.appendChild(table);
+          }
+
+          {
+            const container = document.createElement('div');
+            container.appendChild(Object.assign(document.createElement('h2'), {
+              textContent: 'Totals'
+            }));
+            const list = document.createElement('ul');
+            list.appendChild(Object.assign(document.createElement('li'), {
+              textContent: `Total: ${totalTotalDownloads}`
+            }));
+            for (const platform of ALL_PLATFORMS) {
+              const count = totalTotalDownloadsByPlatform.get(platform) || 0;
+              const percent = Math.round(count / totalTotalDownloads * 100);
+              list.appendChild(Object.assign(document.createElement('li'), {
+                textContent: `Total ${platform}: ${totalTotalDownloadsByPlatform.get(platform)} (${percent}%)`
+              }));
+            }
+            container.appendChild(list);
+            main.prepend(container);
           }
         })
         .catch((err) => {

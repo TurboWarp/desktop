@@ -23,7 +23,7 @@
     "@babel/preset-react": "^7.13.13",
     "@turbowarp/electron-webpack": "^2.9.1",
     "css-loader": "^5.0.2",
-    "electron": "^17.2.0",
+    "electron": "^18.0.1",
     "electron-builder": "22.14.13",
     "intl-messageformat": "^9.4.7",
     "postcss": "^8.3.5",
@@ -49,7 +49,7 @@
     "appId": "org.turbowarp.desktop",
     "productName": "TurboWarp",
     "win": {
-      "artifactName": "${productName} Setup ${version} ${arch}.${ext}",
+      "artifactName": "${productName} Portable ${version} ${arch}.${ext}",
       "icon": "build/icon.ico",
       "target": [
         {
@@ -59,6 +59,9 @@
         {
           "target": "nsis",
           "arch": "ia32"
+        },
+        {
+          "target": "portable"
         }
       ]
     },
@@ -72,6 +75,7 @@
       "showNameOnTiles": true
     },
     "nsis": {
+      "artifactName": "${productName} Setup ${version} ${arch}.${ext}",
       "oneClick": false,
       "deleteAppDataOnUninstall": true,
       "allowToChangeInstallationDirectory": true
