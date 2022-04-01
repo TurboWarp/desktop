@@ -274,7 +274,7 @@ const createDesktopSettingsWindow = () => {
     desktopSettingsWindow = createWindow(getURL('desktop-settings'), {
       title: getTranslation('desktop-settings'),
       width: 500,
-      height: 350
+      height: 450
     });
     desktopSettingsWindow.on('closed', () => {
       desktopSettingsWindow = null;
