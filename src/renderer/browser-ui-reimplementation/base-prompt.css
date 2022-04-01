@@ -12,24 +12,17 @@
   color: black;
 }
 
-.content {
+.inner {
   background: white;
   padding: 20px;
-  border: 1px solidblack;
+  border: 1px solid black;
   border-radius: 3px;
   box-shadow: black 0 0 10px;
   max-width: 480px;
 }
 
-.title {
+.content {
 
-}
-
-.input {
-  display: block;
-  width: 100%;
-  margin-bottom: 10px;
-  box-sizing: border-box;
 }
 
 .button-container {
