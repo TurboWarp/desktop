@@ -537,7 +537,7 @@ app.on('session-created', (session) => {
       });
     }
   });
-})
+});
 
 app.on('web-contents-created', (event, webContents) => {
   webContents.on('context-menu', (event, params) => {
