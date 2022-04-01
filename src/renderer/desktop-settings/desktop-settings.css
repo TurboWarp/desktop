@@ -10,24 +10,36 @@ main {
   min-height: 100vh;
   border: 20px solid hsla(0, 100%, 65%, 1);
 }
+
 input[type="checkbox"] {
   margin-right: 4px;
 }
-select {
-  margin-left: 4px;
-}
+
 .option {
-  display: block;
   margin: 12px 0;
 }
+
 .label {
   display: block;
   margin-bottom: 4px;
 }
+
 .warning {
   font-weight: bold;
   background: rgb(255, 255, 0);
   border: 2px solid black;
   padding: 4px;
   border-radius: 4px;
+}
+
+.device-option {
+  display: flex;
+  flex-direction: column;
+  margin: 12px 0;
+}
+.device-label {
+  font-weight: bold;
+}
+.device-chooser {
+  width: 100%;
 }

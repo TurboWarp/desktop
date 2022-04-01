@@ -11,6 +11,7 @@ const MediaDeviceChooser = ({devices, selected, onChange}) => (
   <select
     value={selected}
     onChange={onChange}
+    className={styles.deviceChooser}
   >
     {devices.length ? devices.map(({deviceId, label}) => (
       <option
@@ -155,16 +156,20 @@ class DesktopSettings extends React.Component {
           </div>
         ) : (
           <React.Fragment>
-            <label className={styles.option}>
-            {getTranslation('settings.microphone')}
+            <label className={styles.deviceOption}>
+              <div className={styles.deviceLabel}>
+                {getTranslation('settings.microphone')}
+              </div>
               <MediaDeviceChooser
                 devices={this.state.audioDevices}
                 selected={this.state.selectedAudioDevice}
                 onChange={this.handleSelectedAudioDeviceChanged}
               />
             </label>
-            <label className={styles.option}>
-              {getTranslation('settings.camera')}
+            <label className={styles.deviceOption}>
+              <div className={styles.deviceLabel}>
+                {getTranslation('settings.camera')}
+              </div>
               <MediaDeviceChooser
                 devices={this.state.videoDevices}
                 selected={this.state.selectedVideoDevice}
