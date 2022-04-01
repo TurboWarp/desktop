@@ -16,6 +16,7 @@ import {isDevelopment, isMac, isLinux, staticDir} from './environment';
 import './library-files';
 import './user-agent';
 import './hardware-acceleration';
+import {handlePermissionRequest} from './permissions';
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
@@ -523,6 +524,8 @@ app.on('open-file', (event, path) => {
 });
 
 app.on('session-created', (session) => {
+  session.setPermissionRequestHandler(handlePermissionRequest);
+
   session.on('will-download', (event, item, webContents) => {
     const extension = pathUtil.extname(item.getFilename()).replace(/^\./, '').toLowerCase();
     const extensionName = getTranslationOrNull(`files.${extension}`);
