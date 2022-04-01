@@ -41,7 +41,7 @@
   "permission.audio-denied-description": "The app will not be able to record sounds or detect loudness.",
   "permission.video-denied": "Camera Permission Denied",
   "permission.video-denied-description": "The app will not be able to take photos or use video sensing.",
-  "permission.macos-instructions": "To change permissions, open \"Security & Privacy\" in System Preferences.",
+  "permission.macos-instructions": "To change permissions, open System Preferences > Security & Privacy > Privacy > Camera or Microphone.",
   "files.svg": "SVG Image",
   "files.png": "PNG Image",
   "files.wav": "WAV Sound",

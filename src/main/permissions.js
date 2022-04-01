@@ -20,11 +20,10 @@ const showPermissionDeniedWarning = (window, mediaType) => {
   const description = getTranslation(`permission.${mediaType}-denied-description`);
   // This prompt currently is only visible in macOS
   const instructions = getTranslation('permission.macos-instructions');
-  const message = `${description}\n\n${instructions}`;
   dialog.showMessageBox(window, {
     type: 'warning',
-    title,
-    message
+    message: title,
+    detail: `${description}\n\n${instructions}`
   });
 };
 
