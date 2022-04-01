@@ -707,7 +707,7 @@ app.on('web-contents-created', (event, webContents) => {
     }
     try {
       const newURL = new URL(url);
-      const baseURL = new URL(getURL('editor'));
+      const baseURL = new URL(getURL(''));
       if (newURL.href.startsWith(baseURL.href)) {
         // Let the editor reload itself
         // For example, reloading to apply settings
