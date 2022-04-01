@@ -1,7 +1,7 @@
 import {ipcRenderer} from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {enumerateDevices, getAudioId, getVideoId, setAudioId, setVideoId} from '../browser-ui-reimplementation/mediadevices-chooser';
+import {probeDevices, setAudioId, setVideoId} from '../browser-ui-reimplementation/mediadevices-chooser';
 import {getTranslation} from '../translations';
 import styles from './desktop-settings.css';
 
@@ -76,14 +76,14 @@ class DesktopSettings extends React.Component {
     this.setState({
       loadingMediaDevices: true
     });
-    enumerateDevices()
-      .then(({audioDevices, videoDevices}) => {
+    probeDevices()
+      .then(({audioDevices, audioId, videoDevices, videoId}) => {
         this.setState({
           loadingMediaDevices: false,
           audioDevices,
-          selectedAudioDevice: getAudioId() || ID_NONE,
+          selectedAudioDevice: audioId,
           videoDevices,
-          selectedVideoDevice: getVideoId() || ID_NONE
+          selectedVideoDevice: videoId
         });
       });
   }

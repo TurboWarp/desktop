@@ -3,10 +3,6 @@ const originalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.
 const AUDIO_DEVICE_ID_KEY = 'twd:audio_id';
 const VIDEO_DEVICE_ID_KEY = 'twd:video_id';
 
-export const getAudioId = () => localStorage.getItem(AUDIO_DEVICE_ID_KEY);
-
-export const getVideoId = () => localStorage.getItem(VIDEO_DEVICE_ID_KEY);
-
 export const setAudioId = (id) => {
   localStorage.setItem(AUDIO_DEVICE_ID_KEY, id);
 };
@@ -15,13 +11,22 @@ export const setVideoId = (id) => {
   localStorage.setItem(VIDEO_DEVICE_ID_KEY, id);
 };
 
-export const enumerateDevices = async () => {
+export const probeDevices = async () => {
   const mediaDevices = await navigator.mediaDevices.enumerateDevices();
   const audioDevices = mediaDevices.filter(i => i.kind === 'audioinput');
   const videoDevices = mediaDevices.filter(i => i.kind === 'videoinput');
+
+  const audioId = localStorage.getItem(AUDIO_DEVICE_ID_KEY);
+  const audioIdExists = audioDevices.find((i) => i.deviceId === audioId);
+
+  const videoId = localStorage.getItem(VIDEO_DEVICE_ID_KEY);
+  const videoIdExists = videoDevices.filter(i => i.deviceId === videoId);
+
   return {
     audioDevices,
-    videoDevices
+    videoDevices,
+    audioId: audioIdExists ? audioId : null,
+    videoId: videoIdExists ? videoId : null
   };
 };
 
@@ -34,10 +39,9 @@ const constrainByDeviceId = (constraint, deviceId) => {
   return constraint;
 };
 
-navigator.mediaDevices.getUserMedia = (constraints) => {
+navigator.mediaDevices.getUserMedia = async (constraints) => {
   const {audio, video} = constraints;
-  const audioId = getAudioId();
-  const videoId = getVideoId();
+  const {audioId, videoId} = await probeDevices();
   if (audio && audioId) {
     constraints.audio = constrainByDeviceId(audio, audioId);
   }
