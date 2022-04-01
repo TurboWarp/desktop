@@ -56,12 +56,14 @@ module.exports = defaultConfig => {
             ],
         },
         plugins: [
-            new CopyWebpackPlugin([
-                {
-                    from: 'node_modules/scratch-blocks/media',
-                    to: 'static/blocks-media'
-                }
-            ])
+            new CopyWebpackPlugin({
+                patterns: [
+                    {
+                        from: 'node_modules/scratch-blocks/media',
+                        to: 'static/blocks-media'
+                    }
+                ]
+            })
         ],
         resolve: {
             alias: {
