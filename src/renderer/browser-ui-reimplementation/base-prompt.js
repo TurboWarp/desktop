@@ -13,6 +13,8 @@ class Prompt extends EventTarget {
   constructor () {
     super();
 
+    this.cancellable = true;
+
     this.container = document.createElement('div');
     this.container.className = styles.container;
 
@@ -25,22 +27,6 @@ class Prompt extends EventTarget {
     this.buttonContainer = document.createElement('div');
     this.buttonContainer.className = styles.buttonContainer;
 
-    this.okButton = document.createElement('button');
-    this.okButton.className = styles.buttonOk;
-    this.okButton.textContent = getTranslation('prompt.ok');
-    this.okButton.onclick = () => {
-      this.ok();
-    };
-
-    this.cancelButton = document.createElement('button');
-    this.cancelButton.className = styles.buttonCancel;
-    this.cancelButton.textContent = getTranslation('prompt.cancel');
-    this.cancelButton.onclick = () => {
-      this.cancel();
-    };
-
-    this.buttonContainer.appendChild(this.cancelButton);
-    this.buttonContainer.appendChild(this.okButton);
     this.inner.appendChild(this.content);
     this.inner.appendChild(this.buttonContainer);
     this.container.appendChild(this.inner);
@@ -57,6 +43,10 @@ class Prompt extends EventTarget {
   }
 
   cancel () {
+    if (!this.cancellable) {
+      this.ok();
+      return;
+    }
     this.hide();
     this.dispatchEvent(new CustomEvent('cancel'));
   }
@@ -66,6 +56,24 @@ class Prompt extends EventTarget {
       previousPrompt.hide();
     }
     previousPrompt = this;
+
+    if (this.cancellable) {
+      const cancelButton = document.createElement('button');
+      cancelButton.className = styles.buttonCancel;
+      cancelButton.textContent = getTranslation('prompt.cancel');
+      cancelButton.onclick = () => {
+        this.cancel();
+      };
+      this.buttonContainer.appendChild(cancelButton);
+    }
+
+    const okButton = document.createElement('button');
+    okButton.className = styles.buttonOk;
+    okButton.textContent = getTranslation('prompt.ok');
+    okButton.onclick = () => {
+      this.ok();
+    };
+    this.buttonContainer.appendChild(okButton);
 
     document.body.appendChild(this.container);
   }

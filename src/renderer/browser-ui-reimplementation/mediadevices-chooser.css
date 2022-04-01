@@ -1,0 +1,16 @@
+.title {
+
+}
+
+.selector {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  margin: 10px 0;
+}
+.label {
+  margin-right: 4px;
+}
+.input {
+  width: 100%;
+}
