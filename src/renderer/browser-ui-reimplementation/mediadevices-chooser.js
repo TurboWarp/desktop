@@ -4,6 +4,9 @@ import styles from './mediadevices-chooser.css';
 
 const originalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
 
+const AUDIO_DEVICE_ID_KEY = 'twd:audio_id';
+const VIDEO_DEVICE_ID_KEY = 'twd:video_id';
+
 const makeDeviceSelector = (text, devices) => {
   const root = document.createElement('label');
   root.className = styles.selector;
@@ -31,7 +34,7 @@ const makeDeviceSelector = (text, devices) => {
   };
 };
 
-const showPrompt = (audioDevices, videoDevices) => new Promise((resolve, reject) => {
+const showDeviceSelectorPrompt = (audioDevices, videoDevices) => new Promise((resolve) => {
   const prompt = new Prompt();
   prompt.cancellable = false;
 
@@ -61,14 +64,52 @@ const showPrompt = (audioDevices, videoDevices) => new Promise((resolve, reject)
 
   prompt.addEventListener('ok', () => {
     resolve({
-      audioDeviceId: audioSelector && audioSelector.get(),
-      videoDeviceId: videoSelector && videoSelector.get()
+      audioId: audioSelector && audioSelector.get(),
+      videoId: videoSelector && videoSelector.get()
     });
   });
 });
 
+export const getAudioId = () => localStorage.getItem(AUDIO_DEVICE_ID_KEY);
+
+export const getVideoId = () => localStorage.getItem(VIDEO_DEVICE_ID_KEY);
+
+export const setAudioId = (id) => {
+  localStorage.setItem(AUDIO_DEVICE_ID_KEY, id);
+};
+
+export const setVideoId = (id) => {
+  localStorage.setItem(VIDEO_DEVICE_ID_KEY, id);
+};
+
+export const enumerateDevices = async () => {
+  const mediaDevices = await navigator.mediaDevices.enumerateDevices();
+  const audioDevices = mediaDevices.filter(i => i.kind === 'audioinput');
+  const videoDevices = mediaDevices.filter(i => i.kind === 'videoinput');
+  return {
+    audioDevices,
+    videoDevices
+  };
+};
+
+const needsConfiguration = (devices, deviceId) => {
+  if (deviceId) {
+    for (const device of devices) {
+      if (device.deviceId === deviceId) {
+        // A device with the given ID exists.
+        return false;
+      }
+    }
+    // A device ID is configured but the device does not exist.
+    // We'll treat this as having no ID configured at all.
+  }
+  // Device ID is not configured
+  // Even if the device only has 1 microphone, Chromium exposes 2 devices to us, one of which is always "Default"
+  return devices.length > 2;
+};
+
 const constrainByDeviceId = (constraint, deviceId) => {
-  // video: true must be converted to video: {} so we can add a constraint
+  // A constraint like video: true must be converted to video: {} so we can add more constraints
   if (constraint === true) {
     constraint = {};
   }
@@ -77,28 +118,33 @@ const constrainByDeviceId = (constraint, deviceId) => {
 };
 
 navigator.mediaDevices.getUserMedia = async (constraints) => {
-  const hasAudio = !!constraints.audio;
-  const hasVideo = !!constraints.video;
+  const {audioDevices, videoDevices} = await enumerateDevices();
+  const {audio, video} = constraints;
+  let audioId = getAudioId();
+  let videoId = getVideoId();
 
-  const mediaDevices = await navigator.mediaDevices.enumerateDevices();
-
-  const audioDevices = mediaDevices.filter(i => i.kind === 'audioinput');
-  const videoDevices = mediaDevices.filter(i => i.kind === 'videoinput');
-
-  const needsPrompt = (hasAudio && audioDevices.length > 1) || (hasVideo && videoDevices.length > 1);
-
-  if (needsPrompt) {
-    const {audioDeviceId, videoDeviceId} = await showPrompt(
-      hasAudio ? audioDevices : null,
-      hasVideo ? videoDevices : null
+  const needsAudioConfiguration = audio && needsConfiguration(audioDevices, audioId);
+  const needsVideoConfiguration = video && needsConfiguration(videoDevices, videoId);
+  if (needsAudioConfiguration || needsVideoConfiguration) {
+    const result = await showDeviceSelectorPrompt(
+      audio ? audioDevices : null,
+      video ? videoDevices : null
     );
-    if (audioDeviceId) {
-      constraints.audio = constrainByDeviceId(constraints.audio, audioDeviceId);
+    if (result.audioId) {
+      audioId = result.audioId;
+      setAudioId(audioId);
     }
-    if (videoDeviceId) {
-      constraints.video = constrainByDeviceId(constraints.video, videoDeviceId);
+    if (result.videoId) {
+      videoId = result.videoId;
+      setVideoId(videoId);
     }
   }
 
+  if (audio && audioId) {
+    constraints.audio = constrainByDeviceId(audio, audioId);
+  }
+  if (video && videoId) {
+    constraints.video = constrainByDeviceId(video, videoId);
+  }
   return originalGetUserMedia(constraints);
 };

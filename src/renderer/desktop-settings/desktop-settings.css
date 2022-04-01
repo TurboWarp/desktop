@@ -13,7 +13,11 @@ main {
 input[type="checkbox"] {
   margin-right: 4px;
 }
+select {
+  margin-left: 4px;
+}
 .option {
+  display: block;
   margin: 12px 0;
 }
 .label {
