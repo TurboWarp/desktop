@@ -42,9 +42,10 @@ class DesktopSettings extends React.Component {
     return (
       <main>
         <h1>{getTranslation('desktop-settings')}</h1>
+
         {this.state.canUpdateCheckerBeEnabled && (
-          <React.Fragment>
-            <p>
+          <div className={styles.option}>
+            <div className={styles.label}>
               <label>
                 <input
                   type="checkbox"
@@ -52,7 +53,6 @@ class DesktopSettings extends React.Component {
                   disabled={!this.state.canUpdateCheckerBeEnabled}
                   checked={this.state.isUpdateCheckerEnabled}
                 />
-                {' '}
                 {getTranslation('settings.enable-update-checker')}
               </label>
               {' '}
@@ -62,30 +62,36 @@ class DesktopSettings extends React.Component {
               >
                 {getTranslation('settings.privacy-link')}
               </a>
-            </p>
+            </div>
             {!this.state.isUpdateCheckerEnabled && (
-              <p>{getTranslation('settings.disabled-update-checker')}</p>
+              <div className={styles.warning}>
+                {getTranslation('settings.disabled-update-checker')}
+              </div>
             )}
-          </React.Fragment>
+          </div>
         )}
 
-        <p>
-          <label>
+        <div className={styles.option}>
+          <label className={styles.label}>
             <input
               type="checkbox"
               checked={this.state.isHardwareAccelerationEnabled}
               onChange={this.handleChangeHardwareAccelerationEnabled}
             />
-            {' '}
             {getTranslation('settings.hardware-acceleration')}
           </label>
-        </p>
+          {!this.state.isHardwareAccelerationEnabled && (
+            <div className={styles.warning}>
+              {getTranslation('settings.disabled-hardware-acceleration')}
+            </div>
+          )}
+        </div>
 
-        <p>
+        <div className={styles.option}>
           <button onClick={this.handleOpenUserData}>
             {getTranslation('settings.open-user-data')}
           </button>
-        </p>
+        </div>
       </main>
     );
   }
