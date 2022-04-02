@@ -61,7 +61,8 @@
           "arch": "ia32"
         },
         {
-          "target": "portable"
+          "target": "portable",
+          "arch": "x64"
         }
       ]
     },
