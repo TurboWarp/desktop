@@ -23,7 +23,7 @@
     "@babel/preset-react": "^7.13.13",
     "@turbowarp/electron-webpack": "^2.9.1",
     "css-loader": "^5.0.2",
-    "electron": "^17.2.0",
+    "electron": "^17.3.1",
     "electron-builder": "22.14.13",
     "intl-messageformat": "^9.4.7",
     "postcss": "^8.3.5",
