@@ -30,6 +30,12 @@ export const probeDevices = async () => {
   };
 };
 
+export const whenDevicesChange = (callback) => {
+  navigator.mediaDevices.addEventListener('devicechange', () => {
+    callback();
+  });
+}
+
 const constrainByDeviceId = (constraint, deviceId) => {
   // A constraint like video: true must be converted to video: {} so we can add more constraints
   if (constraint === true) {

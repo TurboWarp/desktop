@@ -1,7 +1,7 @@
 import {ipcRenderer} from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {probeDevices, setAudioId, setVideoId} from '../browser-ui-reimplementation/mediadevices-chooser';
+import {probeDevices, setAudioId, setVideoId, whenDevicesChange} from '../browser-ui-reimplementation/mediadevices-chooser';
 import {getTranslation} from '../translations';
 import styles from './desktop-settings.css';
 
@@ -65,6 +65,7 @@ class DesktopSettings extends React.Component {
 
   componentDidMount () {
     this.updateMediaDevices();
+    whenDevicesChange(() => this.updateMediaDevices());
   }
 
   handleChangeUpdateCheckerEnabled (e) {
