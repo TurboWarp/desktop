@@ -106,15 +106,15 @@
     <release version="1.0.0" date="2022-1-15">
       <description>
         <ul>
-          <li>The costume editor now supports dark mode.</li>
-          <li>If a dark background makes it hard to edit your costumes, it's possible to change the theme of the costume editor without effecting the rest of the interface.</li>
-          <li>Significantly optimized memory use of costumes.</li>
-          <li>Improved project exporting to compress project.json by up to to 30%.</li>
-          <li>Many compiler optimizations and compatibility fixes.</li>
-          <li>When you right click on a misspelled word detected by the spellchecker, you will now see some suggested replacements.</li>
-          <li>Updated integrated packager.</li>
-          <li>Various bug fixes.</li>
-          <li>Updated translations.</li>
+          <li>The costume editor now supports dark mode</li>
+          <li>If a dark background makes it hard to edit your costumes, it's possible to change the theme of the costume editor without effecting the rest of the interface</li>
+          <li>Significantly optimized memory use of costumes</li>
+          <li>Improved project exporting to compress project.json by up to to 30%</li>
+          <li>Many compiler optimizations and compatibility fixes</li>
+          <li>When you right click on a misspelled word detected by the spellchecker, you will now see some suggested replacements</li>
+          <li>Updated integrated packager</li>
+          <li>Various bug fixes</li>
+          <li>Updated translations</li>
         </ul>
       </description>
     </release>
