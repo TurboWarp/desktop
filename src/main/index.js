@@ -305,7 +305,7 @@ const createPackagerWindow = (editorWebContents) => {
       return {
         action: 'allow',
         overrideBrowserWindowOptions: getWindowOptions({
-          title: 'Loading Preview',
+          title: getTranslation('loading-preview'),
           width: 640,
           height: 480,
           parent: window,
