@@ -7,13 +7,20 @@ import styles from './desktop-settings.css';
 
 const ID_NONE = '';
 
-const MediaDeviceChooser = ({devices, selected, onChange}) => (
+const MediaDeviceChooser = ({devices, selected, onChange, loading}) => (
   <select
-    value={selected}
+    value={loading ? ID_NONE : selected}
     onChange={onChange}
     className={styles.deviceChooser}
   >
-    {devices.length ? devices.map(({deviceId, label}) => (
+    {loading ? (
+      <option
+        value={ID_NONE}
+        disabled
+      >
+        {getTranslation('settings.loading-devices')}
+      </option>
+    ) : devices.length ? devices.map(({deviceId, label}) => (
       <option
         key={deviceId}
         value={deviceId}
@@ -43,7 +50,7 @@ class DesktopSettings extends React.Component {
       selectedAudioDevice: ID_NONE,
       videoDevices: [],
       selectedVideoDevice: ID_NONE,
-      mediaDevicesDirty: false,
+      mediaDevicesNeedRestart: false,
 
       isHardwareAccelerationEnabled: ipcRenderer.sendSync('hardware-acceleration/get-is-enabled')
     };
@@ -93,7 +100,7 @@ class DesktopSettings extends React.Component {
     setAudioId(id);
     this.setState({
       selectedAudioDevice: id,
-      mediaDevicesDirty: true
+      mediaDevicesNeedRestart: true
     });
   }
   handleSelectedVideoDeviceChanged (e) {
@@ -101,7 +108,7 @@ class DesktopSettings extends React.Component {
     setVideoId(id);
     this.setState({
       selectedVideoDevice: id,
-      mediaDevicesDirty: true
+      mediaDevicesNeedRestart: true
     });
   }
 
@@ -150,38 +157,32 @@ class DesktopSettings extends React.Component {
           </div>
         )}
 
-        {this.loadingMediaDevices ? (
-          <div className={styles.option}>
-            {getTranslation('settings.loading-devices')}
+        <label className={styles.deviceOption}>
+          <div className={styles.deviceLabel}>
+            {getTranslation('settings.microphone')}
           </div>
-        ) : (
-          <React.Fragment>
-            <label className={styles.deviceOption}>
-              <div className={styles.deviceLabel}>
-                {getTranslation('settings.microphone')}
-              </div>
-              <MediaDeviceChooser
-                devices={this.state.audioDevices}
-                selected={this.state.selectedAudioDevice}
-                onChange={this.handleSelectedAudioDeviceChanged}
-              />
-            </label>
-            <label className={styles.deviceOption}>
-              <div className={styles.deviceLabel}>
-                {getTranslation('settings.camera')}
-              </div>
-              <MediaDeviceChooser
-                devices={this.state.videoDevices}
-                selected={this.state.selectedVideoDevice}
-                onChange={this.handleSelectedVideoDeviceChanged}
-              />
-            </label>
-            {this.state.mediaDevicesDirty && (
-              <div className={styles.warning}>
-                {getTranslation('settings.restart-for-device-change')}
-              </div>
-            )}
-          </React.Fragment>
+          <MediaDeviceChooser
+            devices={this.state.audioDevices}
+            selected={this.state.selectedAudioDevice}
+            onChange={this.handleSelectedAudioDeviceChanged}
+            loading={this.state.loadingMediaDevices}
+          />
+        </label>
+        <label className={styles.deviceOption}>
+          <div className={styles.deviceLabel}>
+            {getTranslation('settings.camera')}
+          </div>
+          <MediaDeviceChooser
+            devices={this.state.videoDevices}
+            selected={this.state.selectedVideoDevice}
+            onChange={this.handleSelectedVideoDeviceChanged}
+            loading={this.state.loadingMediaDevices}
+          />
+        </label>
+        {this.state.mediaDevicesNeedRestart && (
+          <div className={styles.warning}>
+            {getTranslation('settings.restart-for-device-change')}
+          </div>
         )}
 
         <div className={styles.option}>
