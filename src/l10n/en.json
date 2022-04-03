@@ -36,6 +36,7 @@
   "packager.loading": "Loading project from editor...",
   "source": "Source Code",
   "failed-to-load": "Could not load project: {error}",
+  "crash.title": "Crashed",
   "crash.renderer": "Renderer process crashed: {reason} ({code})",
   "permission.audio-denied": "Microphone Permission Denied",
   "permission.audio-denied-description": "The app will not be able to record sounds or detect loudness.",
