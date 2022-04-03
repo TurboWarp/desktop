@@ -7,7 +7,7 @@ import {format as formatUrl} from 'url';
 import zlib from 'zlib';
 import checkForUpdate from './update-checker';
 import {getTranslation, getTranslationOrNull} from './translations';
-import {APP_NAME} from './brand';
+import {APP_NAME, PACKAGER_NAME} from './brand';
 import './advanced-user-customizations';
 import * as store from './store';
 import './crash';
@@ -287,7 +287,7 @@ const createDesktopSettingsWindow = () => {
 
 const createPackagerWindow = (editorWebContents) => {
   const window = createWindow(`${getURL('packager')}&editor_id=${editorWebContents.id}`, {
-    title: 'TurboWarp Packager',
+    title: PACKAGER_NAME,
     width: 700,
     height: 700,
     parent: BrowserWindow.fromWebContents(editorWebContents)
