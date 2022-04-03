@@ -82,15 +82,15 @@ class DesktopSettings extends React.Component {
         this.setState({
           loadingMediaDevices: false,
           audioDevices,
-          selectedAudioDevice: audioId,
+          selectedAudioDevice: audioId || ID_NONE,
           videoDevices,
-          selectedVideoDevice: videoId
+          selectedVideoDevice: videoId || ID_NONE
         });
       });
   }
   handleSelectedAudioDeviceChanged (e) {
     const id = e.target.value;
-    setVideoId(id);
+    setAudioId(id);
     this.setState({
       selectedAudioDevice: id,
       mediaDevicesDirty: true
@@ -98,7 +98,7 @@ class DesktopSettings extends React.Component {
   }
   handleSelectedVideoDeviceChanged (e) {
     const id = e.target.value;
-    setAudioId(id);
+    setVideoId(id);
     this.setState({
       selectedVideoDevice: id,
       mediaDevicesDirty: true
