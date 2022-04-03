@@ -43,6 +43,11 @@ const handlePermissionRequest = async (webContents, permission, callback, detail
     return callback(true);
   }
 
+  if (permission === 'openExternal') {
+    // This will be checked in other places
+    return callback(true);
+  }
+
   if (permission === 'media') {
     for (const mediaType of details.mediaTypes) {
       if (mediaType === 'audio' || mediaType === 'video') {
