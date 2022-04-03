@@ -293,12 +293,24 @@ const createPackagerWindow = (editorWebContents) => {
     parent: BrowserWindow.fromWebContents(editorWebContents)
   });
   closeWindowWhenPressEscape(window);
-  window.on('page-title-updated', (e, title) => {
+
+  let defaultWindowTitle;
+  window.on('page-title-updated', (e, newTitle, explicitSet) => {
     e.preventDefault();
-    // title will be something like "Project - TurboWarp Packager for Scratch"
-    // the "for Scratch" looks ugly in a native window, so remove that
-    window.setTitle(title.replace(/ for Scratch$/, ''));
+    if (!explicitSet) {
+      return;
+    }
+    // The packager's default name is quite long and we want to display a shorter title instead
+    if (!defaultWindowTitle) {
+      defaultWindowTitle = newTitle;
+    }
+    if (newTitle === defaultWindowTitle) {
+      window.setTitle(PACKAGER_NAME);
+    } else {
+      window.setTitle(newTitle);
+    }
   });
+
   window.webContents.setWindowOpenHandler((details) => {
     if (details.url === 'about:blank') {
       // Opening preview window
