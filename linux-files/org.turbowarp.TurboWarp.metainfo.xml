@@ -64,7 +64,7 @@
           <li>Fixed vertical centering of variable monitor values in certain conditions</li>
           <li>Reduced seems between tiled stamps when high quality pen is enabled</li>
           <li>Reduced lag related to folders addon</li>
-          <li>Updated packager with various new features and bug fixes</li>
+          <li>Updated packager: added variable color option, updated Electron environment, various fixes</li>
           <li>Improved security sandboxing</li>
         </ul>
       </description>
