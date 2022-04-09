@@ -23,7 +23,3 @@ jobs:
       run: npm run dist -- --linux tar.gz --publish never
       env:
         NODE_OPTIONS: --max-old-space-size=4096
-    - uses: actions/upload-artifact@v2
-      with:
-        name: Linux tar.gz
-        path: dist/*.tar.gz
