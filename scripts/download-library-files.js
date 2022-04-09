@@ -110,4 +110,5 @@ limiter.onDone(() => {
     }
   }
   console.timeEnd('Download assets');
+  process.exit(0);
 });
