@@ -225,7 +225,10 @@ const DesktopHOC = function (WrappedComponent) {
         <WrappedComponent
           projectTitle={this.state.title}
           onClickAddonSettings={openAddonSettings}
-          onClickNewWindow={openNewWindow}
+          onClickNewWindow={[
+            getTranslation('menu.new-window'),
+            openNewWindow
+          ]}
           onClickAbout={[
             {
               title: getTranslation('packager'),
