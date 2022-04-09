@@ -171,6 +171,9 @@
         "joystick"
       ]
     },
+    "appImage": {
+      "license": null
+    },
     "fileAssociations": [
       {
         "ext": "sb3",
