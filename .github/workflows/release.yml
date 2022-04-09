@@ -24,20 +24,52 @@ jobs:
       run: npm ci
     - name: Download Library Files
       run: npm run fetch
-    - name: Compile and package
-      run: npm run dist -- --publish always
+
+    - name: Compile
+      run: npm run compile
       env:
         NODE_OPTIONS: --max-old-space-size=4096
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         TW_ENABLE_UPDATE_CHECKER: "1"
-    - name: Package appx
+
+    - name: Package Windows
       if: runner.os == 'Windows'
-      run: npm run dist -- --windows appx --publish never --x64 --ia32
+      run: |
+        npx electron-builder --windows nsis --x64 --ia32 --publish always
+        npx electron-builder --windows portable --x64 --publish always
+        npx electron-builder --windows appx --x64 --ia32 --publish never
       env:
-        NODE_OPTIONS: --max-old-space-size=4096
-    - name: Upload appx artifacts
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DEBUG: electron-builder
+    - name: Upload Additional Windows Artifacts
       if: runner.os == 'Windows'
       uses: actions/upload-artifact@v2
       with:
         name: appx
         path: dist/*.appx
+
+    - name: Package macOS
+      if: runner.os == 'macOS'
+      run: |
+        npx electron-builder --mac dmg --universal --publish always
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DEBUG: electron-builder
+
+    - name: Package Linux
+      if: runner.os == 'Linux'
+      run: |
+        npx electron-builder --linux deb --x64 --publish always
+        npx electron-builder --linux deb --ia32 --publish always
+        npx electron-builder --linux deb --arm64 --publish always
+        npx electron-builder --linux deb --armv7l --publish always
+        npx electron-builder --linux tar.gz --x64 --publish always
+        npx electron-builder --linux tar.gz --ia32 --publish always
+        npx electron-builder --linux tar.gz --arm64 --publish always
+        npx electron-builder --linux tar.gz --armv7l --publish always
+        npx electron-builder --linux AppImage --x64 --publish always
+        npx electron-builder --linux AppImage --ia32 --publish always
+        npx electron-builder --linux AppImage --arm64 --publish always
+        npx electron-builder --linux AppImage --armv7l --publish always
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DEBUG: electron-builder
