@@ -4,6 +4,8 @@ import {ipcRenderer} from 'electron';
 
 import styles from './privacy.css';
 
+document.documentElement.lang = 'en';
+
 const openDesktopSettings = (e) => {
   e.preventDefault();
   ipcRenderer.send('open-desktop-settings');

@@ -5,6 +5,8 @@ import {version} from '../../../package.json';
 import licenseText from '!!raw-loader!../../../LICENSE';
 import styles from './about.css';
 
+document.documentElement.lang = 'en';
+
 const info = [];
 info.push(`v${version}`);
 // TWD is set by preload script

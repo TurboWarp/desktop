@@ -2,10 +2,12 @@ import {ipcRenderer} from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {probeDevices, setAudioId, setVideoId, whenDevicesChange} from '../browser-ui-reimplementation/mediadevices-chooser';
-import {getTranslation} from '../translations';
+import {getTranslation, locale} from '../translations';
 import styles from './desktop-settings.css';
 
 const ID_NONE = '';
+
+document.documentElement.lang = locale;
 
 const MediaDeviceChooser = ({devices, selected, onChange, loading}) => (
   <select

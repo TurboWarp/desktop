@@ -2,7 +2,7 @@ import {ipcRenderer} from 'electron';
 import {getTranslations, getLanguages} from '../l10n/';
 import {detectLocale} from 'scratch-gui/src/lib/detect-locale';
 
-let locale = detectLocale(getLanguages());
+export let locale = detectLocale(getLanguages());
 let translations = getTranslations(locale);
 
 export const localeChanged = newLocale => {
