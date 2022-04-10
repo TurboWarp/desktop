@@ -407,16 +407,19 @@
 
     <section class="changelog" id="changelog">
       <div>
-        <h2>What's new in v1.1.3 (2022-2-21)</h2>
+        <h2>What's new in v1.2.0 (2022-4-09)</h2>
         <ul>
-          <li>Fixed "Mouse position" addon</li>
-        </ul>
-        <h2>What's new in v1.1.2 (2022-2-20)</h2>
-        <ul>
-          <li>Fixed automatically loading project in packager</li>
-          <li>Fixed significant lag when displaying variable monitors caused by the "Hide new variables" addon</li>
-          <li>Fixed builtin sound library not working when offline or in certain regions of the world (China)</li>
-          <li>"Remove Miscellaneous Limits" now also disables mouse X and Y coordinate rounding</li>
+          <li>Added option to configure which microphone and camera the app should use</li>
+          <li>Added option to disable hardware acceleration</li>
+          <li>Fixed stage size stored in projects</li>
+          <li>Reduced costume editor flicker when switching costumes</li>
+          <li>Added text inputs to costume editor color components</li>
+          <li>Fixed monitor position after resizing stage</li>
+          <li>Fixed vertical centering of variable monitor values in certain conditions</li>
+          <li>Fixed lines between tiled stamps when high quality pen is enabled</li>
+          <li>Reduced lag related to folders addon</li>
+          <li>Updated packager: added variable color option, updated Electron environment, various fixes</li>
+          <li>Improved security sandboxing</li>
         </ul>
         <p><a href="https://github.com/TurboWarp/desktop/releases" data-l10n="releases">Older release notes available on GitHub.</a></p>
         <div class="changelog-install-info">
@@ -733,7 +736,7 @@
     </script>
     <script>
       (function() {
-        var VERSION = '1.1.3';
+        var VERSION = '1.2.0';
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'windows';
