@@ -65,7 +65,6 @@
           <li>Fixed lines between tiled stamps when high quality pen is enabled</li>
           <li>Reduced lag related to folders addon</li>
           <li>Updated packager: added variable color option, updated Electron environment, various fixes</li>
-          <li>Improved security sandboxing</li>
         </ul>
       </description>
     </release>
