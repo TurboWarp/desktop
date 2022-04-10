@@ -63,6 +63,7 @@
       ]
     },
     "appx": {
+      "artifactName": "${productName} MS Store ${version} ${arch}.${ext}",
       "applicationId": "TurboWarp",
       "displayName": "TurboWarp",
       "identityName": "45747ThomasWeber.TurboWarpDesktop",
