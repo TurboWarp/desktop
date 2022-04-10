@@ -36,10 +36,16 @@ jobs:
       run: |
         npx electron-builder --windows nsis --x64 --ia32 --publish always
         npx electron-builder --windows portable --x64 --publish always
-        npx electron-builder --windows appx --x64 --ia32 --publish never
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Upload Additional Windows Artifacts
+
+    - name: Package Microsoft Store
+      # Microsoft Store artifact needs to completely recompile the JS since we don't want the update checker
+      if: runner.os == 'Windows'
+      run: npm run dist -- --windows appx --x64 --ia32 --publish never
+      env:
+        NODE_OPTIONS: --max-old-space-size=4096
+    - name: Upload Microsoft Store Artifact
       if: runner.os == 'Windows'
       uses: actions/upload-artifact@v2
       with:
