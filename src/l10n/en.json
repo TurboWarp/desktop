@@ -37,7 +37,7 @@
   "source": "Source Code",
   "failed-to-load": "Could not load project: {error}",
   "crash.title": "Crashed",
-  "crash.renderer": "Renderer process crashed: {reason} ({code})",
+  "crash.description": "Process crashed: {type}: {reason} ({code})",
   "loading-preview": "Loading Preview",
   "permission.audio-denied": "Microphone Permission Denied",
   "permission.audio-denied-description": "The app will not be able to record sounds or detect loudness.",
