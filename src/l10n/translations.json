@@ -202,6 +202,7 @@
         "context.cut": "Taglia",
         "context.open-link": "Apri link",
         "context.paste": "Incolla",
+        "crash.description": "App bloccata: {type}: {reason} ({code})",
         "crash.title": "L'app si è bloccata",
         "desktop-settings": "Impostazioni Desktop",
         "failed-to-load": "Errore nel caricamento del progetto: {error}",
