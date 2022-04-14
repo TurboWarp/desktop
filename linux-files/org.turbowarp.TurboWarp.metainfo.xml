@@ -52,6 +52,14 @@
     <content_attribute id="social-info">mild</content_attribute>
   </content_rating>
   <releases>
+    <release version="1.2.2" date="2022-4-13">
+      <description>
+        <ul>
+          <li>Fixed mouse actions in gamepad support addon in packager</li>
+          <li>Fixed blocks like "insert x at any of list" to insert at a random location</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.2.1" date="2022-4-10">
       <description>
         <ul>
