@@ -735,10 +735,6 @@ app.on('web-contents-created', (event, webContents) => {
   });
 });
 
-// Allows certain versions of Scratch Link to work without an internet connection
-// https://github.com/LLK/scratch-desktop/blob/4b462212a8e406b15bcf549f8523645602b46064/src/main/index.js#L45
-app.commandLine.appendSwitch('host-resolver-rules', 'MAP device-manager.scratch.mit.edu 127.0.0.1');
-
 const acquiredLock = app.requestSingleInstanceLock();
 if (acquiredLock) {
   const autoCreateEditorWindows = () => {
