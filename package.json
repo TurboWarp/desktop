@@ -24,7 +24,7 @@
     "@turbowarp/electron-webpack": "^2.9.1",
     "css-loader": "^5.0.2",
     "electron": "^17.4.0",
-    "electron-builder": "^23.0.4",
+    "electron-builder": "^23.0.6",
     "intl-messageformat": "^9.4.7",
     "postcss": "^8.3.5",
     "postcss-import": "^14.0.0",
