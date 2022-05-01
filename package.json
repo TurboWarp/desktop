@@ -24,7 +24,7 @@
     "electron": "^18.2.0",
     "electron-builder": "^23.0.8",
     "intl-messageformat": "^9.4.7",
-    "postcss": "^8.3.5",
+    "postcss": "^8.4.13",
     "postcss-import": "^14.0.0",
     "postcss-loader": "^4.2.0",
     "postcss-simple-vars": "^6.0.3",
