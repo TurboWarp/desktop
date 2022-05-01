@@ -15,9 +15,7 @@
     "dist:dir": "npm run compile && electron-builder --dir",
     "fetch": "node scripts/download-library-files.js && node scripts/download-packager.js"
   },
-  "dependencies": {
-    "source-map-support": "^0.5.20"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.13.13",
