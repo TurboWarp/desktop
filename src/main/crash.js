@@ -1,6 +1,11 @@
-import {app, dialog, BrowserWindow} from 'electron';
+import {app, dialog, BrowserWindow, crashReporter} from 'electron';
 import {getTranslation} from './translations';
 import {APP_NAME} from './brand';
+
+console.log('Crash dumps will be saved to', app.getPath('crashDumps'));
+crashReporter.start({
+  uploadToServer: false
+});
 
 const showCrashMessage = (window, type, code, reason) => {
   dialog.showMessageBoxSync(window, {
