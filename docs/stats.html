@@ -47,7 +47,7 @@
     </ul>
     <main><p>Loading...</p></main>
     <script>
-      fetch('https://api.github.com/repos/TurboWarp/desktop/releases')
+      fetch('https://api.github.com/repos/TurboWarp/desktop/releases?per_page=100')
         .then((r) => {
           if (!r.ok) throw new Error('Unexpected status code: ' + r.status);
           return r.json();
