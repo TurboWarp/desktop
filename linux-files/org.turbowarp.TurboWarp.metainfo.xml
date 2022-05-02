@@ -49,6 +49,7 @@
     <!-- <control>gamepad</control> -->
   </supports>
   <content_rating type="oars-1.1">
+    <content_attribute id="social-chat">mild</content_attribute>
     <content_attribute id="social-info">mild</content_attribute>
   </content_rating>
   <releases>
