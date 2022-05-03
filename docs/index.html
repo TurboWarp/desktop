@@ -414,19 +414,46 @@
       </div>
     </section>
 
-    <section class="notice">
-      <div>
-        <p>
-          <b>Update April 15, 2022 -</b>
-          Due to significant bugs in v1.2.x, we've temporarily reverted the "latest" version to v1.1.3 on most platforms.
-          v1.2.x will be re-released when we are confident these bugs are fixed.
-        </p>
-        <p>If you're already using v1.2.x without issue, do not downgrade as you may lose data.</p>
-      </div>
-    </section>
-
     <section class="changelog" id="changelog">
       <div>
+        <div data-version="1.3.0">
+          <h2>What's new in v1.3.0</h2>
+          <ul>
+            <li>New addon: Customizable default costume editor colors</li>
+            <li>The app now registers itself as a file handler for .sb and sb2 files in addition to .sb3</li>
+            <li>Optimized comparison blocks</li>
+            <li>Fixed more crashes on app startup on some systems</li>
+          </ul>
+        </div>
+        <div data-version="1.2.2">
+          <h2>What's new in v1.2.2</h2>
+          <ul>
+            <li>Fixed mouse actions in gamepad support addon in packager</li>
+            <li>Fixed blocks like "insert x at any of list" to insert at a random location</li>
+          </ul>
+        </div>
+        <div data-version="1.2.1">
+          <h2>What's new in v1.2.1</h2>
+          <ul>
+            <li>All windows now have proper language hints, fixes CJK characters looking weird in some windows</li>
+            <li>Added error message when any child process dies unexpectedly, not just renderer processes</li>
+          </ul>
+        </div>
+        <div data-version="1.2.0">
+          <h2>What's new in v1.2.0</h2>
+          <ul>
+            <li>Added option to configure which microphone and camera the app should use</li>
+            <li>Added option to disable hardware acceleration</li>
+            <li>Fixed stage size stored in projects</li>
+            <li>Reduced costume editor flicker when switching costumes</li>
+            <li>Added text inputs to costume editor color components</li>
+            <li>Fixed monitor position after resizing stage</li>
+            <li>Fixed vertical centering of variable monitor values in certain conditions</li>
+            <li>Fixed lines between tiled stamps when high quality pen is enabled</li>
+            <li>Reduced lag related to folders addon</li>
+          </ul>
+        </div>
+
         <p><a href="https://github.com/TurboWarp/desktop/releases" data-l10n="releases">Older release notes available on GitHub.</a></p>
         <div class="changelog-install-info">
           <p class="os-windows" data-l10n="update.windows">To update, download and run the new installer below.</p>
@@ -742,7 +769,7 @@
     </script>
     <script>
       (function() {
-        var VERSION = '1.1.3';
+        var VERSION = '1.3.0';
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'windows';
@@ -754,6 +781,45 @@
         }
         function setOS(os) {
           document.body.setAttribute('os', os);
+        }
+
+        var INVALID_VERSIONS = 0;
+        var A_IS_OLDER = 1;
+        var B_IS_OLDER = 2;
+        var VERSIONS_ARE_EQUAL = 3;
+        function compareVersions(a, b) {
+          var partsA = a.split('-')[0].split('.');
+          var partsB = b.split('-')[0].split('.');
+          var expectedLength = 3;
+          if (partsA.length !== expectedLength || partsB.length !== expectedLength) {
+            return INVALID_VERSIONS;
+          }
+          for (var i = 0; i < expectedLength; i++) {
+            var itemA = +partsA[i];
+            var itemB = +partsB[i];
+            if (isNaN(itemA) || isNaN(itemB)) {
+              return INVALID_VERSIONS;
+            }
+            if (itemA > itemB) {
+              return B_IS_OLDER;
+            } else if (itemA < itemB) {
+              return A_IS_OLDER;
+            }
+          }
+          return VERSIONS_ARE_EQUAL;
+        }
+
+        function getParameter(searchName, defaultValue) {
+          var parts = location.search.substring(1).split('&');
+          for (var i = 0; i < parts.length; i++) {
+            var split = parts[i].split('=');
+            var partName = split[0];
+            if (partName === searchName) {
+              var partValue = split[1];
+              return partValue || defaultValue;
+            }
+          }
+          return defaultValue;
         }
 
         document.querySelector('.os-button-windows').addEventListener('click', function () {
@@ -802,6 +868,18 @@
         }
 
         if (/from|to|changelog/i.test(location.search)) {
+          var comingFromVersion = getParameter('from', null);
+          if (comingFromVersion) {
+            var elementsWithVersion = document.querySelectorAll('[data-version]');
+            for (var i = 0; i < elementsWithVersion.length; i++) {
+              var el = elementsWithVersion[i];
+              var comparison = compareVersions(comingFromVersion, el.getAttribute('data-version'));
+              if (comparison === B_IS_OLDER || comparison === VERSIONS_ARE_EQUAL) {
+                el.style.display = 'none';
+              }
+            }
+          }
+
           document.body.setAttribute('full-changelog', 'true');
           document.getElementById('select-os').scrollIntoView();
         } else {
