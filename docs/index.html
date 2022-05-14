@@ -234,6 +234,21 @@
         margin: 0 0 16px 0;
       }
 
+      code {
+        padding: 1px 2px;
+        border-radius: 8px;
+        font-family: monospace;
+        background-color: #eee;
+        border: 1px solid #ddd;
+      }
+      .terminal {
+        padding: 4px;
+        display: block;
+      }
+      .command::before {
+        content: '$ ';
+      }
+
       .icon {
         background-color: #ff4c4c;
         color: black;
@@ -325,6 +340,10 @@
         }
         [full-changelog] .changelog {
           background-color: #273235;
+        }
+        code {
+          background-color: #222;
+          border-color: #333;
         }
         .notice {
           background-color: #35272c;
@@ -513,9 +532,20 @@
 
         <h2>Snap Store</h2>
         <p data-l10n="linux.package">The official package is <a href="https://snapcraft.io/turbowarp-desktop" data-notranslate data-l10n-subkey="package-link">turbowarp-desktop</a>.</p>
+        <p data-l10n="linux.snap-sandbox">By default, the Snap Store version of TurboWarp can't access your camera, microphone, gamepads, or removable drives. To fix this, run these commands:</p>
+        <code class="terminal">
+          <div class="command">snap connect turbowarp-desktop:camera</div>
+          <div class="command">snap connect turbowarp-desktop:audio-record</div>
+          <div class="command">snap connect turbowarp-desktop:joystick</div>
+          <div class="command">snap connect turbowarp-desktop:removable-media</div>
+        </code>
 
         <h2>Flathub/Flatpak</h2>
         <p data-l10n="linux.package">The official package is <a href="https://flathub.org/apps/details/org.turbowarp.TurboWarp" data-notranslate data-l10n-subkey="package-link">org.turbowarp.TurboWarp</a>.</p>
+        <p data-l10n="linux.flatpak-sandbox">Gamepads will not work in the Flatpak version and the app can only access projects in your home directory by default. To allow accessing other folders, run this command:</p>
+        <code class="terminal">
+          <div class="command">flatpak override org.turbowarp.TurboWarp --filesystem=/path/to/folder</div>
+        </code>
 
         <h2>.deb</h2>
         <ul>
