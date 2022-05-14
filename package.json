@@ -124,7 +124,8 @@
         "camera",
         "audio-playback",
         "audio-record",
-        "joystick"
+        "joystick",
+        "removable-media"
       ]
     },
     "appImage": {
