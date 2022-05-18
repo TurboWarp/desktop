@@ -57,7 +57,7 @@ The website source code is in the `docs` folder.
 
 TurboWarp Desktop lets you configure custom JS and CSS.
 
-Find TurboWarp Desktop's data path by using the list below or by clicking "?" in the top left corner, then "Desktop Settings", then "Open User Data Folder", then opening the highlighted folder.
+Find TurboWarp Desktop's data path by using the list below or by clicking "?" in the top right corner, then "Desktop Settings", then "Open User Data Folder", then opening the highlighted folder.
 
  - Windows (except Microsoft Store): `%APPDATA%/turbowarp-desktop`
  - Microsoft Store: Open `%LOCALAPPDATA%/Packages`, find the folder with the word `TurboWarpDesktop` in it, then open `LocalCache/Roaming/turbowarp-desktop`
