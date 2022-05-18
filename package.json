@@ -28,7 +28,7 @@
     "postcss-import": "^14.0.0",
     "postcss-loader": "^4.2.0",
     "postcss-simple-vars": "^6.0.3",
-    "scratch-gui": "github:TurboWarp/scratch-gui#desktop",
+    "scratch-gui": "git+https://github.com/TurboWarp/scratch-gui.git#desktop",
     "semver": "^7.3.4",
     "webpack": "~4.46.0",
     "write-file-atomic": "^3.0.3"
