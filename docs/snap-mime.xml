@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <!-- This file is from https://desktop.turbowarp.org/snap-mime.xml -->
+  <!-- This file works around the snap version of TurboWarp not being able to install new mime types to the system. -->
+  <!-- This lets the user set TurboWarp as the file opener for sb3, sb2, and sb apps without affecting other file types. -->
   <mime-type type="application/x.scratch.sb3">
     <glob pattern="*.sb3" />
     <icon name="x-office-document" />
