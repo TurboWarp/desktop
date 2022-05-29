@@ -783,5 +783,6 @@ if (acquiredLock) {
     autoCreateEditorWindows();
   });
 } else {
+  console.log('Handing off to existing instance.');
   app.quit();
 }
