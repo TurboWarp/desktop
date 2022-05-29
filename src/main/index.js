@@ -16,6 +16,7 @@ import {isDevelopment, isMac, isLinux, staticDir} from './environment';
 import './library-files';
 import './user-agent';
 import './hardware-acceleration';
+import './get-debug-info';
 import {handlePermissionRequest} from './permissions';
 
 const readFile = util.promisify(fs.readFile);
