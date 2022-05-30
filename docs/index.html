@@ -185,7 +185,7 @@
       [os="windows"] .os-button-windows,
       [os="mac"] .os-button-mac,
       [os="linux"] .os-button-linux,
-      [os="chrome"] .os-button-chrome {
+      [os="web"] .os-button-web {
         background-color: #ff4c4c;
       }
 
@@ -195,7 +195,7 @@
       body:not([os="windows"]) .os-windows,
       body:not([os="mac"]) .os-mac,
       body:not([os="linux"]) .os-linux,
-      body:not([os="chrome"]) .os-chrome,
+      body:not([os="web"]) .os-web,
       body[os="mac"] .os-not-mac {
         display: none;
       }
@@ -240,7 +240,7 @@
         justify-content: center;
         text-align: center;
       }
-      .install-help p {
+      .install-help p, .install-help img {
         margin: 0 0 16px 0;
       }
 
@@ -432,11 +432,11 @@
               Linux
             </div>
           </button>
-          <button class="os-button-chrome">
+          <button class="os-button-web">
             <!-- Icon from https://fontawesome.com/v5.15/icons/chrome?style=brands -->
             <svg class="os-button-icon" aria-hidden="true" focusable="false" role="img" viewBox="0 0 496 512"><path fill="currentColor" d="M131.5 217.5L55.1 100.1c47.6-59.2 119-91.8 192-92.1 42.3-.3 85.5 10.5 124.8 33.2 43.4 25.2 76.4 61.4 97.4 103L264 133.4c-58.1-3.4-113.4 29.3-132.5 84.1zm32.9 38.5c0 46.2 37.4 83.6 83.6 83.6s83.6-37.4 83.6-83.6-37.4-83.6-83.6-83.6-83.6 37.3-83.6 83.6zm314.9-89.2L339.6 174c37.9 44.3 38.5 108.2 6.6 157.2L234.1 503.6c46.5 2.5 94.4-7.7 137.8-32.9 107.4-62 150.9-192 107.4-303.9zM133.7 303.6L40.4 120.1C14.9 159.1 0 205.9 0 256c0 124 90.8 226.7 209.5 244.9l63.7-124.8c-57.6 10.8-113.2-20.8-139.5-72.5z"></path></svg>
             <div>
-              Chrome
+              Web App
             </div>
           </button>
         </div>
@@ -613,16 +613,21 @@
       </div>
     </section>
 
-    <section class="os os-chrome">
+    <section class="os os-web">
       <div>
+        <div class="install-help">
+          <p data-l10n="web1">On ChromeOS, Android, iOS, iPadOS, and all other platforms, you can use the TurboWarp website instead. Almost all features work just as well.</p>
+        </div>
+
         <div class="download-button-outer">
           <a class="download-button-inner" href="https://turbowarp.org/" target="_blank" rel="noopener">
-            <div data-l10n="pwa.open">Open the TurboWarp Website</div>
+            <div data-l10n="pwa.open">Open the TurboWarp website</div>
           </a>
         </div>
 
         <div class="install-help">
-          <p data-l10n="pwa.help">Then press the install button in the URL. It may take a few seconds to appear.</p>
+          <p data-l10n="web2">Usually the website can be "installed" as a web app to make it feel more native. On desktops and laptops, the install button may appear in the URL bar after a few seconds.</p>
+          <p data-l10n="web3">On phones and tablets, find "Install app" or "Add to Home Screen" in your browser's interface.</p>
           <img data-src="pwa-install.png" width="620" height="258"class="pwa-install">
         </div>
       </div>
@@ -840,10 +845,10 @@
         var VERSION = '1.3.1';
 
         function getOS() {
-          if (/android/i.test(navigator.userAgent)) return 'windows';
-          if (/iphone|ipad|ipod/i.test(navigator.userAgent)) return 'windows';
+          if (/android/i.test(navigator.userAgent)) return 'web';
+          if (/iphone|ipad|ipod/i.test(navigator.userAgent)) return 'web';
           if (/linux/i.test(navigator.userAgent)) return 'linux';
-          if (/cros/i.test(navigator.userAgent)) return 'chrome';
+          if (/cros/i.test(navigator.userAgent)) return 'web';
           if (/mac/i.test(navigator.userAgent)) return 'mac';
           return 'windows';
         }
@@ -899,8 +904,8 @@
         document.querySelector('.os-button-linux').addEventListener('click', function () {
           setOS('linux');
         });
-        document.querySelector('.os-button-chrome').addEventListener('click', function () {
-          setOS('chrome');
+        document.querySelector('.os-button-web').addEventListener('click', function () {
+          setOS('web');
         });
 
         var links = document.querySelectorAll('a[data-href]');
