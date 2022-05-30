@@ -16,6 +16,7 @@ import AddonChannels from 'scratch-gui/src/addons/channels';
 import {WrappedFileHandle} from './filesystem-api-impl';
 import {localeChanged, getTranslation} from '../translations';
 import runAddons from 'scratch-gui/src/addons/entry';
+import loadInitialProject from './load-initial-project';
 import './gui.css';
 
 class StorageHelper {
@@ -86,29 +87,6 @@ const getProjectTitle = (file) => {
   return match[1];
 };
 
-const isValidURL = (url) => {
-  try {
-    const u = new URL(url);
-    return u.protocol === 'https:' || u.protocol === 'http:';
-  } catch (e) {
-    return false;
-  }
-};
-
-const fetchProjectFromURL = (url) => ipcRenderer.invoke('request-url', url);
-
-const readInitialFile = async () => {
-  if (isValidURL(fileToOpen)) {
-    const match = fileToOpen.match(/^https:\/\/scratch\.mit\.edu\/projects\/(\d+)\/?$/);
-    if (match) {
-      const id = match[1];
-      return fetchProjectFromURL(`https://projects.scratch.mit.edu/${id}`);
-    }
-    return fetchProjectFromURL(fileToOpen);
-  }
-  return ipcRenderer.invoke('read-file', fileToOpen);
-};
-
 const readBlobAsArrayBuffer = (blob) => new Promise((resolve, reject) => {
   const fr = new FileReader();
   fr.onload = () => resolve(fr.result);
@@ -148,7 +126,7 @@ const DesktopHOC = function (WrappedComponent) {
         this.props.onLoadingCompleted();
       } else {
         this.props.onHasInitialProject(true, this.props.loadingState);
-        readInitialFile()
+        loadInitialProject(fileToOpen)
           .then((projectData) => {
             return this.props.vm.loadProject(projectData)
           })
