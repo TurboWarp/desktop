@@ -29,7 +29,8 @@ loadingProjectStyles.textContent = `
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 10;
+  /* Packager currently uses z-index up to 10 */
+  z-index: 101;
   background: rgba(255, 255, 255, 0.8);
   display: flex;
   flex-direction: column;
