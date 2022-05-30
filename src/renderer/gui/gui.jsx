@@ -16,7 +16,6 @@ import AddonChannels from 'scratch-gui/src/addons/channels';
 import {WrappedFileHandle} from './filesystem-api-impl';
 import {localeChanged, getTranslation} from '../translations';
 import runAddons from 'scratch-gui/src/addons/entry';
-import '../dark-scrollbars';
 import './gui.css';
 
 class StorageHelper {
