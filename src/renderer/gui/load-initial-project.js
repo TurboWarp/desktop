@@ -29,7 +29,7 @@ const requestFromMainThreadAsJSON = async (url) => {
 };
 
 const getScratchProjectID = (url) => {
-  const match = url.match(/^https:\/\/scratch\.mit\.edu\/projects\/(\d+)\/?$/);
+  const match = url.match(/^https?:\/\/scratch\.mit\.edu\/projects\/(\d+)\/?/);
   return match ? match[1] : null;
 };
 
