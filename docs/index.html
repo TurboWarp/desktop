@@ -185,7 +185,7 @@
       [os="windows"] .os-button-windows,
       [os="mac"] .os-button-mac,
       [os="linux"] .os-button-linux,
-      [os="chrome"] .os-button-chrome {
+      [os="web"] .os-button-web {
         background-color: #ff4c4c;
       }
 
@@ -195,7 +195,7 @@
       body:not([os="windows"]) .os-windows,
       body:not([os="mac"]) .os-mac,
       body:not([os="linux"]) .os-linux,
-      body:not([os="chrome"]) .os-chrome,
+      body:not([os="web"]) .os-web,
       body[os="mac"] .os-not-mac {
         display: none;
       }
@@ -240,7 +240,7 @@
         justify-content: center;
         text-align: center;
       }
-      .install-help p {
+      .install-help p, .install-help img {
         margin: 0 0 16px 0;
       }
 
@@ -257,6 +257,23 @@
       }
       .command::before {
         content: '$ ';
+      }
+
+      .donate {
+        margin-bottom: 32px;
+      }
+      .donate a {
+        padding: 8px;
+        text-align: center;
+        background: rgb(255 100 157 / 50%);
+        color: inherit;
+        border: 1px solid rgba(255, 100, 157, 1);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+      }
+      .donate a svg {
+        margin-right: 6px;
       }
 
       .icon {
@@ -298,31 +315,41 @@
       }
 
       .picture-container {
-        max-width: 1296px; /* 1280px + 2 * 8px padding */
-        margin: auto;
+        margin: 32px auto;
         flex-direction: column;
         text-align: center;
       }
-      .picture-container > a,
       .picture-container picture,
       .picture-container img {
         height: 100%;
         width: 100%;
+        margin-bottom: 8px;
       }
-      .picture-container picture {
+      .picture-container img {
         filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+        border-radius: 8px;
       }
       .picture-dark {
         display: none;
       }
       .picture-caption {
-        padding-top: 4px;
+        margin: 0;
+      }
+      .picture-container.editor-screenshot {
+        max-width: calc(1280px + 2 * 8px);
+      }
+      .picture-container.addons-screenshot {
+        max-width: calc(683px + 2 * 8px);
+      }
+      .picture-container.packager-screenshot {
+        max-width: calc(683px + 2 * 8px);
       }
 
       .pwa-install {
         width: 100%;
         height: 100%;
         max-width: 620px;
+        border-radius: 8px;
       }
 
       :focus-visible {
@@ -353,7 +380,7 @@
         }
         code {
           background-color: #222;
-          border-color: #333;
+          border-color: #505050;
         }
         .notice {
           background-color: #35272c;
@@ -432,11 +459,11 @@
               Linux
             </div>
           </button>
-          <button class="os-button-chrome">
+          <button class="os-button-web">
             <!-- Icon from https://fontawesome.com/v5.15/icons/chrome?style=brands -->
             <svg class="os-button-icon" aria-hidden="true" focusable="false" role="img" viewBox="0 0 496 512"><path fill="currentColor" d="M131.5 217.5L55.1 100.1c47.6-59.2 119-91.8 192-92.1 42.3-.3 85.5 10.5 124.8 33.2 43.4 25.2 76.4 61.4 97.4 103L264 133.4c-58.1-3.4-113.4 29.3-132.5 84.1zm32.9 38.5c0 46.2 37.4 83.6 83.6 83.6s83.6-37.4 83.6-83.6-37.4-83.6-83.6-83.6-83.6 37.3-83.6 83.6zm314.9-89.2L339.6 174c37.9 44.3 38.5 108.2 6.6 157.2L234.1 503.6c46.5 2.5 94.4-7.7 137.8-32.9 107.4-62 150.9-192 107.4-303.9zM133.7 303.6L40.4 120.1C14.9 159.1 0 205.9 0 256c0 124 90.8 226.7 209.5 244.9l63.7-124.8c-57.6 10.8-113.2-20.8-139.5-72.5z"></path></svg>
             <div>
-              Chrome
+              Web App
             </div>
           </button>
         </div>
@@ -587,7 +614,7 @@
         <h2>.deb</h2>
         <ul>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-amd64-{version}.deb">x86 64-bit</a></li>
-          <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-i386-{version}.deb">x86 32-bit</a></li>
+          <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-i386-{version}.deb">x86 32-bit</a> - <i>32-bit x86 support will be removed in a future release</i></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.deb">ARM 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.deb">ARMv7l</a></li>
         </ul>
@@ -598,7 +625,7 @@
         <h2>.AppImage</h2>
         <ul>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-x86_64-{version}.AppImage">x86 64-bit</a></li>
-          <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-i386-{version}.AppImage">x86 32-bit</a></li>
+          <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-i386-{version}.AppImage">x86 32-bit</a> - <i>32-bit x86 support will be removed in a future release</i></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.AppImage">ARM 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.AppImage">ARMv7l</a></li>
         </ul>
@@ -606,24 +633,29 @@
         <h2>.tar.gz</h2>
         <ul>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-x64-{version}.tar.gz">x86 64-bit</a></li>
-          <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-ia32-{version}.tar.gz">x86 32-bit</a></li>
+          <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-ia32-{version}.tar.gz">x86 32-bit</a> - <i>32-bit x86 support will be removed in a future release</i></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.tar.gz">ARM 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.tar.gz">ARMv7l</a></li>
         </ul>
       </div>
     </section>
 
-    <section class="os os-chrome">
+    <section class="os os-web">
       <div>
+        <div class="install-help">
+          <p data-l10n="web1">On ChromeOS, Android, iOS, iPadOS, and all other platforms, you can use the TurboWarp website instead. Almost all features work just as well.</p>
+        </div>
+
         <div class="download-button-outer">
-          <a class="download-button-inner" href="https://turbowarp.org/" target="_blank" rel="noopener">
-            <div data-l10n="pwa.open">Open the TurboWarp Website</div>
+          <a class="download-button-inner" href="https://turbowarp.org/" target="_blank" rel="noopener noreferrer">
+            <div data-l10n="pwa.open">Open the TurboWarp website</div>
           </a>
         </div>
 
         <div class="install-help">
-          <p data-l10n="pwa.help">Then press the install button in the URL. It may take a few seconds to appear.</p>
-          <img data-src="pwa-install.png" width="620" height="258"class="pwa-install">
+          <p data-l10n="web2">Oftentimes you can "install" the website as a web app. On desktops and laptops, the install button may appear in the URL bar after a few seconds.</p>
+          <p data-l10n="web3">On phones and tablets, find "Install app" or "Add to Home Screen" in your browser's menus.</p>
+          <img data-src="pwa-install.png" width="620" height="258" class="pwa-install">
         </div>
       </div>
     </section>
@@ -661,32 +693,43 @@
       </div>
     </section>
 
-    <section class="picture-container">
-      <a class="os-not-mac picture-light" href="screenshot-win-light.png" target="_blank" rel="noopener noreferrer">
-        <picture>
-          <source data-srcset="screenshot-win-light.webp" type="image/webp">
-          <img data-src="screenshot-win-light.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
-        </picture>
+    <section class="donate">
+      <a href="https://github.com/sponsors/GarboMuffin" target="_blank" rel="noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20"><path d="m244 84 11.1 12 12-11.98C300.6 51.37 347 36.51 392.6 44.1c68.9 11.48 119.4 71.1 119.4 141v5.8c0 41.5-17.2 81.2-47.6 109.5L283.7 469.1c-7.5 7-17.4 10.9-27.7 10.9s-20.2-3.9-27.7-10.9L47.59 300.4C17.23 272.1 0 232.4 0 190.9v-5.8c0-69.9 50.52-129.52 119.4-141 44.7-7.59 92 7.27 124.6 39.9-.9 0 0 .01 0 0zm11.1 79.9-45-46.8c-21.7-20.82-52.5-30.7-82.8-25.66C81.55 99.07 48 138.7 48 185.1v5.8c0 28.2 11.71 55.2 32.34 74.4L256 429.3l175.7-164c20.6-19.2 32.3-46.2 32.3-74.4v-5.8c0-46.4-33.6-86.03-79.3-93.66-30.3-5.04-61.1 4.84-82.8 25.66l-46.8 46.8z" fill="currentColor" /></svg>
+        <div data-l10n="donate">If you like TurboWarp, consider donating</div>
       </a>
-      <a class="os-not-mac picture-dark" href="screenshot-win-dark.png" target="_blank" rel="noopener noreferrer">
-        <picture>
-          <source data-srcset="screenshot-win-dark.webp" type="image/webp">
-          <img data-src="screenshot-win-dark.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
-        </picture>
-      </a>
-      <a class="os-mac picture-light" href="screenshot-mac-light.png" target="_blank" rel="noopener noreferrer">
-        <picture>
-          <source data-srcset="screenshot-mac-light.webp" type="image/webp">
-          <img data-src="screenshot-mac-light.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
-        </picture>
-      </a>
-      <a class="os-mac picture-dark" href="screenshot-mac-dark.png" target="_blank" rel="noopener noreferrer">
-        <picture>
-          <source data-srcset="screenshot-mac-dark.webp" type="image/webp">
-          <img data-src="screenshot-mac-dark.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
-        </picture>
-      </a>
-      <p class="picture-caption" data-l10n="picture.caption">Project pictured: <a href="https://scratch.mit.edu/projects/425020125/" data-l10n-subkey="project">Full Sphere Path Tracer by piano_miles</a></p>
+    </section>
+
+    <section class="picture-container editor-screenshot">
+      <picture class="os-not-mac picture-light">
+        <source data-srcset="screenshot-win-light.webp" type="image/webp">
+        <img data-src="screenshot-win-light.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
+      </picture>
+      <picture class="os-not-mac picture-dark">
+        <source data-srcset="screenshot-win-dark.webp" type="image/webp">
+        <img data-src="screenshot-win-dark.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
+      </picture>
+      <picture class="os-mac picture-light">
+        <source data-srcset="screenshot-mac-light.webp" type="image/webp">
+        <img data-src="screenshot-mac-light.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
+      </picture>
+      <picture class="os-mac picture-dark">
+        <source data-srcset="screenshot-mac-dark.webp" type="image/webp">
+        <img data-src="screenshot-mac-dark.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
+      </picture>
+      <p class="picture-caption" data-l10n="screenshot-caption">Project pictured: <a href="https://scratch.mit.edu/projects/425020125/" data-l10n-subkey="project">Full Sphere Path Tracer by piano_miles</a></p>
+    </section>
+
+    <section class="picture-container addons-screenshot">
+      <img class="picture-light" data-src="addons-light-win.png" width="683" height="700">
+      <img class="picture-dark" data-src="addons-dark-win.png" width="683" height="700">
+      <p class="picture-caption" data-l10n="addons-caption">More than <span data-l10n-subkey="large-number" data-notranslate>50</span> <a href="https://turbowarp.org/addons" target="_blank" rel="noopener noreferrer">addons</a> to customize and enhance your experience.</p>
+    </section>
+
+    <section class="picture-container packager-screenshot">
+      <img class="picture-light" data-src="packager-light-win.png" width="683" height="700">
+      <img class="picture-dark" data-src="packager-dark-win.png" width="683" height="700">
+      <p class="picture-caption" data-l10n="packager-caption">Builtin <a href="https://packager.turbowarp.org/" target="_blank" rel="noopener noreferrer">packager</a> to convert projects to HTML files or applications for Windows, macOS, or Linux.</p>
     </section>
 
     <div id="alternative-changelog-spot"></div>
@@ -840,10 +883,10 @@
         var VERSION = '1.3.1';
 
         function getOS() {
-          if (/android/i.test(navigator.userAgent)) return 'windows';
-          if (/iphone|ipad|ipod/i.test(navigator.userAgent)) return 'windows';
+          if (/android/i.test(navigator.userAgent)) return 'web';
+          if (/iphone|ipad|ipod/i.test(navigator.userAgent)) return 'web';
           if (/linux/i.test(navigator.userAgent)) return 'linux';
-          if (/cros/i.test(navigator.userAgent)) return 'chrome';
+          if (/cros/i.test(navigator.userAgent)) return 'web';
           if (/mac/i.test(navigator.userAgent)) return 'mac';
           return 'windows';
         }
@@ -899,8 +942,8 @@
         document.querySelector('.os-button-linux').addEventListener('click', function () {
           setOS('linux');
         });
-        document.querySelector('.os-button-chrome').addEventListener('click', function () {
-          setOS('chrome');
+        document.querySelector('.os-button-web').addEventListener('click', function () {
+          setOS('web');
         });
 
         var links = document.querySelectorAll('a[data-href]');
