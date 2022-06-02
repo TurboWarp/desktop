@@ -18,6 +18,7 @@ import './user-agent';
 import './hardware-acceleration';
 import './get-debug-info';
 import {handlePermissionRequest} from './permissions';
+import './detect-arm-translation';
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
