@@ -13,7 +13,11 @@ ipcRenderer.invoke('get-debug-info').then((info) => {
       <h1>TurboWarp Desktop v{info.version}</h1>
       <p>
         <i>
-          (Debug info: v{info.version} {info.NODE_ENV}, {info.platform} {info.arch}, Electron {info.electron})
+          {'(Debug info: '}
+          {`v${info.version} ${info.env}, `}
+          {`${info.platform} ${info.arch}${info.runningUnderTranslation ? '-translated' : ''}, `}
+          {`Electron ${info.electron}`}
+          {')'}
         </i>
       </p>
       <p>TurboWarp is a mod of Scratch with a compiler and more features. TurboWarp is not affiliated with Scratch, the Scratch Team, or the Scratch Foundation. Learn more at <a href="https://desktop.turbowarp.org" target="_blank" rel="noreferrer">https://desktop.turbowarp.org</a>.</p>
