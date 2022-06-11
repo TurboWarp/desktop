@@ -58,8 +58,7 @@ jobs:
     - name: Package macOS
       if: runner.os == 'macOS'
       run: |
-        npx electron-builder --mac dmg --x64 --publish always
-        npx electron-builder --mac dmg --arm64 --publish always
+        npx electron-builder --mac dmg --universal --publish always
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

@@ -76,7 +76,7 @@
       "allowToChangeInstallationDirectory": true
     },
     "mac": {
-      "artifactName": "${productName} Setup ${version} ${arch}.${ext}",
+      "artifactName": "${productName} Setup ${version}.${ext}",
       "icon": "build/icon.icns",
       "category": "public.app-category.education",
       "darkModeSupport": true,
