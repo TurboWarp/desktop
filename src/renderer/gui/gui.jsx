@@ -78,6 +78,10 @@ const showPackagedMoved = () => {
   ipcRenderer.send('packager-moved');
 };
 
+const openPackager = () => {
+  ipcRenderer.send('open-packager');
+};
+
 const handleUpdateProjectTitle = (title) => {
   document.title = title;
 };
@@ -298,6 +302,7 @@ ReactDOM.render(<WrappedGUI
   cloudHost="wss://clouddata.turbowarp.org"
   onStorageInit={handleStorageInit}
   onUpdateProjectTitle={handleUpdateProjectTitle}
+  onClickPackager={openPackager}
   backpackVisible
   backpackHost="_local_"
   routingStyle="none"
