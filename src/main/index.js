@@ -19,6 +19,7 @@ import './hardware-acceleration';
 import './get-debug-info';
 import {handlePermissionRequest} from './permissions';
 import './detect-arm-translation';
+import './packager';
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
