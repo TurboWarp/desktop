@@ -8,6 +8,7 @@ import GUI from 'scratch-gui';
 import {AppStateHOC} from 'scratch-gui';
 import TWThemeHOC from 'scratch-gui/src/lib/tw-theme-hoc.jsx';
 import TWStateManagerHOC from 'scratch-gui/src/lib/tw-state-manager-hoc.jsx';
+import TWRestorePointHOC from 'scratch-gui/src/lib/tw-restore-point-hoc.jsx';
 import {openLoadingProject, closeLoadingProject} from 'scratch-gui/src/reducers/modals';
 import {setFileHandle} from 'scratch-gui/src/reducers/tw';
 import {defaultProjectId, onFetchedProjectData, onLoadedProject, requestNewProject, requestProjectUpload, setProjectId} from 'scratch-gui/src/reducers/project-state';
@@ -283,6 +284,7 @@ const WrappedGUI = compose(
   AppStateHOC,
   TWStateManagerHOC,
   TWThemeHOC,
+  TWRestorePointHOC,
   DesktopHOC
 )(GUI);
 
