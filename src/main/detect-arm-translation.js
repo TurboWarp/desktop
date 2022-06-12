@@ -9,9 +9,6 @@ if (isMac && app.runningUnderARM64Translation) {
       type: 'warning',
       message: getTranslation('rosetta.title'),
       detail: getTranslation('rosetta.details'),
-      buttons: [
-        getTranslation('rosetta.ignore')
-      ]
     });
   });
 }

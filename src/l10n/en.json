@@ -53,6 +53,5 @@
   "files.html": "HTML File",
   "files.zip": "Zip File",
   "rosetta.title": "Running under Rosetta is not recommended. Use the Apple Silicon version instead.",
-  "rosetta.details": "The Apple Silicon version will perform better and use less battery. Please install the Apple Silicon version instead.",
-  "rosetta.ignore": "Ignore"
+  "rosetta.details": "The Apple Silicon version will perform better and use less battery. Please install the Apple Silicon version instead."
 }
