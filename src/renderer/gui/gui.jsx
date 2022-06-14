@@ -74,12 +74,12 @@ const onDesktopSettings = () => {
   ipcRenderer.send('open-desktop-settings');
 };
 
-const showPackagedMoved = () => {
-  ipcRenderer.send('packager-moved');
-};
-
 const openPackager = () => {
   ipcRenderer.send('open-packager');
+};
+
+const openPackagerLegacy = () => {
+  ipcRenderer.send('open-packager-legacy');
 };
 
 const handleUpdateProjectTitle = (title) => {
@@ -214,7 +214,7 @@ const DesktopHOC = function (WrappedComponent) {
           onClickAbout={[
             {
               title: getTranslation('packager-legacy'),
-              onClick: showPackagedMoved
+              onClick: openPackagerLegacy
             },
             {
               title: getTranslation('desktop-settings'),

@@ -19,7 +19,6 @@ import './hardware-acceleration';
 import './get-debug-info';
 import {handlePermissionRequest} from './permissions';
 import './detect-arm-translation';
-import './packager';
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
@@ -422,6 +421,16 @@ ipcMain.on('open-desktop-settings', () => {
 
 ipcMain.on('open-packager', (event) => {
   createPackagerWindow(event.sender);
+});
+
+ipcMain.on('open-packager-legacy', async (e) => {
+  const window = BrowserWindow.fromWebContents(e.sender);
+  await dialog.showMessageBox(window, {
+    title: APP_NAME,
+    message: getTranslation('packager-moved.title'),
+    detail: getTranslation('packager-moved.details')
+  });
+  createPackagerWindow(e.sender);
 });
 
 ipcMain.handle('get-packager-html', async () => {
