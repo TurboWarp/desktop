@@ -862,6 +862,7 @@
         "menu.learn-more": "查看更多",
         "menu.new-window": "新窗口",
         "packager-legacy": "TurboWarp Packager（作品打包转换工具）",
+        "packager-moved.details": "这个按钮现在仍可以正常工作，但它可能在未来的某个版本中移除。",
         "packager.loading": "从编辑器中加载作品",
         "permission.audio-denied": "麦克风权限被禁用",
         "permission.audio-denied-description": "应用程序将不能录制声音或检测响度。",
