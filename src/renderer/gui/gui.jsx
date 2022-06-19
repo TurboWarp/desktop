@@ -82,6 +82,10 @@ const openPackagerLegacy = () => {
   ipcRenderer.send('open-packager-legacy');
 };
 
+const openDonate = () => {
+  window.open('https://github.com/sponsors/GarboMuffin');
+};
+
 const handleUpdateProjectTitle = (title) => {
   document.title = title;
 };
@@ -231,6 +235,10 @@ const DesktopHOC = function (WrappedComponent) {
             {
               title: getTranslation('source'),
               onClick: openSourceCode
+            },
+            {
+              title: getTranslation('donate'),
+              onClick: openDonate
             }
           ]}
           {...props}

@@ -35,6 +35,7 @@
   "packager-legacy": "TurboWarp Packager (Convert Project)",
   "packager.loading": "Loading project from editor...",
   "source": "Source Code",
+  "donate": "Donate",
   "failed-to-load": "Could not load project: {error}",
   "crash.title": "Crashed",
   "crash.description": "Process crashed: {type}: {reason} ({code})",
