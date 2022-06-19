@@ -439,10 +439,6 @@ ipcMain.handle('get-packager-html', async () => {
   return uncomressed;
 });
 
-ipcMain.on('open-source-code', () => {
-  shell.openExternal('https://github.com/TurboWarp');
-});
-
 ipcMain.on('export-addon-settings', async (event, settings) => {
   const result = await dialog.showSaveDialog(BrowserWindow.fromWebContents(event.sender), {
     defaultPath: 'turbowarp-addon-setting.json',

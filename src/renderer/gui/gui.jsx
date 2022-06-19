@@ -63,7 +63,7 @@ const openAbout = () => {
 };
 
 const openSourceCode = () => {
-  ipcRenderer.send('open-source-code');
+  window.open('https://github.com/TurboWarp');
 };
 
 const openPrivacyPolicy = () => {
