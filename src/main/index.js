@@ -501,7 +501,7 @@ ipcMain.on('confirm', (event, message) => {
   event.returnValue = result;
 });
 
-ipcMain.handle('request-url', (event, url) => new Promise((resolve, reject) => {
+const requestURLAsArrayBuffer = (url) => new Promise((resolve, reject) => {
   const request = net.request(url);
   request.on('response', (response) => {
     const statusCode = response.statusCode;
@@ -523,7 +523,21 @@ ipcMain.handle('request-url', (event, url) => new Promise((resolve, reject) => {
     reject(e);
   });
   request.end();
-}));
+});
+
+ipcMain.handle('request-url', (event, url) => {
+  if (!allowedToAccessFiles.has(url)) {
+    throw new Error('Not allowed to access URL');
+  }
+  return requestURLAsArrayBuffer(url);
+});
+
+ipcMain.handle('get-project-metadata', (event, id) => {
+  if (!/^\d+$/.test(id)) {
+    throw new Error('Invalid project ID');
+  }
+  return requestURLAsArrayBuffer(`https://api.scratch.mit.edu/projects/${id}`);
+});
 
 ipcMain.on('open-user-data', () => {
   shell.showItemInFolder(app.getPath('userData'));

@@ -21,8 +21,11 @@ const readFileFromMainThread = (path) => ipcRenderer.invoke('read-file', path);
  */
 const requestFromMainThreadAsArrayBuffer = (url) => ipcRenderer.invoke('request-url', url);
 
-const requestFromMainThreadAsJSON = async (url) => {
-  const buffer = await requestFromMainThreadAsArrayBuffer(url);
+/**
+ * @param {ArrayBuffer} buffer
+ * @returns {*} Decoded JSON
+ */
+const parseBufferAsJSON = (buffer) => {
   const text = new TextDecoder().decode(buffer);
   const json = JSON.parse(text);
   return json;
@@ -38,7 +41,7 @@ const fetchScratchProject = async (id) => {
   let token = null;
   try {
     // api.scratch.mit.edu has strict CORS that we can't fetch by default, so make the main thread do it
-    const projectMetadata = await requestFromMainThreadAsJSON(`https://api.scratch.mit.edu/projects/${id}`);
+    const projectMetadata = parseBufferAsJSON(await ipcRenderer.invoke('get-project-metadata', id));
     token = projectMetadata.project_token;
   } catch (e) {
     // For now, this error is non-critical.
@@ -63,6 +66,7 @@ const loadInitialProject = async (pathOrURL) => {
     }
     return requestFromMainThreadAsArrayBuffer(pathOrURL);
   }
+  // The URL probably won't have CORS headers set, so make the main thread do it.
   return readFileFromMainThread(pathOrURL);
 };
 
