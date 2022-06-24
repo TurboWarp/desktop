@@ -63,6 +63,28 @@
     <content_attribute id="social-info">mild</content_attribute>
   </content_rating>
   <releases>
+    <release version="1.4.0" date="2022-6-24">
+      <description>
+        <ul>
+          <li>The builtin copy of the TurboWarp Packager has moved to the File &gt; Package project menu</li>
+          <li>Added a sound duration indicator to the sound editor</li>
+          <li>Added partial support for the "Threads" tab in the debugger addon, including single stepping</li>
+          <li>Fixed high CPU usage when project is paused</li>
+          <li>Improved resolution of large vector costumes</li>
+          <li>Updated backpacked item previews to support transparency</li>
+          <li>Updated dark mode with improved inputs, improved scrollbars, and support for the debugger and gamepad addons</li>
+          <li>Fixed developer tools find bar covering up controls in certain conditions</li>
+          <li>Fixed variable manager causing crashes when variables are too large and fix some graphical errors</li>
+          <li>Improved style of many modals and prompts to be more cohesive</li>
+          <li>Fixed interface allowing invalid framerates and invalid stage sizes</li>
+          <li>Fixed custom extensions being able to corrupt projects if they return unexpected values</li>
+          <li>Fixed custom extension error handling</li>
+          <li>Linux on Apple Silicon should be supported now</li>
+          <li>Added donation links</li>
+          <li>Updated packager: adds support for "☁ room id" special cloud behavior</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.3.1" date="2022-5-18">
       <description>
         <ul>
