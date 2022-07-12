@@ -19,6 +19,7 @@ import './hardware-acceleration';
 import './get-debug-info';
 import {handlePermissionRequest} from './permissions';
 import './detect-arm-translation';
+import {isBackgroundThrottlingEnabled, whenBackgroundThrottlingChanged} from './background-throttling';
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
@@ -181,7 +182,10 @@ const createEditorWindow = () => {
   const window = createWindow(url, {
     title: APP_NAME,
     width: 1280,
-    height: 800
+    height: 800,
+    webPreferences: {
+      backgroundThrottling: isBackgroundThrottlingEnabled()
+    }
   });
   window.on('page-title-updated', (event, title, explicitSet) => {
     event.preventDefault();
@@ -755,6 +759,12 @@ app.on('web-contents-created', (event, webContents) => {
       e.preventDefault();
     }
   });
+});
+
+whenBackgroundThrottlingChanged((backgroundThrottlingEnabled) => {
+  for (const editorWindow of editorWindows) {
+    editorWindow.webContents.setBackgroundThrottling(backgroundThrottlingEnabled);
+  }
 });
 
 // Allows certain versions of Scratch Link to work without an internet connection
