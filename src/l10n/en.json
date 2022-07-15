@@ -13,6 +13,8 @@
   "settings.camera": "Selected Camera",
   "settings.restart-for-device-change": "You may have to restart the application for microphone or camera changes to apply.",
   "settings.no-devices-detected": "No devices detected",
+  "settings.background-throttling": "Sleep hidden windows",
+  "settings.background-throttling-disabled": "Allowing hidden windows to remain active will result in higher CPU usage and lower battery life.",
   "menu.new-window": "New Window",
   "menu.learn-more": "Learn more",
   "unload.stay": "Stay",

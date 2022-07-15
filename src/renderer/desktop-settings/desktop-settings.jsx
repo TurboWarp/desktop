@@ -54,7 +54,9 @@ class DesktopSettings extends React.Component {
       selectedVideoDevice: ID_NONE,
       mediaDevicesNeedRestart: false,
 
-      isHardwareAccelerationEnabled: ipcRenderer.sendSync('hardware-acceleration/get-is-enabled')
+      isHardwareAccelerationEnabled: ipcRenderer.sendSync('hardware-acceleration/get-is-enabled'),
+
+      isBackgroundThrottlingEnabled: ipcRenderer.sendSync('background-throttling/get-is-enabled')
     };
 
     this.handleChangeUpdateCheckerEnabled = this.handleChangeUpdateCheckerEnabled.bind(this);
@@ -62,6 +64,7 @@ class DesktopSettings extends React.Component {
     this.handleSelectedAudioDeviceChanged = this.handleSelectedAudioDeviceChanged.bind(this);
     this.handleSelectedVideoDeviceChanged = this.handleSelectedVideoDeviceChanged.bind(this);
     this.handleChangeHardwareAccelerationEnabled = this.handleChangeHardwareAccelerationEnabled.bind(this);
+    this.handleBackgroundThrottlingChanged = this.handleBackgroundThrottlingChanged.bind(this);
     this.handleOpenUserData = this.handleOpenUserData.bind(this);
   }
 
@@ -120,6 +123,14 @@ class DesktopSettings extends React.Component {
     ipcRenderer.invoke('hardware-acceleration/set-is-enabled', enabled);
     this.setState({
       isHardwareAccelerationEnabled: enabled
+    });
+  }
+
+  handleBackgroundThrottlingChanged (e) {
+    const enabled = e.target.checked;
+    ipcRenderer.invoke('background-throttling/set-is-enabled', enabled);
+    this.setState({
+      isBackgroundThrottlingEnabled: enabled
     });
   }
 
@@ -200,6 +211,22 @@ class DesktopSettings extends React.Component {
           {!this.state.isHardwareAccelerationEnabled && (
             <div className={styles.warning}>
               {getTranslation('settings.disabled-hardware-acceleration')}
+            </div>
+          )}
+        </div>
+
+        <div className={styles.option}>
+          <label className={styles.label}>
+            <input
+              type="checkbox"
+              checked={this.state.isBackgroundThrottlingEnabled}
+              onChange={this.handleBackgroundThrottlingChanged}
+            />
+            {getTranslation('settings.background-throttling')}
+          </label>
+          {!this.state.isBackgroundThrottlingEnabled && (
+            <div className={styles.warning}>
+              {getTranslation('settings.background-throttling-disabled')}
             </div>
           )}
         </div>
