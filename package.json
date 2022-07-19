@@ -118,6 +118,7 @@
     },
     "snap": {
       "summary": "Scratch mod with a compiler, dark mode, a bunch of addons, and more.",
+      "allowNativeWayland": true,
       "plugs": [
         "default",
         "camera",
