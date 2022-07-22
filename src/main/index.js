@@ -296,7 +296,6 @@ const createPackagerWindow = (editorWebContents) => {
     title: PACKAGER_NAME,
     width: 700,
     height: 700,
-    parent: BrowserWindow.fromWebContents(editorWebContents)
   });
   closeWindowWhenPressEscape(window);
 
