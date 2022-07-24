@@ -71,7 +71,8 @@
           <li>Allow creating unlimited cloud variables</li>
           <li>Fixed backpacking JPEG costumes</li>
           <li>Fixed turbo mode stored in projects not applying properly</li>
-          <li>Updated packager: list color, verison number, macOS Electron, Scratch Link support, more</li>
+          <li>Added option to disable hidden window throttling</li>
+          <li>Updated packager: list color, version number, macOS Electron, Scratch Link support, more</li>
         </ul>
       </description>
     </release>
