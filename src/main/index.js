@@ -325,7 +325,6 @@ const createPackagerWindow = (editorWebContents) => {
           title: getTranslation('loading-preview'),
           width: 640,
           height: 480,
-          parent: window,
           webPreferences: {
             // preview window can have arbitrary custom JS and should not have access to special APIs
             preload: null
