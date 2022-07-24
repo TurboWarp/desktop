@@ -72,6 +72,7 @@
           <li>Fixed backpacking JPEG costumes</li>
           <li>Fixed turbo mode stored in projects not applying properly</li>
           <li>Added option to disable hidden window throttling</li>
+          <li>Fixed some bugs in the hide flyout addon</li>
           <li>Updated packager: list color, version number, macOS Electron, Scratch Link support, more</li>
         </ul>
       </description>
