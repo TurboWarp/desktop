@@ -27,7 +27,7 @@ class WrappedFileWritable {
   async write (content) {
     if (content instanceof Blob) {
       const arrayBuffer = await readAsArrayBuffer(content);
-      await ipcRenderer.invoke('write-file', this.path, Buffer.from(new Uint8Array(arrayBuffer)));
+      await ipcRenderer.invoke('write-file', this.path, arrayBuffer);
     }
   }
 

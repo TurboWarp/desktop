@@ -398,7 +398,7 @@ ipcMain.handle('write-file', async (event, file, content) => {
   if (!allowedToAccessFiles.has(file)) {
     throw new Error('Not allowed to access file');
   }
-  await writeFileAtomic(file, content);
+  await writeFileAtomic(file, new Uint8Array(content));
 });
 
 ipcMain.on('open-new-window', () => {
