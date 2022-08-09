@@ -398,6 +398,12 @@ ipcMain.handle('write-file', async (event, file, content) => {
   if (!allowedToAccessFiles.has(file)) {
     throw new Error('Not allowed to access file');
   }
+  // We've received a couple reports that our app is somehow saving 0-byte files, so we'll check that the data we're
+  // about to write actually has some content. Maybe the browser is doing something weird and losing our data when
+  // passed over IPC? I have no idea. This is just for safety and has no downside.
+  if (content.byteLength === 0) {
+    throw new Error('Refusing 0-byte write');
+  }
   await writeFileAtomic(file, new Uint8Array(content));
 });
 
