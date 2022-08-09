@@ -301,6 +301,9 @@
         "updater.detail": "Ez a frissítés tartalmazhat mind új funkciókat, mind hibajavításokat.",
         "updater.later": "Emlékeztessen később"
     },
+    "id": {
+        "donate": "Donasi"
+    },
     "it": {
         "about": "Info",
         "context.copy": "Copia",
@@ -930,6 +933,7 @@
     },
     "uk": {
         "context.open-link": "Відкрити посилання",
+        "donate": "Пожертвувати",
         "files.html": "HTML-сторінка",
         "files.png": "Зображення у форматі PNG",
         "files.svg": "Зображення у форматі SVG",
@@ -942,6 +946,7 @@
         "prompt.ok": "ОК",
         "settings.camera": "Обрана камера",
         "settings.microphone": "Обраний мікрофон",
+        "settings.no-devices-detected": "Не обрані пристрої",
         "unload.leave": "Вийти",
         "unload.message": "Ви впевнені, що хочете вийти?",
         "unload.stay": "Залишитися",
