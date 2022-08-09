@@ -1,7 +1,7 @@
 import {app, BrowserWindow, Menu, ipcMain, shell, dialog, clipboard, screen, net, session} from 'electron'
 import pathUtil from 'path'
 import fs from 'fs';
-import writeFileAtomic from 'write-file-atomic';
+import writeFileAtomicLegacyCallback from 'write-file-atomic';
 import util from 'util';
 import {format as formatUrl} from 'url';
 import zlib from 'zlib';
@@ -24,6 +24,7 @@ import {isBackgroundThrottlingEnabled, whenBackgroundThrottlingChanged} from './
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 const brotliDecompress = util.promisify(zlib.brotliDecompress);
+const writeFileAtomic = util.promisify(writeFileAtomicLegacyCallback);
 
 const filesToOpen = [];
 
