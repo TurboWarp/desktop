@@ -245,6 +245,9 @@
       .install-help p, .install-help img {
         margin: 0 0 16px 0;
       }
+      .install-help p:last-child {
+        margin: 0;
+      }
 
       code {
         padding: 1px 2px;
@@ -611,7 +614,9 @@
         </div>
 
         <div class="install-help">
-          <div data-l10n="mac.help">If a Gatekeeper prompt appears, open Finder, navigate to Applications, right click TurboWarp and select "Open" and then "Open" again.</div>
+          <p data-l10n="mca-help1">Drag TurboWarp into Applications. If it tells you that TurboWarp already exists, choose Replace.</p>
+          <p data-l10n="mac-help2">If you get the error "TurboWarp cannot be opened because the developer cannot be verified", click Cancel, then open Finder, then go to Applications, then control+click on TurboWarp, then select Open, and then click Open. You won't see the warning again until you update the app.</p>
+          <p data-l10n="mac-help3">You get that warning because we can't afford $99 per year for an Apple Developer account. You can help by <a href="https://github.com/sponsors/GarboMuffin">donating</a>.</p>
         </div>
       </div>
     </section>
