@@ -110,6 +110,16 @@ darkModeMedia.onchange();
 const urlSearchParams = new URLSearchParams(location.search);
 const fileToOpen = urlSearchParams.get('file');
 
+const storeFilePathInURL = (filePath) => {
+  const urlParameters = new URLSearchParams(location.search);
+  if (filePath) {
+    urlParameters.set('file', filePath);
+  } else {
+    urlParameters.delete('file');
+  }
+  history.replaceState('', '', '?' + urlParameters.toString());
+};
+
 const DesktopHOC = function (WrappedComponent) {
   let mountedOnce = false;
   class DesktopComponent extends React.Component {
@@ -167,11 +177,14 @@ const DesktopHOC = function (WrappedComponent) {
       if (this.props.projectChanged !== prevProps.projectChanged) {
         ipcRenderer.send('set-file-changed', this.props.projectChanged);
       }
+
       if (this.props.fileHandle !== prevProps.fileHandle) {
         if (this.props.fileHandle) {
           ipcRenderer.send('set-represented-file', this.props.fileHandle.path);
+          storeFilePathInURL(this.props.fileHandle.path);
         } else {
           ipcRenderer.send('set-represented-file', null);
+          storeFilePathInURL(null);
         }
       }
     }

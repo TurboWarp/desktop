@@ -87,13 +87,6 @@ const typesToFilterList = (types) => types.map((type) => ({
     .map((i) => i.substr(1))
 }));
 
-const storeFilePathInURL = (filePath) => {
-  // Store the file path in the URL so that it will be loaded if the window reloads.
-  const urlParameters = new URLSearchParams(location.search);
-  urlParameters.set('file', filePath);
-  history.replaceState('', '', '?' + urlParameters.toString());
-};
-
 window.showSaveFilePicker = async (options) => {
   const result = await ipcRenderer.invoke('show-save-dialog', {
     filters: typesToFilterList(options.types),
@@ -105,7 +98,6 @@ window.showSaveFilePicker = async (options) => {
   }
 
   const filePath = result.filePath;
-  storeFilePathInURL(filePath);
   return new WrappedFileHandle(filePath);
 };
 
@@ -119,6 +111,5 @@ window.showOpenFilePicker = async (options) => {
   }
 
   const [filePath] = result.filePaths;
-  storeFilePathInURL(filePath);
   return [new WrappedFileHandle(filePath)];
 };
