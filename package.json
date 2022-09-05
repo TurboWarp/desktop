@@ -24,7 +24,7 @@
     "electron": "^19.0.10",
     "electron-builder": "^23.3.3",
     "postcss": "^8.4.13",
-    "postcss-import": "^14.0.0",
+    "postcss-import": "^15.0.0",
     "postcss-loader": "^4.2.0",
     "postcss-simple-vars": "^6.0.3",
     "scratch-gui": "git+https://github.com/TurboWarp/scratch-gui.git#desktop",
