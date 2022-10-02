@@ -68,6 +68,7 @@
         <ul>
           <li>New addon: Pick colors from stage (enabled by default)</li>
           <li>New addon: Zebra striping</li>
+          <li>Bitmap costume editor now supports transparency</li>
           <li>SVGs exported by TurboWarp and imported to TurboWarp won't be re-centered unnecessarily</li>
           <li>Sound editor now shows a sound's size, whether it's stereo or not, and its sample rate</li>
           <li>Maximum SVG size has been reverted to the same as Scratch due to too many crashes</li>
@@ -90,7 +91,6 @@
           <li>Fixed some icons being unnecessarily draggable</li>
           <li>Fixed loading Scratch 2 projects with unusual JSON</li>
           <li>Updated packager: settings export and import, optimized memory use of packaged projects</li>
-          <li>Updated translations</li>
         </ul>
       </description>
     </release>
