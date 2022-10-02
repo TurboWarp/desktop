@@ -483,6 +483,38 @@
     <section class="changelog" id="changelog">
       <div>
         <div lang="en">
+          <div data-version="1.6.0">
+            <h2>What's new in v1.6.0</h2>
+            <ul>
+              <li>New addon: Pick colors from stage (enabled by default)</li>
+              <li>New addon: Zebra striping</li>
+              <li>Bitmap costume editor now supports transparency</li>
+              <li>SVGs exported by TurboWarp and imported to TurboWarp won't be re-centered unnecessarily</li>
+              <li>Sound editor now shows a sound's size, whether it's stereo or not, and its sample rate</li>
+              <li>Maximum SVG size has been reverted to the same as Scratch due to too many crashes</li>
+              <li>Added option to clone counter to only show icon</li>
+              <li>Added "Turbo Robot" sprite to builtin libraries</li>
+              <li>Added option to customizable new sprite position to apply to duplicated sprites</li>
+              <li>Fixed "Saving project..." text disappearing before the project was actually saved</li>
+              <li>Fixed save location still being updated if you cancel the confirmation to replace existing project</li>
+              <li>Fixed unnecessary memory use when saving files</li>
+              <li>Fixed loading some projects with many bitmap costumes</li>
+              <li>Fixed block cherry picking breaking on certain blocks</li>
+              <li>Fixed tangent block reporting slightly incorrect values in the compiler</li>
+              <li>Fixed display stage on left side and two-column category menu compatibility bugs</li>
+              <li>Fixed developer tools dark mode issue</li>
+              <li>Fixed auto-hiding block palette bugs</li>
+              <li>Fixed variable manager bugs</li>
+              <li>Fixed sound editor layout bugs at certain window sizes</li>
+              <li>Fixed some costume and sound lists having an unnecessary horizontal scrollbar</li>
+              <li>Fixed color picker overlay not covering the entire page</li>
+              <li>Fixed some icons being unnecessarily draggable</li>
+              <li>Fixed loading Scratch 2 projects with unusual JSON</li>
+              <li>Windows: Title bar now respects your computer's dark mode preference</li>
+              <li>Linux: We now have a repository for Debian/Ubuntu and their derivatives</li>
+              <li>Updated packager: settings export and import, optimized memory use of packaged projects</li>
+            </ul>
+          </div>
           <div data-version="1.5.0">
             <h2>What's new in v1.5.0</h2>
             <ul>
@@ -952,7 +984,7 @@
     </script>
     <script>
       (function() {
-        var VERSION = '1.5.0';
+        var VERSION = '1.6.0';
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'web';
