@@ -262,6 +262,7 @@
       }
       .command::before {
         content: '$ ';
+        color: #e36000;
       }
 
       .donate {
@@ -402,6 +403,9 @@
         }
         :focus-visible {
           outline: 2px solid white;
+        }
+        .command::before {
+          color: #ffa500;
         }
       }
     </style>
@@ -661,24 +665,41 @@
           </code>
         </details>
 
-        <h2>.deb</h2>
+        <h2>Debian, Ubuntu</h2>
         <ul>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-amd64-{version}.deb">x86 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.deb">ARM 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.deb">ARMv7l</a></li>
         </ul>
+        <details>
+          <summary data-l10n="deb-summary">Install our repository to receive updates through apt instead of manually downloading files</summary>
+          <p data-l10n="deb-install">Run these commands in a terminal:</p>
+          <code class="terminal">
+            <div class="command">wget https://desktop.turbowarp.org/release-signing-key.gpg -qO - | gpg --dearmor | sudo tee /usr/share/keyrings/turbowarp.gpg > /dev/null</div>
+            <div class="command">echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/turbowarp.gpg] https://releases.turbowarp.org/deb stable main" | sudo tee /etc/apt/sources.list.d/turbowarp.list</div>
+            <div class="command">sudo apt update</div>
+            <div class="command">sudo apt install turbowarp-desktop</div>
+          </code>
+          <p data-l10n="deb-uninstall">To uninstall:</p>
+          <code class="terminal">
+            <div class="command">sudo apt remove turbowarp-desktop</div>
+            <div class="command">sudo rm /usr/share/keyrings/turbowarp.gpg</div>
+            <div class="command">sudo rm /etc/apt/sources.list.d/turbowarp.list</div>
+            <div class="command">sudo apt update</div>
+          </code>
+        </details>
 
         <h2>Arch User Repository</h2>
         <p data-l10n="arch">For Arch Linux systems, we recommend the official AUR package: <a href="https://aur.archlinux.org/packages/turbowarp-desktop-bin/" data-notranslate data-l10n-subkey="package-link">turbowarp-desktop-bin</a></p>
 
-        <h2>.AppImage</h2>
+        <h2>AppImage</h2>
         <ul>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-x86_64-{version}.AppImage">x86 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.AppImage">ARM 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.AppImage">ARMv7l</a></li>
         </ul>
 
-        <h2>.tar.gz</h2>
+        <h2>tar.gz</h2>
         <ul>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-x64-{version}.tar.gz">x86 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.tar.gz">ARM 64-bit</a></li>
