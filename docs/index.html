@@ -665,25 +665,25 @@
           </code>
         </details>
 
-        <h2>Debian/Ubuntu</h2>
+        <h2>Debian, Ubuntu</h2>
         <ul>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-amd64-{version}.deb">x86 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.deb">ARM 64-bit</a></li>
           <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.deb">ARMv7l</a></li>
         </ul>
         <details>
-          <summary>Or you can add our repository to your system to receive updates through apt:</summary>
-          <p data-l10n="deb-install">Run this in a terminal:</p>
+          <summary data-l10n="deb-summary">Install our repository to receive updates through apt instead of manually downloading files</summary>
+          <p data-l10n="deb-install">Run these commands in a terminal:</p>
           <code class="terminal">
-            <div class="command">wget https://desktop.turbowarp.org/release-signing-key.gpg -q -O - | gpg --dearmor | sudo tee /etc/apt/keyrings/turbowarp.gpg > /dev/null</div>
-            <div class="command">echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/turbowarp.gpg] https://releases.turbowarp.org/deb stable main" | sudo tee /etc/apt/sources.list.d/turbowarp.list</div>
+            <div class="command">wget https://desktop.turbowarp.org/release-signing-key.gpg -qO - | gpg --dearmor | sudo tee /usr/share/keyrings/turbowarp.gpg > /dev/null</div>
+            <div class="command">echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/turbowarp.gpg] https://releases.turbowarp.org/deb stable main" | sudo tee /etc/apt/sources.list.d/turbowarp.list</div>
             <div class="command">sudo apt update</div>
             <div class="command">sudo apt install turbowarp-desktop</div>
           </code>
           <p data-l10n="deb-uninstall">To uninstall:</p>
           <code class="terminal">
             <div class="command">sudo apt remove turbowarp-desktop</div>
-            <div class="command">sudo rm /etc/apt/keyrings/turbowarp.gpg</div>
+            <div class="command">sudo rm /usr/share/keyrings/turbowarp.gpg</div>
             <div class="command">sudo rm /etc/apt/sources.list.d/turbowarp.list</div>
             <div class="command">sudo apt update</div>
           </code>
