@@ -5,3 +5,6 @@ thumbs.db
 .idea/
 library-files
 packager.html.br
+
+# Debian release scripts create files that shouldn't be committed
+deb
