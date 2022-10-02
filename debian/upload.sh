@@ -2,4 +2,4 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-echo TODO
+rclone copy deb turbowarp-pkgs:turbowarp-pkgs/deb -P
