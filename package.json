@@ -1,7 +1,7 @@
 {
   "name": "turbowarp-desktop",
   "description": "Scratch mod with a compiler, dark mode, a bunch of addons, and more.",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "license": "GPL-3.0",
   "author": {
     "email": "contact@turbowarp.org",
