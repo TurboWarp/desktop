@@ -63,10 +63,11 @@
     <content_attribute id="social-info">mild</content_attribute>
   </content_rating>
   <releases>
-    <release version="1.6.1" date="2022-10-08">
+    <release version="1.6.1" date="2022-10-07">
       <description>
         <ul>
           <li>Fixed features that access your microphone or camera</li>
+          <li>Fixed addon settings import not importing some color options</li>
         </ul>
       </description>
     </release>
