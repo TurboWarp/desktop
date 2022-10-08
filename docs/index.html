@@ -490,6 +490,13 @@
     <section class="changelog" id="changelog">
       <div>
         <div lang="en">
+          <div data-version="1.6.1">
+            <h2>What's new in v1.6.1</h2>
+            <ul>
+              <li>Fixed features that access your microphone or camera</li>
+              <li>Fixed addon settings import not importing some color options</li>
+            </ul>
+          </div>
           <div data-version="1.6.0">
             <h2>What's new in v1.6.0</h2>
             <ul>
@@ -986,7 +993,7 @@
     </script>
     <script>
       (function() {
-        var VERSION = '1.6.0';
+        var VERSION = '1.6.1';
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'web';
