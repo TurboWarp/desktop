@@ -63,6 +63,13 @@
     <content_attribute id="social-info">mild</content_attribute>
   </content_rating>
   <releases>
+    <release version="1.6.1" date="2022-10-08">
+      <description>
+        <ul>
+          <li>Fixed features that access your microphone or camera</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.6.0" date="2022-10-02">
       <description>
         <ul>
