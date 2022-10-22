@@ -9,9 +9,9 @@
     <style>
       main {
         max-width: 650px;
-        font-family: sans-serif;
-        margin: auto;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-size: 16px;
+        margin: auto;
       }
       code {
         padding: 1px 2px;
@@ -70,7 +70,7 @@
 
       <h2>macOS</h2>
       <p>Uninstall TurboWarp like you would any other app.</p>
-      <p>Open Finder > Go to Applications > Drag TurboWarp into the trash icon on your dock.</p>
+      <p>Finder > Go to Applications > Drag TurboWarp into the trash icon on your dock.</p>
       <p>To delete user data, open Finder, press Shift+Command+G, type in <code>~/Library/Application Support/</code>, then delete the <code>turbowarp-desktop</code> folder. (repeat for each user that used the app)</p>
 
       <h2>Linux</h2>
@@ -80,7 +80,7 @@
       <p>If you installed it from the Snap Store:</p>
       <code class="terminal">
         <div class="command">snap remove turbowarp-desktop</div>
-        <div class="comment">Remove file association helper file workaround</div>
+        <div class="comment">Remove file association helper file workaround, if it exists</div>
         <div class="command">sudo rm /usr/share/mime/packages/turbowarp-desktop-snap.xml</div>
       </code>
 
@@ -102,12 +102,15 @@
 
       <p>If you installed it from the Arch User Repository:</p>
       <code class="terminal">
-        <div class="command">sudo pacman -R turbowarp-desktop</div>
+        <div class="command">sudo pacman -R turbowarp-desktop-bin</div>
       </code>
 
       <p>If you installed it manually or using the legacy install script:</p>
       <code class="terminal">
+        <div class="comment">Remove app files</div>
         <div class="command">sudo rm /opt/TurboWarp -rf</div>
+        <div class="comment">Remove binary from PATH</div>
+        <div class="command">sudo rm /usr/bin/turbowarp-desktop</div>
         <div class="comment">Remove launch menu item</div>
         <div class="command">sudo rm /usr/share/applications/turbowarp-desktop.desktop</div>
         <div class="comment">Remove file type information</div>
