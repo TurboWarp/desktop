@@ -14,7 +14,7 @@ const getBasename = (path) => {
 const readAsArrayBuffer = (blob) => new Promise((resolve, reject) => {
   const fr = new FileReader();
   fr.onload = () => resolve(fr.result);
-  fr.onerror = () => reject(new Error('cannot read'));
+  fr.onerror = () => reject(new Error('Cannot read Blob as file'));
   fr.readAsArrayBuffer(blob);
 });
 
@@ -26,8 +26,11 @@ class WrappedFileWritable {
 
   async write (content) {
     if (content instanceof Blob) {
+      // We've seen a couple reports of our file saving logic seemingly truncating files at
+      // random points, so we're going to be extra paranoid.
+      const expectedSize = content.size;
       const arrayBuffer = await readAsArrayBuffer(content);
-      await ipcRenderer.invoke('write-file', this.path, arrayBuffer);
+      await ipcRenderer.invoke('write-file', this.path, arrayBuffer, expectedSize);
     }
   }
 

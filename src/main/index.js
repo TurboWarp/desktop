@@ -395,17 +395,22 @@ ipcMain.handle('read-file', async (event, file) => {
   return await readFile(file);
 });
 
-ipcMain.handle('write-file', async (event, file, content) => {
+ipcMain.handle('write-file', async (event, file, arrayBuffer, expectedSize) => {
   if (!allowedToAccessFiles.has(file)) {
     throw new Error('Not allowed to access file');
   }
-  // We've received a couple reports that our app is somehow saving 0-byte files, so we'll check that the data we're
-  // about to write actually has some content. Maybe the browser is doing something weird and losing our data when
-  // passed over IPC? I have no idea. This is just for safety and has no downside.
-  if (content.byteLength === 0) {
-    throw new Error('Refusing 0-byte write');
+
+  // We've seen a couple reports of our file saving logic seemingly truncating files at
+  // random points, so we're going to be extra paranoid.
+  if (arrayBuffer.byteLength !== expectedSize) {
+    throw new Error(`Expected ${expectedSize} bytes but got ${arrayBuffer.byteLength} bytes`);
   }
-  await writeFileAtomic(file, new Uint8Array(content));
+  if (arrayBuffer.byteLength <= 500) {
+    throw new Error(`File size is too small to be a real project: ${arrayBuffer.byteLength}`);
+  }
+
+  const bufferView = new Uint8Array(arrayBuffer);
+  await writeFileAtomic(file, bufferView);
 });
 
 ipcMain.on('open-new-window', () => {
