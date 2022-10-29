@@ -22,7 +22,6 @@ import './detect-arm-translation';
 import {isBackgroundThrottlingEnabled, whenBackgroundThrottlingChanged} from './background-throttling';
 
 const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
 const brotliDecompress = util.promisify(zlib.brotliDecompress);
 const writeFileAtomic = util.promisify(writeFileAtomicLegacyCallback);
 
@@ -468,7 +467,7 @@ ipcMain.on('export-addon-settings', async (event, settings) => {
   }
 
   const path = result.filePath;
-  await writeFile(path, JSON.stringify(settings));
+  await writeFileAtomic(path, JSON.stringify(settings));
 });
 
 ipcMain.on('addon-settings-changed', (event, newSettings) => {
