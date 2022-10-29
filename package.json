@@ -30,7 +30,7 @@
     "scratch-gui": "git+https://github.com/TurboWarp/scratch-gui.git#desktop",
     "semver": "^7.3.4",
     "webpack": "~4.46.0",
-    "write-file-atomic": "^4.0.1"
+    "write-file-atomic": "^5.0.0"
   },
   "homepage": "https://desktop.turbowarp.org/",
   "repository": {
