@@ -692,7 +692,7 @@
 
           <p data-l10n="snap.opener">By default, the snap version can't be set as the file opener for sb3, sb2, or sb files without interfering with other file types. To fix this, run these commands:</p>
           <code class="terminal">
-            <div class="command">sudo wget https://desktop.turbowarp.org/snap-mime.xml -O /usr/share/mime/packages/turbowarp-desktop-snap.xml</div>
+            <div class="command">wget https://desktop.turbowarp.org/snap-mime.xml -qO- | sudo tee /usr/share/mime/packages/turbowarp-desktop-snap.xml > /dev/null</div>
             <div class="command">sudo update-mime-database /usr/share/mime</div>
           </code>
         </details>
@@ -717,7 +717,7 @@
           <span data-l10n="deb-repo">Install our repository to receive updates through apt by running these commands:</span>
         </p>
         <code class="terminal">
-          <div class="command">wget https://desktop.turbowarp.org/release-signing-key.gpg -qO - | gpg --dearmor | sudo tee /usr/share/keyrings/turbowarp.gpg > /dev/null</div>
+          <div class="command">wget https://desktop.turbowarp.org/release-signing-key.gpg -qO- | gpg --dearmor | sudo tee /usr/share/keyrings/turbowarp.gpg > /dev/null</div>
           <div class="command">echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/turbowarp.gpg] https://releases.turbowarp.org/deb stable main" | sudo tee /etc/apt/sources.list.d/turbowarp.list</div>
           <div class="command">sudo apt update</div>
           <div class="command">sudo apt install turbowarp-desktop</div>
