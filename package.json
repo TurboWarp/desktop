@@ -67,7 +67,17 @@
       "publisher": "CN=18FA7D4F-01BF-49F2-BF56-782DCEA49C69",
       "publisherDisplayName": "Thomas Weber",
       "backgroundColor": "#4c97ff",
-      "showNameOnTiles": true
+      "showNameOnTiles": true,
+      "languages": [
+        "en-US",
+        "fr",
+        "nl",
+        "de",
+        "it",
+        "ja",
+        "ru",
+        "es-ES"
+      ]
     },
     "nsis": {
       "artifactName": "${productName} Setup ${version} ${arch}.${ext}",
