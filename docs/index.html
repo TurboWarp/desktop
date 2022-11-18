@@ -453,11 +453,11 @@
   -->
 
   <body os="">
-    <div class="language-selector">
+    <label class="language-selector">
       <svg viewBox="0 0 20 20"><g fill="none" fill-rule="evenodd" stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25"><path d="M17.635 10.113a7.523 7.523 0 0 1-7.523 7.523 7.523 7.523 0 1 1 0-15.047 7.524 7.524 0 0 1 7.523 7.524Z"/><path d="M13.98 10.117c0 1.633-.265 3.143-.726 4.375-.698 1.901-1.846 3.143-3.143 3.143-1.297 0-2.442-1.242-3.144-3.143-.456-1.232-.723-2.742-.723-4.375 0-1.634.267-3.144.723-4.376.702-1.911 1.847-3.153 3.144-3.153 1.297 0 2.445 1.242 3.143 3.153.461 1.232.727 2.742.727 4.376ZM2.955 12.281h14.313M2.955 7.947h14.313M10.112 2.59v15.048"/></g></svg>
       <select class="language-selector-input"></select>
-      <div data-l10n="lang" class="language-text">Language</div>
-    </div>
+      <div class="language-text"></div>
+    </label>
 
     <section class="header visible-loading">
       <div>
@@ -1058,6 +1058,7 @@
 
         const languageSelector = document.querySelector('.language-selector');
         const languageInput = document.querySelector('.language-selector-input');
+        const languageText = document.querySelector('.language-text');
         for (const languageCode of ['en', ...Object.keys(allLanguageMessages)]) {
           const option = document.createElement('option');
           option.textContent = localeNames[languageCode] || languageCode;
@@ -1076,6 +1077,7 @@
 
         const language = getLanguage();
         languageInput.value = language;
+        languageText.textContent = localeNames[language] || '';
         translate(language);
       })();
     </script>
