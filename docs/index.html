@@ -71,6 +71,34 @@
         border: 1px solid rgba(0, 225, 255, 0.35);
       }
 
+      .language-selector {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+      }
+      .language-selector svg {
+        width: 24px;
+        height: 24px;
+      }
+      .language-selector:hover {
+        background: rgba(0, 0, 0, 0.2);
+      }
+      .language-selector-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+      }
+      .language-text {
+        margin-left: 8px;
+      }
+
       .header {
         padding-top: 32px;
         padding-bottom: 32px;
@@ -100,7 +128,7 @@
           margin-top: 0;
         }
         .header-title svg {
-          margin: 0 0 20px 0;
+          margin: 20px 0 20px 0;
         }
       }
       .header-subtitles > * {
@@ -425,6 +453,12 @@
   -->
 
   <body os="">
+    <div class="language-selector">
+      <svg viewBox="0 0 20 20"><g fill="none" fill-rule="evenodd" stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25"><path d="M17.635 10.113a7.523 7.523 0 0 1-7.523 7.523 7.523 7.523 0 1 1 0-15.047 7.524 7.524 0 0 1 7.523 7.524Z"/><path d="M13.98 10.117c0 1.633-.265 3.143-.726 4.375-.698 1.901-1.846 3.143-3.143 3.143-1.297 0-2.442-1.242-3.144-3.143-.456-1.232-.723-2.742-.723-4.375 0-1.634.267-3.144.723-4.376.702-1.911 1.847-3.153 3.144-3.153 1.297 0 2.445 1.242 3.143 3.153.461 1.232.727 2.742.727 4.376ZM2.955 12.281h14.313M2.955 7.947h14.313M10.112 2.59v15.048"/></g></svg>
+      <select class="language-selector-input"></select>
+      <div data-l10n="lang" class="language-text">Language</div>
+    </div>
+
     <section class="header visible-loading">
       <div>
         <h1 class="header-title">
@@ -867,6 +901,7 @@
 "zh-cn":{"addons-caption":"超过 {large-number} 个{addons}可以定制和增强你的体验。","addons-caption.addons":"插件","arch":"对于 Arch Linux 系统，我们建议使用官方的 AUR 软件包：{package-link}","deb-manual":"或者为您的系统手动安装.deb（不会添加apt仓库）:","deb-repo":"通过apt安装我们的存储库，通过运行以下命令来接收更新：","donate":"如果您喜欢 TurboWarp 软件，请考虑捐赠","flatpak":"我们在 Flathub 上维护一个官方的 Flatpak 版本：{package-link}","flatpak.gamepads":"游戏手柄在 Flatpak 版本中无法工作。","flatpak.sandbox":"默认情况下，该应用程序可能仅限于访问主目录中的作品。要允许访问其他文件夹，您需要运行以下命令：","githubBugs":"在 GitHub 报告错误","header.affiliation":"TurboWarp 不属于 Scratch、Scratch 团队或 Scratch 基金会。","header.subtitle":"在你的电脑上使用 {TurboWarp}，一个拥有编译器、深色模式、插件等功能的 Scratch MOD。它甚至还能在离线的时候运行。","linux.1":"在大多数 Linux 发行版上，安装 TurboWarp 的推荐方法是在你的发行版的软件管理器中搜索“TurboWarp”，并选择出现的第一个选项。","linux.2":"如果你是一位高级用户，或者 TurboWarp 不在软件管理器中显示，这里有更多选择：","mac-help2":"如果出现“无法打开TurboWarp因为无法验证开发者”的错误，请单击取消，然后打开Finder，然后转到应用程序，然后控制并单击TurboWarp，选择打开。在更新页面之前，您不会再次看到警告。","mac-help3":"你会收到这样的警告，因为我们无法负担起每年99美元的苹果开发者账户。你可以通过{donating}捐赠来帮助。","mac-help3.donating":"捐赠","mac.download":"下载 macOS 版本（通用）","mca-help1":"将TurboWarp文件夹放进Application文件夹中。如果你看到“TurboWarp已经存在”之类的警告，请选择“替换”。","new":"新的","packager-caption":"内置的 {packager} 可将作品转换为 HTML 文件或 Windows、macOS 或 Linux 应用程序。","packager-caption.packager":"TurboWarp打包器","picture.title":"图片中的作品：由 piano_miles 制作的 Full Sphere Path Tracer","privacy":"隐私政策","pwa.open":"打开 TurboWarp 官方网站","releases":"可在 GitHub 上查看更早的版本说明。","scratchBugs":"在 Scratch 网站报告错误","screenshot-caption":"图片中的作品：{project}","screenshot-caption.project":"由 piano_miles 制作的 Full Sphere Path Tracer","snap":"我们将维护官方的 snap 版本：{package-link}","snap.opener":"默认情况下，snap 版本不能设置为 sb3、sb2 或 sb 文件的文件启动项，而不影响其他文件类型。要解决这个问题，您需要运行以下命令：","snap.sandbox":"默认情况下，snap 版本无法访问您的相机、麦克风、游戏手柄或可移动驱动器。要解决此问题，您需要运行以下命令：","source":"源代码","update.linux":"如果你从像 Snap Store 一样的应用商店或包管理器安装了 TurboWarp Desktop，请等待更新推送到该商店。否则，请运行下面的新安装程序。","update.mac":"在下面下载并安装新的应用程序以更新。","update.windows":"在下面下载并运行新的安装程序以更新。","web1":"在 ChromeOS、Android、iOS、iPadOS 和所有其他操作系统上，您可以改用 TurboWarp 官方网站。几乎所有的功能都可以与 TurboWarp 应用程序一样正常工作。","web2":"很多时候，你可以安装网页。在台式机和笔记本电脑上，“安装”按钮会在几秒后显示。","web3":"在手机和平板电脑上，在浏览器的菜单中寻找“安装应用程序”或“添加到主屏幕”。","win.32":"用于 32 位系统的备选下载","win.download":"下载 Windows 版本（64 位）","win.help":"如果出现 Windows SmartScreen 警告，请单击“更多信息”，然后单击“仍然运行”。","workarounds":"已知的问题和解决方法"},
 "zh-tw":{"githubBugs":"在GitHub上報告Bug","header.affiliation":"TurboWarp 並不隸屬於 Scratch、Scratch 團隊或 Scratch 基金會。","header.subtitle":"{TurboWarp}，運行更快且帶有黑暗模式、附加元件及其他好用功能的 Scratch，離線亦可運行。","mac.download":"為MacOS下載(通用)","new":"全新","picture.title":"上圖專案：Full Sphere Path Tracer，作者：piano_miles","privacy":"隱私政策","scratchBugs":"在Scratch上彙報Bug","screenshot-caption":"上圖專案：{project}","screenshot-caption.project":"Full Sphere Path Tracer，作者：piano_miles","source":"原始碼","update.linux":"若你是從應用商店或軟體套件管理系統安裝 TurboWarp 的，就必須等到它放上更新。或者，運行下方的安裝程式。","update.mac":"下載並安裝新版程式以更新。","update.windows":"下載並運行下方的新版安裝程式以更新。","win.32":"可選擇為32位系統下載","win.download":"為Windows(64位)下載","win.help":"如果Windows Smartscreen警報出現，點擊“更多信息”然後“總是運行”。"},
 }/*===*/;
+        const localeNames = {"ab":"Аҧсшәа","af":"Afrikaans","ar":"العربية","am":"አማርኛ","an":"Aragonés","ast":"Asturianu","az":"Azeri","id":"Bahasa Indonesia","bn":"বাংলা","be":"Беларуская","bg":"Български","ca":"Català","cs":"Česky","cy":"Cymraeg","da":"Dansk","de":"Deutsch","et":"Eesti","el":"Ελληνικά","en":"English","es":"Español (España)","es-419":"Español Latinoamericano","eo":"Esperanto","eu":"Euskara","fa":"فارسی","fil":"Filipino","fr":"Français","fy":"Frysk","ga":"Gaeilge","gd":"Gàidhlig","gl":"Galego","ko":"한국어","ha":"Hausa","hy":"Հայերեն","he":"עִבְרִית","hr":"Hrvatski","xh":"isiXhosa","zu":"isiZulu","is":"Íslenska","it":"Italiano","ka":"ქართული ენა","kk":"қазақша","qu":"Kichwa","sw":"Kiswahili","ht":"Kreyòl ayisyen","ku":"Kurdî","ckb":"کوردیی ناوەندی","lv":"Latviešu","lt":"Lietuvių","hu":"Magyar","mi":"Māori","mn":"Монгол хэл","nl":"Nederlands","ja":"日本語","ja-Hira":"にほんご","nb":"Norsk Bokmål","nn":"Norsk Nynorsk","oc":"Occitan","or":"ଓଡ଼ିଆ","uz":"Oʻzbekcha","th":"ไทย","km":"ភាសាខ្មែរ","pl":"Polski","pt":"Português","pt-br":"Português Brasileiro","rap":"Rapa Nui","ro":"Română","ru":"Русский","nso":"Sepedi","tn":"Setswana","sk":"Slovenčina","sl":"Slovenščina","sr":"Српски","fi":"Suomi","sv":"Svenska","vi":"Tiếng Việt","tr":"Türkçe","uk":"Українська","zh-cn":"简体中文","zh-tw":"繁體中文"};
 
         const translatableElements = document.querySelectorAll('[data-l10n]');
         const translatableAttributes = document.querySelectorAll('[data-l10n-attrib]');
@@ -984,12 +1019,50 @@
           return result;
         }
 
-        return {
-          translate,
-          genl10n
-        };
+        const LANGUAGE_KEY = 'twd:language';
+
+        function getPreferredLanguage() {
+          try {
+            const local = localStorage.getItem(LANGUAGE_KEY);
+            if (local) {
+              return local;
+            }
+          } catch (e) {
+            // ignore
+          }
+          return navigator.language;
+        }
+
+        function getLanguage() {
+          let language = getPreferredLanguage();
+          lanugage = language.toLowerCase();
+          if (!allLanguageMessages[language]) language = language.split('-')[0];
+          const messages = allLanguageMessages[language];
+          return language;
+        }
+
+        const languageSelector = document.querySelector('.language-selector');
+        const languageInput = document.querySelector('.language-selector-input');
+        for (const languageCode of ['en', ...Object.keys(allLanguageMessages)]) {
+          const option = document.createElement('option');
+          option.textContent = localeNames[languageCode] || languageCode;
+          option.value = languageCode;
+          languageInput.append(option);
+        }
+
+        languageSelector.addEventListener('change', (e) => {
+          try {
+            localStorage.setItem(LANGUAGE_KEY, e.target.value);
+            location.reload();
+          } catch (e) {
+            // ignore
+          }
+        });
+
+        const language = getLanguage();
+        languageInput.value = language;
+        translate(language);
       })();
-      L.translate(navigator.language.toLowerCase());
     </script>
     <script>
       (function() {
