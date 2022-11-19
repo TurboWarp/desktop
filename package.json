@@ -92,8 +92,8 @@
       "darkModeSupport": true,
       "gatekeeperAssess": false,
       "hardenedRuntime": true,
-      "entitlements": "entitlements.mac.plist",
-      "entitlementsInherit": "entitlements.mac.plist",
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
       "extendInfo": {
         "NSCameraUsageDescription": "This app requires camera access when using the video sensing blocks.",
         "NSMicrophoneUsageDescription": "This app requires microphone access when recording sounds or detecting loudness."
