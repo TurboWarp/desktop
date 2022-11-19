@@ -75,3 +75,4 @@ TurboWarp Desktop includes a simple update checker. This update checker is disab
 ## Uninstall
 
 See https://desktop.turbowarp.org/uninstall
+hi
