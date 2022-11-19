@@ -27,7 +27,7 @@
     "postcss-import": "^14.0.0",
     "postcss-loader": "^4.2.0",
     "postcss-simple-vars": "^6.0.3",
-    "scratch-gui": "git+https://github.com/PenguinMod/PenguinMod-Gui#develop",
+    "scratch-gui": "git+https://github.com/PenguinMod/PenguinMod-Gui#desktop",
     "semver": "^7.3.4",
     "webpack": "~4.46.0",
     "write-file-atomic": "^5.0.0"
