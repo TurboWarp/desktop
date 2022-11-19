@@ -15,7 +15,7 @@
     "dist:dir": "npm run compile && electron-builder --dir",
     "fetch": "node scripts/download-library-files.js && node scripts/download-packager.js"
   },
-  "dependencies": {},
+  "dependencies": {"lodash.defaultsdeep": "4.6.1"},
   "devDependencies": {
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.13.13",
@@ -23,6 +23,7 @@
     "css-loader": "^5.0.2",
     "electron": "^21.2.3",
     "electron-builder": "^23.6.0",
+    "lodash.defaultsdeep": "4.6.1",
     "postcss": "^8.4.13",
     "postcss-import": "^14.0.0",
     "postcss-loader": "^4.2.0",
