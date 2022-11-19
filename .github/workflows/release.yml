@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, windows-latest]
 
     steps:
     - uses: actions/checkout@v2
@@ -45,20 +45,5 @@ jobs:
       if: runner.os == 'macOS'
       run: |
         npx electron-builder --mac dmg --universal --publish always
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Package Linux
-      if: runner.os == 'Linux'
-      run: |
-        npx electron-builder --linux deb --x64 --publish always
-        npx electron-builder --linux deb --arm64 --publish always
-        npx electron-builder --linux deb --armv7l --publish always
-        npx electron-builder --linux tar.gz --x64 --publish always
-        npx electron-builder --linux tar.gz --arm64 --publish always
-        npx electron-builder --linux tar.gz --armv7l --publish always
-        npx electron-builder --linux AppImage --x64 --publish always
-        npx electron-builder --linux AppImage --arm64 --publish always
-        npx electron-builder --linux AppImage --armv7l --publish always
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
