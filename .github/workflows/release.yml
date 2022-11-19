@@ -43,20 +43,6 @@ jobs:
         npx electron-builder --windows portable --x64 --publish always
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Package Microsoft Store
-      # Microsoft Store artifact needs to completely recompile the JS since we don't want the update checker
-      if: runner.os == 'Windows'
-      run: npm run dist -- --windows appx --x64 --ia32 --arm64 --publish never
-      env:
-        NODE_OPTIONS: --max-old-space-size=4096
-    - name: Upload Microsoft Store Artifact
-      if: runner.os == 'Windows'
-      uses: actions/upload-artifact@v2
-      with:
-        name: appx
-        path: dist/*.appx
-
     - name: Package macOS
       if: runner.os == 'macOS'
       run: |
