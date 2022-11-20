@@ -63,6 +63,10 @@ jobs:
         npx electron-builder --mac dmg --universal --publish always
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
+        APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+        APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        CSC_LINK: ${{ secrets.CSC_LINK }}
 
     - name: Package Linux
       if: runner.os == 'Linux'
