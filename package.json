@@ -15,7 +15,9 @@
     "dist:dir": "npm run compile && electron-builder --dir",
     "fetch": "node scripts/download-library-files.js && node scripts/download-packager.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@electron/notarize": "^1.2.3"
+  },
   "devDependencies": {
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.13.13",
@@ -167,7 +169,8 @@
         "repo": "desktop",
         "owner": "TurboWarp"
       }
-    ]
+    ],
+    "afterSign": "scripts/after-sign.js"
   },
   "electronWebpack": {
     "main": {
