@@ -19,6 +19,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.13.13",
+    "@electron/notarize": "^1.2.3",
     "@turbowarp/electron-webpack": "^2.9.1",
     "css-loader": "^5.0.2",
     "electron": "^21.2.3",
@@ -92,8 +93,8 @@
       "darkModeSupport": true,
       "gatekeeperAssess": false,
       "hardenedRuntime": true,
-      "entitlements": "entitlements.mac.plist",
-      "entitlementsInherit": "entitlements.mac.plist",
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
       "extendInfo": {
         "NSCameraUsageDescription": "This app requires camera access when using the video sensing blocks.",
         "NSMicrophoneUsageDescription": "This app requires microphone access when recording sounds or detecting loudness."
@@ -167,7 +168,8 @@
         "repo": "desktop",
         "owner": "TurboWarp"
       }
-    ]
+    ],
+    "afterSign": "scripts/after-sign.js"
   },
   "electronWebpack": {
     "main": {
