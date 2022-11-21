@@ -1097,6 +1097,10 @@
         languageInput.value = language;
         languageText.textContent = localeNames[language] || '';
         translate(language);
+
+        return {
+          genl10n
+        };
       })();
     </script>
     <script>
