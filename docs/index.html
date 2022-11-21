@@ -538,6 +538,12 @@
     <section class="changelog" id="changelog">
       <div>
         <div lang="en">
+          <div class="os-mac" data-version="1.6.2">
+            <h2>What's new in v1.6.2 (macOS only)</h2>
+            <ul>
+              <li>Added Apple code signing and notarization</li>
+            </ul>
+          </div>
           <div data-version="1.6.1">
             <h2>What's new in v1.6.1</h2>
             <ul>
@@ -705,16 +711,15 @@
     <section class="os os-mac">
       <div>
         <div class="download-button-outer">
-          <a class="download-button-inner" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Setup-{version}.dmg">
+          <!-- FIXME: replace 1.6.2 with {version} for 1.7.0 -->
+          <a class="download-button-inner" data-href="https://github.com/TurboWarp/desktop/releases/download/v1.6.2/TurboWarp-Setup-1.6.2.dmg">
             <div class="download-icon"></div>
             <div data-l10n="mac.download">Download for macOS (Universal)</div>
           </a>
         </div>
 
         <div class="install-help">
-          <p data-l10n="mca-help1">Drag TurboWarp into Applications. If it tells you that TurboWarp already exists, choose Replace.</p>
-          <p data-l10n="mac-help2">If you get the error "TurboWarp cannot be opened because the developer cannot be verified", click Cancel, then open Finder, then go to Applications, then control+click on TurboWarp, then select Open, and then click Open. You won't see the warning again until you update the app.</p>
-          <p data-l10n="mac-help3">You get that warning because we can't afford $99 per year for an Apple Developer account. You can help by <a href="https://github.com/sponsors/GarboMuffin">donating</a>.</p>
+          <p data-l10n="mac-help">Drag TurboWarp into Applications. If it tells you that TurboWarp already exists, choose Replace.</p>
         </div>
       </div>
     </section>
@@ -1096,7 +1101,7 @@
     </script>
     <script>
       (function() {
-        var VERSION = '1.6.1';
+        var VERSION = '1.6.1'; // FIXME: replace 1.6.2 in mac href with {version} for 1.7.0
 
         function getOS() {
           if (/android/i.test(navigator.userAgent)) return 'web';
