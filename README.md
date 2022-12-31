@@ -20,9 +20,11 @@ You'll need to open a terminal for the next steps.
 Clone it:
 
 ```bash
-git clone https://github.com/TurboWarp/desktop turbowarp-desktop
+git clone --recursive https://github.com/TurboWarp/desktop turbowarp-desktop
 cd turbowarp-desktop
 ```
+
+We use git submodules so either use `--recursive` or run `git submodule init` later.
 
 Install dependencies after each update:
 
@@ -31,7 +33,7 @@ Install dependencies after each update:
 npm ci
 ```
 
-Download library files and packager HTML after each update: (Optional, but if you don't do this then some features may not work)
+Download library files, packager HTML, and extensions after each update:
 
 ```
 npm run fetch
