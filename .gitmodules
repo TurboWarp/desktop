@@ -1,0 +1,3 @@
+[submodule "extensions"]
+	path = extensions
+	url = https://github.com/TurboWarp/extensions

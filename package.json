@@ -13,7 +13,7 @@
     "compile": "electron-webpack",
     "dist": "npm run compile && electron-builder",
     "dist:dir": "npm run compile && electron-builder --dir",
-    "fetch": "node scripts/download-library-files.js && node scripts/download-packager.js"
+    "fetch": "node scripts/download-library-files.js && node scripts/download-packager.js && node scripts/prepare-extensions.js"
   },
   "dependencies": {},
   "devDependencies": {

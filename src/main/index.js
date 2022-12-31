@@ -20,6 +20,7 @@ import './get-debug-info';
 import {handlePermissionRequest} from './permissions';
 import './detect-arm-translation';
 import {isBackgroundThrottlingEnabled, whenBackgroundThrottlingChanged} from './background-throttling';
+import './extensions';
 
 const readFile = util.promisify(fs.readFile);
 const brotliDecompress = util.promisify(zlib.brotliDecompress);
