@@ -20,9 +20,11 @@ You'll need to open a terminal for the next steps.
 Clone it:
 
 ```bash
-git clone https://github.com/TurboWarp/desktop turbowarp-desktop
+git clone --recursive https://github.com/TurboWarp/desktop turbowarp-desktop
 cd turbowarp-desktop
 ```
+
+We use git submodules so either use `--recursive` or run `git submodule init` later.
 
 Install dependencies after each update:
 
@@ -31,7 +33,7 @@ Install dependencies after each update:
 npm ci
 ```
 
-Download library files and packager HTML after each update: (Optional, but if you don't do this then some features may not work)
+Download library files, packager HTML, and extensions after each update:
 
 ```
 npm run fetch
@@ -71,3 +73,7 @@ Create the file `userscript.js` in this folder to configure custom JS. Create th
 ## Update checker
 
 TurboWarp Desktop includes a simple update checker. This update checker is disabled by default on local builds. To manally enable it, set the `TW_ENABLE_UPDATE_CHECKER` environment variable to `1` at build-time. In builds with the update checker enabled, the checker can be disabled through the "(?) > Desktop Settings" menu or by setting the `TW_DISABLE_UPDATE_CHECKER` environment variable to `1` at runtime.
+
+## Uninstall
+
+See https://desktop.turbowarp.org/uninstall

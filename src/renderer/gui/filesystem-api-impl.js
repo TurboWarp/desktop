@@ -14,7 +14,7 @@ const getBasename = (path) => {
 const readAsArrayBuffer = (blob) => new Promise((resolve, reject) => {
   const fr = new FileReader();
   fr.onload = () => resolve(fr.result);
-  fr.onerror = () => reject(new Error('cannot read'));
+  fr.onerror = () => reject(new Error('Cannot read Blob as file'));
   fr.readAsArrayBuffer(blob);
 });
 
@@ -26,8 +26,11 @@ class WrappedFileWritable {
 
   async write (content) {
     if (content instanceof Blob) {
+      // We've seen a couple reports of our file saving logic seemingly truncating files at
+      // random points, so we're going to be extra paranoid.
+      const expectedSize = content.size;
       const arrayBuffer = await readAsArrayBuffer(content);
-      await ipcRenderer.invoke('write-file', this.path, Buffer.from(new Uint8Array(arrayBuffer)));
+      await ipcRenderer.invoke('write-file', this.path, arrayBuffer, expectedSize);
     }
   }
 
@@ -87,13 +90,6 @@ const typesToFilterList = (types) => types.map((type) => ({
     .map((i) => i.substr(1))
 }));
 
-const storeFilePathInURL = (filePath) => {
-  // Store the file path in the URL so that it will be loaded if the window reloads.
-  const urlParameters = new URLSearchParams(location.search);
-  urlParameters.set('file', filePath);
-  history.replaceState('', '', '?' + urlParameters.toString());
-};
-
 window.showSaveFilePicker = async (options) => {
   const result = await ipcRenderer.invoke('show-save-dialog', {
     filters: typesToFilterList(options.types),
@@ -105,7 +101,6 @@ window.showSaveFilePicker = async (options) => {
   }
 
   const filePath = result.filePath;
-  storeFilePathInURL(filePath);
   return new WrappedFileHandle(filePath);
 };
 
@@ -119,6 +114,5 @@ window.showOpenFilePicker = async (options) => {
   }
 
   const [filePath] = result.filePaths;
-  storeFilePathInURL(filePath);
   return [new WrappedFileHandle(filePath)];
 };

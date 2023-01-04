@@ -37,7 +37,9 @@ jobs:
     - name: Package Windows
       if: runner.os == 'Windows'
       run: |
-        npx electron-builder --windows nsis --x64 --ia32 --publish always
+        npx electron-builder --windows nsis --x64 --publish always
+        npx electron-builder --windows nsis --ia32 --publish always
+        npx electron-builder --windows nsis --arm64 --publish always
         npx electron-builder --windows portable --x64 --publish always
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -45,7 +47,7 @@ jobs:
     - name: Package Microsoft Store
       # Microsoft Store artifact needs to completely recompile the JS since we don't want the update checker
       if: runner.os == 'Windows'
-      run: npm run dist -- --windows appx --x64 --ia32 --publish never
+      run: npm run dist -- --windows appx --x64 --ia32 --arm64 --publish never
       env:
         NODE_OPTIONS: --max-old-space-size=4096
     - name: Upload Microsoft Store Artifact
@@ -61,20 +63,21 @@ jobs:
         npx electron-builder --mac dmg --universal --publish always
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
+        APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+        APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        CSC_LINK: ${{ secrets.CSC_LINK }}
 
     - name: Package Linux
       if: runner.os == 'Linux'
       run: |
         npx electron-builder --linux deb --x64 --publish always
-        npx electron-builder --linux deb --ia32 --publish always
         npx electron-builder --linux deb --arm64 --publish always
         npx electron-builder --linux deb --armv7l --publish always
         npx electron-builder --linux tar.gz --x64 --publish always
-        npx electron-builder --linux tar.gz --ia32 --publish always
         npx electron-builder --linux tar.gz --arm64 --publish always
         npx electron-builder --linux tar.gz --armv7l --publish always
         npx electron-builder --linux AppImage --x64 --publish always
-        npx electron-builder --linux AppImage --ia32 --publish always
         npx electron-builder --linux AppImage --arm64 --publish always
         npx electron-builder --linux AppImage --armv7l --publish always
       env:

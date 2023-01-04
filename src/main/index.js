@@ -1,7 +1,7 @@
 import {app, BrowserWindow, Menu, ipcMain, shell, dialog, clipboard, screen, net, session} from 'electron'
 import pathUtil from 'path'
 import fs from 'fs';
-import writeFileAtomic from 'write-file-atomic';
+import writeFileAtomicLegacyCallback from 'write-file-atomic';
 import util from 'util';
 import {format as formatUrl} from 'url';
 import zlib from 'zlib';
@@ -19,10 +19,12 @@ import './hardware-acceleration';
 import './get-debug-info';
 import {handlePermissionRequest} from './permissions';
 import './detect-arm-translation';
+import {isBackgroundThrottlingEnabled, whenBackgroundThrottlingChanged} from './background-throttling';
+import './extensions';
 
 const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
 const brotliDecompress = util.promisify(zlib.brotliDecompress);
+const writeFileAtomic = util.promisify(writeFileAtomicLegacyCallback);
 
 const filesToOpen = [];
 
@@ -181,7 +183,10 @@ const createEditorWindow = () => {
   const window = createWindow(url, {
     title: APP_NAME,
     width: 1280,
-    height: 800
+    height: 800,
+    webPreferences: {
+      backgroundThrottling: isBackgroundThrottlingEnabled()
+    }
   });
   window.on('page-title-updated', (event, title, explicitSet) => {
     event.preventDefault();
@@ -292,7 +297,6 @@ const createPackagerWindow = (editorWebContents) => {
     title: PACKAGER_NAME,
     width: 700,
     height: 700,
-    parent: BrowserWindow.fromWebContents(editorWebContents)
   });
   closeWindowWhenPressEscape(window);
 
@@ -322,7 +326,6 @@ const createPackagerWindow = (editorWebContents) => {
           title: getTranslation('loading-preview'),
           width: 640,
           height: 480,
-          parent: window,
           webPreferences: {
             // preview window can have arbitrary custom JS and should not have access to special APIs
             preload: null
@@ -392,11 +395,22 @@ ipcMain.handle('read-file', async (event, file) => {
   return await readFile(file);
 });
 
-ipcMain.handle('write-file', async (event, file, content) => {
+ipcMain.handle('write-file', async (event, file, arrayBuffer, expectedSize) => {
   if (!allowedToAccessFiles.has(file)) {
     throw new Error('Not allowed to access file');
   }
-  await writeFileAtomic(file, content);
+
+  // We've seen a couple reports of our file saving logic seemingly truncating files at
+  // random points, so we're going to be extra paranoid.
+  if (arrayBuffer.byteLength !== expectedSize) {
+    throw new Error(`Expected ${expectedSize} bytes but got ${arrayBuffer.byteLength} bytes`);
+  }
+  if (arrayBuffer.byteLength <= 500) {
+    throw new Error(`File size is too small to be a real project: ${arrayBuffer.byteLength}`);
+  }
+
+  const bufferView = new Uint8Array(arrayBuffer);
+  await writeFileAtomic(file, bufferView);
 });
 
 ipcMain.on('open-new-window', () => {
@@ -423,14 +437,20 @@ ipcMain.on('open-packager', (event) => {
   createPackagerWindow(event.sender);
 });
 
+ipcMain.on('open-packager-legacy', async (e) => {
+  const window = BrowserWindow.fromWebContents(e.sender);
+  await dialog.showMessageBox(window, {
+    title: APP_NAME,
+    message: getTranslation('packager-moved.title'),
+    detail: getTranslation('packager-moved.details')
+  });
+  createPackagerWindow(e.sender);
+});
+
 ipcMain.handle('get-packager-html', async () => {
   const compressed = await readFile(pathUtil.join(staticDir, 'packager.html.br'));
   const uncomressed = await brotliDecompress(compressed);
   return uncomressed;
-});
-
-ipcMain.on('open-source-code', () => {
-  shell.openExternal('https://github.com/TurboWarp');
 });
 
 ipcMain.on('export-addon-settings', async (event, settings) => {
@@ -448,7 +468,7 @@ ipcMain.on('export-addon-settings', async (event, settings) => {
   }
 
   const path = result.filePath;
-  await writeFile(path, JSON.stringify(settings));
+  await writeFileAtomic(path, JSON.stringify(settings));
 });
 
 ipcMain.on('addon-settings-changed', (event, newSettings) => {
@@ -495,7 +515,7 @@ ipcMain.on('confirm', (event, message) => {
   event.returnValue = result;
 });
 
-ipcMain.handle('request-url', (event, url) => new Promise((resolve, reject) => {
+const requestURLAsArrayBuffer = (url) => new Promise((resolve, reject) => {
   const request = net.request(url);
   request.on('response', (response) => {
     const statusCode = response.statusCode;
@@ -517,7 +537,21 @@ ipcMain.handle('request-url', (event, url) => new Promise((resolve, reject) => {
     reject(e);
   });
   request.end();
-}));
+});
+
+ipcMain.handle('request-url', (event, url) => {
+  if (!allowedToAccessFiles.has(url)) {
+    throw new Error('Not allowed to access URL');
+  }
+  return requestURLAsArrayBuffer(url);
+});
+
+ipcMain.handle('get-project-metadata', (event, id) => {
+  if (!/^\d+$/.test(id)) {
+    throw new Error('Invalid project ID');
+  }
+  return requestURLAsArrayBuffer(`https://api.scratch.mit.edu/projects/${id}`);
+});
 
 ipcMain.on('open-user-data', () => {
   shell.showItemInFolder(app.getPath('userData'));
@@ -735,6 +769,12 @@ app.on('web-contents-created', (event, webContents) => {
       e.preventDefault();
     }
   });
+});
+
+whenBackgroundThrottlingChanged((backgroundThrottlingEnabled) => {
+  for (const editorWindow of editorWindows) {
+    editorWindow.webContents.setBackgroundThrottling(backgroundThrottlingEnabled);
+  }
 });
 
 // Allows certain versions of Scratch Link to work without an internet connection

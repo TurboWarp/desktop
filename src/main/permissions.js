@@ -49,7 +49,9 @@ const handlePermissionRequest = async (webContents, permission, callback, detail
   }
 
   if (permission === 'media') {
-    for (const mediaType of details.mediaTypes) {
+    // mediaTypes is not guaranteed to exist
+    const mediaTypes = details.mediaTypes || [];
+    for (const mediaType of mediaTypes) {
       if (mediaType === 'audio' || mediaType === 'video') {
         const hasPermission = await askForMediaAccess(mediaType);
         if (!hasPermission) {
@@ -58,6 +60,7 @@ const handlePermissionRequest = async (webContents, permission, callback, detail
           return callback(false);
         }
       } else {
+        console.log(`Unknown media type: ${mediaType}`);
         return callback(false);
       }
     }

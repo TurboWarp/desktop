@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
   <!-- This file is from https://desktop.turbowarp.org/snap-mime.xml -->
-  <!-- This file works around the snap version of TurboWarp not being able to install new mime types to the system. -->
-  <!-- This lets the user set TurboWarp as the file opener for sb3, sb2, and sb apps without affecting other file types. -->
+  <!-- The Snap version of TurboWarp can't add file type information for Scratch projects files (sb, sb2, sb3) to your system. -->
+  <!-- This file can be used to manually add that information. -->
+  <!-- This lets you set TurboWarp (or any other app) as the opener for Scratch projects without affecting other file types such as normal zip archives. -->
   <mime-type type="application/x.scratch.sb3">
     <glob pattern="*.sb3" />
     <icon name="x-office-document" />

@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>TurboWarp Desktop Download Statistics</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-      body {
+      :root {
         font-family: sans-serif;
       }
       td {
@@ -23,10 +25,10 @@
         border: 1px solid black;
       }
       @media (prefers-color-scheme: dark) {
-        body {
-          color-scheme: dark;
+        :root {
           background: #111;
           color: #eee;
+          color-scheme: dark;
         }
         table, tr, td, th {
           border-color: #555;
@@ -38,13 +40,15 @@
     </style>
   </head>
   <body>
-    <p>Estimated download counts for TurboWarp Desktop based on GitHub releases download Statistics.</p>
-    <p>These estimates do not include certain significant app stores:</p>
+    <p>Estimated download counts for TurboWarp Desktop based on GitHub releases download statistics.</p>
+    <p>These estimates do not include downloads from these sources:</p>
     <ul>
       <li><a href="https://www.microsoft.com/en-us/p/turbowarp/9p4dpzgv5zkl">Microsoft Store</a></li>
       <li><a href="https://snapcraft.io/turbowarp-desktop">Snap Store</a></li>
       <li><a href="https://flathub.org/apps/details/org.turbowarp.TurboWarp">Flathub</a></li>
+      <li>The Debian repository</li>
     </ul>
+    <p>The <a href="https://aur.archlinux.org/packages/turbowarp-desktop-bin">Arch User Repository</a> package downloads the linux-armv7l tar.gz.</p>
     <main><p>Loading...</p></main>
     <script>
       fetch('https://api.github.com/repos/TurboWarp/desktop/releases?per_page=100')

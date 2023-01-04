@@ -8,6 +8,7 @@ import GUI from 'scratch-gui';
 import {AppStateHOC} from 'scratch-gui';
 import TWThemeHOC from 'scratch-gui/src/lib/tw-theme-hoc.jsx';
 import TWStateManagerHOC from 'scratch-gui/src/lib/tw-state-manager-hoc.jsx';
+import TWRestorePointHOC from 'scratch-gui/src/lib/tw-restore-point-hoc.jsx';
 import {openLoadingProject, closeLoadingProject} from 'scratch-gui/src/reducers/modals';
 import {setFileHandle} from 'scratch-gui/src/reducers/tw';
 import {defaultProjectId, onFetchedProjectData, onLoadedProject, requestNewProject, requestProjectUpload, setProjectId} from 'scratch-gui/src/reducers/project-state';
@@ -62,7 +63,7 @@ const openAbout = () => {
 };
 
 const openSourceCode = () => {
-  ipcRenderer.send('open-source-code');
+  window.open('https://github.com/TurboWarp');
 };
 
 const openPrivacyPolicy = () => {
@@ -75,6 +76,14 @@ const onDesktopSettings = () => {
 
 const openPackager = () => {
   ipcRenderer.send('open-packager');
+};
+
+const openPackagerLegacy = () => {
+  ipcRenderer.send('open-packager-legacy');
+};
+
+const openDonate = () => {
+  window.open('https://github.com/sponsors/GarboMuffin');
 };
 
 const handleUpdateProjectTitle = (title) => {
@@ -100,6 +109,16 @@ darkModeMedia.onchange();
 
 const urlSearchParams = new URLSearchParams(location.search);
 const fileToOpen = urlSearchParams.get('file');
+
+const storeFilePathInURL = (filePath) => {
+  const urlParameters = new URLSearchParams(location.search);
+  if (filePath) {
+    urlParameters.set('file', filePath);
+  } else {
+    urlParameters.delete('file');
+  }
+  history.replaceState('', '', '?' + urlParameters.toString());
+};
 
 const DesktopHOC = function (WrappedComponent) {
   let mountedOnce = false;
@@ -158,11 +177,14 @@ const DesktopHOC = function (WrappedComponent) {
       if (this.props.projectChanged !== prevProps.projectChanged) {
         ipcRenderer.send('set-file-changed', this.props.projectChanged);
       }
+
       if (this.props.fileHandle !== prevProps.fileHandle) {
         if (this.props.fileHandle) {
           ipcRenderer.send('set-represented-file', this.props.fileHandle.path);
+          storeFilePathInURL(this.props.fileHandle.path);
         } else {
           ipcRenderer.send('set-represented-file', null);
+          storeFilePathInURL(null);
         }
       }
     }
@@ -208,8 +230,8 @@ const DesktopHOC = function (WrappedComponent) {
           ]}
           onClickAbout={[
             {
-              title: getTranslation('packager'),
-              onClick: openPackager
+              title: getTranslation('packager-legacy'),
+              onClick: openPackagerLegacy
             },
             {
               title: getTranslation('desktop-settings'),
@@ -226,6 +248,10 @@ const DesktopHOC = function (WrappedComponent) {
             {
               title: getTranslation('source'),
               onClick: openSourceCode
+            },
+            {
+              title: getTranslation('donate'),
+              onClick: openDonate
             }
           ]}
           {...props}
@@ -283,6 +309,7 @@ const WrappedGUI = compose(
   AppStateHOC,
   TWStateManagerHOC,
   TWThemeHOC,
+  TWRestorePointHOC,
   DesktopHOC
 )(GUI);
 
@@ -296,6 +323,7 @@ ReactDOM.render(<WrappedGUI
   cloudHost="wss://clouddata.turbowarp.org"
   onStorageInit={handleStorageInit}
   onUpdateProjectTitle={handleUpdateProjectTitle}
+  onClickPackager={openPackager}
   backpackVisible
   backpackHost="_local_"
   routingStyle="none"

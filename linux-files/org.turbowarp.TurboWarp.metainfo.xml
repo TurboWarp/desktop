@@ -12,7 +12,7 @@
     <p>A mod of Scratch with a compiler to run projects faster, dark mode for your eyes, a bunch of addons to improve the editor, and more.</p>
     <p>Features:</p>
     <ul>
-      <li>Runs projects up to 20x faster than Scratch</li>
+      <li>Runs projects up to 100x faster than Scratch</li>
       <li>Uses significantly less memory and energy than Scratch when idle</li>
       <li>Dark mode</li>
       <li>Developer tools, searchable dropdowns, onion skinning</li>
@@ -36,7 +36,7 @@
       <image width="1280" height="800">https://desktop.turbowarp.org/screenshot-win-dark.png</image>
     </screenshot>
     <screenshot>
-      <caption>More than 50 addons to customize and enhance your experience.</caption>
+      <caption>More than 50 addons to customize and enhance your experience</caption>
       <image width="683" height="700">https://desktop.turbowarp.org/addons-win-light.png</image>
     </screenshot>
     <screenshot>
@@ -63,6 +63,83 @@
     <content_attribute id="social-info">mild</content_attribute>
   </content_rating>
   <releases>
+    <release version="1.6.1" date="2022-10-07">
+      <description>
+        <ul>
+          <li>Fixed features that access your microphone or camera</li>
+          <li>Fixed addon settings import not importing some color options</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.6.0" date="2022-10-02">
+      <description>
+        <ul>
+          <li>New addon: Pick colors from stage (enabled by default)</li>
+          <li>New addon: Zebra striping</li>
+          <li>Bitmap costume editor now supports transparency</li>
+          <li>SVGs exported by TurboWarp and imported to TurboWarp won't be re-centered unnecessarily</li>
+          <li>Sound editor now shows a sound's size, whether it's stereo or not, and its sample rate</li>
+          <li>Maximum SVG size has been reverted to the same as Scratch due to too many crashes</li>
+          <li>Added option to clone counter to only show icon</li>
+          <li>Added "Turbo Robot" sprite to builtin libraries</li>
+          <li>Added option to customizable new sprite position to apply to duplicated sprites</li>
+          <li>Fixed "Saving project..." text disappearing before the project was actually saved</li>
+          <li>Fixed save location still being updated if you cancel the confirmation to replace existing project</li>
+          <li>Fixed unnecessary memory use when saving files</li>
+          <li>Fixed loading some projects with many bitmap costumes</li>
+          <li>Fixed block cherry picking breaking on certain blocks</li>
+          <li>Fixed tangent block reporting slightly incorrect values in the compiler</li>
+          <li>Fixed display stage on left side and two-column category menu compatibility bugs</li>
+          <li>Fixed developer tools dark mode issue</li>
+          <li>Fixed auto-hiding block palette bugs</li>
+          <li>Fixed variable manager bugs</li>
+          <li>Fixed sound editor layout bugs at certain window sizes</li>
+          <li>Fixed some costume and sound lists having an unnecessary horizontal scrollbar</li>
+          <li>Fixed color picker overlay not covering the entire page</li>
+          <li>Fixed some icons being unnecessarily draggable</li>
+          <li>Fixed loading Scratch 2 projects with unusual JSON</li>
+          <li>Updated packager: settings export and import, optimized memory use of packaged projects</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.5.0" date="2022-7-23">
+      <description>
+        <ul>
+          <li>New addon: Reverse order of project controls</li>
+          <li>New addon: Hide stage and sprite pane</li>
+          <li>Allow creating unlimited cloud variables</li>
+          <li>Fixed backpacking JPEG costumes</li>
+          <li>Fixed turbo mode stored in projects not applying properly</li>
+          <li>Added option to disable hidden window throttling</li>
+          <li>Fixed some bugs in the hide flyout addon</li>
+          <li>Updated packager: list color, version number, macOS Electron, Scratch Link support, more</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.4.0" date="2022-6-24">
+      <description>
+        <ul>
+          <li>Moved the builtin copy of the TurboWarp Packager to the File &gt; Package project menu</li>
+          <li>Added a sound duration indicator to the sound editor</li>
+          <li>Added partial support for the "Threads" tab in the debugger addon, including single stepping</li>
+          <li>Fixed high CPU usage when project is paused</li>
+          <li>Increased maximum resolution of large vector costumes</li>
+          <li>Updated backpacked item previews to support transparency</li>
+          <li>Updated dark mode with improved inputs, improved scrollbars, and support for the debugger and gamepad addons</li>
+          <li>Fixed developer tools find bar covering up controls in certain conditions</li>
+          <li>Fixed variable manager causing crashes when variables are too large</li>
+          <li>Improved style of many modals and prompts to be more cohesive</li>
+          <li>Fixed block context menus immediately selecting item and closing after being opened on some systems</li>
+          <li>Fixed interface allowing invalid framerates and invalid stage sizes</li>
+          <li>Fixed custom extensions being able to corrupt projects if they return unexpected values</li>
+          <li>Fixed custom extension error handling</li>
+          <li>Fixed various other bugs</li>
+          <li>Linux on Apple Silicon should be supported now</li>
+          <li>Added donation links</li>
+          <li>Updated packager: adds support for "☁ room id" special cloud behavior</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.3.1" date="2022-5-18">
       <description>
         <ul>
