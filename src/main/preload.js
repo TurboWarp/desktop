@@ -25,3 +25,15 @@ contextBridge.exposeInMainWorld('electron', {
     },
   }
 });
+
+// This hack seems to be the only way for the renderer process to be able to transfer
+// a MessagePort to the main thread.
+window.addEventListener('message', (e) => {
+  if (e.origin !== location.origin) {
+    return;
+  }
+  if (e.data.ipcPostMessagePassthrough) {
+    const {channel, data} = e.data.ipcPostMessagePassthrough;
+    ipcRenderer.postMessage(channel, data, e.ports);
+  }
+});

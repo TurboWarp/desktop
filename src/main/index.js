@@ -1,7 +1,6 @@
 import {app, BrowserWindow, Menu, ipcMain, shell, dialog, clipboard, screen, net, session} from 'electron'
 import pathUtil from 'path'
 import fs from 'fs';
-import writeFileAtomicLegacyCallback from 'write-file-atomic';
 import util from 'util';
 import {format as formatUrl} from 'url';
 import zlib from 'zlib';
@@ -21,10 +20,10 @@ import {handlePermissionRequest} from './permissions';
 import './detect-arm-translation';
 import {isBackgroundThrottlingEnabled, whenBackgroundThrottlingChanged} from './background-throttling';
 import './extensions';
+import {createAtomicWriteStream} from './atomic-file-write-stream';
 
 const readFile = util.promisify(fs.readFile);
 const brotliDecompress = util.promisify(zlib.brotliDecompress);
-const writeFileAtomic = util.promisify(writeFileAtomicLegacyCallback);
 
 const filesToOpen = [];
 
@@ -395,22 +394,51 @@ ipcMain.handle('read-file', async (event, file) => {
   return await readFile(file);
 });
 
-ipcMain.handle('write-file', async (event, file, arrayBuffer, expectedSize) => {
-  if (!allowedToAccessFiles.has(file)) {
-    throw new Error('Not allowed to access file');
+ipcMain.on('write-file-with-port', async (startEvent, path) => {
+  if (!allowedToAccessFiles.has(path)) {
+    throw new Error('Not allowed to access path');
   }
 
-  // We've seen a couple reports of our file saving logic seemingly truncating files at
-  // random points, so we're going to be extra paranoid.
-  if (arrayBuffer.byteLength !== expectedSize) {
-    throw new Error(`Expected ${expectedSize} bytes but got ${arrayBuffer.byteLength} bytes`);
-  }
-  if (arrayBuffer.byteLength <= 500) {
-    throw new Error(`File size is too small to be a real project: ${arrayBuffer.byteLength}`);
-  }
+  const writeStream = await createAtomicWriteStream(path);
+  const port = startEvent.ports[0];
+  port.start();
 
-  const bufferView = new Uint8Array(arrayBuffer);
-  await writeFileAtomic(file, bufferView);
+  const handleMessage = data => {
+    if (data.write) {
+      if (writeStream.write(data.write)) {
+        return;
+      }
+      return writeStream.drain();
+    }
+
+    if (data.close) {
+      return writeStream.finish();
+    }
+
+    throw new Error('Unknown message from renderer');
+  };
+
+  port.on('message', async (messageEvent) => {
+    const data = messageEvent.data;
+    const id = data.id;
+
+    try {
+      const result = await handleMessage(data);
+      port.postMessage({
+        response: {
+          id,
+          result
+        }
+      });
+    } catch (error) {
+      port.postMessage({
+        response: {
+          id,
+          error
+        }
+      });
+    }
+  });
 });
 
 ipcMain.on('open-new-window', () => {
