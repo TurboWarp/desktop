@@ -395,34 +395,57 @@ ipcMain.handle('read-file', async (event, file) => {
 });
 
 ipcMain.on('write-file-with-port', async (startEvent, path) => {
-  if (!allowedToAccessFiles.has(path)) {
-    throw new Error('Not allowed to access path');
+  const port = startEvent.ports[0];
+
+  /** @type {NodeJS.WritableStream|null} */
+  let writeStream = null;
+
+  const handleError = (error) => {
+    console.error(error);
+    port.postMessage({
+      error
+    });
+    // Make sure the port is started as we can encounter an error before we normally
+    // begin to accept messages.
+    port.start();
+  };
+
+  try {
+    if (!allowedToAccessFiles.has(path)) {
+      throw new Error('Not allowed to access path');
+    }
+    writeStream = await createAtomicWriteStream(path);
+  } catch (error) {
+    handleError(error);
+    return;
   }
 
-  const writeStream = await createAtomicWriteStream(path);
-  const port = startEvent.ports[0];
-  port.start();
+  writeStream.on('atomic-error', handleError);
 
-  const handleMessage = data => {
+  const handleMessage = (data) => {
     if (data.write) {
       if (writeStream.write(data.write)) {
+        // Still more space in the buffer. Ask for more immediately.
         return;
       }
-      return writeStream.drain();
+      // Wait for the buffer to become empty before asking for more.
+      return new Promise(resolve => {
+        writeStream.once('drain', resolve);
+      });
+    } else if (data.finish) {
+      // Wait for the atomic file write to complete.
+      return new Promise(resolve => {
+        writeStream.once('atomic-finish', resolve);
+        writeStream.end();
+      });
     }
-
-    if (data.close) {
-      return writeStream.finish();
-    }
-
-    throw new Error('Unknown message from renderer');
+    throw new Error('Unknown message from renderer'); 
   };
 
   port.on('message', async (messageEvent) => {
-    const data = messageEvent.data;
-    const id = data.id;
-
     try {
+      const data = messageEvent.data;
+      const id = data.id;
       const result = await handleMessage(data);
       port.postMessage({
         response: {
@@ -431,14 +454,11 @@ ipcMain.on('write-file-with-port', async (startEvent, path) => {
         }
       });
     } catch (error) {
-      port.postMessage({
-        response: {
-          id,
-          error
-        }
-      });
+      handleError(error);
     }
   });
+
+  port.start();
 });
 
 ipcMain.on('open-new-window', () => {

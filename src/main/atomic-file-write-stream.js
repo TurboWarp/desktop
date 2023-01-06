@@ -57,7 +57,7 @@ const createAtomicWriteStream = async (path) => {
   const originalMode = await getOriginalMode(path);
 
   const tempPath = getTemporaryPath(path);
-  const fd = await promisify(fs.open)(tempPath, 'wx', originalMode);
+  const fd = await promisify(fs.open)(tempPath, 'w', originalMode);
   const writeStream = fs.createWriteStream(null, {
     fd,
     autoClose: false,
@@ -68,67 +68,48 @@ const createAtomicWriteStream = async (path) => {
     highWaterMark: 1024 * 1024
   });
 
-  const cleanAfterError = async () => {
+  writeStream.on('error', async (error) => {
     try {
       await promisify(fs.close)(fd);
     } catch (e) {
-      // ignore
+      // ignore; file might already be closed
     }
+
     try {
+      // TODO: it might make sense to leave the broken file on the disk so that there is a chance
+      // of recovery?
       await promisify(fs.unlink)(tempPath);
     } catch (e) {
-      // ignore
+      // ignore; file might have been removed already
     }
-    releaseFileLock();
-  };
 
-  let error = null;
-  writeStream.on('error', (newError) => {
-    if (!error) {
-      error = newError;
-      console.error(error);
-      cleanAfterError();
+    writeStream.emit('atomic-error', error);
+    releaseFileLock();
+  });
+
+  writeStream.on('finish', async () => {
+    try {
+      await promisify(fs.fsync)(fd);
+      await promisify(fs.close)(fd);
+      await promisify(fs.rename)(tempPath, path);
+      writeStream.emit('atomic-finish');
+      releaseFileLock();
+    } catch (error) {
+      writeStream.destroy(error);
     }
   });
 
-  const write = (data) => {
-    if (error) {
-      throw error;
-    }
-    return writeStream.write(data);
-  };
-
-  const finish = async () => {
-    if (error) {
-      throw error;
-    }
-    await promisify(writeStream.end.bind(writeStream))();
-    await promisify(fs.fsync)(fd);
-    await promisify(fs.close)(fd);
-    await promisify(fs.rename)(tempPath, path);
-    releaseFileLock();
-  };
-
-  const drain = () => new Promise((resolve, reject) => {
-    if (error) {
-      return reject(error);
-    }
-    writeStream.once('drain', () => {
-      resolve();
-    });
-  });
-
-  return {
-    write,
-    drain,
-    finish
-  };
+  return writeStream;
 };
 
 const writeFileAtomic = async (path, data) => {
   const stream = await createAtomicWriteStream(path);
-  stream.write(data);
-  return stream.finish();
+  return new Promise((resolve, reject) => {
+    stream.write(data);
+    stream.on('atomic-finish', resolve);
+    stream.on('atomic-error', reject);
+    stream.end();
+  });
 };
 
 export {

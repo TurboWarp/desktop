@@ -40,27 +40,32 @@ class WrappedFileWritable {
     this._callbacks = new Map();
     this._lastMessageId = 1;
 
+    /**
+     * Error object from the main process, if any.
+     * @type {unknown}
+     */
+    this._error = null;
+
     this._channel.port1.onmessage = (event) => {
       const data = event.data;
 
+      const error = data.error;
+      if (error) {
+        this._error = error;
+        for (const handlers of this._callbacks.values()) {
+          handlers.reject(error);
+        }
+        this._callbacks.clear();
+      }
+
       const response = data.response;
-      if (!response) {
-        console.warn('Received an unknown message from the main process', data);
-        return;
-      }
-
-      const id = response.id;
-      const handlers = this._callbacks.get(id);
-      if (!handlers) {
-        console.warn('Received a message for an unknown callback from the main process', data);
-        return;
-      }
-
-      this._callbacks.delete(id);
-      if ('result' in response) {
-        handlers.resolve(response.result);
-      } else {
-        handlers.reject(response.error);
+      if (response) {
+        const id = response.id;
+        const handlers = this._callbacks.get(id);
+        if (handlers) {
+          handlers.resolve(response.result);
+          this._callbacks.delete(id);
+        }
       }
     };
 
@@ -76,6 +81,10 @@ class WrappedFileWritable {
   }
 
   _sendToMainAndWait (message) {
+    if (this._error) {
+      throw this._error;
+    }
+
     const messageId = this._lastMessageId++;
     message.id = messageId;
     return new Promise((resolve, reject) => {
@@ -95,7 +104,7 @@ class WrappedFileWritable {
 
   async close () {
     await this._sendToMainAndWait({
-      close: true
+      finish: true
     });
   }
 }
