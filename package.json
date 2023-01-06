@@ -24,7 +24,6 @@
     "css-loader": "^5.0.2",
     "electron": "^22.0.0",
     "electron-builder": "^23.6.0",
-    "imurmurhash": "^0.1.4",
     "postcss": "^8.4.13",
     "postcss-import": "^14.0.0",
     "postcss-loader": "^4.2.0",
