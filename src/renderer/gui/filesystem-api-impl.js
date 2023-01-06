@@ -34,8 +34,6 @@ class WrappedFileWritable {
 
     this._channel = new MessageChannel();
 
-    console.time('Save');
-
     /**
      * @type {Map<number, {resolve: () => void, reject: (error: unknown) => void}>}
      */
@@ -99,7 +97,6 @@ class WrappedFileWritable {
     await this._sendToMainAndWait({
       close: true
     });
-    console.timeEnd('Save');
   }
 }
 
