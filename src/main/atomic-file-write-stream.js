@@ -60,7 +60,12 @@ const createAtomicWriteStream = async (path) => {
   const fd = await promisify(fs.open)(tempPath, 'wx', originalMode);
   const writeStream = fs.createWriteStream(null, {
     fd,
-    autoClose: false
+    autoClose: false,
+    // Increase high water mark from default value of 16384.
+    // Increasing this results in less time spent waiting for disk IO to complete, which would pause
+    // the sb3 generation stream in scratch-gui.
+    // This does negligibly increase possible memory usage.
+    highWaterMark: 1024 * 1024
   });
 
   const cleanAfterError = async () => {
