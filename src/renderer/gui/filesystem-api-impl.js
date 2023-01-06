@@ -11,31 +11,95 @@ const getBasename = (path) => {
   return match[1];
 };
 
-const readAsArrayBuffer = (blob) => new Promise((resolve, reject) => {
-  const fr = new FileReader();
-  fr.onload = () => resolve(fr.result);
-  fr.onerror = () => reject(new Error('Cannot read Blob as file'));
-  fr.readAsArrayBuffer(blob);
-});
+/**
+ * @param {unknown} contents
+ * @returns {Uint8Array}
+ */
+const toUnit8Array = (contents) => {
+  if (contents instanceof Uint8Array) {
+    return contents;
+  }
+  if (contents instanceof Blob) {
+    throw new Error('Should never receive a Blob here.');
+  }
+  return new Uint8Array(contents);
+};
 
 class WrappedFileWritable {
+  /**
+   * @param {string} path The path on disk we are writing to.
+   */
   constructor (path) {
-    // non-standard, used internally
-    this.path = path;
+    this._path = path;
+
+    this._channel = new MessageChannel();
+
+    console.time('Save');
+
+    /**
+     * @type {Map<number, {resolve: () => void, reject: (error: unknown) => void}>}
+     */
+    this._callbacks = new Map();
+    this._lastMessageId = 1;
+
+    this._channel.port1.onmessage = (event) => {
+      const data = event.data;
+
+      const response = data.response;
+      if (!response) {
+        console.warn('Received an unknown message from the main process', data);
+        return;
+      }
+
+      const id = response.id;
+      const handlers = this._callbacks.get(id);
+      if (!handlers) {
+        console.warn('Received a message for an unknown callback from the main process', data);
+        return;
+      }
+
+      this._callbacks.delete(id);
+      if ('result' in response) {
+        handlers.resolve(response.result);
+      } else {
+        handlers.reject(response.error);
+      }
+    };
+
+    // Note that we don't need to wait for the other end before we can start sending data. The messages
+    // will just be queued up.
+    // preload.js will detect this message event and forward it to the main process
+    window.postMessage({
+      ipcPostMessagePassthrough: {
+        channel: 'write-file-with-port',
+        data: this._path
+      }
+    }, location.origin, [this._channel.port2]);
   }
 
-  async write (content) {
-    if (content instanceof Blob) {
-      // We've seen a couple reports of our file saving logic seemingly truncating files at
-      // random points, so we're going to be extra paranoid.
-      const expectedSize = content.size;
-      const arrayBuffer = await readAsArrayBuffer(content);
-      await ipcRenderer.invoke('write-file', this.path, arrayBuffer, expectedSize);
-    }
+  _sendToMainAndWait (message) {
+    const messageId = this._lastMessageId++;
+    message.id = messageId;
+    return new Promise((resolve, reject) => {
+      this._callbacks.set(messageId, {
+        resolve,
+        reject
+      });
+      this._channel.port1.postMessage(message);
+    });
+  }
+
+  async write (contents) {
+    await this._sendToMainAndWait({
+      write: toUnit8Array(contents)
+    });
   }
 
   async close () {
-    // no-op
+    await this._sendToMainAndWait({
+      close: true
+    });
+    console.timeEnd('Save');
   }
 }
 
