@@ -24,7 +24,36 @@ const getOriginalMode = async (path) => {
   }
 };
 
+/**
+ * @type {Map<string, Array<() => void>>}
+ */
+const fileLockQueues = new Map();
+
+const acquireFileLock = async (path) => {
+  let queue = fileLockQueues.get(path);
+  if (queue) {
+    await new Promise((resolve) => {
+      queue.push(resolve);
+    });
+  } else {
+    fileLockQueues.set(path, []);
+  }
+
+  const releaseFileLock = () => {
+    const nextCallback = fileLockQueues.get(path).shift();
+    if (nextCallback) {
+      nextCallback();
+    } else {
+      fileLockQueues.delete(path);
+    }
+  };
+
+  return releaseFileLock;
+};
+
 const createAtomicWriteStream = async (path) => {
+  const releaseFileLock = await acquireFileLock(path);
+
   const originalMode = await getOriginalMode(path);
 
   const tempPath = getTemporaryPath(path);
@@ -45,6 +74,7 @@ const createAtomicWriteStream = async (path) => {
     } catch (e) {
       // ignore
     }
+    releaseFileLock();
   };
 
   let error = null;
@@ -71,6 +101,7 @@ const createAtomicWriteStream = async (path) => {
     await promisify(fs.fsync)(fd);
     await promisify(fs.close)(fd);
     await promisify(fs.rename)(tempPath, path);
+    releaseFileLock();
   };
 
   const drain = () => new Promise((resolve, reject) => {
