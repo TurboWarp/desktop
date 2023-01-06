@@ -465,16 +465,6 @@ ipcMain.on('open-packager', (event) => {
   createPackagerWindow(event.sender);
 });
 
-ipcMain.on('open-packager-legacy', async (e) => {
-  const window = BrowserWindow.fromWebContents(e.sender);
-  await dialog.showMessageBox(window, {
-    title: APP_NAME,
-    message: getTranslation('packager-moved.title'),
-    detail: getTranslation('packager-moved.details')
-  });
-  createPackagerWindow(e.sender);
-});
-
 ipcMain.handle('get-packager-html', async () => {
   const compressed = await readFile(pathUtil.join(staticDir, 'packager.html.br'));
   const uncomressed = await brotliDecompress(compressed);

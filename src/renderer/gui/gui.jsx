@@ -78,10 +78,6 @@ const openPackager = () => {
   ipcRenderer.send('open-packager');
 };
 
-const openPackagerLegacy = () => {
-  ipcRenderer.send('open-packager-legacy');
-};
-
 const openDonate = () => {
   window.open('https://github.com/sponsors/GarboMuffin');
 };
@@ -229,10 +225,6 @@ const DesktopHOC = function (WrappedComponent) {
             openNewWindow
           ]}
           onClickAbout={[
-            {
-              title: getTranslation('packager-legacy'),
-              onClick: openPackagerLegacy
-            },
             {
               title: getTranslation('desktop-settings'),
               onClick: onDesktopSettings
