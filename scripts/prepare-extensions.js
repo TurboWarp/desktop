@@ -1,26 +1,24 @@
-const fs = require('fs');
 const pathUtil = require('path');
 
-const inputRepository = pathUtil.join(__dirname, '..', 'extensions');
-const outputFolder = pathUtil.join(__dirname, '..', 'static', 'extensions.turbowarp.org');
-
-if (!fs.existsSync(inputRepository)) {
-  throw new Error('TurboWarp/extensions submodule is missing');
+let Builder;
+try {
+  Builder = require('../extensions/development/builder');
+} catch (e) {
+  if (e.code === 'MODULE_NOT_FOUND') {
+    console.error('Could not load TurboWarp/extensions build scripts, most likely because the submodule is missing.');
+    console.error('Try running: `git submodule init` and `git submodule update`');
+  } else {
+    console.error(e);
+  }
+  process.exit(1);
 }
 
-// Clean build every time.
-fs.rmSync(outputFolder, {
-  recursive: true,
-  force: true
-});
-fs.mkdirSync(outputFolder, {
-  recursive: true
-});
+// Even if the desktop app is in development mode, always build extensions in production mode.
+const isProduction = true;
 
-const extensionFolder = pathUtil.join(inputRepository, 'extensions');
-for (const extensionFileName of fs.readdirSync(extensionFolder)) {
-  const oldFile = pathUtil.join(extensionFolder, extensionFileName);
-  const newFile = pathUtil.join(outputFolder, extensionFileName);
-  console.log(`Copying extension: ${extensionFileName}`);
-  fs.copyFileSync(oldFile, newFile);
-}
+const outputDirectory = pathUtil.join(__dirname, '..', 'static', 'extensions.turbowarp.org');
+const builder = new Builder(isProduction);
+const build = builder.build();
+build.export(outputDirectory);
+
+console.log(`Built copy of extensions.turbowarp.org to ${outputDirectory}`);
