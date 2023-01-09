@@ -6,7 +6,7 @@ import {format as formatUrl} from 'url';
 import zlib from 'zlib';
 import checkForUpdate from './update-checker';
 import {getTranslation, getTranslationOrNull} from './translations';
-import {APP_NAME, PACKAGER_NAME} from './brand';
+import {APP_NAME, EXTENSION_GALLERY_NAME, PACKAGER_NAME} from './brand';
 import './advanced-user-customizations';
 import * as store from './store';
 import './crash';
@@ -33,12 +33,14 @@ let addonSettingsWindow = null;
 let privacyWindow = null;
 let desktopSettingsWindow = null;
 const dataWindows = new Set();
+const extensionWindows = new Set();
 const closeAllNonEditorWindows = () => [
   aboutWindow,
   addonSettingsWindow,
   privacyWindow,
   desktopSettingsWindow,
-  ...dataWindows
+  ...dataWindows,
+  ...extensionWindows
 ].filter((i) => i).forEach((i) => i.close())
 
 const allowedToAccessFiles = new Set();
@@ -63,13 +65,16 @@ const isDataURL = (url) => {
   return false;
 };
 
+const isExtensionURL = (url) => url === 'https://extensions.turbowarp.org/';
+
 const defaultWindowOpenHandler = (details) => {
-  if (isSafeOpenExternal(details.url)) {
+  if (isExtensionURL(details.url)) {
+    createExtensionsWindow();
+  } else if (isSafeOpenExternal(details.url)) {
     setImmediate(() => {
       shell.openExternal(details.url);
     });
-  }
-  if (isDataURL(details.url)) {
+  } else if (isDataURL(details.url)) {
     createDataWindow(details.url);
   }
   return {
@@ -355,6 +360,19 @@ const createDataWindow = (url) => {
     dataWindows.delete(window);
   });
   dataWindows.add(window);
+};
+
+const createExtensionsWindow = () => {
+  const window = createWindow(`tw-extensions://./index.html`, {
+    title: EXTENSION_GALLERY_NAME,
+    width: 700,
+    height: 700,
+  });
+  closeWindowWhenPressEscape(window);
+  extensionWindows.add(window);
+  window.on('closed', () => {
+    extensionWindows.delete(window);
+  });
 };
 
 const getLastAccessedDirectory = () => store.get('last_accessed_directory') || '';

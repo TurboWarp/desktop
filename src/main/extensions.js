@@ -29,21 +29,17 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 app.whenReady().then(() => {
-  protocol.registerBufferProtocol('tw-extensions', (request, callback) => {
-    const path = pathUtil.basename(new URL(request.url).pathname);
-    const absolutePath = pathUtil.join(extensionDirectory, path);
+  protocol.registerFileProtocol('tw-extensions', (request, callback) => {
+    const path = request.url.substring('tw-extensions://'.length);
+    const staticPath = pathUtil.join(extensionDirectory, path);
 
-    if (!absolutePath.startsWith(extensionDirectory)) {
+    if (!staticPath.startsWith(extensionDirectory)) {
       callback({
         statusCode: 404
       });
       return;
     }
 
-    readFile(absolutePath)
-      .then((buffer) => callback(buffer))
-      .catch((err) => callback({
-        statusCode: 404
-      }));
+    callback(pathUtil.resolve(staticPath));
   });  
 });
