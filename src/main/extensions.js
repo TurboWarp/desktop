@@ -13,13 +13,9 @@ app.on('session-created', (session) => {
     urls: ['https://extensions.turbowarp.org/*']
   }, (details, callback) => {
     const path = new URL(details.url).pathname;
-    if (path.endsWith('.js')) {
-      callback({
-        redirectURL: `tw-extensions://${path}`
-      });
-    } else {
-      callback({});
-    }
+    callback({
+      redirectURL: `tw-extensions://${path}`
+    });
   });
 });
 
