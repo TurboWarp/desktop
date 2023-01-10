@@ -13,12 +13,10 @@ try {
   process.exit(1);
 }
 
-// Even if the desktop app is in development mode, always build extensions in production mode.
-const isProduction = true;
-
 const outputDirectory = pathUtil.join(__dirname, '..', 'static', 'extensions.turbowarp.org');
-const builder = new Builder(isProduction);
+const mode = 'desktop';
+const builder = new Builder(mode);
 const build = builder.build();
 build.export(outputDirectory);
 
-console.log(`Built copy of extensions.turbowarp.org to ${outputDirectory}`);
+console.log(`Built ${mode} copy of extensions.turbowarp.org to ${outputDirectory}`);

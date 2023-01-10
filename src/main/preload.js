@@ -37,3 +37,28 @@ window.addEventListener('message', (e) => {
     ipcRenderer.postMessage(channel, data, e.ports);
   }
 });
+
+contextBridge.exposeInMainWorld('TWD', {
+  extensions: {
+    loadExtension: (url) => new Promise((resolve, reject) => {
+      const editorId = +new URLSearchParams(location.search).get('editor_id');
+
+      const cleanup = () => {
+        ipcRenderer.removeListener('load-extension/done', handleDone);
+        ipcRenderer.removeListener('load-extension/error', handleError);
+      }
+      const handleDone = () => {
+        cleanup();
+        resolve();
+      };
+      const handleError = (event, error) => {
+        cleanup();
+        reject(error);
+      };
+      ipcRenderer.on('load-extension/done', handleDone);
+      ipcRenderer.on('load-extension/error', handleError);
+
+      ipcRenderer.sendTo(editorId, 'load-extension/start', url);
+    }),
+  },
+});

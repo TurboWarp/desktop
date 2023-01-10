@@ -68,9 +68,7 @@ const isDataURL = (url) => {
 const isExtensionURL = (url) => url === 'https://extensions.turbowarp.org/';
 
 const defaultWindowOpenHandler = (details) => {
-  if (isExtensionURL(details.url)) {
-    createExtensionsWindow();
-  } else if (isSafeOpenExternal(details.url)) {
+  if (isSafeOpenExternal(details.url)) {
     setImmediate(() => {
       shell.openExternal(details.url);
     });
@@ -223,6 +221,15 @@ const createEditorWindow = () => {
       e.preventDefault();
     }
   });
+  window.webContents.setWindowOpenHandler((details) => {
+    if (isExtensionURL(details.url)) {
+      createExtensionsWindow(window.webContents);
+      return {
+        action: 'deny'
+      };
+    }
+    return defaultWindowOpenHandler(details);
+  });
   editorWindows.add(window);
   return window;
 };
@@ -362,8 +369,8 @@ const createDataWindow = (url) => {
   dataWindows.add(window);
 };
 
-const createExtensionsWindow = () => {
-  const window = createWindow(`tw-extensions://./index.html`, {
+const createExtensionsWindow = (editorWebContents) => {
+  const window = createWindow(`tw-extensions://./index.html?editor_id=${editorWebContents.id}`, {
     title: EXTENSION_GALLERY_NAME,
     width: 700,
     height: 700,

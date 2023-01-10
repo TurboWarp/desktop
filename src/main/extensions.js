@@ -30,7 +30,8 @@ protocol.registerSchemesAsPrivileged([
 
 app.whenReady().then(() => {
   protocol.registerFileProtocol('tw-extensions', (request, callback) => {
-    const path = request.url.substring('tw-extensions://'.length);
+    const pathAndQuery = request.url.substring('tw-extensions://'.length);
+    const path = pathAndQuery.split('?')[0];
     const staticPath = pathUtil.join(extensionDirectory, path);
 
     if (!staticPath.startsWith(extensionDirectory)) {
@@ -41,5 +42,5 @@ app.whenReady().then(() => {
     }
 
     callback(pathUtil.resolve(staticPath));
-  });  
+  });
 });

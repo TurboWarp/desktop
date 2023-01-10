@@ -118,10 +118,12 @@ const DesktopHOC = function (WrappedComponent) {
         title: null
       };
       this.handleExportProjectOverIPC = this.handleExportProjectOverIPC.bind(this);
+      this.handleLoadExtensionOverIPC = this.handleLoadExtensionOverIPC.bind(this);
       localeChanged(this.props.locale);
     }
     componentDidMount () {
       ipcRenderer.on('export-project/start', this.handleExportProjectOverIPC);
+      ipcRenderer.on('load-extension/start', this.handleLoadExtensionOverIPC);
 
       if (mountedOnce) {
         return;
@@ -179,6 +181,7 @@ const DesktopHOC = function (WrappedComponent) {
     }
     componentWillUnmount () {
       ipcRenderer.removeListener('export-project/start', this.handleExportProjectOverIPC);
+      ipcRenderer.removeListener('load-extension/start', this.handleLoadExtensionOverIPC);
     }
     async handleExportProjectOverIPC (event) {
       ipcRenderer.sendTo(event.senderId, 'export-project/ack');
@@ -192,6 +195,16 @@ const DesktopHOC = function (WrappedComponent) {
         console.error(e);
         ipcRenderer.sendTo(event.senderId, 'export-project/error', '' + e);
       }
+    }
+    handleLoadExtensionOverIPC (event, url) {
+      this.props.vm.extensionManager.loadExtensionURL(url)
+        .then(() => {
+          ipcRenderer.sendTo(event.senderId, 'load-extension/done');
+        })
+        .catch((error) => {
+          console.error(error);
+          ipcRenderer.sendTo(event.senderId, 'load-extension/error', error);
+        });
     }
     render() {
       const {
@@ -257,8 +270,11 @@ const DesktopHOC = function (WrappedComponent) {
     projectChanged: PropTypes.bool,
     vm: PropTypes.shape({
       loadProject: PropTypes.func,
-      saveProjectSb3: PropTypes.func
-    })
+      saveProjectSb3: PropTypes.func,
+      extensionManager: PropTypes.shape({
+        loadExtensionURL: PropTypes.func,
+      }),
+    }),
   };
   const mapStateToProps = state => ({
     fileHandle: state.scratchGui.tw.fileHandle,
