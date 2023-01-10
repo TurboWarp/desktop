@@ -372,7 +372,7 @@ const createDataWindow = (url) => {
 const createExtensionsWindow = (editorWebContents) => {
   const window = createWindow(`tw-extensions://./index.html?editor_id=${editorWebContents.id}`, {
     title: EXTENSION_GALLERY_NAME,
-    width: 700,
+    width: 950,
     height: 700,
   });
   closeWindowWhenPressEscape(window);
