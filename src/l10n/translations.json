@@ -61,29 +61,6 @@
         "updater.security.detail": "Aquesta versió del TurboWarp pot ser vulnerable a un exploit que posa el teu ordinador en risc d'infecció. L'actualització és altament recomanable.",
         "updater.security.message": "Hi ha disponible una actualització de seguretat important: v{version}"
     },
-    "cs": {
-        "about": "O nás",
-        "context.copy": "Zkopírovat",
-        "context.cut": "Vyjmout",
-        "context.open-link": "Otevřít odkaz",
-        "context.paste": "Vložit",
-        "menu.learn-more": "Zjistit více",
-        "menu.new-window": "Nové okno",
-        "privacy": "Zásady ochrany osobních údajů",
-        "prompt.cancel": "Storno",
-        "source": "Zdrojový kód",
-        "unload.detail": "Jakékoli neuložené změny budou ztraceny.",
-        "unload.leave": "Odejít",
-        "unload.message": "Jste si jisti, že chcete odejít?",
-        "unload.stay": "Zůstat",
-        "updater.detail": "Tato aktualizace může mít nové funkce nebo opravy chyb.",
-        "updater.download": "Stáhnout aktualizaci",
-        "updater.ignore": "Znovu nepřipomínat pro tuto aktualizaci",
-        "updater.later": "Připomenout později",
-        "updater.message": "Je dostupná aktualizace: v{version}",
-        "updater.security.detail": "Tato verze TurboWarp může být zranitelná na exploit, který může infikovat váš počítač. Aktualizace je vysoce doporučena.",
-        "updater.security.message": "Je dostupná důležitá bezpečnostní aktualizace: v{version}"
-    },
     "de": {
         "about": "Infos",
         "context.copy": "Kopieren",
@@ -205,38 +182,6 @@
         "updater.message": "Actualización disponible: v{version}",
         "updater.security.detail": "Esta versión de TurboWarp puede ser vulnerable a un exploit que pone a su computadora en riesgo de una infección. Se recomienda altamente actualizar.",
         "updater.security.message": "Actualización importante de seguridad disponible: v{version}"
-    },
-    "fr": {
-        "about": "À propos",
-        "context.copy": "Copier",
-        "context.cut": "Couper",
-        "context.open-link": "Ouvrir le lien",
-        "context.paste": "Coller",
-        "donate": "Faire un don",
-        "menu.learn-more": "En savoir plus",
-        "menu.new-window": "Nouvelle Fenêtre",
-        "privacy": "Politique de Confidentialité",
-        "prompt.cancel": "Annuler",
-        "prompt.ok": "Ok",
-        "source": "Code source",
-        "unload.detail": "Tout changement non sauvegardé sera perdu.",
-        "unload.leave": "Quitter",
-        "unload.message": "Êtes-vous sûr que vous voulez quitter ?",
-        "unload.stay": "Rester",
-        "updater.download": "Télécharger la mise à jour",
-        "updater.later": "Me le rappeler plus tard"
-    },
-    "hu": {
-        "context.paste": "Beillesztés",
-        "files.sprite3": "Scratch 3-as Szereplő",
-        "files.txt": "Szöveges Dokumentum",
-        "files.wav": "WAV Hang",
-        "menu.learn-more": "Több megtudása",
-        "privacy": "Adatvédelmi Irányelvek",
-        "source": "Forráskód",
-        "unload.detail": "A nem mentett változtatások el fognak veszni.",
-        "updater.detail": "Ez a frissítés tartalmazhat mind új funkciókat, mind hibajavításokat.",
-        "updater.later": "Emlékeztessen később"
     },
     "it": {
         "about": "Info",
@@ -478,18 +423,6 @@
         "updater.security.detail": "Ši TurboWarp versija gali būti pažeidžiama dėl klaidos, dėl kurio kyla pavojus užkrėsti jūsų kompiuterį. Rekomenduojama atnaujinti.",
         "updater.security.message": "Yra svarbus saugos atnaujinimas: v{version}"
     },
-    "nb": {
-        "about": "Om",
-        "menu.learn-more": "Lær mer",
-        "menu.new-window": "Nytt vindu",
-        "privacy": "Personvernregler",
-        "source": "Kildekode",
-        "unload.leave": "Slutt",
-        "unload.message": "Er du sikker at du vil slutte?",
-        "updater.download": "Last ned oppdatering",
-        "updater.message": "En oppdatering er tilgjengelig: v{version}",
-        "updater.security.detail": "Denne versjonen av TurboWarp kan være sårbar for en utnyttelse som setter datamaskinen din i fare for infeksjon. Oppdatering anbefales på det sterkeste."
-    },
     "nl": {
         "about": "Over",
         "context.copy": "Kopiëren",
@@ -696,25 +629,6 @@
         "updater.message": "Uma atualização está disponível: v{version}",
         "updater.security.detail": "Sua versão atual do TurboWarp pode estar vulnerável a um exploit que coloca o seu computador em risco de uma infecção. Atualizar é altamente recomendado.",
         "updater.security.message": "Uma atualização importante de segurança está disponível: v{version}"
-    },
-    "ro": {
-        "about": "Despre",
-        "menu.learn-more": "Află mai multe.",
-        "menu.new-window": "Fereastră Nouă",
-        "privacy": "Politica de Confidențialitate",
-        "prompt.cancel": "Anulează",
-        "source": "Cod sursă",
-        "unload.detail": "Orice modificări nesalvate vor fi pierdute.",
-        "unload.leave": "Ieși",
-        "unload.message": "Ești sigur că vrei să ieși?",
-        "unload.stay": "Rămâi",
-        "updater.detail": "Această actualizare ar putea conține funcții noi sau reparări ale erorilor.",
-        "updater.download": "Descarcă actualizarea",
-        "updater.ignore": "Nu-mi aminti din nou de această actualizare",
-        "updater.later": "Amintește-mi mai târziu",
-        "updater.message": "O actualizare este disponibilă: v{version}",
-        "updater.security.detail": "Această versiune de TurboWarp poate fi vulnerabilă la un abuz care vă pune calculatorul la risc de infectare. Actualizare foarte recomandată.",
-        "updater.security.message": "O actualizare importantă de securitate este disponibilă: v{version}"
     },
     "ru": {
         "about": "Информация",
