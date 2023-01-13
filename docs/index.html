@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+  <!--
+    Some icons are from Font Awesome https://fontawesome.com/
+    For license information, visit https://creativecommons.org/licenses/by/4.0/
+    They have been minified by hand.
+  -->
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,7 +33,7 @@
       }
       body {
         margin: 0;
-        padding: 0;
+        padding: 8px;
       }
       a {
         color: #25d;
@@ -40,25 +45,8 @@
       a:active {
         color: red;
       }
-      img {
+      img, picture {
         display: block;
-      }
-      section {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        padding-right: 8px;
-        padding-left: 8px;
-      }
-      body:not([loaded]) section:not(.visible-loading) {
-        visibility: hidden;
-      }
-      body:not([loaded]) .transparent-loading {
-        visibility: hidden;
-      }
-      section > div {
-        width: 100%;
-        max-width: 700px;
       }
       summary {
         cursor: pointer;
@@ -68,7 +56,42 @@
         padding: 8px;
         border-radius: 8px;
         background: rgba(0, 225, 255, 0.2);
-        border: 1px solid rgba(0, 225, 255, 0.35);
+        border: 1px solid rgba(0, 178, 201, 0.423)
+      }
+      :focus-visible {
+        outline: 2px solid black;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          background: #171717;
+          color: #eee;
+          color-scheme: dark;
+        }
+        a {
+          color: #4af;
+        }
+        :focus-visible {
+          outline: 2px solid white;
+        }
+      }
+
+      h2 {
+        font-size: 2em;
+      }
+      h3 {
+        font-size: 1.2em;
+      }
+
+      .theme-dark {
+        display: none;
+      }
+      @media (prefers-color-scheme: dark) {
+        .theme-dark {
+          display: initial;
+        }
+        .theme-light {
+          display: none;
+        }
       }
 
       .language-selector {
@@ -78,7 +101,6 @@
         padding: 8px;
         display: flex;
         align-items: center;
-        color: white;
       }
       .language-icon {
         width: 24px;
@@ -91,6 +113,11 @@
       }
       .language-selector:hover, .language-selector:focus-within {
         background: rgba(0, 0, 0, 0.2);
+      }
+      @media (prefers-color-scheme: dark) {
+        .language-selector:hover, .language-selector:focus-within {
+          background: rgba(255, 255, 255, 0.2);
+        }
       }
       .language-selector-input {
         position: absolute;
@@ -106,183 +133,242 @@
       }
 
       .header {
-        padding-top: 32px;
-        padding-bottom: 32px;
-        color: white;
-        background-color: #ff4c4c;
-        text-align: center;
-      }
-      .header-title {
         margin: 32px 0;
         font-size: 48px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: normal;
+        text-align: center;
       }
-      .header-title svg {
+      .header svg {
         margin: 0 20px 0 0;
         filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.25));
-        width: 96px;
-        height: 96px;
-        min-width: 96px;
-        min-height: 96px;
+        width: 80px;
+        height: 80px;
       }
-      @media (max-width: 400px) {
-        .header-title {
+      @media (max-width: 580px) {
+        .header {
           flex-direction: column;
           margin-top: 0;
         }
-        .header-title svg {
-          margin: 20px 0 20px 0;
+        .header svg {
+          margin: 40px 0 20px 0;
         }
       }
-      .header-subtitles > * {
-        margin-left: auto;
-        margin-right: auto;
+
+      .subheader {
+        margin: 32px auto;
+        text-align: center;
+        font-size: 24px;
         max-width: 700px;
       }
-      .header a {
-        color: inherit;
-        text-decoration: underline;
+
+      .above-fold-download {
+        margin: 32px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
       }
 
-      .changelog {
-        margin-bottom: 32px;
+      .download-list {
+        display: flex;
+        margin: 0;
+        padding: 0;
       }
-      .changelog li {
-        margin-top: 4px;
+      .download-list li {
+        display: block;
+        padding: 0;
+        margin: 0;
       }
-      [full-changelog] .changelog {
-        background-color: #ffeedf;
+      .download-list li:not(:last-child) {
+        margin-right: 16px;
       }
-      .changelog-install-info {
-        display: none;
+
+      .microsoft-store {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px;
+        background-color: black;
+        border-radius: 8px;
+        color: white !important;
+        text-decoration: none !important;
+        border: 1px solid black;
       }
-      [full-changelog] .changelog-install-info {
+      .microsoft-store:active {
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.6) inset;
+      }
+      @media (prefers-color-scheme: dark) {
+        .microsoft-store {
+          border: 1px solid #aaa;
+        }
+      }
+      .microsoft-icon {
+        background-image: url(microsoft.svg);
+        background-size: 100%;
+        background-repeat: no-repeat;
+        width: 32px;
+        height: 32px;
+        margin-right: 8px;
+      }
+      .microsoft-store > div > :first-child {
+        text-align: left;
+        font-size: 0.9em;
+      }
+      .microsoft-store > div > :last-child {
+        text-align: left;
+        font-weight: bold;
+        font-size: 1.4em;
+      }
+
+      .download-button {
+        display: inline-flex;
+        align-items: center;
+        background-color: #ff8787;
+        border: 1px solid #fd5050;
+        color: black !important;
+        text-decoration: none !important;
+        margin: 0;
+        padding: 12px;
+        font-weight: bold;
+        border-radius: 8px;
+      }
+      .download-button:hover {
+        background-color: #ff6c6c;
+      }
+      .download-button:active {
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.6) inset;
+        background-color: #ff4c4c;
+      }
+      .download-button::before {
+        content: '';
+        /* Icon from https://fontawesome.com/v5.15/icons/download?style=solid */
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="black" d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path></svg>');
+        background-repeat: no-repeat;
+        margin-right: 8px;
+        width: 1em;
+        height: 1em;
+        min-width: 1em;
+        min-height: 1em;
+      }
+      .download-separator {
+        margin: 8px 0;
+      }
+
+      .alternative-download-links {
+        margin: 32px auto;
+        text-align: center;
+      }
+      .alternative-download-links ul {
+        margin: 8px 0;
+        padding: 0;
+        display: inline-flex;
+        justify-content: center;
+      }
+      .alternative-download-links li {
+        margin: 0 8px;
+        padding: 0;
         display: block;
       }
 
-      .notice {
-        background-color: #ffdfdf;
-        margin-bottom: 32px;
+      .picture {
         text-align: center;
-      }
-
-      .select-os {
-        box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-        background: white;
-        position: relative;
-        z-index: 99;
-        margin-bottom: 32px;
-      }
-      .select-os-inner {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-        white-space: nowrap;
-      }
-      .select-os-buttons {
-        margin-top: 16px;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-      .select-os-buttons button {
-        margin: 0 16px 16px 0;
-        border: 0;
-        cursor: pointer;
-        color: black;
-        font-size: .8rem;
-        font-weight: bold;
-        font-family: inherit;
-        border-radius: 26px;
-        background-color: rgba(0, 0, 0, 0.2);
-        padding: 8px 18px;
-        display: flex;
-        align-items: center;
-      }
-      .select-os-buttons button:last-child {
-        margin-right: 0;
-      }
-      .select-os-buttons button:hover {
-        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
-      }
-      .select-os-buttons button:active {
-        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.8);
-      }
-      .os-button-icon {
-        margin-right: 5px;
-        width: 24px;
-        height: 24px;
-      }
-      [os="windows"] .os-button-windows,
-      [os="mac"] .os-button-mac,
-      [os="linux"] .os-button-linux,
-      [os="web"] .os-button-web {
-        background-color: #ff4c4c;
-      }
-
-      .os {
-        margin-bottom: 32px;
-      }
-      body:not([os="windows"]) .os-windows,
-      body:not([os="mac"]) .os-mac,
-      body:not([os="linux"]) .os-linux,
-      body:not([os="web"]) .os-web,
-      body[os="mac"] .os-not-mac {
-        display: none;
-      }
-
-      .download-button-outer {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        margin: 0 0 32px 0;
-      }
-      .download-button-inner {
-        display: flex;
-        align-items: center;
-        background-image: linear-gradient(#ff9494, #ff4c4c);
-        color: black !important;
-        text-decoration: none !important;
-        padding: 12px 18px;
-        font-weight: bold;
-        border-radius: 5px;
-      }
-      .download-button-inner:hover {
-        background-image: linear-gradient(#ff7979, #ff4c4c);
-      }
-      .download-button-inner:active {
-        box-shadow: 0 0 8px rgba(0, 0, 0, 0.6) inset;
-        background-image: linear-gradient(#ff5d5d, #ff4c4c);
-      }
-      .download-icon {
-        /* Icon from https://fontawesome.com/v5.15/icons/download?style=solid */
-        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="black" d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path></svg>');
-        margin-right: 10px;
-        width: 16px;
-        height: 16px;
-        min-width: 16px;
-        min-height: 16px;
-      }
-      .install-help {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        text-align: center;
       }
-      .install-help p, .install-help img {
-        margin: 0 0 16px 0;
+      .picture picture,
+      .picture img {
+        width: 100%;
+        height: 100%;
       }
-      .install-help:last-child p:last-child {
-        margin: 0;
+      .picture img {
+        filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+        border-radius: 8px;
+      }
+      .picture-caption {
+        margin-top: 8px;
       }
 
+      .picture-editor picture,
+      .picture-editor img {
+        max-width: 1280px;
+      }
+
+      .features {
+        margin: 32px auto;
+        max-width: 700px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .feature-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+      @media (max-width: 550px) {
+        .feature-list {
+          grid-template-columns: 1fr;
+        }
+      }
+      .feature-list > * {
+        margin: 8px;
+      }
+      .feature-list p, .feature-list h3 {
+        margin: 0;
+      }
+      .more-features {
+        font-weight: bold;
+        margin-top: 32px;
+      }
+
+      .links {
+        margin: 32px auto;
+        max-width: 700px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+      .links svg {
+        background-color: #ff4c4c;
+        color: black;
+        width: 32px;
+        height: 32px;
+        padding: 4px;
+        margin: 0 12px;
+        border-radius: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+      }
+      @media (max-width: 550px) {
+        .links {
+          grid-template-columns: 1fr;
+        }
+      }
+      .link {
+        color: inherit;
+        display: flex;
+        align-items: center;
+        padding: 12px 0;
+        transition: .2s background-color;
+        border-radius: 8px;
+      }
+      .link:hover {
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+      @media (prefers-color-scheme: dark) {
+        .link:hover {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+      }
+
+      .manual-installation {
+        margin: 32px auto;
+        max-width: 700px;
+      }
       code {
         padding: 1px 2px;
         border-radius: 8px;
@@ -298,622 +384,475 @@
         content: '$ ';
         color: #e36000;
       }
-
-      .donate {
-        margin-bottom: 32px;
-      }
-      .donate a {
-        padding: 8px;
-        text-align: center;
-        background: rgb(255 100 157 / 50%);
-        color: inherit;
-        border: 1px solid rgba(255, 100, 157, 1);
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-      }
-      .donate a svg {
-        margin-right: 6px;
-      }
-
-      .icon {
-        background-color: #ff4c4c;
-        color: black;
-        width: 32px;
-        height: 32px;
-        margin: 0 12px;
-        border-radius: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .icon svg {
-        width: 20px;
-        height: 20px;
-      }
-      .links {
-        margin-bottom: 32px;
-      }
-      .links-inner {
-        columns: 2;
-        column-gap: 0;
-      }
-      @media (max-width: 550px) {
-        .links-inner {
-          columns: 1;
-        }
-      }
-      .link {
-        color: inherit;
-        display: flex;
-        align-items: center;
-        padding: 15px 0;
-        transition: .2s background-color;
-      }
-      .link:hover {
-        background-color: #eee;
-      }
-
-      .picture-container {
-        margin: 32px auto;
-        flex-direction: column;
-        text-align: center;
-      }
-      .picture-container picture,
-      .picture-container img {
-        height: 100%;
-        width: 100%;
-        margin-bottom: 8px;
-      }
-      .picture-container img {
-        filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
-        border-radius: 8px;
-      }
-      .picture-dark {
-        display: none;
-      }
-      .picture-caption {
-        margin: 0;
-      }
-      .picture-container.editor-screenshot {
-        max-width: calc(1280px + 2 * 8px);
-      }
-      .picture-container.addons-screenshot {
-        max-width: calc(683px + 2 * 8px);
-      }
-      .picture-container.packager-screenshot {
-        max-width: calc(683px + 2 * 8px);
-      }
-
-      .pwa-install {
-        width: 100%;
-        height: 100%;
-        max-width: 620px;
-        border-radius: 8px;
-      }
-
-      :focus-visible {
-        outline: 2px solid black;
-      }
-
-      .new {
-        color: white;
-        background: #b117f8;
-        border-radius: 4px;
-        padding: 2px 5px;
-      }
-
       @media (prefers-color-scheme: dark) {
-        :root {
-          background: #171717;
-          color: #eee;
-          color-scheme: dark;
-        }
-        a {
-          color: #4af;
-        }
-        hr {
-          border-color: #333;
-        }
-        .select-os {
-          box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
-          background: #1f1f1f;
-        }
-        .select-os-inner button {
-          color: white;
-          background-color: rgba(255, 255, 255, 0.2);
-        }
-        [full-changelog] .changelog {
-          background-color: #273235;
-        }
         code {
           background-color: #222;
           border-color: #505050;
-        }
-        .notice {
-          background-color: #35272c;
-        }
-        .link:hover {
-          background-color: #333;
-        }
-        .picture-dark {
-          display: block;
-        }
-        .picture-light {
-          display: none;
-        }
-        :focus-visible {
-          outline: 2px solid white;
         }
         .command::before {
           color: #ffa500;
         }
       }
+
+      hr {
+        max-width: 700px;
+        margin: auto;
+        border: 0;
+        border-top: 1px solid currentColor;
+      }
+
+      .changelog {
+        margin: 32px auto;
+        max-width: 700px;
+        margin: auto;
+      }
+
+      [data-if-os] {
+        display: none;
+      }
+      [os-windows] [data-if-os="windows"] {
+        display: initial;
+      }
+      [os-mac] [data-if-os="mac"] {
+        display: initial;
+      }
+      [os-linux] [data-if-os="linux"] {
+        display: initial;
+      }
+      [os-unsupported] [data-if-os="unsupported"] {
+        display: initial;
+      }
     </style>
   </head>
 
-  <!--
-    Some icons are from Font Awesome https://fontawesome.com/
-    For license information, visit https://creativecommons.org/licenses/by/4.0/
-    Icons have been minified by hand.
-  -->
+  <body>
+    <script>
+      function getOS() {
+        if (/android/i.test(navigator.userAgent)) return 'unsupported';
+        if (/iphone|ipad|ipod/i.test(navigator.userAgent)) return 'unsupported';
+        if (/linux/i.test(navigator.userAgent)) return 'linux';
+        if (/cros/i.test(navigator.userAgent)) return 'unsupported';
+        if (/mac/i.test(navigator.userAgent)) return 'mac';
+        if (/windows/i.test(navigator.userAgent)) return 'windows';
+        return 'unsupported';
+      }
+      document.body.setAttribute('os-' + getOS(), '');
+    </script>
 
-  <body os="">
-    <label class="language-selector">
-      <select class="language-selector-input"></select>
+    <label class="language-selector" aria-label="Language Selector">
+      <select class="language-selector-input">
+        <option disabled>The app itself supports multiple languages.</option>
+        <option disabled>We're still working on making this site translatable as it was just redesigned.</option>
+      </select>
       <svg viewBox="0 0 20 20" class="language-icon">
-        <g fill="none" fill-rule="evenodd" stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25">
+        <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25">
           <path d="M17.635 10.113a7.523 7.523 0 0 1-7.523 7.523 7.523 7.523 0 1 1 0-15.047 7.524 7.524 0 0 1 7.523 7.524Z"/>
           <path d="M13.98 10.117c0 1.633-.265 3.143-.726 4.375-.698 1.901-1.846 3.143-3.143 3.143-1.297 0-2.442-1.242-3.144-3.143-.456-1.232-.723-2.742-.723-4.375 0-1.634.267-3.144.723-4.376.702-1.911 1.847-3.153 3.144-3.153 1.297 0 2.445 1.242 3.143 3.153.461 1.232.727 2.742.727 4.376ZM2.955 12.281h14.313M2.955 7.947h14.313M10.112 2.59v15.048"/>
         </g>
       </svg>
       <div class="language-text"></div>
       <svg class="language-caret">
-        <path fill="#FFF" fill-rule="evenodd" d="M4 5c-.275 0-.548-.103-.759-.31L.315 1.807a1.047 1.047 0 0 1 0-1.497c.418-.413 6.952-.413 7.37 0 .42.413.42 1.083 0 1.497L4.76 4.69C4.55 4.897 4.276 5 4 5"/>
+        <path fill="currentColor" fill-rule="evenodd" d="M4 5c-.275 0-.548-.103-.759-.31L.315 1.807a1.047 1.047 0 0 1 0-1.497c.418-.413 6.952-.413 7.37 0 .42.413.42 1.083 0 1.497L4.76 4.69C4.55 4.897 4.276 5 4 5"/>
       </svg>
     </label>
 
-    <section class="header visible-loading">
-      <div>
-        <h1 class="header-title">
-          <svg aria-hidden="true" viewBox="0 0 1024 1024">
-            <path d="m64 174.86735v641.13265c0 35.34622 28.653776 64 64 64h113.30332c9.32935 0 18.19416 4.07135 24.27337 11.14807l67.26992 78.30776c12.15843 14.15343 29.88806 22.29614 48.54676 22.29614h261.21326c18.6587 0 36.38832-8.14271 48.54676-22.29614l67.26992-78.30776c6.07921-7.07672 14.94402-11.14807 24.27337-11.14807h113.30332c35.34622 0 64-28.65378 64-64v-654.84694c0-35.34622-28.65378-64-64-64-0.38091 0-0.76182 0.0034-1.14268 0.0102l-767.99999 13.71429c-34.89522 0.62313-62.85733 29.08902-62.85733 63.9898z" fill="#cc3c3c" fill-rule="evenodd"/>
-            <path d="m64 96v672c0 35.34622 28.653776 64 64 64h128.17394c9.97413 0 19.37789 4.65076 25.43168 12.5776l51.18313 67.01917c12.1076 15.85368 30.9151 25.1552 50.86336 25.1552h256.69578c19.94826 0 38.75576-9.30152 50.86336-25.1552l51.18312-67.01917c6.0538-7.92684 15.45756-12.5776 25.43169-12.5776h128.17394c35.34622 0 64-28.65378 64-64v-672c0-35.346224-28.65378-64-64-64h-768c-35.346224 0-64 28.653776-64 64z" fill="#ff4c4c" fill-rule="evenodd"/>
-            <path d="m96 96v672c0 17.67311 14.32689 32 32 32h128.17394c19.94827 0 38.75577 9.30152 50.86337 25.1552l51.18312 67.01917c6.0538 7.92684 15.45755 12.5776 25.43168 12.5776h256.69578c9.97413 0 19.37788-4.65076 25.43168-12.5776l51.18312-67.01917c12.1076-15.85368 30.9151-25.1552 50.86337-25.1552h128.17394c17.67311 0 32-14.32689 32-32v-672c0-17.673112-14.32689-32-32-32h-768c-17.67311 0-32 14.326888-32 32zm-32 0c0-35.346224 28.653776-64 64-64h768c35.34622 0 64 28.653776 64 64v672c0 35.34622-28.65378 64-64 64h-128.17394c-9.97413 0-19.37789 4.65076-25.43169 12.5776l-51.18312 67.01917c-12.1076 15.85368-30.9151 25.1552-50.86336 25.1552h-256.69578c-19.94826 0-38.75576-9.30152-50.86336-25.1552l-51.18313-67.01917c-6.05379-7.92684-15.45755-12.5776-25.43168-12.5776h-128.17394c-35.346224 0-64-28.65378-64-64z" fill="#fff" fill-opacity=".2"/>
-            <g transform="matrix(4.1943736,0,0,4.1943736,229.13567,171.21359)" fill="none" stroke="#fff" stroke-width="56.4093">
-             <path d="m108.34581 31.577677c-0.79395 3.473563-1.38942 7.244861-1.7864 11.313892-0.0992 1.091691 0 2.481117 0.29773 4.168276 0.29773 1.984893 0.4466 3.374319 0.4466 4.168276 0 2.580361-1.68716 3.870542-5.06147 3.870542-2.18339 0-3.622435-0.64509-4.317148-1.935271-0.09925-2.183383-0.04962-5.160723 0.14887-8.93202 0.198487-4.46601 0.29773-7.44335 0.29773-8.93202-0.09924 0-0.248107-0.09924-0.4466-0.297734-9.229753 0.396979-17.91366 0.992447-26.05172 1.786404-0.198493 1.290181-0.198493 2.878095 0 4.763744l0.59546 5.359212c-0.396973 3.076585-0.59546 7.64184-0.59546 13.695765 0.297733 2.580361 0.4466 13.646143 0.4466 33.197344v10.867303c0 1.68716 0.24811 2.8781 0.74433 3.57281h9.22976c3.771293-0.49623 5.65694 1.09169 5.65694 4.76374 0 2.18339-1.042067 3.72168-3.1262 4.61488-1.290187 0.49623-3.572817 0.59547-6.84789 0.29774-1.984893-0.19849-4.317143-0.24812-6.99675-0.14887-3.672053 0.49622-8.138063 0.8932-13.39803 1.19093-5.359207 0.29774-8.634279-0.44659-9.825218-2.233-0.793957-1.19093-0.793957-2.43149 0-3.72168 1.389425-2.18338 5.011855-3.27507 10.867288-3.27507 3.076587 0 4.61488-0.84358 4.61488-2.53074 0-0.8932-0.04962-1.73678-0.14887-2.53074 0-2.48113 0.04962-4.66452 0.14887-6.550163 0.297733-5.359213 0.297733-12.901808 0-22.627784-0.39698-14.092743-0.248113-26.746439 0.4466-37.961086l-0.4466-0.446601c-3.076587 0.198489-8.832777 0.148867-17.268572-0.148867-0.396979 0-3.423941 0.198489-9.080887 0.595468 1.389425 9.527488 2.183383 16.325748 2.381872 20.394779l-0.297734 4.01941c-0.09924 1.48867-1.339803 2.233005-3.721676 2.233005-1.885649 0-3.473563-3.572808-4.763744-10.718425-0.595468-4.267521-1.190936-8.584664-1.786404-12.951429 0-0.694713-0.347356-1.885649-1.042069-3.572808-0.595468-1.786404-1.908676-4.750966-1.908676-5.644168 0-3.141175 2.901123-2.39465 6.67242-2.990118 0.297734 0 0.793957 0.04962 1.48867 0.148867 0.694713 0.09924 1.190936 0.148867 1.48867 0.148867h36.91902c9.130507-0.396979 17.96328-1.190936 26.49832-2.381872 0.595473-0.297734 1.488678-0.595468 2.679608-0.893202 2.08414-0.19849 3.87054 0.297733 5.35921 1.48867 1.48867 1.091691 1.9849 2.679606 1.48867 4.763744z" fill="none" stroke="#fff" stroke-width="56.4093"/>
-            </g>
-            <g transform="matrix(3.852509,0,0,3.852509,257.89982,219.83848)" fill="none" stroke="#ff4c4c" stroke-width="30.7075">
-             <path d="m110.38498 21.776581q-1.29661 5.672702-1.94492 12.317866-0.16208 1.782849 0.32415 4.538161 0.48623 3.241544 0.48623 4.538161 0 4.214007-5.51062 4.214007-3.5657 0-4.700239-2.107004-0.16208-3.565698 0.16208-9.72463 0.32415-7.293474 0.32415-9.724631-0.16207 0-0.48623-0.324155-15.073176 0.648309-28.3635 1.944927-0.324161 2.107003 0 5.186469l0.6483 5.834779q-0.6483 5.024392-0.6483 14.911102 0.48623 4.214006 0.48623 36.143214v11.831633q0 2.75531 0.81038 3.88985h10.048792q6.158927-0.81039 6.158927 5.18647 0 3.5657-3.403614 5.0244-2.107013 0.81039-7.455559 0.32416-3.241543-0.32416-7.617628-0.16208-5.996857 0.81038-14.586946 1.29661-8.75216 0.48624-10.69709-2.43115-1.296617-1.94493 0-4.05194 2.26908-3.56569 11.831631-3.56569 5.024396 0 5.024396-2.75532 0-1.45869-0.162081-2.75531 0-4.051935 0.162081-7.131398 0.48623-8.75217 0-24.635731-0.648311-23.014961 0.48623-41.329683l-0.48623-0.486231q-5.024396 0.324154-18.800953-0.162077-0.648309 0-9.886708 0.648308 2.26908 15.55941 2.593235 22.204574 0 0-0.324155 4.376085-0.162077 2.431158-4.05193 2.431158-3.079467 0-5.18647-11.669558-0.972463-6.969319-1.944926-14.100715 0-1.13454-1.134541-3.889852-0.972463-2.91739-0.972463-4.376084 0-4.05193 6.158933-5.024393 0.486232 0 1.620772 0.162077 1.13454 0.162078 1.620772 0.162078h16.856029q23.339116 0 23.339116 0 14.911096-0.648309 28.849729-2.593235 0.97247-0.486232 2.91739-0.972463 3.40363-0.324156 5.83478 1.620771 2.43116 1.782849 1.62077 5.18647z" fill="none" stroke="#ff4c4c" stroke-width="30.7075"/>
-            </g>
-            <g transform="matrix(4.1943736,0,0,4.1943736,228.25358,197.35677)" fill="#fff">
-             <path d="m108.34581 25.3789q-1.19093 5.210345-1.7864 11.313892-0.14887 1.637537 0.29773 4.168276 0.4466 2.97734 0.4466 4.168276 0 3.870542-5.06147 3.870542-3.275078 0-4.317148-1.935271-0.14887-3.275074 0.14887-8.93202 0.29773-6.699015 0.29773-8.93202-0.14886 0-0.4466-0.297734-13.84463 0.595468-26.05172 1.786404-0.29774 1.935271 0 4.763744l0.59546 5.359212q-0.59546 4.614877-0.59546 13.695765 0.4466 3.870542 0.4466 33.197344v10.86729q0 2.53074 0.74433 3.57281h9.22976q5.65694-0.74434 5.65694 4.76374 0 3.27508-3.1262 4.61488-1.93528 0.74434-6.84789 0.29774-2.97734-0.29774-6.99675-0.14887-5.50808 0.74433-13.39803 1.19093-8.03881 0.44661-9.825218-2.233-1.190936-1.7864 0-3.72168 2.084138-3.27507 10.867288-3.27507 4.61488 0 4.61488-2.53074 0-1.3398-0.14887-2.53074 0-3.72168 0.14887-6.55015 0.4466-8.03882 0-22.627784-0.59547-21.139115 0.4466-37.961086l-0.4466-0.446601q-4.61488 0.297734-17.268572-0.148867-0.595468 0-9.080887 0.595468 2.084138 14.291232 2.381872 20.394779 0 0-0.297734 4.01941-0.148867 2.233005-3.721676 2.233005-2.828473 0-4.763744-10.718425-0.893202-6.401281-1.786404-12.951429 0-1.042069-1.042069-3.572808-0.893202-2.679606-0.893202-4.019409 0-3.721675 5.656946-4.614877 0.446601 0 1.48867 0.148867t1.48867 0.148867h15.48217q21.43685 0 21.43685 0 13.69576-0.595468 26.49832-2.381872 0.89321-0.446601 2.679608-0.893202 3.12621-0.297735 5.35921 1.48867 2.23301 1.637537 1.48867 4.763744z" fill="#fff"/>
-            </g>
-          </svg>
-          <div>TurboWarp Desktop</div>
-        </h1>
-        <div class="header-subtitles">
-          <noscript><p>This page requires JavaScript. You can <a href="https://github.com/TurboWarp/desktop/releases">download from GitHub releases instead</a> if that's a problem.</p></noscript>
-          <p data-l10n="header.subtitle" class="transparent-loading">Use <a href="https://turbowarp.org" data-notranslate>TurboWarp</a>, the Scratch mod with a compiler, dark mode, addons, and more, from an app on your desktop. It even works when you're offline.</p>
-          <p class="transparent-loading"><i data-l10n="header.affiliation">TurboWarp is not affiliated with Scratch, the Scratch Team, or the Scratch Foundation.</i></p>
-        </div>
+    <h1 class="header">
+      <svg aria-hidden="true" viewBox="0 0 1024 1024">
+        <path d="m64 174.86735v641.13265c0 35.34622 28.653776 64 64 64h113.30332c9.32935 0 18.19416 4.07135 24.27337 11.14807l67.26992 78.30776c12.15843 14.15343 29.88806 22.29614 48.54676 22.29614h261.21326c18.6587 0 36.38832-8.14271 48.54676-22.29614l67.26992-78.30776c6.07921-7.07672 14.94402-11.14807 24.27337-11.14807h113.30332c35.34622 0 64-28.65378 64-64v-654.84694c0-35.34622-28.65378-64-64-64-0.38091 0-0.76182 0.0034-1.14268 0.0102l-767.99999 13.71429c-34.89522 0.62313-62.85733 29.08902-62.85733 63.9898z" fill="#cc3c3c" fill-rule="evenodd"/>
+        <path d="m64 96v672c0 35.34622 28.653776 64 64 64h128.17394c9.97413 0 19.37789 4.65076 25.43168 12.5776l51.18313 67.01917c12.1076 15.85368 30.9151 25.1552 50.86336 25.1552h256.69578c19.94826 0 38.75576-9.30152 50.86336-25.1552l51.18312-67.01917c6.0538-7.92684 15.45756-12.5776 25.43169-12.5776h128.17394c35.34622 0 64-28.65378 64-64v-672c0-35.346224-28.65378-64-64-64h-768c-35.346224 0-64 28.653776-64 64z" fill="#ff4c4c" fill-rule="evenodd"/>
+        <path d="m96 96v672c0 17.67311 14.32689 32 32 32h128.17394c19.94827 0 38.75577 9.30152 50.86337 25.1552l51.18312 67.01917c6.0538 7.92684 15.45755 12.5776 25.43168 12.5776h256.69578c9.97413 0 19.37788-4.65076 25.43168-12.5776l51.18312-67.01917c12.1076-15.85368 30.9151-25.1552 50.86337-25.1552h128.17394c17.67311 0 32-14.32689 32-32v-672c0-17.673112-14.32689-32-32-32h-768c-17.67311 0-32 14.326888-32 32zm-32 0c0-35.346224 28.653776-64 64-64h768c35.34622 0 64 28.653776 64 64v672c0 35.34622-28.65378 64-64 64h-128.17394c-9.97413 0-19.37789 4.65076-25.43169 12.5776l-51.18312 67.01917c-12.1076 15.85368-30.9151 25.1552-50.86336 25.1552h-256.69578c-19.94826 0-38.75576-9.30152-50.86336-25.1552l-51.18313-67.01917c-6.05379-7.92684-15.45755-12.5776-25.43168-12.5776h-128.17394c-35.346224 0-64-28.65378-64-64z" fill="#fff" fill-opacity=".2"/>
+        <g transform="matrix(4.1943736,0,0,4.1943736,229.13567,171.21359)" fill="none" stroke="#fff" stroke-width="56.4093">
+         <path d="m108.34581 31.577677c-0.79395 3.473563-1.38942 7.244861-1.7864 11.313892-0.0992 1.091691 0 2.481117 0.29773 4.168276 0.29773 1.984893 0.4466 3.374319 0.4466 4.168276 0 2.580361-1.68716 3.870542-5.06147 3.870542-2.18339 0-3.622435-0.64509-4.317148-1.935271-0.09925-2.183383-0.04962-5.160723 0.14887-8.93202 0.198487-4.46601 0.29773-7.44335 0.29773-8.93202-0.09924 0-0.248107-0.09924-0.4466-0.297734-9.229753 0.396979-17.91366 0.992447-26.05172 1.786404-0.198493 1.290181-0.198493 2.878095 0 4.763744l0.59546 5.359212c-0.396973 3.076585-0.59546 7.64184-0.59546 13.695765 0.297733 2.580361 0.4466 13.646143 0.4466 33.197344v10.867303c0 1.68716 0.24811 2.8781 0.74433 3.57281h9.22976c3.771293-0.49623 5.65694 1.09169 5.65694 4.76374 0 2.18339-1.042067 3.72168-3.1262 4.61488-1.290187 0.49623-3.572817 0.59547-6.84789 0.29774-1.984893-0.19849-4.317143-0.24812-6.99675-0.14887-3.672053 0.49622-8.138063 0.8932-13.39803 1.19093-5.359207 0.29774-8.634279-0.44659-9.825218-2.233-0.793957-1.19093-0.793957-2.43149 0-3.72168 1.389425-2.18338 5.011855-3.27507 10.867288-3.27507 3.076587 0 4.61488-0.84358 4.61488-2.53074 0-0.8932-0.04962-1.73678-0.14887-2.53074 0-2.48113 0.04962-4.66452 0.14887-6.550163 0.297733-5.359213 0.297733-12.901808 0-22.627784-0.39698-14.092743-0.248113-26.746439 0.4466-37.961086l-0.4466-0.446601c-3.076587 0.198489-8.832777 0.148867-17.268572-0.148867-0.396979 0-3.423941 0.198489-9.080887 0.595468 1.389425 9.527488 2.183383 16.325748 2.381872 20.394779l-0.297734 4.01941c-0.09924 1.48867-1.339803 2.233005-3.721676 2.233005-1.885649 0-3.473563-3.572808-4.763744-10.718425-0.595468-4.267521-1.190936-8.584664-1.786404-12.951429 0-0.694713-0.347356-1.885649-1.042069-3.572808-0.595468-1.786404-1.908676-4.750966-1.908676-5.644168 0-3.141175 2.901123-2.39465 6.67242-2.990118 0.297734 0 0.793957 0.04962 1.48867 0.148867 0.694713 0.09924 1.190936 0.148867 1.48867 0.148867h36.91902c9.130507-0.396979 17.96328-1.190936 26.49832-2.381872 0.595473-0.297734 1.488678-0.595468 2.679608-0.893202 2.08414-0.19849 3.87054 0.297733 5.35921 1.48867 1.48867 1.091691 1.9849 2.679606 1.48867 4.763744z" fill="none" stroke="#fff" stroke-width="56.4093"/>
+        </g>
+        <g transform="matrix(3.852509,0,0,3.852509,257.89982,219.83848)" fill="none" stroke="#ff4c4c" stroke-width="30.7075">
+         <path d="m110.38498 21.776581q-1.29661 5.672702-1.94492 12.317866-0.16208 1.782849 0.32415 4.538161 0.48623 3.241544 0.48623 4.538161 0 4.214007-5.51062 4.214007-3.5657 0-4.700239-2.107004-0.16208-3.565698 0.16208-9.72463 0.32415-7.293474 0.32415-9.724631-0.16207 0-0.48623-0.324155-15.073176 0.648309-28.3635 1.944927-0.324161 2.107003 0 5.186469l0.6483 5.834779q-0.6483 5.024392-0.6483 14.911102 0.48623 4.214006 0.48623 36.143214v11.831633q0 2.75531 0.81038 3.88985h10.048792q6.158927-0.81039 6.158927 5.18647 0 3.5657-3.403614 5.0244-2.107013 0.81039-7.455559 0.32416-3.241543-0.32416-7.617628-0.16208-5.996857 0.81038-14.586946 1.29661-8.75216 0.48624-10.69709-2.43115-1.296617-1.94493 0-4.05194 2.26908-3.56569 11.831631-3.56569 5.024396 0 5.024396-2.75532 0-1.45869-0.162081-2.75531 0-4.051935 0.162081-7.131398 0.48623-8.75217 0-24.635731-0.648311-23.014961 0.48623-41.329683l-0.48623-0.486231q-5.024396 0.324154-18.800953-0.162077-0.648309 0-9.886708 0.648308 2.26908 15.55941 2.593235 22.204574 0 0-0.324155 4.376085-0.162077 2.431158-4.05193 2.431158-3.079467 0-5.18647-11.669558-0.972463-6.969319-1.944926-14.100715 0-1.13454-1.134541-3.889852-0.972463-2.91739-0.972463-4.376084 0-4.05193 6.158933-5.024393 0.486232 0 1.620772 0.162077 1.13454 0.162078 1.620772 0.162078h16.856029q23.339116 0 23.339116 0 14.911096-0.648309 28.849729-2.593235 0.97247-0.486232 2.91739-0.972463 3.40363-0.324156 5.83478 1.620771 2.43116 1.782849 1.62077 5.18647z" fill="none" stroke="#ff4c4c" stroke-width="30.7075"/>
+        </g>
+        <g transform="matrix(4.1943736,0,0,4.1943736,228.25358,197.35677)" fill="#fff">
+         <path d="m108.34581 25.3789q-1.19093 5.210345-1.7864 11.313892-0.14887 1.637537 0.29773 4.168276 0.4466 2.97734 0.4466 4.168276 0 3.870542-5.06147 3.870542-3.275078 0-4.317148-1.935271-0.14887-3.275074 0.14887-8.93202 0.29773-6.699015 0.29773-8.93202-0.14886 0-0.4466-0.297734-13.84463 0.595468-26.05172 1.786404-0.29774 1.935271 0 4.763744l0.59546 5.359212q-0.59546 4.614877-0.59546 13.695765 0.4466 3.870542 0.4466 33.197344v10.86729q0 2.53074 0.74433 3.57281h9.22976q5.65694-0.74434 5.65694 4.76374 0 3.27508-3.1262 4.61488-1.93528 0.74434-6.84789 0.29774-2.97734-0.29774-6.99675-0.14887-5.50808 0.74433-13.39803 1.19093-8.03881 0.44661-9.825218-2.233-1.190936-1.7864 0-3.72168 2.084138-3.27507 10.867288-3.27507 4.61488 0 4.61488-2.53074 0-1.3398-0.14887-2.53074 0-3.72168 0.14887-6.55015 0.4466-8.03882 0-22.627784-0.59547-21.139115 0.4466-37.961086l-0.4466-0.446601q-4.61488 0.297734-17.268572-0.148867-0.595468 0-9.080887 0.595468 2.084138 14.291232 2.381872 20.394779 0 0-0.297734 4.01941-0.148867 2.233005-3.721676 2.233005-2.828473 0-4.763744-10.718425-0.893202-6.401281-1.786404-12.951429 0-1.042069-1.042069-3.572808-0.893202-2.679606-0.893202-4.019409 0-3.721675 5.656946-4.614877 0.446601 0 1.48867 0.148867t1.48867 0.148867h15.48217q21.43685 0 21.43685 0 13.69576-0.595468 26.49832-2.381872 0.89321-0.446601 2.679608-0.893202 3.12621-0.297735 5.35921 1.48867 2.23301 1.637537 1.48867 4.763744z" fill="#fff"/>
+        </g>
+      </svg>
+      <div>TurboWarp Desktop</div>
+    </h1>
+
+    <div class="subheader">TurboWarp is a better version of Scratch 3 with a compiler, dark mode, addons, and a lot more. Now, you can use it offline on any desktop computer. Not affiliated with the Scratch Team.</div>
+
+    <div class="above-fold-download">
+      <noscript>
+        <a class="download-button" href="#install">Read installation instructions (JS disabled)</a>
+      </noscript>
+
+      <div data-if-os="windows">
+        <a class="microsoft-store" href="https://apps.microsoft.com/store/detail/turbowarp/9P4DPZGV5ZKL">
+          <div class="microsoft-icon"></div>
+          <div>
+            <div>Get it from</div>
+            <div>Microsoft</div>
+          </div>
+        </a>
+        <div class="download-separator">or</div>
+        <a class="download-button" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Setup-{version}-x64.exe">Download installer for Windows (64-bit)</a>
       </div>
-    </section>
 
-    <section class="select-os" id="select-os">
-      <div class="select-os-inner">
-        <div class="select-os-buttons">
-          <button class="os-button-windows">
-            <!-- Icon from https://fontawesome.com/icons/windows?style=brands -->
-            <svg class="os-button-icon" aria-hidden="true" focusable="false" role="img" viewBox="0 0 448 512"><path fill="currentColor" d="M0 93.7l183.6-25.3v177.4H0V93.7zm0 324.6l183.6 25.3V268.4H0v149.9zm203.8 28L448 480V268.4H203.8v177.9zm0-380.6v180.1H448V32L203.8 65.7z"></path></svg>
-            <div>
-              Windows
-            </div>
-          </button>
-          <button class="os-button-mac">
-            <!-- Icon from https://fontawesome.com/icons/apple?style=brands -->
-            <svg class="os-button-icon" aria-hidden="true" focusable="false" role="img" viewBox="0 0 384 512"><path fill="currentColor" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path></svg>
-            <div>
-              macOS
-            </div>
-          </button>
-          <button class="os-button-linux">
-            <!-- Icon from https://fontawesome.com/icons/linux?style=brands -->
-            <svg class="os-button-icon" aria-hidden="true" focusable="false" role="img" viewBox="0 0 448 512"><path fill="currentColor" d="M220.8 123.3c1 .5 1.8 1.7 3 1.7 1.1 0 2.8-.4 2.9-1.5.2-1.4-1.9-2.3-3.2-2.9-1.7-.7-3.9-1-5.5-.1-.4.2-.8.7-.6 1.1.3 1.3 2.3 1.1 3.4 1.7zm-21.9 1.7c1.2 0 2-1.2 3-1.7 1.1-.6 3.1-.4 3.5-1.6.2-.4-.2-.9-.6-1.1-1.6-.9-3.8-.6-5.5.1-1.3.6-3.4 1.5-3.2 2.9.1 1 1.8 1.5 2.8 1.4zM420 403.8c-3.6-4-5.3-11.6-7.2-19.7-1.8-8.1-3.9-16.8-10.5-22.4-1.3-1.1-2.6-2.1-4-2.9-1.3-.8-2.7-1.5-4.1-2 9.2-27.3 5.6-54.5-3.7-79.1-11.4-30.1-31.3-56.4-46.5-74.4-17.1-21.5-33.7-41.9-33.4-72C311.1 85.4 315.7.1 234.8 0 132.4-.2 158 103.4 156.9 135.2c-1.7 23.4-6.4 41.8-22.5 64.7-18.9 22.5-45.5 58.8-58.1 96.7-6 17.9-8.8 36.1-6.2 53.3-6.5 5.8-11.4 14.7-16.6 20.2-4.2 4.3-10.3 5.9-17 8.3s-14 6-18.5 14.5c-2.1 3.9-2.8 8.1-2.8 12.4 0 3.9.6 7.9 1.2 11.8 1.2 8.1 2.5 15.7.8 20.8-5.2 14.4-5.9 24.4-2.2 31.7 3.8 7.3 11.4 10.5 20.1 12.3 17.3 3.6 40.8 2.7 59.3 12.5 19.8 10.4 39.9 14.1 55.9 10.4 11.6-2.6 21.1-9.6 25.9-20.2 12.5-.1 26.3-5.4 48.3-6.6 14.9-1.2 33.6 5.3 55.1 4.1.6 2.3 1.4 4.6 2.5 6.7v.1c8.3 16.7 23.8 24.3 40.3 23 16.6-1.3 34.1-11 48.3-27.9 13.6-16.4 36-23.2 50.9-32.2 7.4-4.5 13.4-10.1 13.9-18.3.4-8.2-4.4-17.3-15.5-29.7zM223.7 87.3c9.8-22.2 34.2-21.8 44-.4 6.5 14.2 3.6 30.9-4.3 40.4-1.6-.8-5.9-2.6-12.6-4.9 1.1-1.2 3.1-2.7 3.9-4.6 4.8-11.8-.2-27-9.1-27.3-7.3-.5-13.9 10.8-11.8 23-4.1-2-9.4-3.5-13-4.4-1-6.9-.3-14.6 2.9-21.8zM183 75.8c10.1 0 20.8 14.2 19.1 33.5-3.5 1-7.1 2.5-10.2 4.6 1.2-8.9-3.3-20.1-9.6-19.6-8.4.7-9.8 21.2-1.8 28.1 1 .8 1.9-.2-5.9 5.5-15.6-14.6-10.5-52.1 8.4-52.1zm-13.6 60.7c6.2-4.6 13.6-10 14.1-10.5 4.7-4.4 13.5-14.2 27.9-14.2 7.1 0 15.6 2.3 25.9 8.9 6.3 4.1 11.3 4.4 22.6 9.3 8.4 3.5 13.7 9.7 10.5 18.2-2.6 7.1-11 14.4-22.7 18.1-11.1 3.6-19.8 16-38.2 14.9-3.9-.2-7-1-9.6-2.1-8-3.5-12.2-10.4-20-15-8.6-4.8-13.2-10.4-14.7-15.3-1.4-4.9 0-9 4.2-12.3zm3.3 334c-2.7 35.1-43.9 34.4-75.3 18-29.9-15.8-68.6-6.5-76.5-21.9-2.4-4.7-2.4-12.7 2.6-26.4v-.2c2.4-7.6.6-16-.6-23.9-1.2-7.8-1.8-15 .9-20 3.5-6.7 8.5-9.1 14.8-11.3 10.3-3.7 11.8-3.4 19.6-9.9 5.5-5.7 9.5-12.9 14.3-18 5.1-5.5 10-8.1 17.7-6.9 8.1 1.2 15.1 6.8 21.9 16l19.6 35.6c9.5 19.9 43.1 48.4 41 68.9zm-1.4-25.9c-4.1-6.6-9.6-13.6-14.4-19.6 7.1 0 14.2-2.2 16.7-8.9 2.3-6.2 0-14.9-7.4-24.9-13.5-18.2-38.3-32.5-38.3-32.5-13.5-8.4-21.1-18.7-24.6-29.9s-3-23.3-.3-35.2c5.2-22.9 18.6-45.2 27.2-59.2 2.3-1.7.8 3.2-8.7 20.8-8.5 16.1-24.4 53.3-2.6 82.4.6-20.7 5.5-41.8 13.8-61.5 12-27.4 37.3-74.9 39.3-112.7 1.1.8 4.6 3.2 6.2 4.1 4.6 2.7 8.1 6.7 12.6 10.3 12.4 10 28.5 9.2 42.4 1.2 6.2-3.5 11.2-7.5 15.9-9 9.9-3.1 17.8-8.6 22.3-15 7.7 30.4 25.7 74.3 37.2 95.7 6.1 11.4 18.3 35.5 23.6 64.6 3.3-.1 7 .4 10.9 1.4 13.8-35.7-11.7-74.2-23.3-84.9-4.7-4.6-4.9-6.6-2.6-6.5 12.6 11.2 29.2 33.7 35.2 59 2.8 11.6 3.3 23.7.4 35.7 16.4 6.8 35.9 17.9 30.7 34.8-2.2-.1-3.2 0-4.2 0 3.2-10.1-3.9-17.6-22.8-26.1-19.6-8.6-36-8.6-38.3 12.5-12.1 4.2-18.3 14.7-21.4 27.3-2.8 11.2-3.6 24.7-4.4 39.9-.5 7.7-3.6 18-6.8 29-32.1 22.9-76.7 32.9-114.3 7.2zm257.4-11.5c-.9 16.8-41.2 19.9-63.2 46.5-13.2 15.7-29.4 24.4-43.6 25.5s-26.5-4.8-33.7-19.3c-4.7-11.1-2.4-23.1 1.1-36.3 3.7-14.2 9.2-28.8 9.9-40.6.8-15.2 1.7-28.5 4.2-38.7 2.6-10.3 6.6-17.2 13.7-21.1.3-.2.7-.3 1-.5.8 13.2 7.3 26.6 18.8 29.5 12.6 3.3 30.7-7.5 38.4-16.3 9-.3 15.7-.9 22.6 5.1 9.9 8.5 7.1 30.3 17.1 41.6 10.6 11.6 14 19.5 13.7 24.6zM173.3 148.7c2 1.9 4.7 4.5 8 7.1 6.6 5.2 15.8 10.6 27.3 10.6 11.6 0 22.5-5.9 31.8-10.8 4.9-2.6 10.9-7 14.8-10.4s5.9-6.3 3.1-6.6-2.6 2.6-6 5.1c-4.4 3.2-9.7 7.4-13.9 9.8-7.4 4.2-19.5 10.2-29.9 10.2s-18.7-4.8-24.9-9.7c-3.1-2.5-5.7-5-7.7-6.9-1.5-1.4-1.9-4.6-4.3-4.9-1.4-.1-1.8 3.7 1.7 6.5z"></path></svg>
-            <div>
-              Linux
-            </div>
-          </button>
-          <button class="os-button-web">
-            <!-- Icon from https://fontawesome.com/v5.15/icons/chrome?style=brands -->
-            <svg class="os-button-icon" aria-hidden="true" focusable="false" role="img" viewBox="0 0 496 512"><path fill="currentColor" d="M131.5 217.5L55.1 100.1c47.6-59.2 119-91.8 192-92.1 42.3-.3 85.5 10.5 124.8 33.2 43.4 25.2 76.4 61.4 97.4 103L264 133.4c-58.1-3.4-113.4 29.3-132.5 84.1zm32.9 38.5c0 46.2 37.4 83.6 83.6 83.6s83.6-37.4 83.6-83.6-37.4-83.6-83.6-83.6-83.6 37.3-83.6 83.6zm314.9-89.2L339.6 174c37.9 44.3 38.5 108.2 6.6 157.2L234.1 503.6c46.5 2.5 94.4-7.7 137.8-32.9 107.4-62 150.9-192 107.4-303.9zM133.7 303.6L40.4 120.1C14.9 159.1 0 205.9 0 256c0 124 90.8 226.7 209.5 244.9l63.7-124.8c-57.6 10.8-113.2-20.8-139.5-72.5z"></path></svg>
-            <div>
-              Web App
-            </div>
-          </button>
-        </div>
+      <div data-if-os="mac">
+        <a class="download-button" data-href="https://github.com/TurboWarp/desktop/releases/download/v1.6.2/TurboWarp-Setup-1.6.2.dmg">Download for macOS (Universal)</a>
       </div>
-    </section>
 
-    <section class="changelog" id="changelog">
-      <div>
-        <div lang="en">
-          <div class="os-mac" data-version="1.6.2">
-            <h2>What's new in v1.6.2 (macOS only)</h2>
-            <ul>
-              <li>Added Apple code signing and notarization</li>
-            </ul>
-          </div>
-          <div data-version="1.6.1">
-            <h2>What's new in v1.6.1</h2>
-            <ul>
-              <li>Fixed features that access your microphone or camera</li>
-              <li>Fixed addon settings import not importing some color options</li>
-            </ul>
-          </div>
-          <div data-version="1.6.0">
-            <h2>What's new in v1.6.0</h2>
-            <ul>
-              <li>New addon: Pick colors from stage (enabled by default)</li>
-              <li>New addon: Zebra striping</li>
-              <li>Bitmap costume editor now supports transparency</li>
-              <li>SVGs exported by TurboWarp and imported to TurboWarp won't be re-centered unnecessarily</li>
-              <li>Sound editor now shows a sound's size, whether it's stereo or not, and its sample rate</li>
-              <li>Maximum SVG size has been reverted to the same as Scratch due to too many crashes</li>
-              <li>Added option to clone counter to only show icon</li>
-              <li>Added "Turbo Robot" sprite to builtin libraries</li>
-              <li>Added option to customizable new sprite position to apply to duplicated sprites</li>
-              <li>Fixed "Saving project..." text disappearing before the project was actually saved</li>
-              <li>Fixed save location still being updated if you cancel the confirmation to replace existing project</li>
-              <li>Fixed unnecessary memory use when saving files</li>
-              <li>Fixed loading some projects with many bitmap costumes</li>
-              <li>Fixed block cherry picking breaking on certain blocks</li>
-              <li>Fixed tangent block reporting slightly incorrect values in the compiler</li>
-              <li>Fixed display stage on left side and two-column category menu compatibility bugs</li>
-              <li>Fixed developer tools dark mode issue</li>
-              <li>Fixed auto-hiding block palette bugs</li>
-              <li>Fixed variable manager bugs</li>
-              <li>Fixed sound editor layout bugs at certain window sizes</li>
-              <li>Fixed some costume and sound lists having an unnecessary horizontal scrollbar</li>
-              <li>Fixed color picker overlay not covering the entire page</li>
-              <li>Fixed some icons being unnecessarily draggable</li>
-              <li>Fixed loading Scratch 2 projects with unusual JSON</li>
-              <li>Windows: Title bar now respects your computer's dark mode preference</li>
-              <li>Linux: We now have a repository for Debian/Ubuntu and their derivatives</li>
-              <li>Updated packager: settings export and import, optimized memory use of packaged projects</li>
-            </ul>
-          </div>
-          <div data-version="1.5.0">
-            <h2>What's new in v1.5.0</h2>
-            <ul>
-              <li>New addon: Reverse order of project controls</li>
-              <li>New addon: Hide stage and sprite pane</li>
-              <li>Allow creating unlimited cloud variables</li>
-              <li>Fixed backpacking JPEG costumes</li>
-              <li>Fixed turbo mode stored in projects not applying properly</li>
-              <li>Added option to disable hidden window throttling</li>
-              <li>Fixed some bugs in the auto-hiding block palette addon</li>
-              <li>Linux: Support for 32-bit x86 has been removed</li>
-              <li>macOS: Fixed uncloseable packager windows if opened from a fullscreen editor window</li>
-              <li>Updated packager: list color, version number, macOS Electron, Scratch Link support, more</li>
-            </ul>
-          </div>
-          <div data-version="1.4.0">
-            <h2>What's new in v1.4.0</h2>
-            <ul>
-              <li>Moved the builtin copy of the TurboWarp Packager to the File &gt; Package project menu</li>
-              <li>Added a sound duration indicator to the sound editor</li>
-              <li>Added partial support for the "Threads" tab in the debugger addon, including single stepping</li>
-              <li>Fixed high CPU usage when project is paused</li>
-              <li>Increased maximum resolution of large vector costumes</li>
-              <li>Updated backpacked item previews to support transparency</li>
-              <li>Updated dark mode with improved inputs, improved scrollbars, and support for the debugger and gamepad addons</li>
-              <li>Fixed developer tools find bar covering up controls in certain conditions</li>
-              <li>Fixed variable manager causing crashes when variables are too large</li>
-              <li>Improved style of many modals and prompts to be more cohesive</li>
-              <li>Fixed block context menus immediately selecting item and closing after being opened on some systems</li>
-              <li>Fixed interface allowing invalid framerates and invalid stage sizes</li>
-              <li>Fixed custom extensions being able to corrupt projects if they return unexpected values</li>
-              <li>Fixed custom extension error handling</li>
-              <li>Fixed various other bugs</li>
-              <li>Linux: Support for 32-bit x86 systems will be removed in v1.5.0 (32-bit ARM is not affected)</li>
-              <li>Linux: Added support for Linux on Apple Silicon</li>
-              <li>macOS: Reduced app startup time</li>
-              <li>Added <a href="https://github.com/sponsors/GarboMuffin">donation</a> links</li>
-              <li>Updated packager: adds support for "☁ room id" special cloud behavior</li>
-            </ul>
-          </div>
-          <div data-version="1.3.1">
-            <h2>What's new in v1.3.1</h2>
-            <ul>
-              <li>Fixed crash on some Linux systems</li>
-              <li>Gamepad addon now supports buttons other than the left button and is compatible with pointerlock in the packager</li>
-              <li>Updated packager: relicensed to Apache 2.0 from LGPL3.0 for fewer restrictions, added "☁ set clipboard" and "☁ pasted" support to special cloud behaviors</li>
-              <li>Various other bug fixes</li>
-            </ul>
-          </div>
-          <div data-version="1.3.0">
-            <h2>What's new in v1.3.0</h2>
-            <ul>
-              <li>New addon: Customizable default costume editor colors</li>
-              <li>The app now registers itself as a file handler for .sb and sb2 files in addition to .sb3</li>
-              <li>Optimized comparison blocks</li>
-              <li>Fixed more crashes on app startup on some systems</li>
-            </ul>
-          </div>
-          <div data-version="1.2.2">
-            <h2>What's new in v1.2.2</h2>
-            <ul>
-              <li>Fixed mouse actions in gamepad support addon in packager</li>
-              <li>Fixed blocks like "insert x at any of list" to insert at a random location</li>
-            </ul>
-          </div>
-          <div data-version="1.2.1">
-            <h2>What's new in v1.2.1</h2>
-            <ul>
-              <li>All windows now have proper language hints, fixes CJK characters looking weird in some windows</li>
-              <li>Added error message when any child process dies unexpectedly, not just renderer processes</li>
-            </ul>
-          </div>
-          <div data-version="1.2.0">
-            <h2>What's new in v1.2.0</h2>
-            <ul>
-              <li>Added option to configure which microphone and camera the app should use</li>
-              <li>Added option to disable hardware acceleration</li>
-              <li>Fixed stage size stored in projects</li>
-              <li>Reduced costume editor flicker when switching costumes</li>
-              <li>Added text inputs to costume editor color components</li>
-              <li>Fixed monitor position after resizing stage</li>
-              <li>Fixed vertical centering of variable monitor values in certain conditions</li>
-              <li>Fixed lines between tiled stamps when high quality pen is enabled</li>
-              <li>Reduced lag related to folders addon</li>
-            </ul>
-          </div>
-        </div>
-
-        <p><a href="https://github.com/TurboWarp/desktop/releases" data-l10n="releases">Older release notes available on GitHub.</a></p>
-        <div class="changelog-install-info">
-          <p class="os-windows" data-l10n="update.windows">To update, download and run the new installer below.</p>
-          <p class="os-mac" data-l10n="update.mac">To update, download and install the new app below.</p>
-          <p class="os-linux" data-l10n="update.linux">If you installed TurboWarp Desktop from an app store or package manager such as the Snap Store, wait until the update is pushed to the store. Otherwise, run the new installer below.</p>
-        </div>
+      <div data-if-os="linux">
+        <a class="download-button" href="#linux">Read Linux installation instructions</a>
       </div>
-    </section>
 
-    <section class="os os-windows">
-      <div>
-        <div class="download-button-outer">
-          <a href="https://apps.microsoft.com/store/detail/turbowarp/9P4DPZGV5ZKL">
-            <img data-src="microsoft-store.png" alt="Get it from Microsoft" height="60">
-          </a>
-        </div>
-
-        <div class="download-button-outer">
-          <a class="download-button-inner" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Setup-{version}-x64.exe">
-            <div class="download-icon"></div>
-            <div data-l10n="win.download">Download for Windows (64-bit)</div>
-          </a>
-        </div>
-
-        <div class="download-button-outer">
-          <a class="download-button-inner" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Setup-{version}-ia32.exe">
-            <div class="download-icon"></div>
-            <div data-l10n="win.32">Alternative download for 32-bit systems</div>
-          </a>
-        </div>
-
-        <div class="install-help">
-          <p data-l10n="win.help">If a Windows SmartScreen alert appears, click "More info" then "Run anyways".</p>
-        </div>
+      <div data-if-os="unsupported">
+        <a class="download-button" href="#install">Could not detect operating system</a>
       </div>
-    </section>
+    </div>
 
-    <section class="os os-mac">
+    <div class="alternative-download-links">
       <div>
-        <div class="download-button-outer">
-          <!-- FIXME: replace 1.6.2 with {version} for 1.7.0 -->
-          <a class="download-button-inner" data-href="https://github.com/TurboWarp/desktop/releases/download/v1.6.2/TurboWarp-Setup-1.6.2.dmg">
-            <div class="download-icon"></div>
-            <div data-l10n="mac.download">Download for macOS (Universal)</div>
-          </a>
-        </div>
-
-        <div class="install-help">
-          <p data-l10n="mac-help">Drag TurboWarp into Applications. If it tells you that TurboWarp already exists, choose Replace.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="os os-linux">
-      <div>
-        <p data-l10n="linux.1">On most Linux distributions, the recommended way to install TurboWarp is to search for "TurboWarp" in your distribution's software manager and choose the first option that appears.</p>
-        <p data-l10n="linux.2">If you're an advanced user or if it doesn't appear, more choices are available:</p>
-
-        <h2>Snap Store</h2>
-        <p data-l10n="snap">We maintain an official snap version: <a href="https://snapcraft.io/turbowarp-desktop" data-notranslate data-l10n-subkey="package-link">turbowarp-desktop</a></p>
-
-        <details>
-          <summary data-l10n="workarounds">Known issues and workarounds</summary>
-
-          <p data-l10n="snap.sandbox">By default, the snap version can't access your camera, microphone, gamepads, or removable drives. To fix this, run these commands:</p>
-          <code class="terminal">
-            <div class="command">snap connect turbowarp-desktop:camera</div>
-            <div class="command">snap connect turbowarp-desktop:audio-record</div>
-            <div class="command">snap connect turbowarp-desktop:joystick</div>
-            <div class="command">snap connect turbowarp-desktop:removable-media</div>
-          </code>
-
-          <p data-l10n="snap.opener">By default, the snap version can't be set as the file opener for sb3, sb2, or sb files without interfering with other file types. To fix this, run these commands:</p>
-          <code class="terminal">
-            <div class="command">wget https://desktop.turbowarp.org/snap-mime.xml -qO- | sudo tee /usr/share/mime/packages/turbowarp-desktop-snap.xml > /dev/null</div>
-            <div class="command">sudo update-mime-database /usr/share/mime</div>
-          </code>
-        </details>
-
-        <h2>Flatpak</h2>
-        <p data-l10n="flatpak">We maintain an official Flatpak version on Flathub: <a href="https://flathub.org/apps/details/org.turbowarp.TurboWarp" data-notranslate data-l10n-subkey="package-link">org.turbowarp.TurboWarp</a></p>
-
-        <details>
-          <summary data-l10n="workarounds">Known issues and workarounds</summary>
-
-          <p data-l10n="flatpak.gamepads">Gamepads will not work in the Flatpak version.</p>
-
-          <p data-l10n="flatpak.sandbox">By default, the app may be limited to only accessing projects in your home directory. To allow accessing other folders, run this command:</p>
-          <code class="terminal">
-            <div class="command">flatpak override org.turbowarp.TurboWarp --filesystem=<i>/path/to/folder/</i></div>
-          </code>
-        </details>
-
-        <h2>Debian, Ubuntu, Raspberry Pi OS</h2>
-        <p>
-          <span class="new" data-l10n="new">New!</span>
-          <span data-l10n="deb-repo">Install our repository to receive updates through apt by running these commands:</span>
-        </p>
-        <code class="terminal">
-          <div class="command">wget https://desktop.turbowarp.org/release-signing-key.gpg -qO- | gpg --dearmor | sudo tee /usr/share/keyrings/turbowarp.gpg > /dev/null</div>
-          <div class="command">echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/turbowarp.gpg] https://releases.turbowarp.org/deb stable main" | sudo tee /etc/apt/sources.list.d/turbowarp.list</div>
-          <div class="command">sudo apt update</div>
-          <div class="command">sudo apt install turbowarp-desktop</div>
-        </code>
-        <p data-l10n="deb-manual">Or manually install the .deb package for your system (won't add apt repository):</p>
+        <b>Other operating systems:</b>
         <ul>
-          <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-amd64-{version}.deb">x86 64-bit</a></li>
-          <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.deb">ARM 64-bit</a></li>
-          <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.deb">ARMv7l</a></li>
-        </ul>
-
-        <h2>Arch User Repository</h2>
-        <p data-l10n="arch">For Arch Linux systems, we recommend the official AUR package: <a href="https://aur.archlinux.org/packages/turbowarp-desktop-bin/" data-notranslate data-l10n-subkey="package-link">turbowarp-desktop-bin</a></p>
-
-        <h2>AppImage</h2>
-        <ul>
-          <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-x86_64-{version}.AppImage">x86 64-bit</a></li>
-          <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.AppImage">ARM 64-bit</a></li>
-          <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.AppImage">ARMv7l</a></li>
-        </ul>
-
-        <h2>tar.gz</h2>
-        <ul>
-          <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-x64-{version}.tar.gz">x86 64-bit</a></li>
-          <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.tar.gz">ARM 64-bit</a></li>
-          <li><a data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.tar.gz">ARMv7l</a></li>
+          <li><a href="#windows">Windows</a></li>
+          <li><a href="#mac">macOS</a></li>
+          <li><a href="#linux">Linux</a></li>
         </ul>
       </div>
-    </section>
+      <div><b>Or use our web app in any browser:</b> <a href="https://turbowarp.org/editor">turbowarp.org/editor</a></div>
+    </div>
 
-    <section class="os os-web">
-      <div>
-        <div class="install-help">
-          <p data-l10n="web1">On ChromeOS, Android, iOS, iPadOS, and all other platforms, you can use the TurboWarp website instead. Almost all features work just as well.</p>
-        </div>
-
-        <div class="download-button-outer">
-          <a class="download-button-inner" href="https://turbowarp.org/" target="_blank" rel="noopener noreferrer">
-            <div data-l10n="pwa.open">Open the TurboWarp website</div>
-          </a>
-        </div>
-
-        <div class="install-help">
-          <p data-l10n="web2">Oftentimes you can "install" the website as a web app. On desktops and laptops, the install button may appear in the URL bar after a few seconds.</p>
-          <p data-l10n="web3">On phones and tablets, find "Install app" or "Add to Home Screen" in your browser's menus.</p>
-          <img data-src="pwa-install.png" width="620" height="258" class="pwa-install">
-        </div>
-      </div>
-    </section>
-
-    <section class="links">
-      <div class="links-inner">
-        <a class="link" href="https://github.com/TurboWarp/desktop/">
-          <div class="icon">
-            <!-- Icon from https://fontawesome.com/v5.15/icons/code?style=solid -->
-            <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 640 512"><path fill="currentColor" d="M278.9 511.5l-61-17.7c-6.4-1.8-10-8.5-8.2-14.9L346.2 8.7c1.8-6.4 8.5-10 14.9-8.2l61 17.7c6.4 1.8 10 8.5 8.2 14.9L293.8 503.3c-1.9 6.4-8.5 10.1-14.9 8.2zm-114-112.2l43.5-46.4c4.6-4.9 4.3-12.7-.8-17.2L117 256l90.6-79.7c5.1-4.5 5.5-12.3.8-17.2l-43.5-46.4c-4.5-4.8-12.1-5.1-17-.5L3.8 247.2c-5.1 4.7-5.1 12.8 0 17.5l144.1 135.1c4.9 4.6 12.5 4.4 17-.5zm327.2.6l144.1-135.1c5.1-4.7 5.1-12.8 0-17.5L492.1 112.1c-4.8-4.5-12.4-4.3-17 .5L431.6 159c-4.6 4.9-4.3 12.7.8 17.2L523 256l-90.6 79.7c-5.1 4.5-5.5 12.3-.8 17.2l43.5 46.4c4.5 4.9 12.1 5.1 17 .6z"></path></svg>
-          </div>
-          <div data-l10n="source">Source code</div>
-        </a>
-        <a class="link" href="privacy.html">
-          <div class="icon">
-            <!-- Icon from https://fontawesome.com/v5.15/icons/file?style=solid -->
-            <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 384 512"><path fill="currentColor" d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg>
-          </div>
-          <div data-l10n="privacy">Privacy policy</div>
-        </a>
-        <a class="link" href="https://scratch.mit.edu/users/GarboMuffin/#comments">
-          <div class="icon">
-            <!-- Icon from https://fontawesome.com/v5.15/icons/bug?style=solid -->
-            <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 512 512"><path fill="currentColor" d="M511.988 288.9c-.478 17.43-15.217 31.1-32.653 31.1H424v16c0 21.864-4.882 42.584-13.6 61.145l60.228 60.228c12.496 12.497 12.496 32.758 0 45.255-12.498 12.497-32.759 12.496-45.256 0l-54.736-54.736C345.886 467.965 314.351 480 280 480V236c0-6.627-5.373-12-12-12h-24c-6.627 0-12 5.373-12 12v244c-34.351 0-65.886-12.035-90.636-32.108l-54.736 54.736c-12.498 12.497-32.759 12.496-45.256 0-12.496-12.497-12.496-32.758 0-45.255l60.228-60.228C92.882 378.584 88 357.864 88 336v-16H32.666C15.23 320 .491 306.33.013 288.9-.484 270.816 14.028 256 32 256h56v-58.745l-46.628-46.628c-12.496-12.497-12.496-32.758 0-45.255 12.498-12.497 32.758-12.497 45.256 0L141.255 160h229.489l54.627-54.627c12.498-12.497 32.758-12.497 45.256 0 12.496 12.497 12.496 32.758 0 45.255L424 197.255V256h56c17.972 0 32.484 14.816 31.988 32.9zM257 0c-61.856 0-112 50.144-112 112h224C369 50.144 318.856 0 257 0z"></path></svg>
-          </div>
-          <div data-l10n="scratchBugs">Report bugs on Scratch</div>
-        </a>
-        <a class="link" href="https://github.com/TurboWarp/desktop/issues">
-          <div class="icon">
-            <!-- Icon from https://fontawesome.com/v5.15/icons/bug?style=solid -->
-            <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 512 512"><path fill="currentColor" d="M511.988 288.9c-.478 17.43-15.217 31.1-32.653 31.1H424v16c0 21.864-4.882 42.584-13.6 61.145l60.228 60.228c12.496 12.497 12.496 32.758 0 45.255-12.498 12.497-32.759 12.496-45.256 0l-54.736-54.736C345.886 467.965 314.351 480 280 480V236c0-6.627-5.373-12-12-12h-24c-6.627 0-12 5.373-12 12v244c-34.351 0-65.886-12.035-90.636-32.108l-54.736 54.736c-12.498 12.497-32.759 12.496-45.256 0-12.496-12.497-12.496-32.758 0-45.255l60.228-60.228C92.882 378.584 88 357.864 88 336v-16H32.666C15.23 320 .491 306.33.013 288.9-.484 270.816 14.028 256 32 256h56v-58.745l-46.628-46.628c-12.496-12.497-12.496-32.758 0-45.255 12.498-12.497 32.758-12.497 45.256 0L141.255 160h229.489l54.627-54.627c12.498-12.497 32.758-12.497 45.256 0 12.496 12.497 12.496 32.758 0 45.255L424 197.255V256h56c17.972 0 32.484 14.816 31.988 32.9zM257 0c-61.856 0-112 50.144-112 112h224C369 50.144 318.856 0 257 0z"></path></svg>
-          </div>
-          <div data-l10n="githubBugs">Report bugs on GitHub</div>
-        </a>
-      </div>
-    </section>
-
-    <section class="donate">
-      <a href="https://github.com/sponsors/GarboMuffin" target="_blank" rel="noopener noreferrer">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20"><path d="m244 84 11.1 12 12-11.98C300.6 51.37 347 36.51 392.6 44.1c68.9 11.48 119.4 71.1 119.4 141v5.8c0 41.5-17.2 81.2-47.6 109.5L283.7 469.1c-7.5 7-17.4 10.9-27.7 10.9s-20.2-3.9-27.7-10.9L47.59 300.4C17.23 272.1 0 232.4 0 190.9v-5.8c0-69.9 50.52-129.52 119.4-141 44.7-7.59 92 7.27 124.6 39.9-.9 0 0 .01 0 0zm11.1 79.9-45-46.8c-21.7-20.82-52.5-30.7-82.8-25.66C81.55 99.07 48 138.7 48 185.1v5.8c0 28.2 11.71 55.2 32.34 74.4L256 429.3l175.7-164c20.6-19.2 32.3-46.2 32.3-74.4v-5.8c0-46.4-33.6-86.03-79.3-93.66-30.3-5.04-61.1 4.84-82.8 25.66l-46.8 46.8z" fill="currentColor" /></svg>
-        <div data-l10n="donate">If you like TurboWarp, consider donating</div>
-      </a>
-    </section>
-
-    <section class="picture-container editor-screenshot">
-      <picture class="os-not-mac picture-light">
+    <div class="picture picture-editor">
+      <picture class="theme-light">
         <source data-srcset="screenshot-win-light.webp" type="image/webp">
-        <img data-src="screenshot-win-light.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
+        <img data-src="screenshot-win-light.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles">
       </picture>
-      <picture class="os-not-mac picture-dark">
+      <picture class="theme-dark">
         <source data-srcset="screenshot-win-dark.webp" type="image/webp">
-        <img data-src="screenshot-win-dark.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
+        <img data-src="screenshot-win-dark.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles">
       </picture>
-      <picture class="os-mac picture-light">
-        <source data-srcset="screenshot-mac-light.webp" type="image/webp">
-        <img data-src="screenshot-mac-light.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
-      </picture>
-      <picture class="os-mac picture-dark">
-        <source data-srcset="screenshot-mac-dark.webp" type="image/webp">
-        <img data-src="screenshot-mac-dark.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles" data-l10n-attrib="title=picture.title">
-      </picture>
-      <p class="picture-caption" data-l10n="screenshot-caption">Project pictured: <a href="https://scratch.mit.edu/projects/425020125/" data-l10n-subkey="project">Full Sphere Path Tracer by piano_miles</a></p>
-    </section>
+      <div class="picture-caption">Project pictured: <a href="https://scratch.mit.edu/projects/425020125/">Full Sphere Path Tracer by piano_miles</a></div>
+    </div>
 
-    <section class="picture-container addons-screenshot">
-      <img class="picture-light" data-src="addons-win-light.png" width="683" height="700">
-      <img class="picture-dark" data-src="addons-win-dark.png" width="683" height="700">
-      <p class="picture-caption" data-l10n="addons-caption">More than <span data-l10n-subkey="large-number" data-notranslate>50</span> <a href="https://turbowarp.org/addons" target="_blank" rel="noopener noreferrer">addons</a> to customize and enhance your experience.</p>
-    </section>
+    <div class="features">
+      <h2>Features</h2>
 
-    <section class="picture-container packager-screenshot">
-      <img class="picture-light" data-src="packager-win-light.png" width="683" height="700">
-      <img class="picture-dark" data-src="packager-win-dark.png" width="683" height="700">
-      <p class="picture-caption" data-l10n="packager-caption">Builtin <a href="https://packager.turbowarp.org/" target="_blank" rel="noopener noreferrer">packager</a> to convert projects to HTML files or applications for Windows, macOS, or Linux.</p>
-    </section>
+      <div class="feature-list">
+        <div>
+          <h3>Speed</h3>
+          <p><a href="https://docs.turbowarp.org/how">By compiling projects to JavaScript, they run 10-100x faster than in Scratch.</a></p>
+        </div>
+        <div>
+          <h3>Lighter than Scratch</h3>
+          <p>Uses significantly less memory and idle CPU usage than Scratch.</p>
+        </div>
+        <div>
+          <h3>Dark mode</h3>
+          <p>Your eyes will thank you.</p>
+        </div>
+        <div>
+          <h3>Packager</h3>
+          <p><a href="https://packager.turbowarp.org/">Built in packager to convert projects to HTML files, zip files, or applications for Windows, macOS, or Linux.</a></p>
+        </div>
+        <div>
+          <h3>60 FPS</h3>
+          <p><a href="https://docs.turbowarp.org/custom-fps">Replace Scratch's default 30 FPS with any framerate of your choosing.</a></p>
+        </div>
+        <div>
+          <h3>Custom stage size</h3>
+          <p><a href="https://docs.turbowarp.org/custom-stage-size">Change Scratch's default 480x360 stage to any size you like.</a></p>
+        </div>
+        <div>
+          <h3>Remove limits</h3>
+          <p>Remove almost any of Scratch's arbitrary limits, including the 300 clone limit.</p>
+        </div>
+        <div>
+          <h3>Backpack</h3>
+          <p>Put scripts, costumes, sounds, or entire sprites into the backpack to re-use them later.</p>
+        </div>
+        <div>
+          <h3>Tools for developers</h3>
+          <p>Searchable dropdowns, find bar, jump to block definition, folders, block switching, and more.</p>
+        </div>
+        <div>
+          <h3>Tools for artists</h3>
+          <p>Full support for transparency, an improved costume editor, and onion skinning, and more.</p>
+        </div>
+      </div>
 
-    <div id="alternative-changelog-spot"></div>
+      <div class="more-features">And a lot more.</div>
+    </div>
+
+    <hr>
+
+    <div class="links">
+      <a class="link" href="https://github.com/TurboWarp/desktop/">
+        <!-- Icon from https://fontawesome.com/v5.15/icons/code?style=solid -->
+        <svg viewBox="0 0 640 512"><path fill="currentColor" d="M278.9 511.5l-61-17.7c-6.4-1.8-10-8.5-8.2-14.9L346.2 8.7c1.8-6.4 8.5-10 14.9-8.2l61 17.7c6.4 1.8 10 8.5 8.2 14.9L293.8 503.3c-1.9 6.4-8.5 10.1-14.9 8.2zm-114-112.2l43.5-46.4c4.6-4.9 4.3-12.7-.8-17.2L117 256l90.6-79.7c5.1-4.5 5.5-12.3.8-17.2l-43.5-46.4c-4.5-4.8-12.1-5.1-17-.5L3.8 247.2c-5.1 4.7-5.1 12.8 0 17.5l144.1 135.1c4.9 4.6 12.5 4.4 17-.5zm327.2.6l144.1-135.1c5.1-4.7 5.1-12.8 0-17.5L492.1 112.1c-4.8-4.5-12.4-4.3-17 .5L431.6 159c-4.6 4.9-4.3 12.7.8 17.2L523 256l-90.6 79.7c-5.1 4.5-5.5 12.3-.8 17.2l43.5 46.4c4.5 4.9 12.1 5.1 17 .6z"></path></svg>
+        <div>Source code</div>
+      </a>
+      <a class="link" href="privacy.html">
+        <!-- Icon from https://fontawesome.com/v5.15/icons/file?style=solid -->
+        <svg viewBox="0 0 384 512"><path fill="currentColor" d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg>
+        <div>Privacy policy</div>
+      </a>
+      <a class="link" href="https://scratch.mit.edu/users/GarboMuffin/#comments">
+        <!-- Icon from https://fontawesome.com/v5.15/icons/bug?style=solid -->
+        <svg viewBox="0 0 512 512"><path fill="currentColor" d="M511.988 288.9c-.478 17.43-15.217 31.1-32.653 31.1H424v16c0 21.864-4.882 42.584-13.6 61.145l60.228 60.228c12.496 12.497 12.496 32.758 0 45.255-12.498 12.497-32.759 12.496-45.256 0l-54.736-54.736C345.886 467.965 314.351 480 280 480V236c0-6.627-5.373-12-12-12h-24c-6.627 0-12 5.373-12 12v244c-34.351 0-65.886-12.035-90.636-32.108l-54.736 54.736c-12.498 12.497-32.759 12.496-45.256 0-12.496-12.497-12.496-32.758 0-45.255l60.228-60.228C92.882 378.584 88 357.864 88 336v-16H32.666C15.23 320 .491 306.33.013 288.9-.484 270.816 14.028 256 32 256h56v-58.745l-46.628-46.628c-12.496-12.497-12.496-32.758 0-45.255 12.498-12.497 32.758-12.497 45.256 0L141.255 160h229.489l54.627-54.627c12.498-12.497 32.758-12.497 45.256 0 12.496 12.497 12.496 32.758 0 45.255L424 197.255V256h56c17.972 0 32.484 14.816 31.988 32.9zM257 0c-61.856 0-112 50.144-112 112h224C369 50.144 318.856 0 257 0z"></path></svg>
+        <div>Report bugs on Scratch</div>
+      </a>
+      <a class="link" href="https://github.com/TurboWarp/desktop/issues">
+        <!-- Icon from https://fontawesome.com/v5.15/icons/bug?style=solid -->
+        <svg viewBox="0 0 512 512"><path fill="currentColor" d="M511.988 288.9c-.478 17.43-15.217 31.1-32.653 31.1H424v16c0 21.864-4.882 42.584-13.6 61.145l60.228 60.228c12.496 12.497 12.496 32.758 0 45.255-12.498 12.497-32.759 12.496-45.256 0l-54.736-54.736C345.886 467.965 314.351 480 280 480V236c0-6.627-5.373-12-12-12h-24c-6.627 0-12 5.373-12 12v244c-34.351 0-65.886-12.035-90.636-32.108l-54.736 54.736c-12.498 12.497-32.759 12.496-45.256 0-12.496-12.497-12.496-32.758 0-45.255l60.228-60.228C92.882 378.584 88 357.864 88 336v-16H32.666C15.23 320 .491 306.33.013 288.9-.484 270.816 14.028 256 32 256h56v-58.745l-46.628-46.628c-12.496-12.497-12.496-32.758 0-45.255 12.498-12.497 32.758-12.497 45.256 0L141.255 160h229.489l54.627-54.627c12.498-12.497 32.758-12.497 45.256 0 12.496 12.497 12.496 32.758 0 45.255L424 197.255V256h56c17.972 0 32.484 14.816 31.988 32.9zM257 0c-61.856 0-112 50.144-112 112h224C369 50.144 318.856 0 257 0z"></path></svg>
+        <div>Report bugs on GitHub</div>
+      </a>
+      <a class="link" href="https://github.com/sponsors/GarboMuffin">
+        <svg viewBox="0 0 512 512" width="20" height="20"><path d="m244 84 11.1 12 12-11.98C300.6 51.37 347 36.51 392.6 44.1c68.9 11.48 119.4 71.1 119.4 141v5.8c0 41.5-17.2 81.2-47.6 109.5L283.7 469.1c-7.5 7-17.4 10.9-27.7 10.9s-20.2-3.9-27.7-10.9L47.59 300.4C17.23 272.1 0 232.4 0 190.9v-5.8c0-69.9 50.52-129.52 119.4-141 44.7-7.59 92 7.27 124.6 39.9-.9 0 0 .01 0 0zm11.1 79.9-45-46.8c-21.7-20.82-52.5-30.7-82.8-25.66C81.55 99.07 48 138.7 48 185.1v5.8c0 28.2 11.71 55.2 32.34 74.4L256 429.3l175.7-164c20.6-19.2 32.3-46.2 32.3-74.4v-5.8c0-46.4-33.6-86.03-79.3-93.66-30.3-5.04-61.1 4.84-82.8 25.66l-46.8 46.8z" fill="currentColor" /></svg>
+        <div>Donate</div>
+      </a>
+    </div>
+
+    <hr>
+
+    <div id="install"></div>
+
+    <div class="manual-installation" id="windows">
+      <h2>Install on Windows</h2>
+      <p>Get it from the Microsoft Store to enable automatic updates.</p>
+      <div>
+        <a class="microsoft-store" href="https://apps.microsoft.com/store/detail/turbowarp/9P4DPZGV5ZKL">
+          <div class="microsoft-icon"></div>
+          <div>
+            <div>Get it from</div>
+            <div>Microsoft</div>
+          </div>
+        </a>
+      </div>
+
+      <p>Alternatively, you can download the appropriate installer. If a Windows SmartScreen alert appears, click "More info" then "Run anyways".</p>
+      <ul class="download-list">
+        <li><a class="download-button" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Setup-{version}-x64.exe">64-bit (most computers)</a></li>
+        <li><a class="download-button" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-Setup-{version}-ia32.exe">32-bit</a></li>
+      </ul>
+    </div>
+
+    <hr>
+
+    <div class="manual-installation" id="mac">
+      <h2>Install on macOS</h2>
+      <!-- TODO: Need to update 1.6.2 -> 1.7.0 after 1.6.1 is obsolete -->
+      <a class="download-button" data-href="https://github.com/TurboWarp/desktop/releases/download/v1.6.2/TurboWarp-Setup-1.6.2.dmg">Download for macOS (Universal)</a>
+      <p>Drag TurboWarp into Applications. If it tells you that TurboWarp already exists, choose Replace.</p>
+    </div>
+
+    <hr>
+
+    <div class="manual-installation" id="linux">
+      <h2>Install on Linux</h2>
+      <p>On most Linux distributions, the recommended way to install TurboWarp is to search for "TurboWarp" in your distribution's software manager and choose the first option that appears. If it doesn't appear, we support the following installation methods:</p>
+
+      <h3>Snap Store</h3>
+      <p>We maintain an official snap version: <a href="https://snapcraft.io/turbowarp-desktop">turbowarp-desktop</a></p>
+      <details>
+        <summary>Known issues and workarounds</summary>
+        <p>By default, the snap version can't access your camera, microphone, gamepads, or removable drives. To fix this, run these commands:</p>
+        <code class="terminal">
+          <div class="command">snap connect turbowarp-desktop:camera</div>
+          <div class="command">snap connect turbowarp-desktop:audio-record</div>
+          <div class="command">snap connect turbowarp-desktop:joystick</div>
+          <div class="command">snap connect turbowarp-desktop:removable-media</div>
+        </code>
+        <p>By default, the snap version can't be set as the file opener for sb3, sb2, or sb files without interfering with other file types. To fix this, run these commands:</p>
+        <code class="terminal">
+          <div class="command">wget https://desktop.turbowarp.org/snap-mime.xml -qO- | sudo tee /usr/share/mime/packages/turbowarp-desktop-snap.xml > /dev/null</div>
+          <div class="command">sudo update-mime-database /usr/share/mime</div>
+        </code>
+      </details>
+
+      <h3>Flatpak</h3>
+      <p>We maintain an official Flatpak version on Flathub: <a href="https://flathub.org/apps/details/org.turbowarp.TurboWarp">org.turbowarp.TurboWarp</a></p>
+      <details>
+        <summary>Known issues and workarounds</summary>
+        <p>Gamepads will not work in the Flatpak version.</p>
+        <p>By default, the app may be limited to only accessing projects in your home directory. To allow accessing other folders, run this command:</p>
+        <code class="terminal">
+          <div class="command">flatpak override org.turbowarp.TurboWarp --filesystem=<i>/path/to/folder/</i></div>
+        </code>
+      </details>
+
+      <h3>Debian, Ubuntu, Raspberry Pi OS</h3>
+      <p>Install our repository to receive updates through apt by running these commands:</p>
+      <code class="terminal">
+        <div class="command">wget https://desktop.turbowarp.org/release-signing-key.gpg -qO- | gpg --dearmor | sudo tee /usr/share/keyrings/turbowarp.gpg > /dev/null</div>
+        <div class="command">echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/turbowarp.gpg] https://releases.turbowarp.org/deb stable main" | sudo tee /etc/apt/sources.list.d/turbowarp.list</div>
+        <div class="command">sudo apt update</div>
+        <div class="command">sudo apt install turbowarp-desktop</div>
+      </code>
+      <p>Or manually install the .deb package for your system (won't add apt repository):</p>
+      <ul class="download-list">
+        <li><a class="download-button" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-amd64-{version}.deb">x86 64-bit</a></li>
+        <li><a class="download-button" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.deb">ARM 64-bit</a></li>
+        <li><a class="download-button" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.deb">ARMv7l</a></li>
+      </ul>
+
+      <h3>Arch User Repository</h3>
+      <p>For Arch Linux systems, we recommend the official AUR package: <a href="https://aur.archlinux.org/packages/turbowarp-desktop-bin/">turbowarp-desktop-bin</a></p>
+
+      <h3>AppImage</h3>
+      <ul class="download-list">
+        <li><a class="download-button" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-x86_64-{version}.AppImage">x86 64-bit</a></li>
+        <li><a class="download-button" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.AppImage">ARM 64-bit</a></li>
+        <li><a class="download-button" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.AppImage">ARMv7l</a></li>
+      </ul>
+
+      <h3>tar.gz</h3>
+      <ul class="download-list">
+        <li><a class="download-button" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-x64-{version}.tar.gz">x86 64-bit</a></li>
+        <li><a class="download-button" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-arm64-{version}.tar.gz">ARM 64-bit</a></li>
+        <li><a class="download-button" data-href="https://github.com/TurboWarp/desktop/releases/download/v{version}/TurboWarp-linux-armv7l-{version}.tar.gz">ARMv7l</a></li>
+      </ul>
+    </div>
+
+    <hr>
+
+    <div class="changelog" id="changelog">
+      <h2>Changelog</h2>
+      <div lang="en">
+        <div class="os-mac" data-version="1.6.2">
+          <h3>v1.6.2 (macOS only)</h3>
+          <ul>
+            <li>Added Apple code signing and notarization</li>
+          </ul>
+        </div>
+        <div data-version="1.6.1">
+          <h3>v1.6.1</h3>
+          <ul>
+            <li>Fixed features that access your microphone or camera</li>
+            <li>Fixed addon settings import not importing some color options</li>
+          </ul>
+        </div>
+        <div data-version="1.6.0">
+          <h3>v1.6.0</h3>
+          <ul>
+            <li>New addon: Pick colors from stage (enabled by default)</li>
+            <li>New addon: Zebra striping</li>
+            <li>Bitmap costume editor now supports transparency</li>
+            <li>SVGs exported by TurboWarp and imported to TurboWarp won't be re-centered unnecessarily</li>
+            <li>Sound editor now shows a sound's size, whether it's stereo or not, and its sample rate</li>
+            <li>Maximum SVG size has been reverted to the same as Scratch due to too many crashes</li>
+            <li>Added option to clone counter to only show icon</li>
+            <li>Added "Turbo Robot" sprite to builtin libraries</li>
+            <li>Added option to customizable new sprite position to apply to duplicated sprites</li>
+            <li>Fixed "Saving project..." text disappearing before the project was actually saved</li>
+            <li>Fixed save location still being updated if you cancel the confirmation to replace existing project</li>
+            <li>Fixed unnecessary memory use when saving files</li>
+            <li>Fixed loading some projects with many bitmap costumes</li>
+            <li>Fixed block cherry picking breaking on certain blocks</li>
+            <li>Fixed tangent block reporting slightly incorrect values in the compiler</li>
+            <li>Fixed display stage on left side and two-column category menu compatibility bugs</li>
+            <li>Fixed developer tools dark mode issue</li>
+            <li>Fixed auto-hiding block palette bugs</li>
+            <li>Fixed variable manager bugs</li>
+            <li>Fixed sound editor layout bugs at certain window sizes</li>
+            <li>Fixed some costume and sound lists having an unnecessary horizontal scrollbar</li>
+            <li>Fixed color picker overlay not covering the entire page</li>
+            <li>Fixed some icons being unnecessarily draggable</li>
+            <li>Fixed loading Scratch 2 projects with unusual JSON</li>
+            <li>Windows: Title bar now respects your computer's dark mode preference</li>
+            <li>Linux: We now have a repository for Debian/Ubuntu and their derivatives</li>
+            <li>Updated packager: settings export and import, optimized memory use of packaged projects</li>
+          </ul>
+        </div>
+        <div data-version="1.5.0">
+          <h3>v1.5.0</h3>
+          <ul>
+            <li>New addon: Reverse order of project controls</li>
+            <li>New addon: Hide stage and sprite pane</li>
+            <li>Allow creating unlimited cloud variables</li>
+            <li>Fixed backpacking JPEG costumes</li>
+            <li>Fixed turbo mode stored in projects not applying properly</li>
+            <li>Added option to disable hidden window throttling</li>
+            <li>Fixed some bugs in the auto-hiding block palette addon</li>
+            <li>Linux: Support for 32-bit x86 has been removed</li>
+            <li>macOS: Fixed uncloseable packager windows if opened from a fullscreen editor window</li>
+            <li>Updated packager: list color, version number, macOS Electron, Scratch Link support, more</li>
+          </ul>
+        </div>
+        <div data-version="1.4.0">
+          <h3>v1.4.0</h3>
+          <ul>
+            <li>Moved the builtin copy of the TurboWarp Packager to the File &gt; Package project menu</li>
+            <li>Added a sound duration indicator to the sound editor</li>
+            <li>Added partial support for the "Threads" tab in the debugger addon, including single stepping</li>
+            <li>Fixed high CPU usage when project is paused</li>
+            <li>Increased maximum resolution of large vector costumes</li>
+            <li>Updated backpacked item previews to support transparency</li>
+            <li>Updated dark mode with improved inputs, improved scrollbars, and support for the debugger and gamepad addons</li>
+            <li>Fixed developer tools find bar covering up controls in certain conditions</li>
+            <li>Fixed variable manager causing crashes when variables are too large</li>
+            <li>Improved style of many modals and prompts to be more cohesive</li>
+            <li>Fixed block context menus immediately selecting item and closing after being opened on some systems</li>
+            <li>Fixed interface allowing invalid framerates and invalid stage sizes</li>
+            <li>Fixed custom extensions being able to corrupt projects if they return unexpected values</li>
+            <li>Fixed custom extension error handling</li>
+            <li>Fixed various other bugs</li>
+            <li>Linux: Support for 32-bit x86 systems will be removed in v1.5.0 (32-bit ARM is not affected)</li>
+            <li>Linux: Added support for Linux on Apple Silicon</li>
+            <li>macOS: Reduced app startup time</li>
+            <li>Added <a href="https://github.com/sponsors/GarboMuffin">donation</a> links</li>
+            <li>Updated packager: adds support for "☁ room id" special cloud behavior</li>
+          </ul>
+        </div>
+        <div data-version="1.3.1">
+          <h3>v1.3.1</h3>
+          <ul>
+            <li>Fixed crash on some Linux systems</li>
+            <li>Gamepad addon now supports buttons other than the left button and is compatible with pointerlock in the packager</li>
+            <li>Updated packager: relicensed to Apache 2.0 from LGPL3.0 for fewer restrictions, added "☁ set clipboard" and "☁ pasted" support to special cloud behaviors</li>
+            <li>Various other bug fixes</li>
+          </ul>
+        </div>
+        <div data-version="1.3.0">
+          <h3>v1.3.0</h3>
+          <ul>
+            <li>New addon: Customizable default costume editor colors</li>
+            <li>The app now registers itself as a file handler for .sb and sb2 files in addition to .sb3</li>
+            <li>Optimized comparison blocks</li>
+            <li>Fixed more crashes on app startup on some systems</li>
+          </ul>
+        </div>
+        <div data-version="1.2.2">
+          <h3>v1.2.2</h3>
+          <ul>
+            <li>Fixed mouse actions in gamepad support addon in packager</li>
+            <li>Fixed blocks like "insert x at any of list" to insert at a random location</li>
+          </ul>
+        </div>
+        <div data-version="1.2.1">
+          <h3>v1.2.1</h3>
+          <ul>
+            <li>All windows now have proper language hints, fixes CJK characters looking weird in some windows</li>
+            <li>Added error message when any child process dies unexpectedly, not just renderer processes</li>
+          </ul>
+        </div>
+        <div data-version="1.2.0">
+          <h3>v1.2.0</h3>
+          <ul>
+            <li>Added option to configure which microphone and camera the app should use</li>
+            <li>Added option to disable hardware acceleration</li>
+            <li>Fixed stage size stored in projects</li>
+            <li>Reduced costume editor flicker when switching costumes</li>
+            <li>Added text inputs to costume editor color components</li>
+            <li>Fixed monitor position after resizing stage</li>
+            <li>Fixed vertical centering of variable monitor values in certain conditions</li>
+            <li>Fixed lines between tiled stamps when high quality pen is enabled</li>
+            <li>Reduced lag related to folders addon</li>
+          </ul>
+        </div>
+      </div>
+      <p><a href="https://github.com/TurboWarp/desktop/releases">Older release notes available on GitHub.</a></p>
+    </div>
 
     <script>
       window.L = (function () {
-        const allLanguageMessages = /*===*/{
-"ca":{"addons-caption":"Més de {large-number} {addons} per personalitzar i millorar la teva experiència.","arch":"Per als sistemes Arch Linux, recomanem el paquet oficial AUR: {package-link}","deb-manual":"O instal·leu manualment el paquet .deb per al vostre equip (No s'afegirà el repositori apt):","deb-repo":"Instal·leu el nostre repositori per rebre actualitzacions a través d'apt executant aquestes ordres:","donate":"Si t'agrada TurboWarp, considera fer una donació","flatpak":"Mantenim una versió oficial de Flatpak a Flathub: {package-link}","flatpak.gamepads":"Els gamepads no funcionaran a la versió Flatpak.","flatpak.sandbox":"De manera predeterminada, l'aplicació pot estar limitada a accedir només als projectes del vostre directori d'inici. Per permetre l'accés a altres carpetes, executa aquesta ordre:","githubBugs":"Informa d'errors a GitHub","header.affiliation":"TurboWarp no està afiliat a Scratch, al Scratch Team o la Scratch Foundation.","header.subtitle":"Utilitza {TurboWarp} el mod del Scratch amb un compilador, mode fosc, addons i molt més, des d'una aplicació a l'escriptori. Fins i tot funciona quan estàs fora de línia.","linux.1":"A la majoria de distribucions de Linux, la manera recomanada d'instal·lar TurboWarp és cercar \"TurboWarp\" al gestor de programari de la teva distribució i triar la primera opció que apareix.","linux.2":"Si ets un usuari avançat o si no apareix, hi ha més opcions disponibles:","mac-help":"Arrossegueu TurboWarp a Aplicacions. Si avisa que TurboWarp ja existeix, trieu la opció de Reemplaça.","mac.download":"Baixa per a macOS (Universal)","new":"Nou!","packager-caption":"{packager} integrat per convertir projectes en fitxers HTML o aplicacions per a Windows, macOS o Linux.","packager-caption.packager":"empaquetador","picture.title":"Projecte a la foto: Full Sphere Path Tracer de piano_miles","privacy":"Política de privacitat","pwa.open":"Obriu el web de TurboWarp","releases":"Notes de versió anteriors disponibles a GitHub.","scratchBugs":"Informa d'errors a Scratch","screenshot-caption":"Projecte a la imatge: {project}","snap":"Mantenim una versió snap oficial: {package-link}","snap.opener":"Per defecte, la versió snap no es pot establir com a obrir fitxers per a fitxers sb3, sb2 o sb sense interferir amb altres tipus d'arxius. Per solucionar-ho, executeu aquestes ordres:","snap.sandbox":"Per defecte, la versió snap no pot accedir a la càmera, el micròfon, els gamepads o les unitats extraïbles. Per solucionar-ho, executa aquestes ordres:","source":"Codi font","update.linux":"Si has instal·lat TurboWarp Desktop des d'una botiga d'aplicacions o un gestor de paquets, com ara Snap Store, espera fins que l'actualització s'enviï a la botiga. En cas contrari, executa el nou instal·lador a continuació.","update.mac":"Per actualitzar, descarregueu i instal·leu la nova aplicació a continuació.","update.windows":"Per actualitzar, descarregueu i executeu el nou instal·lador a continuació.","web1":"A ChromeOS, Android, iOS, iPadOS i totes les altres plataformes, pots utilitzar el web de TurboWarp. Gairebé totes les funcions funcionen igual de bé.","web2":"Sovint pots \"instal·lar\" el lloc web com a aplicació web. En ordinadors de sobretaula i portàtils, el botó d'instal·lació pot aparèixer a la barra d'URL després d'uns segons.","web3":"Als telèfons i tauletes, cerca \"Instal·la l'aplicació\" o \"Afegeix a la pantalla d'inici\" als menús del navegador.","win.32":"Baixada alternativa pels sistemes de 32 bits","win.download":"Baixa per a Windows (64 bits)","win.help":"Si apareix una alerta de Windows SmartScreen, fes click a \"Més informació\" i després a \"Executar de totes maneres\".","workarounds":"Problemes coneguts i solucions alternatives"},
-"de":{"addons-caption":"Mehr als {large-number} {addons}, um deine Erfahrung zu personalisieren und zu verbessern. ","addons-caption.addons":"Addons","arch":"Für Arch-Linux-Systeme empfehlen wir das offizielle AUR-Paket: {package-link}","deb-manual":"Oder installiere das .deb-Paket manuell für dein System (apt-Repository wird nicht hinzugefügt):","deb-repo":"Installiere unser Repository, um Updates über apt zu erhalten. Führe dazu folgende Befehle aus:","donate":"Wenn du TurboWarp magst, mach eine Spende","flatpak":"Wir besitzen eine offizielle Flatpak-Version auf Flathub: {package-link}","flatpak.gamepads":"Controller werden in der Flatpak-Version nicht funktionieren.","flatpak.sandbox":"Die App könnte darauf beschränkt sein, nur auf Projekte in deiner Home-Directory zuzugreifen. Um auch auf andere Ordner zuzugreifen, führe diesen Befehl aus:","githubBugs":"Melde Fehler auf GitHub","header.affiliation":"TurboWarp ist nicht mit Scratch, dem Scratch Team oder der Scratch-Stiftung verbunden.","header.subtitle":"Verwende {TurboWarp}, das Scratch-Mod mit einem Compiler, Dunkelmodus, Addons und mehr, mit einer App auf deinem Desktop. Es funktioniert auch, wenn du offline bist.","linux.1":"Auf den meisten Linux-Distributionen empfehlen wir, in Softwaremanager nach \"TurboWarp\" zu suchen und die erste erscheinende Option zu wählen.","linux.2":"Wenn du ein erweiterter Benutzer bist oder wenn es nicht erscheint, gibt es mehrere Möglichkeiten:","mac-help":"Verschiebe TurboWarp in die Anwendungen. Wenn es dir sagt, dass TurboWarp schon existiert, dann wähle Ersetzen.","mac.download":"Download für macOS (Universell)","new":"Neu!","packager-caption":"Eingebauter {packager} zum Umwandeln von Projekten in HTML-Dateien oder Apps für Windows, macOS oder Linux.","packager-caption.packager":"Packager","picture.title":"Abgebildetes Projekt: Full Sphere Path Tracer von piano_miles","privacy":"Datenschutzerklärung","pwa.open":"TurboWarp-Website öffnen","releases":"Ältere Änderungsprotokolle sind auf GitHub verfügbar.","scratchBugs":"Melde Fehler auf Scratch","screenshot-caption":"Abgebildetes Projekt: {project}","screenshot-caption.project":"Full Sphere Path Tracer von piano_miles","snap":"Wir besitzen eine offizielle Snap-Version: {package-link}","snap.opener":"Die Snap-Version kann standardmäßig nicht als Dateiöffner für sb3-, sb2- oder sb-Dateien festgelegt werden, ohne Konflikte mit anderen Datentypen auszulösen. Um dies zu beheben, füre die folgenden Befehle aus:","snap.sandbox":"Die Snap-Version hat standardmäßig keinen Zugriff auf deine Kameras, Mikrofone, Controller oder Wechseldatenträger. Um dies zu beheben, führe die folgenden Befehle aus:","source":"Quellcode","update.linux":"Falls du TurboWarp Desktop von einem App-Store oder Paketmanager wie dem Snap-Store installiert hast, warte bis das Update im Store verfügbar ist. Ansonsten kannst du unten den neuen Installer ausführen","update.mac":"Lade die neue App herunter und führe sie aus, um TurboWarp zu aktualisieren.","update.windows":"Lade den Installer herunter und führe ihn aus, um TurboWarp zu aktualisieren.","web1":"Auf ChromeOS, Android, iOS, iPadOS und allen anderen Plattformen kannst du die TurboWarp-Website benutzen. Fast alle Funktionen funktionieren genauso gut.","web2":"Oft kannst du die Website als Web-App \"installieren\". Auf Desktops und Laptops wird der Installationsknopf in der URL-Leiste nach ein paar Sekunden erscheinen.","web3":"Auf Handys und Tablets, finde \"App installieren\" oder \"Zum Startbildschrm hinzufügen\" in den Browsermenüs.","win.32":"Alternativer Download für 32-bit-Systeme","win.download":"Für WIndows (64-bit) herunterladen","win.help":"Falls eine Warnung von Windows SmartScreen erscheint, klicke auf \"Weiter Informationen\" und dann auf \"Trotzdem ausführen\".","workarounds":"Bekannte Probleme und Workarounds"},
-"es":{"addons-caption":"Más de {large-number} {addons} para personalizar y mejorar su experiencia.","arch":"Para los sistemas Arch Linux, recomendamos el paquete oficial AUR: {package-link}","deb-manual":"O instale manualmente el paquete .deb para su sistema (no añadirá el repositorio apt): ","deb-repo":"Instale nuestro repositorio para recibir actualizaciones desde el apt corriendo estos comandos:","donate":"Si le gusta TurboWarp, considere donar","flatpak":"Mantenemos una versión oficial de Flatpak en Flathub: {package-link}","flatpak.gamepads":"Los mandos no funcionarán en la versión de Flatpak.","flatpak.sandbox":"Por defecto, la aplicación puee estar limitada a solo acceder a proyectos en tu carpeta base. Para permitirle acceder a otras carpetas, ejecute este comando:","githubBugs":"Reportar bugs en GitHub","header.affiliation":"TurboWarp no está afiliado con Scratch, el equipo de Scratch o la Scratch Foundation.","header.subtitle":"Use {TurboWarp}, el mod de Scratch con compilador, modo oscuro, addons y más, desde una app en su escritorio. Funciona incluso sin una conexión a internet.","linux.1":"En la mayoría de distribuciones de Linux, la manera recomendada de instalar TurboWarp es buscar «TurboWarp» en el administrador de software de su distribución y elegir la primera opción que aparece.","linux.2":"Si es un usuario avanzado o si no aparece, hay más opciones disponibles:","mac-help":"Arrastre TurboWarp dentro de Aplicaciones. Si le dice que TurboWarp ya existe, elija Reemplazar.","mac.download":"Descargar para macOS (Universal)","new":"¡Nuevo!","packager-caption":"El {packager} para convertir proyectos en archivos HTML o aplicaciones para Windows, macOS o Linux.","packager-caption.packager":"convertidor","picture.title":"Proyecto en la imagen: Full Sphere Path Tracer por piano_miles","privacy":"Política de privacidad","pwa.open":"Abra el sitio web de TurboWarp","releases":"Lista de cambios de versiones antiguas disponible en GitHub.","scratchBugs":"Reportar bugs en Scratch","screenshot-caption":"Proyecto en imagen: {project}","screenshot-caption.project":"Full Sphere Path Tracer por piano_miles","snap":"Mantenemos una versión oficial de snap: {package-link}","snap.opener":"Por defecto, la versión de snap no puede ser configurada como el abridor de archivos para sb3, sb2 o archivos sb sin interferir con otros tipos de archivos. Para solucionarlo, ejecute estos comandos:","snap.sandbox":"Por defecto, la versión de snap no puede acceder a su cámara, micrófono, mandos o almacenamientos externos. Para solucionarlo, ejecute estos comandos:","source":"Código fuente","update.linux":"Si instaló TurboWarp Desktop desde una tienda de aplicaciones o administrador de paquetes, por ejemplo la Snap Store, espere hasta que la actualización se publique en la tienda. De lo contrario, ejecute el nuevo instalador debajo.","update.mac":"Para actualizar, descargue e instale la app debajo.","update.windows":"Para actualizar, descargue y ejecute el instalador debajo.","web1":"En ChromeOS, Android, iOS, iPadOS y todas las demás plataformas, puede usar el sitio web de TurboWarb en cambio. Casi todas las características funcionan igual de bien.","web2":"Algunas veces puede «instalar» el sitio web com una aplicación web. En escritorios y portátiles, el botón de instalar puede aparecer en la barra de URL después de unos segundos.","web3":"En teléfonos y tabletas, busque «Instalar aplicación» o «Añadir a la Pantalla Principal» en el menú de su navegador.","win.32":"Descarga alternativa para sistemas 32-bit","win.download":"Descargar para Windows (64-bit)","win.help":"Si aparece una alerta de Windows SmartScreen, haga click en «Más información» y luego en «Ejecutar de todas formas».","workarounds":"Problemas conocidos y soluciones"},
-"it":{"addons-caption":"Più di {large-number} {addons} per personalizzare e migliorare la tua esperienza.","addons-caption.addons":"addon","arch":"Per i sistemi Arch Linux raccomandiamo il pacchetto AUR ufficiale: {package-link}","deb-manual":"Oppure installa manualmente il pacchetto .deb per il tuo sistema (non aggiungerà apt al repository):","deb-repo":"Installa il nostro repository per ricevere aggiornamenti tramite apt eseguendo questi comandi:","donate":"Se ti piace TurboWarp potresti considerare di fare una donazione","flatpak":"Manteniamo una versione Flatpack ufficlale su Flathub: {package-link}","flatpak.gamepads":"I gamepad non funzionano nella versione Flatpack","flatpak.sandbox":"Come impostazione predefinita la app può limitare l'accesso ai soli progetti nella tua cartella principali. Per accedere alle altre cartelle esegui questo comando: ","githubBugs":"Notifica i bug su GitHub","header.affiliation":"TurboWarp non è affiliato a Scratch, allo Scratch Team o alla Scratch Foundation.","header.subtitle":"Usa {TurboWarp}, la mod di Scratch dotata di compilatore, dark mode, addon e molto altro, come app sul tuo PC. Funziona anche quando sei offline.","linux.1":"Per la maggior parte delle distribuzioni Linux il modo raccomandato per installare TurboWarp è quello di cercare \"TurboWarp\" nel gestore di app della tua distribuzione e scegliere la prima opzione che compare.","linux.2":"Se sei un utente avanzato o se non compare, altre scelte sono disponibili:","mac-help":"Trascina TurboWarp nelle Applicazioni. Se compare il messaggio che TurboWarp è già installato, scegli Rimpiazza.","mac.download":"Scarica per macOS (Universale)","new":"Nuovo!","packager-caption":"{packager} integrato per convertire i progetti in file HTML o applicazioni per Windows, macOS o Linux.","packager-caption.packager":"Packager","picture.title":"Progetto: Full Sphere Path Tracer di piano_miles","privacy":"Politica delle privacy","pwa.open":"Apri il sito TurboWarp","releases":"Le note di rilascio delle versioni precedenti sono disponibili su GitHub.","scratchBugs":"Notifica i bug su Scratch","screenshot-caption":"Progetto mostrato: {project}","screenshot-caption.project":"Full Sphere Path Tracer di piano_miles","snap":"Manteniamo una versione snap ufficlale: {package-link}","snap.opener":"Come impostazione predefinita la versione snap non può essere associata ai file sb3, sb2 e sb senza interferire con altri tipi di file. Per risolvere il problema esegui questi comandi:","snap.sandbox":"Come impostazione predefinita, la versione snap non può accedere la fotocamera, il microfono, i gamepads a i drive rimuovibili. Per risolvere il problema esegui questi comandi:","source":"Codice sorgente","update.linux":"Se hai installato TurboWarp Desktop da un app store o usando un gestore di pacchetti come Snap Store attendi fino a che l'aggiornamento è presente nello store. In alternativa puoi eseguire il nuovo installatore che trovi qui sotto.","update.mac":"Per aggiornare, scaricare ed eseguire la nuova app qui sotto.","update.windows":"Per aggiornare, scaricare ed eseguire il nuovo installatore qui sotto.","web1":"Su ChromeOS, Android, iOS, iPadOS e tutte le altre piattaforme puoi usare in alternativa la versione web di TurboWarp. Funziona per la maggior parte esattamente nello stesso modo.","web2":"Solitamente è possibile \"installare\" il sito web come una web app. Nei desktop e laptop dopo alcuni secondi potrebbe apparire il pulsante di installazione nella barra dell'URL.","web3":"Sui cellulari e sui tablet cerca \"installa app\" o \"Aggiungi alla Schermata Home\" nel menu del tuo browser.","win.32":"Download alternativi per sistemi a 32-bit:","win.download":"Scarica per Windows (64-bit)","win.help":"Se compare un avviso di Windows, clicca \"More info\" e poi \"Run anyways\"","workarounds":"Problemi conosciuti e soluzioni alternative"},
-"ja":{"addons-caption":"{large-number}{addons}数多くのアドオンで、あなたの体験をカスタマイズし、向上させることができます。","addons-caption.addons":"アドオン","arch":"Arch Linuxシステムでは、公式のAURパッケージをお勧めします。{package-link}","deb-manual":"または、お使いのシステムの .deb パッケージを手動でインストールしてください (aptリポジトリは追加されません)。","deb-repo":"リポジトリをインストールして、次のコマンドを実行してaptを通じて更新を受信します。","donate":"TurboWarpを気に入っていただけたなら、寄付をご検討ください。","flatpak":"Flatpakの公式版をFlathubで管理しています:\n{package-link}","flatpak.gamepads":"ゲームパッドはFlatpak版では動作しません。","flatpak.sandbox":"デフォルトでは、アプリはホームディレクトリ内のプロジェクトにのみアクセスすることに制限される場合があります。他のフォルダへのアクセスを許可するには、次のコマンドを実行します。","githubBugs":"バグをGitHubで報告する","header.affiliation":"TurboWarpはScratch、Scratch Team、Scratch財団と提携していません。","header.subtitle":"コンパイラ、ダークモード、アドオンなどを備えたScratch MOD の{TurboWarp}をデスクトップ上で利用できます。オフラインでも動作します。","linux.1":"多くのLinuxディストリビューションでは、TurboWarpをインストールする推奨方法は、あなたのディストリビューションのソフトウェアマネージャーで「TurboWarp」を検索し、一番最初のものを選択することです。","linux.2":"もしあなたが熟練されていたり、TurboWarpが表示されない場合は、他の選択肢もあります: ","mac-help":"TurboWarpを「アプリケーション」にドラッグします。TurboWarpがすでに存在すると表示された場合は、置換を選択してください。","mac.download":"macOS用をダウンロード(全般)","new":"新機能!","packager-caption":"プロジェクトをHTMLファイルやWindows、macOS、Linux用のアプリケーションに変換するための{packager}を内蔵しています。","packager-caption.packager":"パッケージャー","picture.title":"プロジェクトの写真: Full Sphere Path Tracer by piano_miles","privacy":"プライバシーポリシー","pwa.open":"Turbowarpのウェブサイトで開く","releases":"古いリリースノートはGitHubで公開しています。","scratchBugs":"バグをScratchで報告する","screenshot-caption":"写真のプロジェクト: {project}","snap":"snapの公式版を管理しています:{package-link}","snap.opener":"デフォルトでは、スナップバージョンは、他のファイルタイプに干渉することなく、sb3、sb2、またはsbファイルの干渉のないファイルとして設定することはできません。これを修正するには、次のコマンドを実行します。","snap.sandbox":"デフォルトでは、スナップバージョンはカメラ、マイク、ゲームパッド、または取り外し可能なドライブにアクセスできません。これを修正するには、次のコマンドを実行します。","source":"ソースコード","update.linux":"アプリストアまたはSnapStoreなどのパッケージマネージャからTurboWarp Desktopをインストールした場合は、アップデートがストアに入るされるまで待って下さい。それ以外の場合は、以下の新規インストーラーを実行してください。","update.mac":"アップデートするには、以下の新しいアプリをダウンロードしてインストールしてください。","update.windows":"更新するには、以下の新しいインストーラーをダウンロードして実行します。","web1":"ChromeOS、Android、iOS、iPadOS、およびその他のすべてのプラットフォームでは、代わりにTurboWarpのWebサイトを使用できます。ほとんどの機能はDesktop版同様に機能します。","web2":"ほとんどは、Webサイトをウェブアプリとして「インストール」できます。デスクトップやラップトップでは、数秒後にURLバーにインストールボタンが表示されることがあります。","web3":"スマートフォンやタブレットでは、ブラウザのメニューで「アプリのインストール」または「ホーム画面に追加」することができます。","win.32":"32-bitのシステムのための代替ダウンロード","win.download":"Windows用をダウンロード(64-bit)","win.help":"もしWindowsの警告が出た場合は、「詳細情報」をクリックし「実行」をクリックしてください。","workarounds":"既知の問題点と解決方法"},
-"lt":{"addons-caption":"Daugiau nei {large-number} {addons} pritaikyti ir pagerinti jūsų patirtį.","addons-caption.addons":"Įskiepiai","arch":"Arch Linux sistemoms rekomenduojame naudoti oficialų AUR paketą: {package-link}","donate":"Jei jums patinka TurboWarp, galite paaukoti","flatpak":"Palaikome oficialią Flatpak versija Flathub platformoje: {package-link}","flatpak.gamepads":"Žaidimų pulteliai neveiks Flatpak versijoje.","flatpak.sandbox":"Pagal numatytuosius nustatymus programa gali būti apribota prieiga tik prie jūsų namų kataloge esančių projektų. Norėdami leisti pasiekti kitus aplankus, paleiskite šią komandą:","githubBugs":"Pranešti apie klaidas per GitHub","header.affiliation":"TurboWarp nėra susietas su Scratch, the Scratch Team ar su the Scratch Foundation.","header.subtitle":"Naudokite {TurboWarp}, Scratch modifikaciją su kompiliatoriumi, tamsiuoju režimu, įskiepiais, ir daugiau, per  programą jūsų kompiuteryje. Ji net veikia kai nesate prisijungę prie interneto.","linux.1":"Daugumoje Linux distributyvų rekomenduojamas būdas įdiegti TurboWarp yra ieškoti \"TurboWarp\" savo distributyvo programinės įrangos tvarkyklėje ir pasirinkti pirmą pasirodžiusią parinktį.","linux.2":"Jei esate pažengęs naudotojas arba jei jis nerodomas, galima pasirinkti daugiau variantų:","mac.download":"Atsisiųsti MacOS (Universalu) kompiuteriams","new":"Naujiena!","packager-caption":"Įdiegtas {packager}  konvertuoti projektus į HTML failus arba Windows, MacOS arba Linux programas.","packager-caption.packager":"Pakuotojas","picture.title":"Projektas pavaizduotas nuotraukoje: Full Sphere Path Tracer sukurta piano_miles","privacy":"Privatumo politika","pwa.open":"Atidarykite TurboWarp svetainę","releases":"Senesni išleidimų užrašai yra pasiekiami GitHub.","scratchBugs":"Pranešti apie klaidas per Scratch","screenshot-caption":"Projektas pavaizduotas nuotraukoje: {project}","screenshot-caption.project":"Full Sphere Path Tracker sukurta piano_miles","snap":"Palaikome oficialią snap versiją: {package-link}","snap.opener":"Pagal numatytuosius nustatymus snap versijos negalima nustatyti kaip sb3, sb2 arba sb failų atidarymo priemonės, netrukdant kitiems failų tipams. Norėdami tai ištaisyti, paleiskite šias komandas:","snap.sandbox":"Pagal numatytuosius nustatymus snap versija negali pasiekti kameros, mikrofono, žaidimų pultelių ir keičiamųjų diskų. Norėdami tai ištaisyti, paleiskite šias komandas:","source":"Šaltinio kodas","update.linux":"Jei TurboWarp Desktop įdiegėte iš programų parduotuvės arba paketų tvarkyklės, pvz., Snap Store, palaukite, kol atnaujinimas bus perkeltas į parduotuvę. Priešingu atveju paleiskite toliau pateiktą naująją diegimo programą.","update.mac":"Atnaujinimui, atsisiųskite ir įdiekite naują programą apačioje.","update.windows":"Atnaujinimui, atsisiųskite naują įdiegėją ir paleiskite jį apačioje.","web1":"ChromeOS, Android, iOS, iPadOS ir visose kitose platformose galite naudoti \"TurboWarp\" svetainę. Beveik visos funkcijos veikia taip pat gerai.","web2":"Dažnai svetainę galite \"įdiegti\" kaip žiniatinklio programą. Staliniuose ir nešiojamuosiuose kompiuteriuose po kelių sekundžių URL juostoje gali pasirodyti diegimo mygtukas.","web3":"Telefonuose ir planšetiniuose kompiuteriuose naršyklės meniu raskite \"Įdiegti programą\" arba \"Pridėti į pagrindinį ekraną\".","win.32":"Alternatyvus atsisiuntimas 32-bitų sistemoms","win.download":"Atsisiųsti Windows (64-Bitų) kompiuteriams","win.help":"Jei Windows SmartScreen įspėjimas atsiranda, spustėlėkite \"Daugiau informacijos\" ir tada \"Vis tiek paleisti\".","workarounds":"Žinomos problemos bei apėjimo būdai"},
-"nl":{"addons-caption":"Meer dan {large-number} {addons} om je ervaring aan te passen en te verbeteren.","arch":"Voor Arch Linux-systemen raden we je aan om de officiële AUR-package te gebruiken: {package-link}","deb-manual":"Of installeer handmatig de .deb-package voor je systeem (zonder apt-archief):","deb-repo":"Download ons archief om updates via apt te ontvangen door deze commands uit te voeren:","donate":"Als je TurboWarp leuk vindt, overweeg om te doneren","flatpak":"We onderhouden een officiële Flatpak-versie op Flathub: {package-link}","flatpak.gamepads":"Gamepads werken niet in de Flatpak-versie.","flatpak.sandbox":"De app kan soms alleen toegang krijgen tot projecten in je thuismap. Om toegang te krijgen tot andere mappen, voer deze opdracht uit:","githubBugs":"Fouten/bugs melden op GitHub","header.affiliation":"TurboWarp is niet aangesloten bij Scratch, het Scratch-Team, of de Scratch-organisatie.","header.subtitle":"Gebruik {TurboWarp}, de Scratch-modificatie met een compiler, donkere modus, extensies, en meer, vanaf een app op je computer. Het werkt zelfs wanneer je offline bent!","linux.1":"Op de meeste Linux-distributies is de aanbevolen manier om TurboWarp te installeren om \"TurboWarp\" op te zoeken in de softwaremanager van je distributie en kies de eerste optie die je tegenkomt.","linux.2":"Als je een geavanceerde gebruiker bent of het verschijnt niet, zijn er meer keuzes beschikbaar:","mac-help":"Sleep TurboWarp naar Applicaties. Als je wordt verteld dat TurboWarp al bestaat, kies dan Vervangen.","mac.download":"Download voor macOS (Universeel)","new":"Nieuw!","packager-caption":"Ingebouwde {packager} om projecten te converteren naar HTML-bestanden of applicaties voor Windows, macOS, of Linux.","picture.title":"Afgebeeld project: Full Sphere Path Tracer door piano_miles","privacy":"Privacybeleid","pwa.open":"De TurboWarp-Website Openen","releases":"Oudere release-opmerkingen beschikbaar op GitHub.","scratchBugs":"Fouten/bugs melden op Scratch","screenshot-caption":"Afgebeeld project: {project}","screenshot-caption.project":"Full Sphere Path Tracer door piano_miles","snap":"We onderhouden een officiële snap-versie: {package-link}","snap.opener":"De snap-versie kan niet worden ingesteld als de bestandsopener voor sb3-, sb2-, of sb-bestanden zonder andere bestandstypen te interfereren. Voer deze opdrachten uit om dit op te lossen:","snap.sandbox":"De snap-versie kan niet standaard toegang krijgen tot je camera, microfoon, gamepads, of verwijderbare schijven. Voer deze opdrachten uit om dit op te lossen:","source":"Broncode","update.linux":"Als je TurboWarp Desktop hebt geïnstalleerd van een appstore of pakketmanager zoals de Snap Store, wacht dan totdat de update beschikbaar is in de store. Gebruik anders de nieuwe installeerder hieronder.","update.mac":"Om te updaten, download en installeer de nieuwe app hieronder.","update.windows":"Om te updaten, download en open de nieuwe installeerder hieronder.","web1":"Op ChromeOS, Android, iOS, iPadOS, en alle andere platformen kun je in plaats daarvaan de TurboWarp-website gebruiken. Bijna alle functies werken net zo goed.","web2":"Vaak kun je de website \"installeren\" als een webapp. Op desktops en laptops komt de installeerknop na een paar seconden tevoorschijn in de URL-balk.","web3":"Op telefoons en tablets, zoek \"App installeren\" of \"Aan Startscherm Toevoegen\" in je menu's van je browser.","win.32":"Alternatieve download voor 32-bits systemen","win.download":"Download voor Windows (64-bit)","win.help":"Als je een Windows SmartScreen-waarschuwing tegenkomt, klik op \"Meer informatie\" dan \"Toch uitvoeren\".","workarounds":"Bekende problemen en tijdelijke oplossingen"},
-"ru":{"addons-caption":"Доступно более {large-number} {addons} чтобы настроить и улучшить ваш опыт.","addons-caption.addons":"аддонов","arch":"Для систем Arch Linux мы рекомендуем официальный пакет AUR: {package-link}","deb-manual":"Или вручную установите пакет .deb для вашей системы (репозиторий apt не будет добавлен):","deb-repo":"Установите наш репозиторий, чтобы получать обновления через apt, запустив следующие команды:","donate":"Если вам нравится TurboWarp, рассмотрите возможность внести пожертвования","flatpak":"Мы поддерживаем официальную версию Flatpak на Flathub: {package-link}","flatpak.gamepads":"Геймпады не будут работать в Flatpak версии.","flatpak.sandbox":"По умолчанию приложение может быть ограничено доступом только к проектам в вашем домашнем каталоге. Чтобы разрешить доступ к другим папкам, запустите следующую команду:","githubBugs":"Сообщить о багах на GitHub","linux.1":"Для большинства дистрибутивов Linux рекомендуется устанавливать TurboWarp через поиск \"TurboWarp\" в менеджере ПО дистрибутива и выбрать первый результат в списке.","linux.2":"Если вы продвинутый пользователь или он не появился, то есть ещё способы:","mac-help":"Перетащите TurboWarp в приложения. Если выходит ошибка, что TurboWarp уже существует, выберите Заменить.","mac.download":"Скачать для macOS (Универсальный)","new":"Новое!","packager-caption":"Всторенный {packager} для преобразования проектов в HTML-файлы или приложения для Windows, macOS или Linux.","packager-caption.packager":"упаковщик","picture.title":"Изображённый проект: Full Sphere Path Tracer от piano_miles","privacy":"Политика конфиденциальности","pwa.open":"Открыть веб-сайт TurboWarp","scratchBugs":"Сообщить о багах на Scratch","screenshot-caption":"Изображённый проект: {project}","screenshot-caption.project":"Full Sphere Path Tracer от piano_miles","snap":"Мы поддерживаем официальную Snap версию: {package-link}","snap.opener":"По умолчанию Snap версия не может быть установлена в качестве средства открытия файлов sb3, sb2 или sb, не мешая другим типам файлов. Чтобы это исправить, запустите следующие команды:","snap.sandbox":"По умолчанию Snap версия не может получить доступ к вашей камере, микрофону, геймпадам или съемным дискам. Чтобы это исправить, запустите следующие команды:","source":"Исходный код","update.linux":"Если вы установили TurboWarp Desktop из магазина приложений или диспетчера пакетов, такого как Snap Store, дождитесь, пока обновление будет отправлено в магазин. В противном случае запустите новый установочный файл ниже.","update.mac":"Чтобы обновить, скачайте и установите приложение ниже.","web1":"На ChromeOS, Android, iOS, iPadOS и всех других платформах вместо этого вы можете использовать веб-сайт TurboWarp. Почти все функции работают так же хорошо.","web2":"Часто вы можете «установить» веб-сайт как веб-приложение. На настольных компьютерах и ноутбуках кнопка установки может появиться в адресной строке спустя пару секунд.","web3":"На телефонах и планшетах найдите «Установить приложение» или «Добавить на главный экран» в меню браузера.","win.32":"Альтернативная ссылка для 32-битных систем","win.download":"Скачать для Windows (x64)","win.help":"Если появляется предупреждение от Windows SmartScreen, нажмите «Дополнительные сведения», а потом «Выполнить в любом случае».","workarounds":"Известные проблемы и обходные пути"},
-"sl":{"addons-caption":"Več kot {large-number} {addons}, s katerimi lahko prilagodite in izboljšate aplikacijo.","addons-caption.addons":"dodatkov","arch":"Za sisteme z Arch Linux priporočamo uradni paket AUR: {package-link}","flatpak":"Skrbimo za uradno različico za Flatpak na Flathub: {package-link}","githubBugs":"Prijavite napake na GitHubu","header.affiliation":"TurboWarp ni povezan s Scratchem, skupino Scratch ali fundacijo Scratch.","header.subtitle":"Uporabljajte {TurboWarp}, spremenjeno različico Scratcha s prevajalnikom kode, temnim načinom, dodatki in drugimi funkcijami, kot aplikacijo na svojem računalniku. Deluje tudi brez internetne povezave.","linux.2":"Če ste naprednejši uporabnik ali če ga ne najdete, imate več možnosti:","mac.download":"Prenos za macOS (univerzalni)","new":"Novo!","packager-caption":"Vgrajeni {packager}, ki spremeni projekte v datoteke HTML ali aplikacije za Windows, macOS in Linux.","packager-caption.packager":"Packager","picture.title":"Projekt na sliki: Full Sphere Path Tracer avtorja piano_miles","privacy":"Politika zasebnosti","pwa.open":"Odpri spletno stran TurboWarp","releases":"Opombe starejših različic so na voljo na GitHubu.","scratchBugs":"Prijavite napake na Scratchu","screenshot-caption":"Projekt na sliki: {project}","screenshot-caption.project":"Full Sphere Path Tracer avtorja piano_miles","snap":"Skrbimo za uradno različico za snap: {package-link}","source":"Izvirna koda","update.linux":"Če ste namestili TurboWarp Desktop s pomočjo trgovine z aplikacijami ali upravitelja paketov, kot je Snap Store, počakajte, dokler posodobitev ni na voljo v trgovini. Sicer zaženite nov namestitveni program spodaj.","update.mac":"Za posodobitev spodaj prenesite in namestite novo aplikacijo.","update.windows":"Za posodobitev spodaj prenesite nov namestitveni program.","web2":"Pogosto lahko spletno stran \"namestite\" kot spletno aplikacijo. Na namiznih in prenosnih računalnikih se gumb za namestitev lahko prikaže v vrstici za URL čez nekaj sekund.","web3":"Na telefonih in tablicah poiščite \"Namesti aplikacijo\" ali \"Dodaj na domači zaslon\" v meniju svojega brskalnika.","win.32":"Alternativni prenos za 32-bitne sisteme","win.download":"Prenos za Windows (64-bitni)","win.help":"Če se prikaže opozorilo Windows SmartScreen, kliknite \"Več informacij\" in nato \"Vseeno zaženi\".","workarounds":"Znane napake in rešitve"},
-"sv":{"addons-caption":"Mer än {large-number} {addons} för att anpassa och förbättra din upplevelse.","addons-caption.addons":"Tillägg","arch":"För Arch Linux systemer så rekomenderar vi det officiella paketet: {package-link}","deb-manual":"Eller installera .deb paketet manuellt för ditt system (kommer inte lägga till apt förvaret):","deb-repo":"Installera vårat förvar för att få uppdateringar med hjälp av apt genom att köra dessa komandon:","donate":"Om du gillar TurboWarp, överväga att donera","flatpak":"Vi upprätthåller en officiel Flatpak version på Flathub: {package-link} ","flatpak.gamepads":"Gamepads kommer inte funka med Flatpak versionen","flatpak.sandbox":"Som standard, kommer appen vara begränsad till att bara få tillgång till projekt i din hemkatalog. För att få tillgång till andra kataloger, kör detta kommando: ","githubBugs":"Rapportera buggar på GitHub","header.affiliation":"TurboWarp är inte ansluten med Scratch, Scratch teamet eller Scratchstiftelsen.","header.subtitle":"Använd {TurboWarp}, Scratch modifikationet med en kompilator, mörkt läge, tillägg och mer från en app på ditt skrivbord. Det funkar även om du är offline.","linux.1":"På de flesta Linux-distributioner så är det rekommenderade sättet att installera TurboWarp är att söka efter \"TurboWarp\" i din distributions programvaruhanterare och välj det första som kommer upp.","linux.2":"Om du är en avancerad användare eller om det inte visas, mer val fills tilgängliga: ","mac-help":"Dra TurboWarp till Program. Om det säger att TurboWarp redan finns, välj Ersätt.","mac.download":"Ladda ned för MacOS (Universal)","new":"Nytt!","packager-caption":"Inbyggd {packager} för att konvertera projekt till HTML filer eller applikationer för Windows, MacOS eller Linux","packager-caption.packager":"förpackare","picture.title":"Projekt på bild: Full Sphere Path Tracer av piano_miles","privacy":"Integritetspolicy","pwa.open":"Öppna TurboWarps webbsida","releases":"Äldre utsläppnings noteringar tillgängliga på Github","scratchBugs":"Rapportera buggar på Scratch","screenshot-caption":"Projekt på bild: {project}","screenshot-caption.project":"Full Sphere Path Tracer av piano_miles","snap":"Vi upprätthåller en officiel snap version: {package-link}","snap.opener":"Som standard kommer snap versionen inte ställas in som filöppnaren för sb3, sb2 eller sb filer utan stör för andra filtyper. För att fixa detta, kör dessa komandon: ","snap.sandbox":"Som standard kan inte snap versionen inte komma åt din kamera, mikrfonen, gamepads eller borttagbara volymer. För att fixa detta, kör dessa komandon:","source":"Källkod","update.linux":"Om du installerade TurboWarp Desktop från en appbutik eller pakethanterare som Snap Store, vänta tills uppdateringen är puttad till butiken. Annars, kör installeraren nedan.","update.mac":"För att uppdatera, ladda ner och installera appen nedan","update.windows":"För att uppdatera, ladda ner och kör den nya installatören nedan.","web1":"Pä ChromeOS, Android, iOS, iPadOS, och alla andra platformer kan du använda TurboWarps webbsida istället. Nästan alla funktioner funkar lika bra.","web2":"Ofta kan du \"installera\" webbsidan som en app. På stationära och bärbara datorer kan installationsknappen visas i URL-fältet efter några sekunder.","web3":"På telefoner och surfplattor, hitta \"Installera app\" eller \"Lägg till till hemskärmen\" i din webbläsarens meny.","win.32":"Alternativ nedladdning för 32-bit systemer","win.download":"Ladda ned för Windows (64-bit)","win.help":"Om en Windows SmartScreen fönster poppar upp, klicka \"Mer Info\" välj då \"Kör ändå\".","workarounds":"Kända fel och lösningar"},
-"uk":{"addons-caption":"Більше {large-number} {addons} для налаштування та покращення вашого досвіду.","addons-caption.addons":"доповнень","arch":"Для систем Arch Linux ми рекомендуємо офіційний пакет AUR: {package-link}","donate":"Якщо вам сподобався TurboWarp, розгляньте можливість пожертвувати нам","flatpak":"Ми підтримуємо офіційну версію Flatpak на Flathub: {package-link}","flatpak.gamepads":"Геймпади не працюватимуть у версії Flatpak.","flatpak.sandbox":"За замовчуванням програма може мати доступ лише до проектів у вашому домашньому каталозі. Щоб дозволити доступ до інших папок, виконайте цю команду:","githubBugs":"Звіт про помилки на GitHub","header.affiliation":"TurboWarp ніяк не пов'язаний із Scratch, командою Scratch або фондом Scratch.","header.subtitle":"Використовуйте {TurboWarp}, це мод на Scratch із компілятором, темним режимом, різними доповненнями, та іншим у програмі для вашого комп'ютера. Яка працює навіть без Інтернету.","linux.1":"У більшості дистрибутивів Linux рекомендованим способом інсталяції TurboWarp є пошук «TurboWarp» у диспетчері програмного забезпечення у вашому дистрибуті та вибір першого варіанту, який з’явиться.","linux.2":"Якщо ви досвідчений користувач або якщо він не відображається, доступні інші варіанти:","mac-help":"Перетягніть TurboWarp у програми. Якщо з'являється повідомлення, що TurboWarp уже існує, виберіть «Замінити».","mac.download":"Завантажити для macOS (Універсальний)","new":"Нове!","packager-caption":"Вбудований {packager} для конвертування проектів в HTML файли або програми для Windows, macOS, або Linux.","packager-caption.packager":"пакувальник","picture.title":"Зображено проєкт: Full Sphere Path Tracer від piano_miles","privacy":"Політика Конфіденсійності","pwa.open":"Відкрити веб-сайт TurboWarp","releases":"Більш старі релізи доступні на GitHub.","scratchBugs":"Звіт про помилки на Scratch","screenshot-caption":"Зображено проєкт: {project}","screenshot-caption.project":"Full Sphere Path Tracer від piano_miles","snap":"Ми підтримуємо офіційну Snap версію: {package-link}","snap.opener":"За замовчуванням версію Snap не можна встановити як засіб відкриття файлів sb3, sb2 або sb без перешкод для інших типів файлів. Щоб виправити це, виконайте ці команди:","snap.sandbox":"За замовчуванням версія Snap не має доступу до камери, мікрофона, геймпадів або знімних дисків. Щоб виправити це, виконайте ці команди:","source":"Вихідний код","update.linux":"Якщо ви встановили TurboWarp Desktop із магазину додатків або менеджера пакунків, наприклад Snap Store, зачекайте, поки оновлення буде відправлено в магазин. В іншому випадку запустіть новий інсталятор нижче.","update.mac":"Щоб оновити, завантажте та встановіть нову програму нижче.","update.windows":"Щоб оновити, завантажте та запустіть новий інсталятор нижче.","web1":"На ChromeOS, Android, iOS, iPadOS та інших платформах ви можете використовувати веб-сайт TurboWarp. Майже всі функції працюють однаково добре.","web2":"Часто ви можете \"встановити\" веб-сайт як веб-додаток. На комп’ютерах і ноутбуках кнопка встановлення може з’явитися в рядку URL-адреси через кілька секунд.","web3":"На телефонах і планшетах знайдіть у меню браузера, «Установити програму» або «Додати на головний екран».","win.32":"Альтернативне посилання для 32-бітних систем","win.download":"Завантажити для Windows (64-біт)","win.help":"Якщо з'являється попередження від Windows SmartScreen, натисніть \"більше інформації\" а потім \"Все одно запустити\".","workarounds":"Відомі проблеми та способи їх вирішення"},
-"zh-cn":{"addons-caption":"超过 {large-number} 个{addons}可以定制和增强你的体验。","addons-caption.addons":"插件","arch":"对于 Arch Linux 系统，我们建议使用官方的 AUR 软件包：{package-link}","deb-manual":"或者为您的系统手动安装.deb（不会添加apt仓库）:","deb-repo":"通过apt安装我们的存储库，通过运行以下命令来接收更新：","donate":"如果您喜欢 TurboWarp 软件，请考虑捐赠","flatpak":"我们在 Flathub 上维护一个官方的 Flatpak 版本：{package-link}","flatpak.gamepads":"游戏手柄在 Flatpak 版本中无法工作。","flatpak.sandbox":"默认情况下，该应用程序可能仅限于访问主目录中的作品。要允许访问其他文件夹，您需要运行以下命令：","githubBugs":"在 GitHub 报告错误","header.affiliation":"TurboWarp 不属于 Scratch、Scratch 团队或 Scratch 基金会。","header.subtitle":"在你的电脑上使用 {TurboWarp}，一个拥有编译器、深色模式、插件等功能的 Scratch MOD。它甚至还能在离线的时候运行。","linux.1":"在大多数 Linux 发行版上，安装 TurboWarp 的推荐方法是在你的发行版的软件管理器中搜索“TurboWarp”，并选择出现的第一个选项。","linux.2":"如果你是一位高级用户，或者 TurboWarp 不在软件管理器中显示，这里有更多选择：","mac-help":"将TurboWarp文件夹放进Application文件夹中。如果你看到“TurboWarp已经存在”之类的警告，请选择“替换”。","mac.download":"下载 macOS 版本（通用）","new":"新的","packager-caption":"内置的 {packager} 可将作品转换为 HTML 文件或 Windows、macOS 或 Linux 应用程序。","packager-caption.packager":"TurboWarp打包器","picture.title":"图片中的作品：由 piano_miles 制作的 Full Sphere Path Tracer","privacy":"隐私政策","pwa.open":"打开 TurboWarp 官方网站","releases":"可在 GitHub 上查看更早的版本说明。","scratchBugs":"在 Scratch 网站报告错误","screenshot-caption":"图片中的作品：{project}","screenshot-caption.project":"由 piano_miles 制作的 Full Sphere Path Tracer","snap":"我们将维护官方的 snap 版本：{package-link}","snap.opener":"默认情况下，snap 版本不能设置为 sb3、sb2 或 sb 文件的文件启动项，而不影响其他文件类型。要解决这个问题，您需要运行以下命令：","snap.sandbox":"默认情况下，snap 版本无法访问您的相机、麦克风、游戏手柄或可移动驱动器。要解决此问题，您需要运行以下命令：","source":"源代码","update.linux":"如果你从像 Snap Store 一样的应用商店或包管理器安装了 TurboWarp Desktop，请等待更新推送到该商店。否则，请运行下面的新安装程序。","update.mac":"在下面下载并安装新的应用程序以更新。","update.windows":"在下面下载并运行新的安装程序以更新。","web1":"在 ChromeOS、Android、iOS、iPadOS 和所有其他操作系统上，您可以改用 TurboWarp 官方网站。几乎所有的功能都可以与 TurboWarp 应用程序一样正常工作。","web2":"很多时候，你可以安装网页。在台式机和笔记本电脑上，“安装”按钮会在几秒后显示。","web3":"在手机和平板电脑上，在浏览器的菜单中寻找“安装应用程序”或“添加到主屏幕”。","win.32":"用于 32 位系统的备选下载","win.download":"下载 Windows 版本（64 位）","win.help":"如果出现 Windows SmartScreen 警告，请单击“更多信息”，然后单击“仍然运行”。","workarounds":"已知的问题和解决方法"},
-}/*===*/;
-        const localeNames = /*+++*/{"en":"English","ca":"Català","de":"Deutsch","es":"Español (España)","it":"Italiano","ja":"日本語","lt":"Lietuvių","nl":"Nederlands","ru":"Русский","sl":"Slovenščina","sv":"Svenska","uk":"Українська","zh-cn":"简体中文"}/*+++*/;
-
-        const KNOWN_GOOD_LANGUAGES = ['en', 'es', 'ja', 'nl', 'it', 'sl'];
+        const allLanguageMessages = /*===*/{}/*===*/;
+        const localeNames = /*+++*/{"en":"English"}/*+++*/;
 
         const translatableElements = document.querySelectorAll('[data-l10n]');
         const translatableAttributes = document.querySelectorAll('[data-l10n-attrib]');
@@ -1035,6 +974,7 @@
         function normalizeLanguage(language) {
           language = language.toLowerCase();
           if (!allLanguageMessages[language]) language = language.split('-')[0];
+          if (!allLanguageMessages[language]) return null;
           return language;
         }
 
@@ -1047,17 +987,16 @@
           try {
             const local = localStorage.getItem(LANGUAGE_KEY);
             if (local) {
-              return normalizeLanguage(local);
+              const normalized = normalizeLanguage(local);
+              if (normalized) {
+                return normalized;
+              }
             }
           } catch (e) {
             // ignore
           }
 
-          const def = normalizeLanguage(navigator.language);
-          if (KNOWN_GOOD_LANGUAGES.includes(def)) {
-            return def;
-          }
-          return 'en';
+          return normalizeLanguage(navigator.language) || 'en';
         }
 
         function getLanguage() {
@@ -1095,21 +1034,10 @@
         };
       })();
     </script>
+
     <script>
       (function() {
-        var VERSION = '1.6.1'; // FIXME: replace 1.6.2 in mac href with {version} for 1.7.0
-
-        function getOS() {
-          if (/android/i.test(navigator.userAgent)) return 'web';
-          if (/iphone|ipad|ipod/i.test(navigator.userAgent)) return 'web';
-          if (/linux/i.test(navigator.userAgent)) return 'linux';
-          if (/cros/i.test(navigator.userAgent)) return 'web';
-          if (/mac/i.test(navigator.userAgent)) return 'mac';
-          return 'windows';
-        }
-        function setOS(os) {
-          document.body.setAttribute('os', os);
-        }
+        var VERSION = '1.6.1'; // TODO: replace 1.6.2 in mac href with {version} for 1.7.0 in BOTH spots
 
         var INVALID_VERSIONS = 0;
         var A_IS_OLDER = 1;
@@ -1150,19 +1078,6 @@
           return defaultValue;
         }
 
-        document.querySelector('.os-button-windows').addEventListener('click', function () {
-          setOS('windows');
-        });
-        document.querySelector('.os-button-mac').addEventListener('click', function () {
-          setOS('mac');
-        });
-        document.querySelector('.os-button-linux').addEventListener('click', function () {
-          setOS('linux');
-        });
-        document.querySelector('.os-button-web').addEventListener('click', function () {
-          setOS('web');
-        });
-
         var links = document.querySelectorAll('a[data-href]');
         for (var i = 0; i < links.length; i++) {
           links[i].href = links[i].getAttribute('data-href').replace(/{version}/g, VERSION);
@@ -1195,27 +1110,22 @@
           }
         }
 
-        if (/from|to|changelog/i.test(location.search)) {
-          var comingFromVersion = getParameter('from', null);
-          if (comingFromVersion) {
-            var elementsWithVersion = document.querySelectorAll('[data-version]');
-            for (var i = 0; i < elementsWithVersion.length; i++) {
-              var el = elementsWithVersion[i];
-              var comparison = compareVersions(comingFromVersion, el.getAttribute('data-version'));
-              if (comparison === B_IS_OLDER || comparison === VERSIONS_ARE_EQUAL) {
-                el.style.display = 'none';
-              }
-            }
-          }
+        // if (/from|to|changelog/i.test(location.search)) {
+        //   var comingFromVersion = getParameter('from', null);
+        //   if (comingFromVersion) {
+        //     var elementsWithVersion = document.querySelectorAll('[data-version]');
+        //     for (var i = 0; i < elementsWithVersion.length; i++) {
+        //       var el = elementsWithVersion[i];
+        //       var comparison = compareVersions(comingFromVersion, el.getAttribute('data-version'));
+        //       if (comparison === B_IS_OLDER || comparison === VERSIONS_ARE_EQUAL) {
+        //         el.style.display = 'none';
+        //       }
+        //     }
+        //   }
 
-          document.body.setAttribute('full-changelog', 'true');
-          document.getElementById('select-os').scrollIntoView();
-        } else {
-          document.getElementById('alternative-changelog-spot').appendChild(document.getElementById('changelog'));
-        }
-
-        setOS(getOS());
-        document.body.setAttribute('loaded', '');
+        //   document.body.setAttribute('full-changelog', 'true');
+        //   document.getElementById('select-os').scrollIntoView();
+        // }
       }());
     </script>
   </body>
