@@ -94,6 +94,11 @@
         }
       }
 
+      .section {
+        max-width: 700px;
+        margin: 32px auto;
+      }
+
       .language-selector {
         position: absolute;
         top: 0;
@@ -157,11 +162,15 @@
         }
       }
 
-      .subheader {
+      .subheader,
+      .changelog-subheader {
         margin: 32px auto;
+        max-width: 700px;
         text-align: center;
         font-size: 24px;
-        max-width: 700px;
+      }
+      .changelog-subheader {
+        display: none;
       }
 
       .above-fold-download {
@@ -268,9 +277,12 @@
         justify-content: center;
       }
       .alternative-download-links li {
-        margin: 0 8px;
-        padding: 0;
         display: block;
+        padding: 0;
+        margin: 0;
+      }
+      .alternative-download-links a {
+        margin: 0 8px;
       }
 
       .picture {
@@ -298,8 +310,6 @@
       }
 
       .features {
-        margin: 32px auto;
-        max-width: 700px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -325,8 +335,6 @@
       }
 
       .links {
-        margin: 32px auto;
-        max-width: 700px;
         display: grid;
         grid-template-columns: 1fr 1fr;
       }
@@ -365,10 +373,6 @@
         }
       }
 
-      .manual-installation {
-        margin: 32px auto;
-        max-width: 700px;
-      }
       code {
         padding: 1px 2px;
         border-radius: 8px;
@@ -401,12 +405,6 @@
         border-top: 1px solid currentColor;
       }
 
-      .changelog {
-        margin: 32px auto;
-        max-width: 700px;
-        margin: auto;
-      }
-
       [data-if-os] {
         display: none;
       }
@@ -421,6 +419,17 @@
       }
       [os-unsupported] [data-if-os="unsupported"] {
         display: initial;
+      }
+
+      [is-changelog] .subheader,
+      [is-changelog] .alternative-download-links,
+      [is-changelog] .picture,
+      [is-changelog] .features,
+      [is-changelog] .links {
+        display: none;
+      }
+      [is-changelog] .changelog-subheader {
+        display: block;
       }
     </style>
   </head>
@@ -476,9 +485,16 @@
 
     <div class="subheader">TurboWarp is a better version of Scratch 3 with a compiler, dark mode, addons, and a lot more. Now, you can use it offline on any desktop computer. Not affiliated with the Scratch Team.</div>
 
+    <div class="changelog-subheader">
+      <p data-if-os="windows">To update, download and run the new installer.</p>
+      <p data-if-os="mac">To update, download and install the new app bundle.</p>
+      <p data-if-os="linux">If you installed TurboWarp Desktop from an app store or package manager, download the update from there. Otherwise, manually reinstall the app the same way you installed it.</p>
+      <p data-if-os="unsupported">To update, reinstall the app the same way you installed it.</p>
+    </div>
+
     <div class="above-fold-download">
       <noscript>
-        <a class="download-button" href="#install">Read installation instructions (JS disabled)</a>
+        <a class="download-button" href="#windows">Read installation instructions (JS disabled)</a>
       </noscript>
 
       <div data-if-os="windows">
@@ -502,7 +518,7 @@
       </div>
 
       <div data-if-os="unsupported">
-        <a class="download-button" href="#install">Could not detect operating system</a>
+        <a class="download-button" href="#windows">Could not detect operating system</a>
       </div>
     </div>
 
@@ -530,7 +546,7 @@
       <div class="picture-caption">Project pictured: <a href="https://scratch.mit.edu/projects/425020125/">Full Sphere Path Tracer by piano_miles</a></div>
     </div>
 
-    <div class="features">
+    <div class="features section">
       <h2>Features</h2>
 
       <div class="feature-list">
@@ -572,16 +588,18 @@
         </div>
         <div>
           <h3>Tools for artists</h3>
-          <p>Full support for transparency, an improved costume editor, and onion skinning, and more.</p>
+          <p>Full support for transparency, an improved costume editor, onion skinning, and more.</p>
+        </div>
+        <div>
+          <h3>Cat blocks</h3>
+          <p>Enable the cat blocks addon to get cute cat blocks any day of the year.</p>
         </div>
       </div>
 
       <div class="more-features">And a lot more.</div>
     </div>
 
-    <hr>
-
-    <div class="links">
+    <div class="links section">
       <a class="link" href="https://github.com/TurboWarp/desktop/">
         <!-- Icon from https://fontawesome.com/v5.15/icons/code?style=solid -->
         <svg viewBox="0 0 640 512"><path fill="currentColor" d="M278.9 511.5l-61-17.7c-6.4-1.8-10-8.5-8.2-14.9L346.2 8.7c1.8-6.4 8.5-10 14.9-8.2l61 17.7c6.4 1.8 10 8.5 8.2 14.9L293.8 503.3c-1.9 6.4-8.5 10.1-14.9 8.2zm-114-112.2l43.5-46.4c4.6-4.9 4.3-12.7-.8-17.2L117 256l90.6-79.7c5.1-4.5 5.5-12.3.8-17.2l-43.5-46.4c-4.5-4.8-12.1-5.1-17-.5L3.8 247.2c-5.1 4.7-5.1 12.8 0 17.5l144.1 135.1c4.9 4.6 12.5 4.4 17-.5zm327.2.6l144.1-135.1c5.1-4.7 5.1-12.8 0-17.5L492.1 112.1c-4.8-4.5-12.4-4.3-17 .5L431.6 159c-4.6 4.9-4.3 12.7.8 17.2L523 256l-90.6 79.7c-5.1 4.5-5.5 12.3-.8 17.2l43.5 46.4c4.5 4.9 12.1 5.1 17 .6z"></path></svg>
@@ -590,7 +608,7 @@
       <a class="link" href="privacy.html">
         <!-- Icon from https://fontawesome.com/v5.15/icons/file?style=solid -->
         <svg viewBox="0 0 384 512"><path fill="currentColor" d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg>
-        <div>Privacy policy</div>
+        <div>Privacy</div>
       </a>
       <a class="link" href="https://scratch.mit.edu/users/GarboMuffin/#comments">
         <!-- Icon from https://fontawesome.com/v5.15/icons/bug?style=solid -->
@@ -608,11 +626,9 @@
       </a>
     </div>
 
-    <hr>
+    <div class="alternative-changelog-location"></div>
 
-    <div id="install"></div>
-
-    <div class="manual-installation" id="windows">
+    <div class="manual-installation section" id="windows">
       <h2>Install on Windows</h2>
       <p>Get it from the Microsoft Store to enable automatic updates.</p>
       <div>
@@ -632,18 +648,14 @@
       </ul>
     </div>
 
-    <hr>
-
-    <div class="manual-installation" id="mac">
+    <div class="manual-installation section" id="mac">
       <h2>Install on macOS</h2>
       <!-- TODO: Need to update 1.6.2 -> 1.7.0 after 1.6.1 is obsolete -->
       <a class="download-button" data-href="https://github.com/TurboWarp/desktop/releases/download/v1.6.2/TurboWarp-Setup-1.6.2.dmg">Download for macOS (Universal)</a>
       <p>Drag TurboWarp into Applications. If it tells you that TurboWarp already exists, choose Replace.</p>
     </div>
 
-    <hr>
-
-    <div class="manual-installation" id="linux">
+    <div class="manual-installation section" id="linux">
       <h2>Install on Linux</h2>
       <p>On most Linux distributions, the recommended way to install TurboWarp is to search for "TurboWarp" in your distribution's software manager and choose the first option that appears. If it doesn't appear, we support the following installation methods:</p>
 
@@ -709,9 +721,7 @@
       </ul>
     </div>
 
-    <hr>
-
-    <div class="changelog" id="changelog">
+    <div class="changelog section" id="changelog">
       <h2>Changelog</h2>
       <div lang="en">
         <div class="os-mac" data-version="1.6.2">
@@ -1110,22 +1120,23 @@
           }
         }
 
-        // if (/from|to|changelog/i.test(location.search)) {
-        //   var comingFromVersion = getParameter('from', null);
-        //   if (comingFromVersion) {
-        //     var elementsWithVersion = document.querySelectorAll('[data-version]');
-        //     for (var i = 0; i < elementsWithVersion.length; i++) {
-        //       var el = elementsWithVersion[i];
-        //       var comparison = compareVersions(comingFromVersion, el.getAttribute('data-version'));
-        //       if (comparison === B_IS_OLDER || comparison === VERSIONS_ARE_EQUAL) {
-        //         el.style.display = 'none';
-        //       }
-        //     }
-        //   }
-
-        //   document.body.setAttribute('full-changelog', 'true');
-        //   document.getElementById('select-os').scrollIntoView();
-        // }
+        if (/from|to|changelog/i.test(location.search)) {
+          var comingFromVersion = getParameter('from', null);
+          if (comingFromVersion) {
+            var elementsWithVersion = document.querySelectorAll('[data-version]');
+            for (var i = 0; i < elementsWithVersion.length; i++) {
+              var el = elementsWithVersion[i];
+              var comparison = compareVersions(comingFromVersion, el.getAttribute('data-version'));
+              if (comparison === B_IS_OLDER || comparison === VERSIONS_ARE_EQUAL) {
+                el.style.display = 'none';
+              }
+            }
+          }
+          var changelogElement = document.getElementById('changelog');
+          var insertChangelogAfter = document.querySelector('.alternative-changelog-location');
+          document.body.insertBefore(changelogElement, insertChangelogAfter.nextSibling);
+          document.body.setAttribute('is-changelog', '');
+        }
       }());
     </script>
   </body>
