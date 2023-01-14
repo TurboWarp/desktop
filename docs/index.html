@@ -83,18 +83,6 @@
         font-size: 1.2em;
       }
 
-      .theme-dark {
-        display: none;
-      }
-      @media (prefers-color-scheme: dark) {
-        .theme-dark {
-          display: initial;
-        }
-        .theme-light {
-          display: none;
-        }
-      }
-
       .section {
         max-width: 700px;
         margin: 32px auto;
@@ -182,6 +170,8 @@
       }
       [is-changelog] .subheader,
       [is-changelog] .alternative-download-links,
+      [is-changelog] .above-fold-download .microsoft-store,
+      [is-changelog] .above-fold-download .download-separator,
       [is-changelog] .picture,
       [is-changelog] .features,
       [is-changelog] .links {
@@ -502,8 +492,9 @@
       const getOS = () => {
         if (/android/i.test(navigator.userAgent)) return 'unsupported';
         if (/iphone|ipad|ipod/i.test(navigator.userAgent)) return 'unsupported';
-        if (/linux/i.test(navigator.userAgent)) return 'linux';
-        if (/cros/i.test(navigator.userAgent)) return 'unsupported';
+        // Chromium on Raspberry Pi OS reports CrOS in User-Agent but Linux in navigator.platform
+        if (navigator.platform.includes('Linux') || /linux/i.test(navigator.userAgent)) return 'linux';
+        if (navigator.userAgent.includes('CrOS')) return 'unsupported';
         if (/mac/i.test(navigator.userAgent)) return 'mac';
         if (/windows/i.test(navigator.userAgent)) return 'windows';
         return 'unsupported';
@@ -595,8 +586,8 @@
       languageSelector.value = language;
       languageText.textContent = localeNames[language] || language;
 
-      // Process elements as they appear
       const handleElementWasCompleted = (element) => {
+        // Can't translate an element until its children finish, otherwise what we put can be overwritten or appended to
         const l10n = element.getAttribute('l10n');
         if (l10n) {
           const message = messages[l10n];
@@ -604,6 +595,14 @@
             element.textContent = message;
           }
         }
+      };
+      const stack = [document.body];
+      const handleElementWasAdded = (element) => {
+        if (element.nodeType !== 1) return;
+        while (!stack[stack.length - 1].contains(element)) {
+          handleElementWasCompleted(stack.pop());
+        }
+        stack.push(element);
 
         const asset = element.getAttribute('data-asset');
         if (asset) {
@@ -617,16 +616,6 @@
             element.style.display = 'none';
           }
         }
-      };
-
-      // Weird MutationObserver hack to process elements once all of their children have finished loading
-      const stack = [document.body];
-      const handleElementWasAdded = (element) => {
-        if (element.nodeType !== 1) return;
-        while (!stack[stack.length - 1].contains(element)) {
-          handleElementWasCompleted(stack.pop());
-        }
-        stack.push(element);
       };
       const mutationObserver = new MutationObserver(function (mutationList) {
         for (const mutation of mutationList) {
@@ -705,15 +694,12 @@
     </div>
 
     <div class="picture picture-editor">
-      <picture class="theme-light">
+      <picture>
+        <source srcset="screenshot-win-dark.webp 1x, screenshot-win-dark-2x.webp 2x" type="image/webp" media="(prefers-color-scheme: dark)">
+        <source srcset="screenshot-win-dark.png 1x, screenshot-win-dark-2x.png 2x" type="image/png" media="(prefers-color-scheme: dark)">
         <source srcset="screenshot-win-light.webp 1x, screenshot-win-light-2x.webp 2x" type="image/webp">
         <source srcset="screenshot-win-light.png 1x, screenshot-win-light-2x.png 2x" type="image/png">
         <img class="path-tracer" loading="lazy" src="screenshot-win-light.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles">
-      </picture>
-      <picture class="theme-dark">
-        <source srcset="screenshot-win-dark.webp 1x, screenshot-win-dark-2x.webp 2x" type="image/webp">
-        <source srcset="screenshot-win-dark.png 1x, screenshot-win-dark-2x.png 2x" type="image/png">
-        <img class="path-tracer" loading="lazy" src="screenshot-win-dark.png" width="1280" height="800" title="Project pictured: Full Sphere Path Tracer by piano_miles">
       </picture>
       <a class="picture-caption" l10n="caption" href="https://scratch.mit.edu/projects/425020125/">Project pictured: Full Sphere Path Tracer by piano_miles</a>
       <script>
