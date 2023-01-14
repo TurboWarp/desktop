@@ -203,6 +203,9 @@
       .above-fold-download p {
         margin: 8px 0;
       }
+      .above-fold-download p:last-child {
+        margin-bottom: 0;
+      }
 
       .download-list {
         display: flex;
@@ -432,22 +435,27 @@
       [data-if-os] {
         display: none;
       }
-      [os-windows] [data-if-os="windows"] {
+      [data-os="windows"] [data-if-os="windows"] {
         display: initial;
       }
-      [os-mac] [data-if-os="mac"] {
+      [data-os="mac"] [data-if-os="mac"] {
         display: initial;
       }
-      [os-linux] [data-if-os="linux"] {
+      [data-os="linux"] [data-if-os="linux"] {
         display: initial;
       }
-      [os-unsupported] [data-if-os="unsupported"] {
+      [data-os="unsupported"] [data-if-os="unsupported"] {
         display: initial;
       }
     </style>
   </head>
 
   <body>
+    <script>
+      // fallback for ancient browsers that understand old JS but not modern JS
+      document.body.setAttribute('data-os', 'unsupported');
+    </script>
+
     <label class="language-selector" aria-label="Language Selector">
       <select class="language-selector-input">
         <option disabled>The app itself does support many languages.</option>
@@ -500,7 +508,7 @@
         if (/windows/i.test(navigator.userAgent)) return 'windows';
         return 'unsupported';
       };
-      document.body.setAttribute(`os-${getOS()}`, '');
+      document.body.setAttribute('data-os', getOS());
 
       // Changelog page
       const INVALID_VERSIONS = 0;
@@ -644,7 +652,7 @@
       });
     </script>
 
-    <div class="subheader" l10n="about">TurboWarp is a better version of Scratch 3 with a compiler, dark mode, addons, and a lot more. TurboWarp Desktop lets you use it offline on any desktop computer. Not affiliated with the Scratch Team.</div>
+    <div class="subheader" l10n="about">Create games, animations, and stories with the better version of Scratch with dark mode, addons, a compiler, and a lot more. Now available as an app for any desktop computer. TurboWarp is not affiliated with the Scratch Team.</div>
 
     <div class="changelog-subheader">
       <p data-if-os="windows" l10n="updatewin">To update, download and run the new installer.</p>
@@ -1032,7 +1040,7 @@
           const string = element.textContent.trim();
           const description = element.getAttribute('l10n-description');
           const existing = result[id];
-          if (existing && existing.string !== string || existing.developer_comment !== description) {
+          if (existing && (existing.string !== string || existing.developer_comment !== description)) {
             throw new Error(`${id} has a conflict`);
           }
           result[id] = {
