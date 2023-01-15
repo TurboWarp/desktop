@@ -2,12 +2,15 @@
 
 set -euo pipefail
 
-echo "!!! WARNING !!!"
-echo "  This script is deprecated: using it is highly discouraged and it may cease to receive updates or function in the near future."
-echo "  Please use the other install methods listed on the https://desktop.turbowarp.org/ website."
-echo "  The other methods are typically more secure, often support automatic updates, integrate better into the rest of your system, and are usually easier to uninstall."
+echo -e "\e[31m\e[1m!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+echo -e "!!! THIS SCRIPT IS DEPRECATED !!!"
+echo -e "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\e[0m"
 echo ""
-echo "Press enter to continue anyways."
+echo "Please use one of the installation methods listed on https://desktop.turbowarp.org/ instead."
+echo "They are more secure and often integrate into your system's package manager."
+echo "If for some reason you must use this script, please contact us."
+echo ""
+echo "Press enter to acknowledge the warning and continue anyways."
 read
 
 fatal() {
