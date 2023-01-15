@@ -13,6 +13,19 @@
         font-size: 16px;
         margin: auto;
       }
+      h1 {
+        font-size: 2.5em;
+        margin: 32px 0;
+        text-align: center;
+        font-weight: normal;
+      }
+      h2 {
+        font-size: 1.75em;
+        margin: 32px 0 16px 0;
+      }
+      p {
+        margin: 16px 0;
+      }
       code {
         padding: 1px 2px;
         border-radius: 8px;
@@ -37,8 +50,6 @@
         font-style: italic;
       }
       .warning {
-        color: #111;
-        background: yellow;
         border: 1px solid orange;
         padding: 8px;
         border-radius: 8px;
@@ -46,7 +57,7 @@
       @media (prefers-color-scheme: dark) {
         :root {
           color-scheme: dark;
-          background: #111;
+          background: #171717;
           color: #eee;
         }
         code {
@@ -61,21 +72,24 @@
   </head>
   <body>
     <main>
-      <h1>How to uninstall TurboWarp Desktop</h1>
+      <h1>How to completely uninstall TurboWarp Desktop</h1>
+      <p>This page describes how to <i>completely</i> uninstall TurboWarp, including deleting all of your user data where your settings and backpack and stored. Uninstalling the app does not affect projects you have saved on your computer.</p>
 
       <h2>Windows</h2>
       <p>Uninstall TurboWarp like you would any other app.</p>
       <p>Settings &gt; Add or remove programs &gt; TurboWarp &gt; Remove.</p>
-      <p>To delete user data, open file explorer, type <code>%APPDATA%</code> into the location bar, then delete the <code>turbowarp-desktop</code> folder. (repeat for each user that used the app)</p>
+      <p>To delete user data, open file explorer, type <code>%APPDATA%</code> into the location bar, then delete the <code>turbowarp-desktop</code> folder. Repeat for each user that used the app.</p>
 
       <h2>macOS</h2>
       <p>Uninstall TurboWarp like you would any other app.</p>
       <p>Finder > Go to Applications > Drag TurboWarp into the trash icon on your dock.</p>
-      <p>To delete user data, open Finder, press Shift+Command+G, type in <code>~/Library/Application Support/</code>, then delete the <code>turbowarp-desktop</code> folder. (repeat for each user that used the app)</p>
+      <p>To delete user data, open Finder, press Shift+Command+G, type in <code>~/Library/Application Support/</code>, then delete the <code>turbowarp-desktop</code> folder. Repeat for each user that used the app.</p>
 
       <h2>Linux</h2>
-      <p>It depends on how you installed it. If you don't remember how you installed it, just run everything here.</p>
-      <p class="warning">Please copy and paste these commands instead of re-typing them. Small typos could break your system.</p>
+      <p>Typically you can open up your distributions software manager, search for "TurboWarp", and just uninstall it from there.</p>
+
+      <p>If you installed it manually or from the command line or want to delete user data, you may need to run some commands.</p>
+      <p class="warning">Please be careful running these. Small typos could break your system.</p>
 
       <p>If you installed it from the Snap Store:</p>
       <code class="terminal">
@@ -84,13 +98,17 @@
         <div class="command">sudo rm /usr/share/mime/packages/turbowarp-desktop-snap.xml</div>
       </code>
 
-      <p>If you installed it from Flathub:</p>
+      <p>If you installed it using Flatpak from Flathub:</p>
       <code class="terminal">
+        <div class="comment">To uninstall without removing user data:</div>
         <div class="command">flatpak uninstall org.turbowarp.TurboWarp</div>
+        <div class="comment">To uninstall and remove user data:</div>
+        <div class="command">flatpak uninstall org.turbowarp.TurboWarp --delete-data</div>
       </code>
 
       <p>If you installed it using the Debian/Ubuntu repository or .deb packages:</p>
       <code class="terminal">
+        <div class="comment">Remove app files</div>
         <div class="command">sudo apt remove turbowarp-desktop</div>
         <div class="comment">Remove our repository from your computer</div>
         <div class="command">sudo rm /etc/apt/sources.list.d/turbowarp.list</div>
@@ -109,9 +127,9 @@
       <code class="terminal">
         <div class="comment">Remove app files</div>
         <div class="command">sudo rm /opt/TurboWarp -rf</div>
-        <div class="comment">Remove binary from PATH</div>
+        <div class="comment">Remove shortcut in PATH</div>
         <div class="command">sudo rm /usr/bin/turbowarp-desktop</div>
-        <div class="comment">Remove launch menu item</div>
+        <div class="comment">Remove desktop launch menu item</div>
         <div class="command">sudo rm /usr/share/applications/turbowarp-desktop.desktop</div>
         <div class="comment">Remove file type information</div>
         <div class="command">sudo rm /usr/share/mime/packages/turbowarp-desktop.xml</div>
@@ -120,14 +138,15 @@
         <div class="comment">May have to reboot for full effect</div>
       </code>
 
-      <p>If you're using the AppImage, simply delete the .AppImage file.</p>
-
       <p>If you manually installed the tar.gz, delete the folder where you installed it to.</p>
 
-      <p>Delete user data: (repeat for each user that used the app)</p>
+      <p>If you're using the AppImage, simply delete the .AppImage file.</p>
+
+      <p>Delete user data:</p>
       <code class="terminal">
         <div class="command">sudo rm ~/.config/turbowarp-desktop -rf</div>
       </code>
+      <p>Repeat for each user that used the app.</p>
     </main>
   </body>
 </html>
