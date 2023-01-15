@@ -639,6 +639,19 @@
           changelogElement.style.display = 'block';
         }
       });
+
+      document.addEventListener('click', (e) => {
+        const id = e.target.hash && e.target.hash.substring(1);
+        if (id) {
+          const element = document.getElementById(id);
+          if (element) {
+            e.preventDefault();
+            element.scrollIntoView({
+              behavior: 'smooth'
+            });
+          }
+        }
+      });
     </script>
 
     <div class="subheader" l10n="about">Create games, animations, and stories with the better version of Scratch with dark mode, addons, a compiler, and a lot more. Now available as an app for any desktop computer. TurboWarp is not affiliated with the Scratch Team.</div>
