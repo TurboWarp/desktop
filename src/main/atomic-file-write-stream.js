@@ -63,9 +63,8 @@ const createAtomicWriteStream = async (path) => {
     autoClose: false,
     // Increase high water mark from default value of 16384.
     // Increasing this results in less time spent waiting for disk IO to complete, which would pause
-    // the sb3 generation stream in scratch-gui.
-    // This does negligibly increase possible memory usage.
-    highWaterMark: 1024 * 1024
+    // the sb3 generation stream in scratch-gui. Increasing this does increase memory usage.
+    highWaterMark: 1024 * 1024 * 5
   });
 
   writeStream.on('error', async (error) => {
