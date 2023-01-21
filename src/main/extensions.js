@@ -1,10 +1,6 @@
 import {app, protocol} from 'electron';
 import pathUtil from 'path';
-import fs from 'fs';
-import {promisify} from 'util';
 import {staticDir} from './environment';
-
-const readFile = promisify(fs.readFile);
 
 const extensionDirectory = pathUtil.join(staticDir, 'extensions.turbowarp.org', '/');
 
