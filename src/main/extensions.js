@@ -15,15 +15,6 @@ app.on('session-created', (session) => {
   });
 });
 
-protocol.registerSchemesAsPrivileged([
-  {
-    scheme: 'tw-extensions',
-    privileges: {
-      supportFetchAPI: true
-    }
-  }
-]);
-
 app.whenReady().then(() => {
   protocol.registerFileProtocol('tw-extensions', (request, callback) => {
     const pathAndQuery = request.url.substring('tw-extensions://'.length);

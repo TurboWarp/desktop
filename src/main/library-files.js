@@ -8,15 +8,6 @@ import {staticDir} from './environment';
 const readFile = promisify(fs.readFile);
 const decompress = promisify(brotliDecompress);
 
-protocol.registerSchemesAsPrivileged([
-  {
-    scheme: 'tw-library-files',
-    privileges: {
-      supportFetchAPI: true
-    }
-  }
-]);
-
 const mimeTypes = new Map();
 mimeTypes.set('wav', 'audio/wav');
 mimeTypes.set('svg', 'image/svg+xml');

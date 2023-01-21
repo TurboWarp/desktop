@@ -21,6 +21,8 @@ import './detect-arm-translation';
 import {isBackgroundThrottlingEnabled, whenBackgroundThrottlingChanged} from './background-throttling';
 import './extensions';
 import {createAtomicWriteStream} from './atomic-file-write-stream';
+import './protocols';
+import './request-security';
 
 const readFile = util.promisify(fs.readFile);
 const brotliDecompress = util.promisify(zlib.brotliDecompress);
@@ -883,7 +885,7 @@ if (acquiredLock) {
     }
   });
 
-  app.on('ready', () => {
+  app.whenReady().then(() => {
     checkForUpdate();
     autoCreateEditorWindows();
   });
