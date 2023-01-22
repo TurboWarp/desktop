@@ -90,12 +90,15 @@
       }
 
       .language-selector {
+        display: none;
         position: absolute;
         top: 0;
         left: 0;
         padding: 8px;
-        display: flex;
         align-items: center;
+      }
+      [has-js] .language-selector {
+        display: flex;
       }
       .language-icon {
         width: 24px;
@@ -443,6 +446,7 @@
 
   <body>
     <script>
+      document.body.setAttribute('has-js', 'true');
       // fallback for ancient browsers that understand old JS but not modern JS
       document.body.setAttribute('data-os', 'unsupported');
     </script>
@@ -541,6 +545,7 @@
         const option = document.createElement('option');
         option.textContent = localeNames[languageCode] || languageCode;
         option.value = languageCode;
+        option.lang = languageCode;
         languageSelector.append(option);
       }
       languageSelector.addEventListener('change', (e) => {
@@ -663,7 +668,10 @@
 
     <div class="above-fold-download">
       <noscript>
-        <a class="download-button" href="#windows">Read installation instructions (JS disabled)</a>
+        <div>
+          <a class="download-button" href="#windows">Read installation instructions</a>
+          <p>Download buttons will go to GitHub instead of direct downloads because JavaScript is disabled.</p>
+        </div>
       </noscript>
 
       <div data-if-os="windows">
