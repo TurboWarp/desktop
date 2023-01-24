@@ -67,6 +67,7 @@
       <description>
         <ul>
           <li>Added support for unsandboxed extensions from extensions.turbowarp.org</li>
+          <li>The desktop app includes an offline copy of extensions.turbowarp.org</li>
           <li>Custom extensions will now be automatically loaded when you open a project made with recent versions of TurboWarp (a confirmation prompt appears for third-party extensions)</li>
           <li>Project saving now uses significantly less memory</li>
           <li>Added "Rename broadcasts" addon (enabled by default)</li>
@@ -75,6 +76,7 @@
           <li>Added "Project volume slider" addon</li>
           <li>Added "Always show number pad" addon</li>
           <li>Added a few more switches to the "Block switching" addon</li>
+          <li>Checkboxes in the toolbox are now dark in dark mode</li>
           <li>Allow creating monitors for mouse down, mouse x, mouse y, and days since 2000</li>
           <li>Fixed crash in costume editor using transparent colors with bitmap line tool</li>
           <li>Fixed costume editor color picker ignoring transparency</li>
