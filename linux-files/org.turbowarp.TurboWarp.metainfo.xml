@@ -63,6 +63,26 @@
     <content_attribute id="social-info">mild</content_attribute>
   </content_rating>
   <releases>
+    <release version="1.7.0" date="2023-1-24">
+      <description>
+        <ul>
+          <li>Added support for unsandboxed extensions from extensions.turbowarp.org</li>
+          <li>Custom extensions will now be automatically loaded when you open a project made with recent versions of TurboWarp (a confirmation prompt appears for third-party extensions)</li>
+          <li>Project saving now uses significantly less memory</li>
+          <li>Added "Rename broadcasts" addon (enabled by default)</li>
+          <li>Added "Collapsing sprite properties" addon</li>
+          <li>Added "Costume editor snapping" addon</li>
+          <li>Added "Project volume slider" addon</li>
+          <li>Added "Always show number pad" addon</li>
+          <li>Added a few more switches to the "Block switching" addon</li>
+          <li>Allow creating monitors for mouse down, mouse x, mouse y, and days since 2000</li>
+          <li>Fixed crash in costume editor using transparent colors with bitmap line tool</li>
+          <li>Fixed costume editor color picker ignoring transparency</li>
+          <li>Fixed some keyboard shortcuts not working when caps lock is enabled</li>
+          <li>Fixed many other bugs</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.6.1" date="2022-10-07">
       <description>
         <ul>
