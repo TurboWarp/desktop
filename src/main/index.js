@@ -22,7 +22,6 @@ import {isBackgroundThrottlingEnabled, whenBackgroundThrottlingChanged} from './
 import './extensions';
 import {createAtomicWriteStream} from './atomic-file-write-stream';
 import './protocols';
-import './request-security';
 
 const readFile = util.promisify(fs.readFile);
 const brotliDecompress = util.promisify(zlib.brotliDecompress);
