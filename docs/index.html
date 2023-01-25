@@ -488,7 +488,7 @@
     <script type="generated-locale-names">{"en":"English","de":"Deutsch","it":"Italiano","nl":"Nederlands"}</script>
 
     <script>
-      const VERSION = '1.7.0';
+      const VERSION = '1.6.1'; // TODO: replace 1.6.2 in mac href with {version} for 1.7.0 in BOTH spots
 
       // OS-specific styles
       const getOS = () => {
@@ -688,7 +688,7 @@
       </div>
 
       <div data-if-os="mac">
-        <a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Setup-{version}.dmg" l10n="macd" l10n-description="Universal means the apps works on Intel and ARM Macs">Download for macOS (Universal)</a>
+        <a class="download-button" href="https://github.com/TurboWarp/desktop/releases/download/v1.6.2/TurboWarp-Setup-1.6.2.dmg" l10n="macd" l10n-description="Universal means the apps works on Intel and ARM Macs">Download for macOS (Universal)</a>
       </div>
 
       <div data-if-os="linux">
@@ -813,27 +813,10 @@
     <div class="changelog section" id="changelog">
       <h2 l10n="changelog">Changelog</h2>
       <div lang="en">
-        <div data-version="1.7.0">
-          <h3>v1.7.0 (January 24 2023)</h3>
+        <div data-if-os="mac" data-version="1.6.2">
+          <h3>v1.6.2 (macOS only)</h3>
           <ul>
-            <li>Added support for unsandboxed extensions from extensions.turbowarp.org</li>
-            <li>The desktop app includes an offline copy of extensions.turbowarp.org</li>
-            <li>Custom extensions will now be automatically loaded when you open a project made with recent versions of TurboWarp (a confirmation prompt appears for third-party extensions)</li>
-            <li>Project saving now uses significantly less memory</li>
-            <li>Added "Rename broadcasts" addon (enabled by default)</li>
-            <li>Added "Collapsing sprite properties" addon</li>
-            <li>Added "Costume editor snapping" addon</li>
-            <li>Added "Project volume slider" addon</li>
-            <li>Added "Always show number pad" addon</li>
-            <li>Added a few more switches to the "Block switching" addon</li>
-            <li>Checkboxes in the toolbox are now dark in dark mode</li>
-            <li>Allow creating monitors for mouse down, mouse x, mouse y, and days since 2000</li>
-            <li>Fixed crash in costume editor using transparent colors with bitmap line tool</li>
-            <li>Fixed costume editor color picker ignoring transparency</li>
-            <li>Fixed some keyboard shortcuts not working when caps lock is enabled</li>
-            <li>Fixed many other bugs</li>
-            <li>Windows: Support for Windows 7, Windows 8, and Windows 8.1 may be removed in a future update</li>
-            <li>macOS: Our app is now notarized by Apple</li>
+            <li>Added Apple code signing and notarization</li>
           </ul>
         </div>
         <div data-version="1.6.1">
@@ -986,7 +969,8 @@
     <div class="manual-installation section" id="mac">
       <h2 l10n="mac">Install on macOS</h2>
       <p l10n="mac2">Drag TurboWarp into Applications. If it tells you that TurboWarp already exists, choose "Replace".</p>
-      <a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Setup-{version}.dmg" l10n="macd" l10n-description="Universal means the apps works on Intel and ARM Macs">Download for macOS (Universal)</a>
+      <!-- TODO: Need to update 1.6.2 -> 1.7.0 after 1.6.1 is obsolete -->
+      <a class="download-button" href="https://github.com/TurboWarp/desktop/releases/download/v1.6.2/TurboWarp-Setup-1.6.2.dmg" l10n="macd" l10n-description="Universal means the apps works on Intel and ARM Macs">Download for macOS (Universal)</a>
     </div>
 
     <div class="manual-installation section" id="linux">
