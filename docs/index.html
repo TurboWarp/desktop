@@ -529,8 +529,9 @@
         }
         return VERSIONS_ARE_EQUAL;
       };
-      const isChangelogPage = /from|to|changelog/i.test(location.search);
-      const comingFromVersion = new URLSearchParams(location.search).get('from') || '0.0.0';
+      const searchParams = new URLSearchParams(location.search);
+      const isChangelogPage = searchParams.has('changelog') || searchParams.has('from') || searchParams.has('to');
+      const comingFromVersion = searchParams.get('from') || '0.0.0';
       if (isChangelogPage) {
         document.body.setAttribute('is-changelog', '');
       }
