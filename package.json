@@ -22,7 +22,7 @@
     "@electron/notarize": "^1.2.3",
     "@turbowarp/electron-webpack": "^2.9.1",
     "css-loader": "^5.0.2",
-    "electron": "^22.2.0",
+    "electron": "^23.0.0",
     "electron-builder": "^23.6.0",
     "postcss": "^8.4.13",
     "postcss-import": "^14.0.0",
