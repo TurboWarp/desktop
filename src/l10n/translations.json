@@ -493,6 +493,7 @@
         "crash.description": "Proces napotkał krytyczny błąd: {type} : {reason} ({code})",
         "crash.title": "Napotkano krytyczny błąd",
         "desktop-settings": "Ustawienia Wersji na Pulpit",
+        "donate": "Wesprzyj",
         "failed-to-load": "Nie udało się załadować projektu: {error}",
         "files.html": "Plik HTML",
         "files.png": "Obraz PNG",
