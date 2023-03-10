@@ -1008,35 +1008,6 @@
       <h2 l10n="lin">Install on Linux</h2>
       <p l10n="lin2">Try searching for "TurboWarp" in your distribution's software manager and choose the first option that appears. If it doesn't appear or if you're an advanced user, choose one of these installation methods:</p>
 
-      <h3>Snap Store</h3>
-      <p><span l10n="snap" l10n-description="snap refers to snapcraft.io">We maintain an official snap version:</span> <a href="https://snapcraft.io/turbowarp-desktop">turbowarp-desktop</a></p>
-      <details>
-        <summary l10n="issues">Known issues and workarounds</summary>
-        <p l10n="snap2" l10n-description="snap refers to snapcraft.io">By default, the snap version can't access your camera, microphone, gamepads, or removable drives. To fix this, run these commands:</p>
-        <code class="terminal">
-          <div class="command">snap connect turbowarp-desktop:camera</div>
-          <div class="command">snap connect turbowarp-desktop:audio-record</div>
-          <div class="command">snap connect turbowarp-desktop:joystick</div>
-          <div class="command">snap connect turbowarp-desktop:removable-media</div>
-        </code>
-        <p l10n="snap3" l10n-description="snap refers to snapcraft.io">By default, the snap version can't be set as the file opener for sb3, sb2, or sb files without interfering with other file types. To fix this, run these commands:</p>
-        <code class="terminal">
-          <div class="command">wget https://desktop.turbowarp.org/snap-mime.xml -qO- | sudo tee /usr/share/mime/packages/turbowarp-desktop-snap.xml > /dev/null</div>
-          <div class="command">sudo update-mime-database /usr/share/mime</div>
-        </code>
-      </details>
-
-      <h3>Flatpak</h3>
-      <p><span l10n="flatpak" l10n-description="Flatpak refers to flatpak.org and Flathub refers to flathub.org">We maintain an official Flatpak version on Flathub:</span> <a href="https://flathub.org/apps/details/org.turbowarp.TurboWarp">org.turbowarp.TurboWarp</a></p>
-      <details>
-        <summary l10n="issues">Known issues and workarounds</summary>
-        <p l10n="flatpak2" l10n-description="Flatpak refers to flatpak.org">Gamepads will not work in the Flatpak version.</p>
-        <p l10n="flatpak3">By default, the app may be limited to only accessing projects in your home directory. To allow accessing other folders, run this command:</p>
-        <code class="terminal">
-          <div class="command">flatpak override org.turbowarp.TurboWarp --filesystem=<i>/path/to/folder/</i></div>
-        </code>
-      </details>
-
       <h3>Debian, Ubuntu, Raspberry Pi OS, Linux Mint</h3>
       <p l10n="deb" l10n-description="apt refers to a Linux command line tool">Install our repository to receive updates through apt by running these commands:</p>
       <code class="terminal">
@@ -1054,6 +1025,35 @@
 
       <h3>Arch User Repository</h3>
       <p><span l10n="arch" l10n-description="AUR refers to the Arch User Repository">For Arch Linux systems, we recommend the official AUR package:</span> <a href="https://aur.archlinux.org/packages/turbowarp-desktop-bin/">turbowarp-desktop-bin</a></p>
+
+      <h3>Flatpak</h3>
+      <p><span l10n="flatpak" l10n-description="Flatpak refers to flatpak.org and Flathub refers to flathub.org">We maintain an official Flatpak version on Flathub:</span> <a href="https://flathub.org/apps/details/org.turbowarp.TurboWarp">org.turbowarp.TurboWarp</a></p>
+      <details>
+        <summary l10n="issues">Known issues and workarounds</summary>
+        <p l10n="flatpak2" l10n-description="Flatpak refers to flatpak.org">Gamepads will not work in the Flatpak version.</p>
+        <p l10n="flatpak3">By default, the app may be limited to only accessing projects in your home directory. To allow accessing other folders, run this command:</p>
+        <code class="terminal">
+          <div class="command">flatpak override org.turbowarp.TurboWarp --filesystem=<i>/path/to/folder/</i></div>
+        </code>
+      </details>
+
+      <h3>Snap Store</h3>
+      <p><span l10n="snap" l10n-description="snap refers to snapcraft.io">We maintain an official snap version:</span> <a href="https://snapcraft.io/turbowarp-desktop">turbowarp-desktop</a></p>
+      <details>
+        <summary l10n="issues">Known issues and workarounds</summary>
+        <p l10n="snap2" l10n-description="snap refers to snapcraft.io">By default, the snap version can't access your camera, microphone, gamepads, or removable drives. To fix this, run these commands:</p>
+        <code class="terminal">
+          <div class="command">snap connect turbowarp-desktop:camera</div>
+          <div class="command">snap connect turbowarp-desktop:audio-record</div>
+          <div class="command">snap connect turbowarp-desktop:joystick</div>
+          <div class="command">snap connect turbowarp-desktop:removable-media</div>
+        </code>
+        <p l10n="snap3" l10n-description="snap refers to snapcraft.io">By default, the snap version can't be set as the file opener for sb3, sb2, or sb files without interfering with other file types. To fix this, run these commands:</p>
+        <code class="terminal">
+          <div class="command">wget https://desktop.turbowarp.org/snap-mime.xml -qO- | sudo tee /usr/share/mime/packages/turbowarp-desktop-snap.xml > /dev/null</div>
+          <div class="command">sudo update-mime-database /usr/share/mime</div>
+        </code>
+      </details>
 
       <h3>AppImage</h3>
       <ul class="download-list">
