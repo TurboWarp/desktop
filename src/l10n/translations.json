@@ -677,7 +677,7 @@
         "settings.loading-devices": "Загрузка медиа-устройств...",
         "settings.microphone": "Выбранный микрофон",
         "settings.no-devices-detected": "Нет обнаруженных устройств",
-        "settings.open-user-data": "Открытая папка данных пользователя",
+        "settings.open-user-data": "Открыть папку данных пользователя",
         "settings.privacy-link": "(приватность)",
         "settings.restart-for-device-change": "Возможно, вам придется перезапустить приложение, чтобы смена микрофона или камеры вступила в силу.",
         "source": "Исходный код",
