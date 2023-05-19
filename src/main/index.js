@@ -784,10 +784,10 @@ app.on('web-contents-created', (event, webContents) => {
         e.preventDefault();
         createEditorWindow();
       }
-      // Ctrl+Equals/Plus to zoom in
+      // Ctrl+Equals/Plus to zoom in (depends on keyboard layout)
       if (
         input.control &&
-        input.key === '='
+        (input.key === '=' || input.key === '+')
       ) {
         e.preventDefault();
         webContents.setZoomLevel(webContents.getZoomLevel() + 1);
