@@ -33,9 +33,8 @@ app.on('session-created', (session) => {
   // By default in Electron, file:// URLs bypass CORS. We enforce it ourselves here.
   session.webRequest.onHeadersReceived((details, callback) => {
     if (details.resourceType === 'xhr') {
-      const sourceURL = new URL(details.frame.url);
       const destinationURL = new URL(details.url);
-      if ((destinationURL.protocol === 'http:' || destinationURL.protocol === 'https:') && sourceURL.protocol === 'file:') {
+      if (destinationURL.protocol === 'http:' || destinationURL.protocol === 'https:') {
         if (canBypassCORS()) {
           callback({
             responseHeaders: {
