@@ -55,8 +55,8 @@ class DesktopSettings extends React.Component {
       mediaDevicesNeedRestart: false,
 
       isHardwareAccelerationEnabled: ipcRenderer.sendSync('hardware-acceleration/get-is-enabled'),
-
-      isBackgroundThrottlingEnabled: ipcRenderer.sendSync('background-throttling/get-is-enabled')
+      isBackgroundThrottlingEnabled: ipcRenderer.sendSync('background-throttling/get-is-enabled'),
+      canBypassCORS: ipcRenderer.sendSync('bypass-cors/get-is-enabled')
     };
 
     this.handleChangeUpdateCheckerEnabled = this.handleChangeUpdateCheckerEnabled.bind(this);
@@ -65,6 +65,7 @@ class DesktopSettings extends React.Component {
     this.handleSelectedVideoDeviceChanged = this.handleSelectedVideoDeviceChanged.bind(this);
     this.handleChangeHardwareAccelerationEnabled = this.handleChangeHardwareAccelerationEnabled.bind(this);
     this.handleBackgroundThrottlingChanged = this.handleBackgroundThrottlingChanged.bind(this);
+    this.handleBypassCORSChanged = this.handleBypassCORSChanged.bind(this);
     this.handleOpenUserData = this.handleOpenUserData.bind(this);
   }
 
@@ -131,6 +132,14 @@ class DesktopSettings extends React.Component {
     ipcRenderer.invoke('background-throttling/set-is-enabled', enabled);
     this.setState({
       isBackgroundThrottlingEnabled: enabled
+    });
+  }
+
+  handleBypassCORSChanged (e) {
+    const enabled = e.target.checked;
+    ipcRenderer.invoke('bypass-cors/set-is-enabled', enabled);
+    this.setState({
+      canBypassCORS: enabled
     });
   }
 
@@ -227,6 +236,22 @@ class DesktopSettings extends React.Component {
           {!this.state.isBackgroundThrottlingEnabled && (
             <div className={styles.warning}>
               {getTranslation('settings.background-throttling-disabled')}
+            </div>
+          )}
+        </div>
+
+        <div className={styles.option}>
+          <label className={styles.label}>
+            <input
+              type="checkbox"
+              checked={this.state.canBypassCORS}
+              onChange={this.handleBypassCORSChanged}
+            />
+            {getTranslation('settings.bypass-cors')}
+          </label>
+          {this.state.canBypassCORS && (
+            <div className={styles.warning}>
+              {getTranslation('settings.bypass-cors-enabled')}
             </div>
           )}
         </div>

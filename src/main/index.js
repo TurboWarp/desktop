@@ -652,37 +652,6 @@ app.on('session-created', (session) => {
       });
     }
   });
-
-  const rootFileURL = new URL(`file://${__dirname}/`).href;
-
-  // Enforce additional restrictions when fetching file:// URIs
-  session.webRequest.onBeforeRequest((details, callback) => {
-    const destinationURL = new URL(details.url);
-    if (destinationURL.protocol === 'file:' && !destinationURL.href.startsWith(rootFileURL)) {
-      return callback({
-        cancel: true
-      });
-    }
-    callback({});
-  });
-
-  // Enforce CORS when a file:// URI fetches something from the broader internet
-  session.webRequest.onHeadersReceived((details, callback) => {
-    if (details.resourceType === 'xhr') {
-      const sourceURL = new URL(details.frame.url);
-      const destinationURL = new URL(details.url);
-      if ((destinationURL.protocol === 'http:' || destinationURL.protocol === 'https:') && sourceURL.protocol === 'file:') {
-        const corsHeaders = details.responseHeaders?.['access-control-allow-origin'] || [];
-        const corsHeader = corsHeaders.join(',');
-        if (corsHeader !== '*') {
-          return callback({
-            cancel: true
-          });
-        }
-      }
-    }
-    callback({});
-  });
 });
 
 app.on('web-contents-created', (event, webContents) => {
