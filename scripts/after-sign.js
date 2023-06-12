@@ -12,13 +12,25 @@ exports.default = async (context) => {
     return;
   }
 
-  const appId = packageJSON.build.appId;
-  const appPath = `${appOutDir}/${context.packager.appInfo.productFilename}.app`;
   const appleId = process.env.APPLE_ID_USERNAME
   const appleIdPassword = process.env.APPLE_ID_PASSWORD;
   const teamId = process.env.APPLE_TEAM_ID;
+  if (!appleId) {
+    console.log('Not notarzing: no APPLE_ID_USERNAME');
+    return;
+  }
+  if (!appleIdPassword) {
+    console.log('Not notarzing: no APPLE_ID_PASSWORD');
+    return;
+  }
+  if (!teamId) {
+    console.log('Not notarzing: no APPLE_TEAM_ID');
+    return;
+  }
 
   console.log('Sending app to Apple for notarization, this will take a while...');
+  const appId = packageJSON.build.appId;
+  const appPath = `${appOutDir}/${context.packager.appInfo.productFilename}.app`;
 
   return await notarize({
     tool: 'notarytool',
