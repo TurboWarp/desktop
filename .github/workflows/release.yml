@@ -17,7 +17,7 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         submodules: recursive
     - name: Install Node.js
@@ -54,7 +54,7 @@ jobs:
         NODE_OPTIONS: --max-old-space-size=4096
     - name: Upload Microsoft Store Artifact
       if: runner.os == 'Windows'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: appx
         path: dist/*.appx
