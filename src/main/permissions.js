@@ -48,6 +48,11 @@ const handlePermissionRequest = async (webContents, permission, callback, detail
     return callback(true);
   }
 
+  if (permission === 'notifications') {
+    // Used by notification extension
+    return callback(true);
+  }
+
   if (permission === 'media') {
     // mediaTypes is not guaranteed to exist
     const mediaTypes = details.mediaTypes || [];
