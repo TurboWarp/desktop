@@ -66,12 +66,12 @@
     <release version="1.8.0" date="2023-06-19">
       <description>
         <ul>
-          <li>Added more than 40 new extensions including Animated Text, Local Storage, BigInt, Clipping and Blending, Sensing Plus, Clones Plus, Looks Plus, RegExp, and Notifications</li>
+          <li>Added more than 40 new extensions including Animated Text, Local Storage, BigInt, JSON, Clipping and Blending, Sensing Plus, Clones Plus, Looks Plus, and RegExp</li>
           <li>Updated many extensions including Stretch, Runtime Options, and Files</li>
           <li>To protect user privacy, builtin extensions now ask for permission before allowing the project to contact untrusted websites</li>
           <li>Custom extensions can now be loaded from files or text</li>
-          <li>Added "random" option to point towards block</li>
           <li>Added option to allow extensions to bypass CORS</li>
+          <li>Added "random direction" option to point towards block</li>
           <li>Fixed script execution order occasionally changing after saving project</li>
           <li>Fixed zooming with ctrl+plus on some keyboard layouts</li>
           <li>Fixed exporting addon settings</li>
