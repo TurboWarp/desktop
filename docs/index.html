@@ -498,7 +498,7 @@
     <script type="generated-locale-names">{"en":"English","ca":"Català","de":"Deutsch","es":"Español (España)","it":"Italiano","ja":"日本語","ko":"한국어","nl":"Nederlands","pt-br":"Português Brasileiro","zh-cn":"简体中文"}</script>
 
     <script>
-      const VERSION = '1.7.1';
+      const VERSION = '1.8.0';
 
       // OS-specific styles
       const getOS = () => {
@@ -727,7 +727,9 @@
         </ul>
       </div>
       <div><b l10n="webapp" l10n-description="Followed by link to turbowarp.org/editor">Or use our web app in any browser:</b> <a href="https://turbowarp.org/editor">turbowarp.org/editor</a></div>
-      <div>
+
+      <!-- when there is no beta update, leave it hidden so we don't lose the l10n string -->
+      <div hidden>
         <b><span l10n="beta" l10n-description="Followed by a version number eg. v1.7.2-beta.1 that is a link to learn more about the current beta release.">Beta version available:</span></b>
         <a href="https://github.com/TurboWarp/desktop/releases/tag/v1.8.0">v1.8.0 release candidate</a>
       </div>
@@ -838,6 +840,21 @@
     <div class="changelog section" id="changelog">
       <h2 l10n="changelog">Changelog</h2>
       <div lang="en">
+        <div data-version="1.8.0">
+          <h3>v1.8.0 (June 19 2023)</h3>
+          <ul>
+            <li>Added more than 40 new extensions including Animated Text (like Scratch Lab), Local Storage, BigInt, JSON, Clipping and Blending, Sensing Plus, Clones Plus, Looks Plus, and RegExp</li>
+            <li>Updated many extensions including Stretch, Runtime Options, and Files</li>
+            <li>To protect user privacy, builtin extensions now ask for permission before allowing the project to contact untrusted websites</li>
+            <li>Custom extensions can now be loaded from files or text</li>
+            <li>Added option to allow extensions to bypass CORS</li>
+            <li>Added "random direction" option to point towards block</li>
+            <li>Fixed script execution order occasionally changing after saving project</li>
+            <li>Fixed zooming with ctrl+plus on some keyboard layouts</li>
+            <li>Fixed exporting addon settings</li>
+            <li>Fixed many other bugs</li>
+          </ul>
+        </div>
         <div data-version="1.7.0">
           <h3>v1.7.1 (January 24 2023)</h3>
           <ul>
