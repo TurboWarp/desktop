@@ -643,6 +643,7 @@ app.on('session-created', (session) => {
     const extensionName = getTranslationOrNull(`files.${extension}`);
     if (extensionName) {
       item.setSaveDialogOptions({
+        title: item.getFilename(),
         filters: [
           {
             name: extensionName,
