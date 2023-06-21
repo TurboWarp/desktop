@@ -498,7 +498,7 @@
     <script type="generated-locale-names">{"en":"English","ca":"Català","de":"Deutsch","es":"Español (España)","it":"Italiano","ja":"日本語","ko":"한국어","nl":"Nederlands","pt-br":"Português Brasileiro","zh-cn":"简体中文"}</script>
 
     <script>
-      const VERSION = '1.8.0';
+      const VERSION = '1.8.1';
 
       // OS-specific styles
       const getOS = () => {
@@ -840,6 +840,14 @@
     <div class="changelog section" id="changelog">
       <h2 l10n="changelog">Changelog</h2>
       <div lang="en">
+        <div data-version="1.8.1">
+          <h3>v1.8.1 (June 20 2023)</h3>
+          <ul>
+            <li>Fixed issues using custom extensions in the packager (if issues remain, reset options in packager)</li>
+            <li>Fixed using an extension to fetch files from extensions.turbowarp.org in the editor</li>
+            <li>Fixed Looks Plus "this sprite" option not working properly in clones</li>
+          </ul>
+        </div>
         <div data-version="1.8.0">
           <h3>v1.8.0 (June 19 2023)</h3>
           <ul>
