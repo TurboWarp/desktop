@@ -1,5 +1,6 @@
 import './normalize.css';
 import './browser-ui-reimplementation';
+import './temporary-fetch-fix';
 
 const searchParams = new URLSearchParams(location.search);
 const route = searchParams.get('route');
