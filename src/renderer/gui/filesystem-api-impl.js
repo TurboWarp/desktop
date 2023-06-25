@@ -107,6 +107,12 @@ class WrappedFileWritable {
       finish: true
     });
   }
+
+  async abort () {
+    await this._sendToMainAndWait({
+      abort: true
+    });
+  }
 }
 
 export class WrappedFileHandle {

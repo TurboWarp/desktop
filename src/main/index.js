@@ -464,6 +464,9 @@ ipcMain.on('write-file-with-port', async (startEvent, path) => {
         writeStream.once('atomic-finish', resolve);
         writeStream.end();
       });
+    } else if (data.abort) {
+      writeStream.emit('error', new Error('Aborted by renderer process'));
+      return;
     }
     throw new Error('Unknown message from renderer'); 
   };
