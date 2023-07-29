@@ -940,6 +940,8 @@
         "rosetta.title": "不建议在 Rosetta 下运行。请使用 Apple Silicon 版本。",
         "settings.background-throttling": "休眠不可见窗口",
         "settings.background-throttling-disabled": "允许不可见窗口保持活动，但是会带来更高的CPU占用和更低的电池寿命",
+        "settings.bypass-cors": "允许拓展访问任何网站",
+        "settings.bypass-cors-enabled": "这将禁用网络安全功能“CORS”检查。恶意项目或拓展可能会访问任何网站或您网络上的任何设备。",
         "settings.camera": "已选择摄像头",
         "settings.disabled-hardware-acceleration": "不建议禁用硬件加速，因为硬件加速几乎总是能提高性能。",
         "settings.disabled-update-checker": "我们不建议您关闭更新检查。",
