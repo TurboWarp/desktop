@@ -5,6 +5,8 @@ import {canBypassCORS} from './bypass-cors';
 
 const extensionDirectory = pathUtil.join(staticDir, 'extensions.turbowarp.org', '/');
 
+const ORIGIN = 'null';
+
 app.on('session-created', (session) => {
   const rootFileURL = new URL(`file://${__dirname}/`).href;
 
@@ -30,12 +32,32 @@ app.on('session-created', (session) => {
     }
   });
 
+  // By default, file:// URLs don't send an Origin header. Some websites don't respond with CORS headers
+  // if no Origin was given, so we'll make sure to just give one.
+  session.webRequest.onBeforeSendHeaders((details, callback) => {
+    callback({
+      requestHeaders: {
+        ...details.requestHeaders,
+        origin: ORIGIN
+      }
+    });
+  });
+
   // By default in Electron, file:// URLs bypass CORS. We enforce it ourselves here.
   session.webRequest.onHeadersReceived((details, callback) => {
     if (details.resourceType === 'xhr') {
       const destinationURL = new URL(details.url);
       if (destinationURL.protocol === 'http:' || destinationURL.protocol === 'https:') {
+        let allowed = false;
         if (canBypassCORS()) {
+          allowed = true;
+        } else {
+          const corsHeaders = details.responseHeaders?.['access-control-allow-origin'] || [];
+          const corsHeader = corsHeaders.join(',');
+          allowed = corsHeader === '*' || corsHeader === ORIGIN;
+        }
+
+        if (allowed) {
           callback({
             responseHeaders: {
               ...(details.responseHeaders || {}),
@@ -43,12 +65,11 @@ app.on('session-created', (session) => {
             }
           });
         } else {
-          const corsHeaders = details.responseHeaders?.['access-control-allow-origin'] || [];
-          const corsHeader = corsHeaders.join(',');
           callback({
-            cancel: corsHeader !== '*'
+            cancel: true
           });
         }
+
         return;
       }
     }
