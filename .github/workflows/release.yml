@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 14.x
+        cache: npm
+    - name: Install Dependencies
+      run: npm install
+    - name: Download Library Files
+      run: npm run fetch
+
+    - name: Compile
+      run: npm run compile
+      env:
+        NODE_OPTIONS: --max-old-space-size=4096
+        TW_ENABLE_UPDATE_CHECKER: "1"
+
+    - name: Package Windows
+      if: runner.os == 'Windows'
+      run: |
+        npx electron-builder --windows nsis --x64 --publish always
+        npx electron-builder --windows nsis --ia32 --publish always
+        npx electron-builder --windows nsis --arm64 --publish always
+        npx electron-builder --windows portable --x64 --publish always
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

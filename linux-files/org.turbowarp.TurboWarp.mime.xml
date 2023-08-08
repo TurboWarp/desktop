@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x.scratch.sb3">
+    <glob pattern="*.sb3" />
+    <icon name="org.turbowarp.TurboWarp" />
+  </mime-type>
+  <mime-type type="application/x.scratch.sb2">
+    <glob pattern="*.sb2" />
+    <icon name="org.turbowarp.TurboWarp" />
+  </mime-type>
+  <mime-type type="application/x.scratch.sb">
+    <glob pattern="*.sb" />
+    <icon name="org.turbowarp.TurboWarp" />
+  </mime-type>
+</mime-info>

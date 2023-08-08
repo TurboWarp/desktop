@@ -1,0 +1,20 @@
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: black;
+  background-color: white;
+}
+main {
+  padding: 20px;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100vh;
+  border: 20px solid hsla(0, 100%, 65%, 1);
+}
+a {
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+}
+a:active {
+  color: red;
+}

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>TurboWarp Desktop Download Statistics</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      :root {
+        font-family: sans-serif;
+      }
+      td {
+        text-align: center;
+      }
+      a {
+        text-decoration: none;
+        color: blue;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      a:active {
+        color: red;
+      }
+      table, tr, td, th {
+        border: 1px solid black;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          background: #111;
+          color: #eee;
+          color-scheme: dark;
+        }
+        table, tr, td, th {
+          border-color: #555;
+        }
+        a {
+          color: #4af;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <p>Estimated download counts for TurboWarp Desktop based on GitHub releases download statistics.</p>
+    <p>These estimates do not include downloads from these sources:</p>
+    <ul>
+      <li><a href="https://www.microsoft.com/en-us/p/turbowarp/9p4dpzgv5zkl">Microsoft Store</a></li>
+      <li><a href="https://snapcraft.io/turbowarp-desktop">Snap Store</a></li>
+      <li><a href="https://flathub.org/apps/details/org.turbowarp.TurboWarp">Flathub</a></li>
+      <li>The Debian repository</li>
+    </ul>
+    <p>The <a href="https://aur.archlinux.org/packages/turbowarp-desktop-bin">Arch User Repository</a> package downloads the linux-armv7l tar.gz.</p>
+    <main><p>Loading...</p></main>
+    <script>
+      fetch('https://api.github.com/repos/TurboWarp/desktop/releases?per_page=100')
+        .then((r) => {
+          if (!r.ok) throw new Error('Unexpected status code: ' + r.status);
+          return r.json();
+        })
+        .then((releases) => {
+          const main = document.querySelector('main');
+          while (main.firstChild) main.removeChild(main.firstChild);
+
+          let totalTotalDownloads = 0;
+          const totalTotalDownloadsByPlatform = new Map();
+          const ALL_PLATFORMS = ['Windows', 'macOS', 'Linux'];
+
+          let previousPublish = new Date();
+
+          for (const {assets, tag_name, html_url, prerelease, published_at} of releases) {
+            if (prerelease) {
+              continue;
+            }
+
+            const published = new Date(published_at);
+            const daysAsLatestVersion = (previousPublish.getTime() - published.getTime()) / (1000 * 60 * 60 * 24);
+            previousPublish = published;
+
+            const table = document.createElement('table');
+            const downloadsByPlatform = new Map();
+            let totalDownloads = 0;
+
+            const headerRow = document.createElement('tr');
+            headerRow.appendChild(Object.assign(document.createElement('th'), {
+              textContent: 'Asset'
+            }));
+            headerRow.appendChild(Object.assign(document.createElement('th'), {
+              textContent: 'Downloads'
+            }));
+            table.appendChild(headerRow);
+
+            const getPlatform = (name) => {
+              if (name.endsWith('exe')) return 'Windows';
+              if (name.endsWith('dmg') || name.endsWith('dmg.zip')) return 'macOS';
+              return 'Linux';
+            };
+            const getExtensionPriority = (name) => {
+              const extensionOrder = [
+                'exe',
+                'dmg',
+                'dmg.zip', // used by some old versions
+                'deb',
+                'tar.gz',
+                'AppImage'
+              ];
+              return extensionOrder.findIndex((i) => name.endsWith(i));
+            };
+            const makeRow = () => {
+              const row = document.createElement('tr');
+              const name = document.createElement('td');
+              const data = document.createElement('td');
+              row.appendChild(name);
+              row.appendChild(data);
+              table.appendChild(row);
+              return {
+                nameElement: name,
+                dataElement: data
+              };
+            };
+            for (const {download_count, name, browser_download_url} of assets.sort((a, b) => {
+              const extA = getExtensionPriority(a.name);
+              const extB = getExtensionPriority(b.name);
+              if (extA > extB) return 1;
+              if (extA < extB) return -1;
+              if (a.name > b.name) return 1;
+              if (b.name > a.name) return -1;
+              return 0;
+            })) {
+              if (name.endsWith('yml') || name.endsWith('blockmap')) continue;
+
+              totalDownloads += download_count;
+              const platform = getPlatform(name);
+              downloadsByPlatform.set(platform, (downloadsByPlatform.get(platform) || 0) + download_count);
+
+              const {nameElement, dataElement} = makeRow();
+              const link = Object.assign(document.createElement('a'), {
+                href: browser_download_url,
+                textContent: name
+              });
+              nameElement.appendChild(link);
+              dataElement.textContent = download_count;
+            }
+
+            totalTotalDownloads += totalDownloads;
+
+            for (const platform of ALL_PLATFORMS) {
+              const downloads = downloadsByPlatform.get(platform) || 0;
+              if (downloads === 0) continue;
+
+              totalTotalDownloadsByPlatform.set(platform, (totalTotalDownloadsByPlatform.get(platform) || 0) + downloads);
+
+              const {nameElement, dataElement} = makeRow();
+              nameElement.textContent = `All ${platform}`;
+              nameElement.style.fontStyle = 'italic';
+              const percent = downloads / totalDownloads * 100;
+              dataElement.textContent = `${Math.round(percent)}%`;
+            }
+
+            {
+              const {nameElement, dataElement} = makeRow();
+              nameElement.textContent = 'Total';
+              dataElement.textContent = totalDownloads;
+            }
+
+            const tagLink = document.createElement('a');
+            tagLink.href = html_url;
+            tagLink.textContent = '*';
+
+            const header = document.createElement('h2');
+            header.textContent = `${tag_name} `;
+            header.appendChild(tagLink);
+
+            main.appendChild(header);
+            main.appendChild(table);
+          }
+
+          {
+            const container = document.createElement('div');
+            container.appendChild(Object.assign(document.createElement('h2'), {
+              textContent: 'Totals'
+            }));
+            const list = document.createElement('ul');
+            list.appendChild(Object.assign(document.createElement('li'), {
+              textContent: `Total: ${totalTotalDownloads}`
+            }));
+            for (const platform of ALL_PLATFORMS) {
+              const count = totalTotalDownloadsByPlatform.get(platform) || 0;
+              const percent = Math.round(count / totalTotalDownloads * 100);
+              list.appendChild(Object.assign(document.createElement('li'), {
+                textContent: `Total ${platform}: ${totalTotalDownloadsByPlatform.get(platform)} (${percent}%)`
+              }));
+            }
+            container.appendChild(list);
+            main.prepend(container);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          alert(err);
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,186 @@
+{
+  "name": "turbowarp-desktop",
+  "description": "Scratch mod with a compiler, dark mode, a bunch of addons, and more.",
+  "version": "1.7.0",
+  "license": "GPL-3.0",
+  "author": {
+    "email": "contact@turbowarp.org",
+    "name": "Thomas Weber"
+  },
+  "scripts": {
+    "dev": "npm run start",
+    "start": "electron-webpack dev",
+    "compile": "electron-webpack",
+    "dist": "npm run compile && electron-builder",
+    "dist:dir": "npm run compile && electron-builder --dir",
+    "fetch": "node scripts/download-library-files.js && node scripts/download-packager.js"
+  },
+  "dependencies": {"lodash.defaultsdeep": "4.6.1"},
+  "devDependencies": {
+    "@babel/preset-env": "^7.12.16",
+    "@babel/preset-react": "^7.13.13",
+    "@turbowarp/electron-webpack": "^2.9.1",
+    "css-loader": "^5.0.2",
+    "electron": "^21.2.3",
+    "electron-builder": "^23.6.0",
+    "lodash.defaultsdeep": "4.6.1",
+    "postcss": "^8.4.13",
+    "postcss-import": "^14.0.0",
+    "postcss-loader": "^4.2.0",
+    "postcss-simple-vars": "^6.0.3",
+    "scratch-gui": "git+https://github.com/PenguinMod/penguinmod.github.io#desktop",
+    "semver": "^7.3.4",
+    "webpack": "~4.46.0",
+    "write-file-atomic": "^5.0.0"
+  },
+  "homepage": "https://desktop.turbowarp.org/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TurboWarp/desktop.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TurboWarp/desktop/issues",
+    "email": "contact@turbowarp.org"
+  },
+  "build": {
+    "extends": "file:node_modules/@turbowarp/electron-webpack/out/electron-builder.js",
+    "appId": "org.turbowarp.desktop",
+    "productName": "TurboWarp",
+    "win": {
+      "artifactName": "${productName} Portable ${version} ${arch}.${ext}",
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": "x64"
+        },
+        {
+          "target": "portable",
+          "arch": "x64"
+        }
+      ]
+    },
+    "appx": {
+      "artifactName": "${productName} MS Store ${version} ${arch}.${ext}",
+      "applicationId": "TurboWarp",
+      "displayName": "TurboWarp",
+      "identityName": "45747ThomasWeber.TurboWarpDesktop",
+      "publisher": "CN=18FA7D4F-01BF-49F2-BF56-782DCEA49C69",
+      "publisherDisplayName": "Thomas Weber",
+      "backgroundColor": "#4c97ff",
+      "showNameOnTiles": true,
+      "languages": [
+        "en-US",
+        "fr",
+        "nl",
+        "de",
+        "it",
+        "ja",
+        "ru",
+        "es-ES"
+      ]
+    },
+    "nsis": {
+      "artifactName": "${productName} Setup ${version} ${arch}.${ext}",
+      "oneClick": false,
+      "deleteAppDataOnUninstall": true,
+      "allowToChangeInstallationDirectory": true
+    },
+    "mac": {
+      "artifactName": "${productName} Setup ${version}.${ext}",
+      "icon": "build/icon.icns",
+      "category": "public.app-category.education",
+      "darkModeSupport": true,
+      "gatekeeperAssess": false,
+      "hardenedRuntime": true,
+      "entitlements": "entitlements.mac.plist",
+      "entitlementsInherit": "entitlements.mac.plist",
+      "extendInfo": {
+        "NSCameraUsageDescription": "This app requires camera access when using the video sensing blocks.",
+        "NSMicrophoneUsageDescription": "This app requires microphone access when recording sounds or detecting loudness."
+      },
+      "target": [
+        {
+          "arch": "universal",
+          "target": "dmg"
+        }
+      ]
+    },
+    "linux": {
+      "artifactName": "${productName}-${os}-${arch}-${version}.${ext}",
+      "icon": "./build/",
+      "synopsis": "Mod of Scratch with a compiler and more features.",
+      "description": "TurboWarp is a Scratch mod with a compiler to run projects faster, dark mode for your eyes, a bunch of addons to improve the editor, and more.",
+      "category": "Development",
+      "extraFiles": [
+        "linux-files"
+      ],
+      "target": [
+        {
+          "target": "deb"
+        },
+        {
+          "target": "appimage"
+        },
+        {
+          "target": "tar.gz"
+        }
+      ]
+    },
+    "snap": {
+      "summary": "Scratch mod with a compiler, dark mode, a bunch of addons, and more.",
+      "allowNativeWayland": true,
+      "plugs": [
+        "default",
+        "camera",
+        "audio-playback",
+        "audio-record",
+        "joystick",
+        "removable-media"
+      ]
+    },
+    "appImage": {
+      "license": null
+    },
+    "fileAssociations": [
+      {
+        "ext": "sb3",
+        "name": "Scratch 3 Project",
+        "role": "Editor",
+        "mimeType": "application/x.scratch.sb3"
+      },
+      {
+        "ext": "sb2",
+        "name": "Scratch 2 Project",
+        "role": "Editor",
+        "mimeType": "application/x.scratch.sb2"
+      },
+      {
+        "ext": "sb",
+        "name": "Scratch 1 Project",
+        "role": "Editor",
+        "mimeType": "application/x.scratch.sb"
+      }
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "repo": "desktop",
+        "owner": "TurboWarp"
+      }
+    ]
+  },
+  "electronWebpack": {
+    "main": {
+      "webpackConfig": "webpack.main.js",
+      "extraEntries": [
+        "@/preload.js"
+      ]
+    },
+    "renderer": {
+      "webpackConfig": "webpack.renderer.js",
+      "template": "src/renderer/template.html"
+    }
+  },
+  "private": true
+}
