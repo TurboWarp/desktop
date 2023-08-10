@@ -59,7 +59,7 @@ const downloadAsset = async (asset) => {
   }
 
   console.log(`Downloading: ${md5ext}`);
-  const response = await fetch(`https://assets.scratch.mit.edu/${md5ext}`);
+  const response = await fetch(`https://scratch-assets.scratch.org/${md5ext}`);
   const uncompressed = await response.buffer();
 
   const expectedHash = asset.assetId;

@@ -39,7 +39,7 @@ class StorageHelper {
 
 const handleStorageInit = (storage) => {
   storage.addHelper(new StorageHelper(storage, (asset) => `tw-library-files://library-files/${asset}`));
-  storage.addHelper(new StorageHelper(storage, (asset) => `https://assets.scratch.mit.edu/internalapi/asset/${asset}/get/`));
+  storage.addHelper(new StorageHelper(storage, (asset) => `https://scratch-assets.scratch.org/internalapi/asset/${asset}/get/`));
 };
 
 AddonChannels.reloadChannel.addEventListener('message', () => {
