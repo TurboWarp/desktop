@@ -49,8 +49,8 @@ const fetchScratchProject = async (id) => {
   }
 
   const tokenPart = token ? `?token=${token}` : '';
-  const url = `https://projects.scratch.mit.edu/${id}${tokenPart}`;
-  // projects.scratch.mit.edu currently does not have strict CORS
+  const url = `https://scratch-projects.scratch.org/${id}${tokenPart}`;
+  // scratch-projects.scratch.org currently does not have strict CORS
   const res = await fetch(url);
   if (!res.ok) {
     throw new Error(`Request for project ID ${id} returned status ${r.status}`);
