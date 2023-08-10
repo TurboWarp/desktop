@@ -40,7 +40,7 @@ const fetchScratchProject = async (id) => {
   // We are a desktop app, so we can make requests directly to the Scratch API.
   let token = null;
   try {
-    // api.scratch.mit.edu has strict CORS that we can't fetch by default, so make the main thread do it
+    // scratch-api.scratch.org has strict CORS that we can't fetch by default, so make the main thread do it
     const projectMetadata = parseBufferAsJSON(await ipcRenderer.invoke('get-project-metadata', id));
     token = projectMetadata.project_token;
   } catch (e) {

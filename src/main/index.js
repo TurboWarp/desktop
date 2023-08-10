@@ -617,7 +617,7 @@ ipcMain.handle('get-project-metadata', (event, id) => {
   if (!/^\d+$/.test(id)) {
     throw new Error('Invalid project ID');
   }
-  return requestURLAsArrayBuffer(`https://api.scratch.mit.edu/projects/${id}`);
+  return requestURLAsArrayBuffer(`https://scratch-api.scratch.org/projects/${id}`);
 });
 
 ipcMain.on('open-user-data', () => {
