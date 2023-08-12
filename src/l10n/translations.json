@@ -157,6 +157,8 @@
         "rosetta.title": "No se recomienda utilizar con Rosetta. En cambio, use la versión de Apple Silicon.",
         "settings.background-throttling": "Dormir ventanas ocultas",
         "settings.background-throttling-disabled": "Permitir ventanas ocultas para permanecer activo resultará en un uso mayor del CPU y acortará la vida útil de la batería.",
+        "settings.bypass-cors": "Permitir a las extensiones acceder a cualquier sitio web",
+        "settings.bypass-cors-enabled": "Esto deshabilita las comprobaciones \"CORS\", una función de seguridad web. Proyectos o extensiones maliciosas podrían acceder a cualquier sitio web o dispositivo en tu red.",
         "settings.camera": "Cámara Seleccionada",
         "settings.disabled-hardware-acceleration": "Deshabilitar la aceleración de hardware no es recomendado, ya que suele mejorar el rendimiento.",
         "settings.disabled-update-checker": "No es recomendable desactivar el verificador de actualizaciones.",
