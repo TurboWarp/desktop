@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <style>
+      #splash {
+        position: absolute; width: 100%; height: 100%; top: 0; left: 0;
+        display: flex; align-items: center; justify-content: center;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: #ff4c4c;
+        background-color: white;
+      }
+      .tw-loaded #splash {
+        display: none;
+      }
+      #splash[splash-theme="dark"] {
+        background-color: #333;
+        color: #fff;
+      }
+      #splash-spinner:after {
+        content: " ";
+        display: block;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        border: 6px solid;
+        border-color: currentColor transparent currentColor transparent;
+        animation: splash-spinner 1.2s linear infinite;
+      }
+      @keyframes splash-spinner {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="splash" aria-hidden="true"><div id="splash-content"><div id="splash-spinner"></div></div></div>
+    <div id="app"></div>
+    <script>
+      (function () {
+        let theme = localStorage.getItem('tw:theme');
+        if (theme === null) {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.querySelector('#splash').setAttribute('splash-theme', theme);
+      })();
+    </script>
+    <script src="index.js"></script>
+  </body>
+</html>
