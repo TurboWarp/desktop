@@ -28,6 +28,7 @@ const DesktopHOC = function (WrappedComponent) {
       this.state = {
         title: null
       };
+      this.handleUpdateProjectTitle = this.handleUpdateProjectTitle.bind(this);
       // this.handleExportProjectOverIPC = this.handleExportProjectOverIPC.bind(this);
       // this.handleLoadExtensionOverIPC = this.handleLoadExtensionOverIPC.bind(this);
       // localeChanged(this.props.locale);
@@ -80,9 +81,13 @@ const DesktopHOC = function (WrappedComponent) {
         this.props.onRequestNewProject();
       });
     }
-    componentDidUpdate (prevProps) {
+    componentDidUpdate (prevProps, prevState) {
       if (this.props.projectChanged !== prevProps.projectChanged) {
         EditorPreload.setChanged(this.props.projectChanged);
+      }
+
+      if (this.state.title !== prevState.title) {
+        document.title = this.state.title;
       }
 
       if (this.props.fileHandle !== prevProps.fileHandle) {
@@ -97,6 +102,11 @@ const DesktopHOC = function (WrappedComponent) {
     componentWillUnmount () {
       // ipcRenderer.removeListener('export-project/start', this.handleExportProjectOverIPC);
       // ipcRenderer.removeListener('load-extension/start', this.handleLoadExtensionOverIPC);
+    }
+    handleUpdateProjectTitle (newTitle) {
+      this.setState({
+        title: newTitle
+      });
     }
     async handleExportProjectOverIPC (event) {
       // ipcRenderer.sendTo(event.senderId, 'export-project/ack');
@@ -138,34 +148,8 @@ const DesktopHOC = function (WrappedComponent) {
       } = this.props;
       return (
         <WrappedComponent
-          // projectTitle={this.state.title}
-          // onClickAddonSettings={openAddonSettings}
-          // onClickNewWindow={[
-          //   getTranslation('menu.new-window'),
-          //   openNewWindow
-          // ]}
-          // onClickAbout={[
-          //   {
-          //     title: getTranslation('desktop-settings'),
-          //     onClick: onDesktopSettings
-          //   },
-          //   {
-          //     title: getTranslation('privacy'),
-          //     onClick: openPrivacyPolicy
-          //   },
-          //   {
-          //     title: getTranslation('about'),
-          //     onClick: openAbout
-          //   },
-          //   {
-          //     title: getTranslation('source'),
-          //     onClick: openSourceCode
-          //   },
-          //   {
-          //     title: getTranslation('donate'),
-          //     onClick: openDonate
-          //   }
-          // ]}
+          projectTitle={this.state.title}
+          onUpdateProjectTitle={this.handleUpdateProjectTitle}
           {...props}
         />
       );

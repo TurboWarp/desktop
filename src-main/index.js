@@ -1,12 +1,14 @@
 const {app} = require('electron');
+const path = require('path');
+require('./protocols');
 const EditorWindow = require('./windows/editor');
-require('./protocols/index');
-
-app.enableSandbox();
+const openExternal = require('./open-external');
 
 if (!app.requestSingleInstanceLock()) {
-  process.exit(0);
+  app.exit();
 }
+
+app.enableSandbox();
 
 app.on('session-created', (session) => {
   session.setPermissionCheckHandler((webContents, permission, requestingOrigin, details) => {
@@ -18,37 +20,26 @@ app.on('session-created', (session) => {
 });
 
 app.on('web-contents-created', (_event, webContents) => {
-  webContents.on('will-naviate', (event, url) => {
-    console.log('Denying navigate', url);
+  webContents.on('will-navigate', (event, url) => {
     event.preventDefault();
+    openExternal(event.url);
   });
 
   webContents.setWindowOpenHandler((event) => {
-    console.log('Denying open window', event.url);
+    openExternal(event.url);
     return {
       action: 'deny'
     };
   });
 });
 
-// for (const path of parseArgs(process.argv)) {
-//   filesToOpen.push(resolveFilePath('', path));
-// }
-
-// app.on('second-instance', (event, argv, workingDirectory) => {
-//   for (const i of parseArgs(argv)) {
-//     filesToOpen.push(resolveFilePath(workingDirectory, i));
-//   }
-//   autoCreateEditorWindows();
-// });
-
 app.on('activate', () => {
   if (app.isReady()) {
-    console.log('Activate!');
+    // TODO
   }
 });
 
-const parseFilesFromArgv = (argv) => {
+const parseFilesFromArgv = (argv, workingDirectory) => {
   // argv could be any of:
   // turbowarp.exe project.sb3
   // electron.exe --inspect=sdf main.js project.sb3
@@ -61,13 +52,13 @@ const parseFilesFromArgv = (argv) => {
   // defaultApp is true when the path to the app is in argv
   argv = argv.slice(process.defaultApp ? 2 : 1);
 
-  return argv;
+  return argv.map(i => path.resolve(workingDirectory, i));
 };
 
-app.on('second-instance', (event, argv) => {
-  EditorWindow.openFiles(parseFilesFromArgv(argv));
+app.on('second-instance', (event, argv, workingDirectory) => {
+  EditorWindow.openFiles(parseFilesFromArgv(argv, workingDirectory));
 });
 
 app.whenReady().then(() => {
-  EditorWindow.openFiles(parseFilesFromArgv(process.argv));
+  EditorWindow.openFiles(parseFilesFromArgv(process.argv, process.cwd()));
 });

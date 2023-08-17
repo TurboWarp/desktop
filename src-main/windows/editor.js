@@ -1,10 +1,15 @@
 const fs = require('fs');
 const {promisify} = require('util');
 const path = require('path');
-const {dialog} = require('electron');
+const {dialog, inAppPurchase} = require('electron');
 const BaseWindow = require('./base');
 const AddonsWindow = require('./addons');
+const DesktopSettingsWindow = require('./desktop-settings');
+const PrivacyWindow = require('./privacy');
+const AboutWindow = require('./about');
 const {createAtomicWriteStream} = require('../atomic-write-stream');
+const {translate} = require('../l10n');
+const {APP_NAME} = require('../brand');
 
 const readFile = promisify(fs.readFile);
 
@@ -21,6 +26,33 @@ class EditorWindow extends BaseWindow {
     this.window.loadURL(`tw-editor://./gui/index.html`);
     this.window.show();
     this.window.webContents.openDevTools();
+
+    this.window.webContents.on('will-prevent-unload', (event) => {
+      const choice = dialog.showMessageBoxSync(this.window, {
+        type: 'info',
+        buttons: [
+          translate('unload.stay'),
+          translate('unload.leave')
+        ],
+        cancelId: 0,
+        defaultId: 0,
+        message: translate('unload.message'),
+        detail: translate('unload.detail')
+      });
+      if (choice === 1) {
+        event.preventDefault();
+      }
+    });
+
+    this.window.on('page-title-updated', (event, title, explicitSet) => {
+      event.preventDefault();
+      if (explicitSet && title) {
+        this.window.setTitle(`${title} - ${APP_NAME}`);
+      } else {
+        this.window.setTitle(APP_NAME);
+      }    
+    });
+    this.window.setTitle(APP_NAME);
 
     const ipc = this.window.webContents.ipc;
 
@@ -167,8 +199,24 @@ class EditorWindow extends BaseWindow {
       port.start();
     });
 
+    ipc.handle('open-new-window', () => {
+      EditorWindow.openFiles([]);
+    });
+
     ipc.handle('open-addon-settings', () => {
       AddonsWindow.show();
+    });
+
+    ipc.handle('open-desktop-settings', () => {
+      DesktopSettingsWindow.show();
+    })
+
+    ipc.handle('open-privacy', () => {
+      PrivacyWindow.show();
+    });
+
+    ipc.handle('open-about', () => {
+      AboutWindow.show();
     });
   }
 

@@ -1,0 +1,34 @@
+{
+  "unload.stay": {
+    "string": "Stay",
+    "context": "Part of confirmation prompt that appears when closing with unsaved changes in desktop app"
+  },
+  "unload.leave": {
+    "string": "Leave",
+    "context": "Part of confirmation prompt that appears when closing with unsaved changes in desktop app"
+  },
+  "unload.message": {
+    "string": "Are you sure you want to quit?",
+    "context": "Part of confirmation prompt that appears when closing with unsaved changes in desktop app"
+  },
+  "unload.detail": {
+    "string": "Any unsaved changes will be lost.",
+    "context": "Part of confirmation prompt that appears when closing with unsaved changes in desktop app"
+  },
+  "addon-settings": {
+    "string": "Addon Settings",
+    "context": "Title of addon settings window"
+  },
+  "desktop-settings": {
+    "string": "Desktop Settings",
+    "context": "Title of desktop settings window"
+  },
+  "privacy-policy": {
+    "string": "Privacy Policy",
+    "context": "Title of privacy policy window"
+  },
+  "about": {
+    "string": "About",
+    "context": "Title of about window"
+  }
+}

@@ -199,29 +199,29 @@ const createEditorWindow = () => {
       window.setTitle(APP_NAME);
     }
   });
-  window.on('closed', () => {
-    editorWindows.delete(window);
-    if (editorWindows.size === 0) {
-      closeAllNonEditorWindows();
-    }
-  });
-  window.webContents.on('will-prevent-unload', (e) => {
-    const choice = dialog.showMessageBoxSync(window, {
-      title: APP_NAME,
-      type: 'info',
-      buttons: [
-        getTranslation('unload.stay'),
-        getTranslation('unload.leave')
-      ],
-      cancelId: 0,
-      defaultId: 0,
-      message: getTranslation('unload.message'),
-      detail: getTranslation('unload.detail')
-    });
-    if (choice === 1) {
-      e.preventDefault();
-    }
-  });
+  // window.on('closed', () => {
+  //   editorWindows.delete(window);
+  //   if (editorWindows.size === 0) {
+  //     closeAllNonEditorWindows();
+  //   }
+  // });
+  // window.webContents.on('will-prevent-unload', (e) => {
+  //   const choice = dialog.showMessageBoxSync(window, {
+  //     title: APP_NAME,
+  //     type: 'info',
+  //     buttons: [
+  //       getTranslation('unload.stay'),
+  //       getTranslation('unload.leave')
+  //     ],
+  //     cancelId: 0,
+  //     defaultId: 0,
+  //     message: getTranslation('unload.message'),
+  //     detail: getTranslation('unload.detail')
+  //   });
+  //   if (choice === 1) {
+  //     e.preventDefault();
+  //   }
+  // });
   window.webContents.setWindowOpenHandler((details) => {
     if (isExtensionURL(details.url)) {
       createExtensionsWindow(window.webContents);

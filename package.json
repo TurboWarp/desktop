@@ -51,7 +51,8 @@
     "files": [
       "src-main/**/*",
       "src-preload/**/*",
-      "dist-renderer/**/*"
+      "src-renderer/**/*",
+      "dist-renderer-webpack/**/*"
     ],
     "extraResources": [
       {

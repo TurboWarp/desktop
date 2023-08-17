@@ -8,7 +8,11 @@ contextBridge.exposeInMainWorld('EditorPreload', {
   showSaveFilePicker: suggestedName => ipcRenderer.invoke('show-save-file-picker', suggestedName),
   showOpenFilePicker: () => ipcRenderer.invoke('show-open-file-picker'),
   setChanged: (changed) => ipcRenderer.invoke('set-changed', changed),
-  openAddonSettings: () => ipcRenderer.invoke('open-addon-settings')
+  openNewWindow: () => ipcRenderer.invoke('open-new-window'),
+  openAddonSettings: () => ipcRenderer.invoke('open-addon-settings'),
+  openDesktopSettings: () => ipcRenderer.invoke('open-desktop-settings'),
+  openPrivacy: () => ipcRenderer.invoke('open-privacy'),
+  openAbout: () => ipcRenderer.invoke('open-about')
 });
 
 window.addEventListener('message', (e) => {

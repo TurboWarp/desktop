@@ -19,6 +19,7 @@ const getOriginalMode = async (path) => {
     const stat = await promisify(fs.stat)(path);
     return stat.mode;
   } catch (e) {
+    // TODO: we do this because write-file-atomic did it but that seems kinda not great??
     // read and write for all users
     return 0o666;
   }

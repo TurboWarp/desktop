@@ -58,10 +58,10 @@ module.exports = [
     {
         ...base,
         output: {
-            path: path.resolve(__dirname, 'dist-renderer/editor/gui'),
+            path: path.resolve(__dirname, 'dist-renderer-webpack/editor/gui'),
             filename: 'index.js'
         },
-        entry: './src-renderer/editor/gui/index.jsx',
+        entry: './src-renderer-webpack/editor/gui/index.jsx',
         plugins: [
             new CopyWebpackPlugin({
                 patterns: [
@@ -70,7 +70,7 @@ module.exports = [
                         to: 'static/blocks-media'
                     },
                     {
-                        context: 'src-renderer/editor/gui/',
+                        context: 'src-renderer-webpack/editor/gui/',
                         from: 'index.html'
                     }
                 ]
@@ -87,15 +87,15 @@ module.exports = [
     {
         ...base,
         output: {
-            path: path.resolve(__dirname, 'dist-renderer/editor/addons'),
+            path: path.resolve(__dirname, 'dist-renderer-webpack/editor/addons'),
             filename: 'index.js'
         },
-        entry: './src-renderer/editor/addons/index.jsx',
+        entry: './src-renderer-webpack/editor/addons/index.jsx',
         plugins: [
             new CopyWebpackPlugin({
                 patterns: [
                     {
-                        context: 'src-renderer/editor/addons/',
+                        context: 'src-renderer-webpack/editor/addons/',
                         from: 'index.html'
                     }
                 ]
