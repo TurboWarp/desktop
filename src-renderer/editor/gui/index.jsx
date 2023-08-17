@@ -8,3 +8,5 @@ document.body.classList.add('tw-loaded');
 GUI.setAppElement(appTarget);
 
 ReactDOM.render(<GUI />, appTarget);
+
+require('./addons');

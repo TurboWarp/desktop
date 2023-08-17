@@ -15,6 +15,7 @@ class BaseWindow {
   }
 
   getWindowOptions () {
+    /** @type {Electron.BrowserWindowConstructorOptions} */
     const options = {};
 
     const dimensions = this.getDimensions();
@@ -24,6 +25,9 @@ class BaseWindow {
     options.useContentSize = true;
     options.minWidth = 200;
     options.minHeight = 200;
+
+    // Child classes are expected to show the window on their own
+    options.show = false;
 
     // Electron's default window placement sucks, at least on Linux
     const activeScreen = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());

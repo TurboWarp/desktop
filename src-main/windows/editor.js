@@ -3,6 +3,7 @@ const {promisify} = require('util');
 const path = require('path');
 const {dialog} = require('electron');
 const BaseWindow = require('./base');
+const AddonsWindow = require('./addons');
 const {createAtomicWriteStream} = require('../atomic-write-stream');
 
 const readFile = promisify(fs.readFile);
@@ -17,7 +18,7 @@ class EditorWindow extends BaseWindow {
     /** @type {string|null} */
     this.openingFile = null;
 
-    this.window.loadURL(`tw-file://./editor/index.html`);
+    this.window.loadURL(`tw-editor://./gui/index.html`);
     this.window.show();
     this.window.webContents.openDevTools();
 
@@ -164,6 +165,10 @@ class EditorWindow extends BaseWindow {
       });
 
       port.start();
+    });
+
+    ipc.handle('open-addon-settings', () => {
+      AddonsWindow.show();
     });
   }
 
