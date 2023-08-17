@@ -1,8 +1,17 @@
 const {contextBridge, ipcRenderer} = require('electron');
 
 contextBridge.exposeInMainWorld('EditorPreload', {
-  hasInitialFile: () => ipcRenderer.invoke('has-initial-file'),
-  getInitialFile: () => ipcRenderer.invoke('get-initial-file'),
-  setChanged: changed => ipcRenderer.invoke('changed', changed),
-  closedFile: () => ipcRenderer.invoke('closed-file')
+  hasFile: () => ipcRenderer.invoke('has-file'),
+  getFile: () => ipcRenderer.invoke('get-file'),
+  openedFile: () => ipcRenderer.invoke('opened-file'),
+  closedFile: () => ipcRenderer.invoke('closed-file'),
+  showSaveFilePicker: suggestedName => ipcRenderer.invoke('show-save-file-picker', suggestedName),
+  showOpenFilePicker: () => ipcRenderer.invoke('show-open-file-picker'),
+  setChanged: (changed) => ipcRenderer.invoke('set-changed', changed)
+});
+
+window.addEventListener('message', (e) => {
+  if (e.source === window && e.data === 'start-write-stream') {
+    ipcRenderer.postMessage('start-write-stream', null, e.ports);
+  }
 });

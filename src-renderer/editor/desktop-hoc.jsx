@@ -11,8 +11,15 @@ import {
   requestNewProject
 } from 'scratch-gui/src/reducers/project-state';
 import {setFileHandle} from 'scratch-gui/src/reducers/tw';
+import {WrappedFileHandle} from './filesystem-api-impl';
 
 let mountedOnce = false;
+
+const getProjectTitle = (file) => {
+  const match = file.match(/([^/\\]+)\.sb[2|3]?$/);
+  if (!match) return null;
+  return match[1];
+};
 
 const DesktopHOC = function (WrappedComponent) {
   class DesktopComponent extends React.Component {
@@ -38,7 +45,7 @@ const DesktopHOC = function (WrappedComponent) {
 
       this.props.onLoadingStarted();
       (async () => {
-        const hasFile = await EditorPreload.hasInitialFile();
+        const hasFile = await EditorPreload.hasFile();
         if (!hasFile) {
           this.props.onHasInitialProject(false, this.props.loadingState);
           this.props.onLoadingCompleted();
@@ -46,17 +53,23 @@ const DesktopHOC = function (WrappedComponent) {
         }
  
         this.props.onHasInitialProject(true, this.props.loadingState);
-        const file = await EditorPreload.getInitialFile();
+        const file = await EditorPreload.getFile();
 
         const {name, data} = file;
         await this.props.vm.loadProject(data);
         this.props.onLoadingCompleted();
         this.props.onLoadedProject(this.props.loadingState, true);
 
-        this.setState({
-          title: name
-        });
-        // TODO: set file handle
+        const title = getProjectTitle(name);
+        if (title) {
+          this.setState({
+            title
+          });
+        }
+
+        if (name.endsWith('.sb3')) {
+          this.props.onSetFileHandle(new WrappedFileHandle(name));
+        }
       })().catch(error => {
         console.error(error);
         alert(error);
@@ -72,8 +85,13 @@ const DesktopHOC = function (WrappedComponent) {
         EditorPreload.setChanged(this.props.projectChanged);
       }
 
-      if (!this.props.fileHandle && prevProps.fileHandle) {
-        EditorPreload.closedFile();
+      if (this.props.fileHandle !== prevProps.fileHandle) {
+        console.log(this.props.fileHandle, prevProps.fileHandle);
+        if (this.props.fileHandle) {
+          EditorPreload.openedFile();
+        } else {
+          EditorPreload.closedFile();
+        }
       }
     }
     componentWillUnmount () {
