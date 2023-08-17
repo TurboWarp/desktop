@@ -162,6 +162,14 @@
         font-size: 24px;
       }
 
+      .security-advisory {
+        max-width: 700px;
+        margin: 32px auto;
+        text-align: center;
+        border: 4px solid yellow;
+        padding: 4px;
+      }
+
       .changelog {
         display: none;
       }
@@ -734,6 +742,13 @@
         <b><span l10n="beta" l10n-description="Followed by a version number eg. v1.7.2-beta.1 that is a link to learn more about the current beta release.">Beta version available:</span></b>
         <a href="https://github.com/TurboWarp/desktop/releases/tag/v1.8.0">v1.8.0 release candidate</a>
       </div>
+    </div>
+
+    <div class="security-advisory" lang="en">
+      <h2>Security Advisory</h2>
+      <p>Versions of TurboWarp Desktop prior to 1.8.0 allowed malicious projects or extensions to silently read files from your computer and upload them to a remote server. Updating is <b>HIGHLY RECOMMENDED</b>.</p>
+      <p>You can check your current version by pressing the (?) button in the top right corner of the app then "About".</p>
+      <p><a href="https://github.com/TurboWarp/desktop/security/advisories/GHSA-wg4p-vj7h-q82q">GHSA-wg4p-vj7h-q82q</a> - CVE Pending</p>
     </div>
 
     <div class="picture picture-editor">
