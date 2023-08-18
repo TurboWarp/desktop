@@ -8,6 +8,7 @@ if (!app.requestSingleInstanceLock()) {
 const openExternal = require('./open-external');
 const BaseWindow = require('./windows/base');
 const EditorWindow = require('./windows/editor');
+const checkForUpdates = require('./updates');
 require('./protocols');
 require('./context-menu');
 require('./shortcuts');
@@ -20,6 +21,7 @@ app.on('session-created', (session) => {
   // Permission requests are delegated to BaseWindow
 
   session.setPermissionCheckHandler((webContents, permission, requestingOrigin, details) => {
+    console.log('check', permission);
     if (!details.isMainFrame) {
       return false;
     }
@@ -31,6 +33,7 @@ app.on('session-created', (session) => {
   });
 
   session.setPermissionRequestHandler((webContents, permission, callback, details) => {
+    console.log('request', permission);
     if (!details.isMainFrame) {
       callback(false);
       return;

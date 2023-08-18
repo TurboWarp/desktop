@@ -90,5 +90,9 @@
   "prompts.cancel": {
     "string": "Cancel",
     "context": "Appears in confirmation dialogs"
+  },
+  "packager.loading-preview": {
+    "string": "Loading...",
+    "context": "Loading message for packager preview windows"
   }
 }

@@ -2,9 +2,23 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <style>
+      [splash-theme="dark"]:not(.tw-loaded) {
+        background-color: #222222;
+      }
+    </style>
   </head>
   <body>
     <div id="app"></div>
+    <script>
+      (function () {
+        let theme = localStorage.getItem('tw:theme');
+        if (theme === null) {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.body.setAttribute('splash-theme', theme);
+      })();
+    </script>
     <script src="index.js"></script>
   </body>
 </html>

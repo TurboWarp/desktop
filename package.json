@@ -11,6 +11,7 @@
     "fetch": "node scripts/download-library-files.js && node scripts/download-packager.js && node scripts/prepare-extensions.js",
     "webpack:compile": "webpack",
     "webpack:watch": "webpack --watch",
+    "electron:start": "electron src-main/index.js",
     "electron:package:dir": "electron-builder --dir"
   },
   "dependencies": {},

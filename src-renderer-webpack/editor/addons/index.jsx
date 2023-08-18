@@ -8,6 +8,7 @@ const handleExportSettings = settings => {
 };
 
 const appTarget = document.getElementById('app');
+document.body.classList.add('tw-loaded');
 
 ReactDOM.render((
   <AddonSettings

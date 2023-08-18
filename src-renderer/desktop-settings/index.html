@@ -1,1 +1,194 @@
-<h1>Desktop Settings</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: black;
+        background-color: white;
+      }
+      main {
+        padding: 20px;
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 100vh;
+        border: 20px solid hsla(0, 100%, 65%, 1);
+      }
+      h1 {
+        margin-top: 0;
+      }
+      label {
+        display: block;
+        margin: 8px 0;
+      }
+      .label {
+        font-weight: bold;
+        margin-bottom: 2px;
+      }
+      select {
+        width: 100%;
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+        font: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Desktop Settings</h1>
+
+      <script>
+        const settings = DesktopSettingsPreload.getSettings();
+      </script>
+
+      <label>
+        <div class="label">Update checker</div>
+        <select class="update-checker" autocomplete="off">
+          <!-- <option value="beta">Notify me about beta updates</option> -->
+          <option value="stable">Notify me about stable updates</option>
+          <option value="security">Notify me about security updates</option>
+        </select>
+        <script>
+          const updateChecker = document.querySelector('.update-checker');
+          updateChecker.addEventListener('change', (e) => {
+            DesktopSettingsPreload.setUpdateChecker(e.target.value);
+          });
+        </script>
+      </label>
+
+      <label>
+        <div class="label">Selected microphone</div>
+        <select class="selected-microphone" autocomplete="off">
+          <option selected disabled>Loading...</option>
+        </select>
+        <script>
+          const selectedMicrophone = document.querySelector('.selected-microphone');
+          selectedMicrophone.addEventListener('change', (e) => {
+            DesktopSettingsPreload.setMicrophone(e.target.value);
+          });
+        </script>
+      </label>
+
+      <label>
+        <div class="label">Selected camera</div>
+        <select class="selected-camera" autocomplete="off">
+          <option selected disabled>Loading...</option>
+        </select>
+        <script>
+          const selectedCamera = document.querySelector('.selected-camera');
+          selectedCamera.addEventListener('change', (e) => {
+            DesktopSettingsPreload.setCamera(e.target.value);
+          });
+          selectedCamera.value = settings.microphone;
+        </script>
+      </label>
+
+      <script>
+        const createStatusMessageOption = (text) => {
+          const option = document.createElement('option');
+          option.selected = true;
+          option.disabled = true;
+          option.textContent = text;
+          return option;
+        };
+
+        const addOptions = (element, selected, devices) => {
+          while (element.firstChild) {
+            element.removeChild(element.firstChild);
+          }
+
+          if (devices.length === 0) {
+            element.appendChild(createStatusMessageOption('No devices'));
+          } else {
+            for (const device of devices) {
+              const option = document.createElement('option');
+              option.value = device.deviceId;
+              option.textContent = device.label;
+              element.appendChild(option);
+            }
+            if (selected) {
+              element.value = selected;
+            }
+          }
+        };
+
+        const addErrorOption = (element, error) => {
+          while (element.firstChild) {
+            element.removeChild(element.firstChild);
+          }
+          element.appendChild(createStatusMessageOption(`Error: ${error}`));
+        };
+
+        const enumerate = async () => {
+          if (!navigator.mediaDevices) {
+            throw new Error('mediaDevices not defined');
+          }
+          return navigator.mediaDevices.enumerateDevices()
+        };
+
+        enumerate()
+          .then((mediaDevices) => {
+            console.log(mediaDevices);
+            addOptions(selectedMicrophone, settings.microphone, mediaDevices.filter((i) => i.kind === 'audioinput'));
+            addOptions(selectedCamera, settings.camera, mediaDevices.filter((i) => i.kind === 'videoinput'));
+          })
+          .catch((error) => {
+            console.error(error);
+            addErrorOption(selectedMicrophone, error);
+            addErrorOption(selectedCamera, error);
+          });
+      </script>
+
+      <label>
+        <input type="checkbox" class="hardware-acceleration" autocomplete="off">
+        Use hardware acceleration (requires restart)
+        <script>
+          const hardwareAcceleration = document.querySelector('.hardware-acceleration');
+          hardwareAcceleration.addEventListener('change', (e) => {
+            DesktopSettingsPreload.setHardwareAcceleration(e.target.checked);
+          });
+          hardwareAcceleration.checked = settings.hardwareAcceleration;
+        </script>
+      </label>
+
+      <label>
+        <input type="checkbox" class="background-throttling" autocomplete="off">
+        Sleep hidden windows
+        <script>
+          const backgroundThrottling = document.querySelector('.background-throttling');
+          backgroundThrottling.addEventListener('change', (e) => {
+            DesktopSettingsPreload.setBackgroundThrottling(e.target.checked);
+          });
+          backgroundThrottling.checked = settings.backgroundThrottling;
+        </script>
+      </label>
+
+      <label>
+        <input type="checkbox" class="bypass-cors" autocomplete="off">
+        Allow extensions to access any website
+        <script>
+          const bypassCORS = document.querySelector('.bypass-cors');
+          bypassCORS.addEventListener('change', (e) => {
+            DesktopSettingsPreload.setBypassCORS(e.target.checked);
+          });
+          bypassCORS.checked = settings.bypassCORS;
+        </script>
+      </label>
+
+      <div>
+        <button class="open-user-data">Open user data folder</button>
+      </div>
+      <script>
+        const openUserData = document.querySelector('.open-user-data');
+        openUserData.addEventListener('click', () => {
+          DesktopSettingsPreload.openUserData();
+        });
+      </script>
+    </main>
+  </body>
+</html>

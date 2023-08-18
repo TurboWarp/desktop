@@ -20,3 +20,5 @@ contextBridge.exposeInMainWorld('PromptsPreload', {
   alert: (message) => ipcRenderer.sendSync('alert', message),
   confirm: (message) => ipcRenderer.sendSync('confirm', message),
 });
+
+contextBridge.exposeInMainWorld('IsDesktop', true);

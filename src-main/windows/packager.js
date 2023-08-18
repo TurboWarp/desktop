@@ -2,6 +2,7 @@ const BaseWindow = require('./base');
 const {PACKAGER_NAME} = require('../brand');
 const onBeforeRequest = require('../projects-on-before-request');
 const prompts = require('../prompts');
+const {translate} = require('../l10n');
 
 class PackagerWindow extends BaseWindow {
   constructor (editorWindow) {
@@ -27,6 +28,7 @@ class PackagerWindow extends BaseWindow {
     });
 
     this.window.webContents.on('did-finish-load', () => {
+      // We can't do this from the preload script
       this.window.webContents.executeJavaScript(`
         window.alert = (message) => PromptsPreload.alert(message);
         window.confirm = (message) => PromptsPreload.confirm(message);
@@ -34,6 +36,16 @@ class PackagerWindow extends BaseWindow {
         // Electron will try to clone the last value returned here, so make sure it doesn't try to clone a function
         void 0;
       `);
+    });
+
+    this.window.webContents.on('did-create-window', (newWindow, details) => {
+      // Center the window on the parent
+      const parentBounds = this.window.getBounds();
+      const newBounds = newWindow.getBounds();
+      const centerX = parentBounds.x + (parentBounds.width / 2) - (newBounds.width / 2);
+      const centerY = parentBounds.y + (parentBounds.height / 2) - (newBounds.height / 2);
+      newWindow.setPosition(centerX, centerY);
+      newWindow.show();
     });
 
     this.window.loadURL('tw-packager://./packager.html');
@@ -50,6 +62,28 @@ class PackagerWindow extends BaseWindow {
 
   static forEditor (editorWindow) {
     new PackagerWindow(editorWindow);
+  }
+
+  handleWindowOpen (details) {
+    if (details.url === 'about:blank') {
+      return {
+        action: 'allow',
+        outlivesOpener: true,
+        overrideBrowserWindowOptions: {
+          title: translate('packager.loading-preview'),
+          // TODO: would be best to autodetect the right size
+          width: 480,
+          height: 360,
+          backgroundColor: '#000000',
+          webPreferences: {
+            preload: null
+          },
+          // Visibility will be handled by did-create-window
+          show: false
+        }
+      };
+    }
+    return super.handleWindowOpen(details);
   }
 
   onBeforeRequest (details, callback) {
