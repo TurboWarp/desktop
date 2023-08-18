@@ -856,6 +856,7 @@
     <div class="changelog section" id="changelog">
       <h2 l10n="changelog">Changelog</h2>
       <div lang="en">
+        <!-- CHANGELOG_START -->
         <div data-version="1.8.1">
           <h3>v1.8.1 (June 20 2023)</h3>
           <ul>
@@ -881,7 +882,7 @@
             <li>Windows: Added native support for Windows on ARM</li>
           </ul>
         </div>
-        <div data-version="1.7.0">
+        <div data-version="1.7.1">
           <h3>v1.7.1 (January 24 2023)</h3>
           <ul>
             <li>Added support for unsandboxed extensions from extensions.turbowarp.org</li>
@@ -980,7 +981,7 @@
             <li>Linux: Support for 32-bit x86 systems will be removed in v1.5.0 (32-bit ARM is not affected)</li>
             <li>Linux: Added support for Linux on Apple Silicon</li>
             <li>macOS: Reduced app startup time</li>
-            <li>Added <a href="https://github.com/sponsors/GarboMuffin">donation</a> links</li>
+            <li>Added donation links</li>
             <li>Updated packager: adds support for "☁ room id" special cloud behavior</li>
           </ul>
         </div>
@@ -1012,6 +1013,7 @@
         <div data-version="1.2.1">
           <h3>v1.2.1 (April 10 2022)</h3>
           <ul>
+            <li>Fixed crash on startup on some systems</li>
             <li>All windows now have proper language hints, fixes CJK characters looking weird in some windows</li>
             <li>Added error message when any child process dies unexpectedly, not just renderer processes</li>
           </ul>
@@ -1030,6 +1032,52 @@
             <li>Reduced lag related to folders addon</li>
           </ul>
         </div>
+        <div data-version="1.1.3">
+          <h3>v1.1.3 (February 21 2022)</h3>
+          <ul>
+            <li>Fixed "Mouse position" addon</li>
+          </ul>
+        </div>
+        <div data-version="1.1.2">
+          <h3>v1.1.2 (February 20 2022)</h3>
+          <ul>
+            <li>Fixed automatically loading project in packager</li>
+            <li>Fixed significant lag when displaying variable monitors caused by the "Hide new variables" addon</li>
+            <li>Fixed builtin sound library not working when offline or in certain regions of the world (China)</li>
+            <li>"Remove Miscellaneous Limits" now also disables mouse X and Y coordinate rounding</li>
+          </ul>
+        </div>
+        <div data-version="1.1.1">
+          <h3>v1.1.1 (February 13 2022)</h3>
+          <ul>
+            <li>New addon: Customizable block text style</li>
+            <li>New addon: Search sprites by name</li>
+            <li>New addon: Enhanced full screen</li>
+            <li>The right-click menu on a variable monitor now has an option to hide it</li>
+            <li>Stage size can now be changed without reloading the editor</li>
+            <li>Stage size can now be stored in a project</li>
+            <li>Fix storing gamepad settings in projects</li>
+            <li>Fix onion skinning layers being slightly misplaced</li>
+            <li>Improve sound editor performance on very large sounds</li>
+            <li>Updated packager</li>
+            <li>Many bug fixes</li>
+          </ul>
+        </div>
+        <div data-version="1.0.0">
+          <h3>v1.0.0 (January 15 2022)</h3>
+          <ul>
+            <li>The costume editor now supports dark mode</li>
+            <li>If a dark background makes it hard to edit your costumes, it's possible to change the theme of the costume editor without effecting the rest of the interface</li>
+            <li>Significantly optimized memory use of costumes</li>
+            <li>Improved project exporting to compress project.json by up to to 30%</li>
+            <li>Many compiler optimizations and compatibility fixes</li>
+            <li>When you right click on a misspelled word detected by the spellchecker, you will now see some suggested replacements</li>
+            <li>Updated integrated packager</li>
+            <li>Various bug fixes</li>
+            <li>Updated translations</li>
+          </ul>
+        </div>
+        <!-- CHANGELOG_END -->
       </div>
       <p><a href="https://github.com/TurboWarp/desktop/releases" l10n="old">Older release notes are available on GitHub.</a></p>
     </div>
