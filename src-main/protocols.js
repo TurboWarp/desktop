@@ -38,6 +38,9 @@ const FILE_SCHEMES = {
   'tw-extensions': {
     root: path.resolve(__dirname, '../dist-extensions'),
     supportFetch: true
+  },
+  'tw-update': {
+    root: path.resolve(__dirname, '../src-renderer/update')
   }
 };
 

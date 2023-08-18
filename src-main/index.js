@@ -8,7 +8,7 @@ if (!app.requestSingleInstanceLock()) {
 const openExternal = require('./open-external');
 const BaseWindow = require('./windows/base');
 const EditorWindow = require('./windows/editor');
-const checkForUpdates = require('./updates');
+const checkForUpdates = require('./update-checker');
 require('./protocols');
 require('./context-menu');
 require('./shortcuts');
@@ -125,4 +125,5 @@ app.on('second-instance', (event, argv, workingDirectory) => {
 
 app.whenReady().then(() => {
   EditorWindow.openFiles(parseFilesFromArgv(process.argv, process.cwd()));
+  checkForUpdates();
 });

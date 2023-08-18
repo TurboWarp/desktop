@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: black;
+        background-color: white;
+      }
+      main {
+        padding: 20px;
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 100vh;
+        border: 20px solid hsla(0, 100%, 65%, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      h1, p {
+        margin: 0;
+      }
+
+      .update-log {
+        width: 100%;
+        flex-grow: 1;
+        border: 0;
+      }
+      button {
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        border: 1px solid hsla(0, 0%, 0%, 0.15);
+        font-weight: bold;
+      }
+      .download-update {
+        color: black;
+        background-color: #24cd11;
+      }
+      label {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>An update is available!</h1>
+
+      <p>TurboWarp Desktop <span class="latest-version"></span> is now available. Read the changelog below:</p>
+
+      <div class="update-log"></div>
+
+      <button class="download-update">Download Update</button>
+      <button class="ignore-update">Ignore</button>
+
+      <label>
+        <input type="checkbox" class="permanently-ignore">
+        Ignore this update
+      </label>
+
+      <script>
+        const params = new URLSearchParams(location.search);
+
+        const latestVersion = document.querySelector('.latest-version');
+        latestVersion.textContent = `v${params.get('version')}`;
+
+        if (params.get('security') === 'true') {
+          document.body.classList.add('security');
+        }
+
+        const changelog = document.querySelector('.changelog');
+        fetch(`https://desktop.turbowarp.org/in-app-changelog.json?version=${latestVersion}`)
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(`HTTP error ${res.ok}`);
+            }
+            return res.json();
+          })
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((error) => {
+
+          });
+      </script>
+    </main>
+  </body>
+</html>

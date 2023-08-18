@@ -94,5 +94,9 @@
   "packager.loading-preview": {
     "string": "Loading...",
     "context": "Loading message for packager preview windows"
+  },
+  "update.title": {
+    "string": "Update Available",
+    "context": "Title of update window"
   }
 }
