@@ -14,18 +14,29 @@ const {APP_NAME} = require('../brand');
 const readFile = promisify(fs.readFile);
 
 class EditorWindow extends BaseWindow {
+  /**
+   * @param {string|null} file
+   */
   constructor (file) {
     super();
 
-    /** @type {string|null} */
-    this.openedFile = file;
+    // This file ID system is not quite perfect. Ideally we would completely revoke permission to access
+    // old projects after you load the next one, but our handling of file handles in scratch-gui is
+    // pretty bad right now, so this is the best compromise.
+    this.openedFiles = [];
+    this.activeFileId = -1;
 
-    /** @type {string|null} */
-    this.openingFile = null;
+    if (file !== null) {
+      this.openedFiles.push(file);
+      this.activeFileId = 0;
+    }
 
-    this.window.loadURL(`tw-editor://./gui/index.html`);
-    this.window.show();
-    this.window.webContents.openDevTools();
+    const getFileById = (id) => {
+      if (typeof id !== 'number' || typeof this.openedFiles[id] !== 'string') {
+        throw new Error('Invalid file ID');
+      }
+      return this.openedFiles[id];
+    };
 
     this.window.webContents.on('will-prevent-unload', (event) => {
       const choice = dialog.showMessageBoxSync(this.window, {
@@ -56,39 +67,35 @@ class EditorWindow extends BaseWindow {
 
     const ipc = this.window.webContents.ipc;
 
-    ipc.handle('has-file', () => {
-      this.openingFile = null;
-      return !!this.openedFile;
+    ipc.handle('get-initial-file', () => {
+      if (this.activeFileId === -1) {
+        return null;
+      }
+      return this.activeFileId;
     });
 
-    ipc.handle('get-file', async () => {
-      this.openingFile = null;
-      if (!this.openedFile) {
-        throw new Error('No file opened');
-      }
-      const data = await readFile(this.openedFile);
+    ipc.handle('get-file', async (event, id) => {
+      const file = getFileById(id);
+      const data = await readFile(file);
       return {
-        name: path.basename(this.openedFile),
+        name: path.basename(file),
         data: data
       }
     });
 
-    ipc.handle('set-changed', changed => {
+    ipc.handle('set-changed', (event, changed) => {
       this.window.setDocumentEdited(changed);
     });
 
-    ipc.handle('opened-file', () => {
-      if (this.openingFile) {
-        this.openedFile = this.openingFile;
-        this.openingFile = null;
-      }
-      this.window.setRepresentedFilename(this.openedFile);
+    ipc.handle('opened-file', (event, id) => {
+      const file = getFileById(id);
+      this.activeFileId = id;
+      this.window.setRepresentedFilename(file);
     });
 
     ipc.handle('closed-file', () => {
+      this.activeFileId = -1;
       this.window.setRepresentedFilename('');
-      this.openedFile = null;
-      this.openingFile = null;
     });
 
     ipc.handle('show-open-file-picker', async () => {
@@ -105,11 +112,15 @@ class EditorWindow extends BaseWindow {
       if (result.canceled) {
         return null;
       }
-      this.openingFile = result.filePaths[0];
-      return path.basename(this.openingFile);
+      const file = result.filePaths[0];
+      this.openedFiles.push(file);
+      return {
+        id: this.openedFiles.length - 1,
+        name: path.basename(file)
+      };
     });
 
-    ipc.handle('show-save-file-picker', async (suggestedName) => {
+    ipc.handle('show-save-file-picker', async (event, suggestedName) => {
       const result = await dialog.showSaveDialog(this.window, {
         // TODO: remember last location,
         defaultPath: `${suggestedName}.sb3`,
@@ -123,15 +134,16 @@ class EditorWindow extends BaseWindow {
       if (result.canceled) {
         return null;
       }
-      this.openedFile = result.filePath;
-      return path.basename(this.openedFile);
+      const file = result.filePath;
+      this.openedFiles.push(file);
+      return {
+        id: this.openedFiles.length - 1,
+        name: path.basename(file)
+      };
     });
 
-    ipc.on('start-write-stream', async (startEvent) => {
-      if (!this.openedFile) {
-        throw new Error('No file opened');
-      }
-
+    ipc.on('start-write-stream', async (startEvent, id) => {
+      const file = getFileById(id);
       const port = startEvent.ports[0];
 
       /** @type {NodeJS.WritableStream|null} */
@@ -149,7 +161,7 @@ class EditorWindow extends BaseWindow {
       };
 
       try {
-        writeStream = await createAtomicWriteStream(this.openedFile);
+        writeStream = await createAtomicWriteStream(file);
       } catch (error) {
         handleError(error);
         return;
@@ -218,6 +230,9 @@ class EditorWindow extends BaseWindow {
     ipc.handle('open-about', () => {
       AboutWindow.show();
     });
+
+    this.window.loadURL(`tw-editor://./gui/index.html`);
+    this.show();
   }
 
   /**

@@ -27,7 +27,7 @@ class AddonsWindow extends BaseWindow {
 
   static show () {
     const window = BaseWindow.singleton(AddonsWindow);
-    window.window.show();
+    window.show();
   }
 }
 

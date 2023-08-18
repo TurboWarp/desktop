@@ -1,8 +1,12 @@
 const {app} = require('electron');
 const path = require('path');
-require('./protocols');
+
 const EditorWindow = require('./windows/editor');
 const openExternal = require('./open-external');
+require('./protocols');
+require('./context-menu');
+require('./shortcuts');
+require('./menu-bar');
 
 if (!app.requestSingleInstanceLock()) {
   app.exit();
@@ -21,8 +25,11 @@ app.on('session-created', (session) => {
 
 app.on('web-contents-created', (_event, webContents) => {
   webContents.on('will-navigate', (event, url) => {
-    event.preventDefault();
-    openExternal(event.url);
+    // Windows can always reload themselves, but that's it.
+    if (webContents.getURL() !== url) {
+      event.preventDefault();
+      openExternal(event.url);
+    }
   });
 
   webContents.setWindowOpenHandler((event) => {

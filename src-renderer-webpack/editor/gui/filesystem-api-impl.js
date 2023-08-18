@@ -18,7 +18,10 @@ const toUnit8Array = (contents) => {
 };
 
 class WrappedFileWritable {
-  constructor () {
+  /**
+   * @param {number} id File ID from main
+   */
+  constructor (id) {
     this._channel = new MessageChannel();
 
     /** @type {Map<number, {resolve: () => void, reject: (error: unknown) => void}>} */
@@ -57,7 +60,9 @@ class WrappedFileWritable {
     // Note that we don't need to wait for the other end before we can start sending data. The messages
     // will just be queued up.
     // We use this weird postMessage because Electron's context bridge doesn't handle the channel objects.
-    window.postMessage('start-write-stream', window.origin, [this._channel.port2])
+    window.postMessage({
+      ipcStartWriteStream: id
+    }, window.origin, [this._channel.port2])
   }
 
   _sendToMainAndWait (message) {
@@ -97,20 +102,21 @@ class WrappedFileWritable {
 
 export class WrappedFileHandle {
   /**
-   * @param {string} name File name with extension.
-   * @param {boolean} unfinished
+   * @param {number} id File ID from main.
+   * @param {string} name Name including file extension.
    */
-  constructor (name) {
+  constructor (id, name) {
+    this.id = id;
     this.name = name;
   }
 
   async getFile () {
-    const data = await EditorPreload.getFile();
+    const data = await EditorPreload.getFile(this.id);
     return new File([data.data], this.name);
   }
 
   async createWritable () {
-    return new WrappedFileWritable();
+    return new WrappedFileWritable(this.id);
   }
 }
 
@@ -122,19 +128,20 @@ class AbortError extends Error {
 }
 
 window.showSaveFilePicker = async (options) => {
-  const name = await EditorPreload.showSaveFilePicker({
+  const result = await EditorPreload.showSaveFilePicker({
     suggestedName: options.suggestedName
   });
-  if (name === null) {
-    throw new AbortError('Save aborted');
+  if (result === null) {
+    throw new AbortError('No file selected');
   }
-  return new WrappedFileHandle(name);
+  return new WrappedFileHandle(result.id, result.name);
 };
 
 window.showOpenFilePicker = async () => {
-  const name = await EditorPreload.showOpenFilePicker();
-  if (name === null) {
-    throw new AbortError('Open aborted');
+  const result = await EditorPreload.showOpenFilePicker();
+  if (result === null) {
+    throw new AbortError('No file selected');
   }
-  return [new WrappedFileHandle(name)];
+  debugger;
+  return [new WrappedFileHandle(result.id, result.name)];
 };

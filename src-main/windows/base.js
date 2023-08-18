@@ -84,6 +84,11 @@ class BaseWindow {
 
     return options;
   }
+
+  show () {
+    this.window.show();
+    this.window.focus();
+  }
 }
 
 module.exports = BaseWindow;

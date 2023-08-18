@@ -28,103 +28,103 @@ const brotliDecompress = util.promisify(zlib.brotliDecompress);
 
 const filesToOpen = [];
 
-const editorWindows = new Set();
-let aboutWindow = null;
-let addonSettingsWindow = null;
-let privacyWindow = null;
-let desktopSettingsWindow = null;
-const dataWindows = new Set();
-const extensionWindows = new Set();
-const closeAllNonEditorWindows = () => [
-  aboutWindow,
-  addonSettingsWindow,
-  privacyWindow,
-  desktopSettingsWindow,
-  ...dataWindows,
-  ...extensionWindows
-].filter((i) => i).forEach((i) => i.close())
+// const editorWindows = new Set();
+// let aboutWindow = null;
+// let addonSettingsWindow = null;
+// let privacyWindow = null;
+// let desktopSettingsWindow = null;
+// const dataWindows = new Set();
+// const extensionWindows = new Set();
+// const closeAllNonEditorWindows = () => [
+//   aboutWindow,
+//   addonSettingsWindow,
+//   privacyWindow,
+//   desktopSettingsWindow,
+//   ...dataWindows,
+//   ...extensionWindows
+// ].filter((i) => i).forEach((i) => i.close())
 
-const allowedToAccessFiles = new Set();
+// const allowedToAccessFiles = new Set();
 
-const isSafeOpenExternal = (url) => {
-  try {
-    const parsedUrl = new URL(url);
-    return parsedUrl.protocol === 'https:' || parsedUrl.protocol === 'http:';
-  } catch (e) {
-    // ignore
-  }
-  return false;
-};
+// const isSafeOpenExternal = (url) => {
+//   try {
+//     const parsedUrl = new URL(url);
+//     return parsedUrl.protocol === 'https:' || parsedUrl.protocol === 'http:';
+//   } catch (e) {
+//     // ignore
+//   }
+//   return false;
+// };
 
-const isDataURL = (url) => {
-  try {
-    const parsedUrl = new URL(url);
-    return parsedUrl.protocol === 'data:';
-  } catch (e) {
-    // ignore
-  }
-  return false;
-};
+// const isDataURL = (url) => {
+//   try {
+//     const parsedUrl = new URL(url);
+//     return parsedUrl.protocol === 'data:';
+//   } catch (e) {
+//     // ignore
+//   }
+//   return false;
+// };
 
-const isExtensionURL = (url) => url === 'https://extensions.turbowarp.org/';
+// const isExtensionURL = (url) => url === 'https://extensions.turbowarp.org/';
 
-const defaultWindowOpenHandler = (details) => {
-  if (isSafeOpenExternal(details.url)) {
-    setImmediate(() => {
-      shell.openExternal(details.url);
-    });
-  } else if (isDataURL(details.url)) {
-    createDataWindow(details.url);
-  }
-  return {
-    action: 'deny'
-  }
-};
+// const defaultWindowOpenHandler = (details) => {
+//   if (isSafeOpenExternal(details.url)) {
+//     setImmediate(() => {
+//       shell.openExternal(details.url);
+//     });
+//   } else if (isDataURL(details.url)) {
+//     createDataWindow(details.url);
+//   }
+//   return {
+//     action: 'deny'
+//   }
+// };
 
-if (isMac) {
-  Menu.setApplicationMenu(Menu.buildFromTemplate([
-    { role: 'appMenu' },
-    {
-      role: 'fileMenu',
-      submenu: [
-        { role: 'quit' },
-        {
-          label: getTranslation('menu.new-window'),
-          accelerator: 'Cmd+N',
-          click: () => {
-            createEditorWindow();
-          }
-        }
-      ]
-    },
-    { role: 'editMenu' },
-    { role: 'viewMenu' },
-    { role: 'windowMenu' },
-    {
-      role: 'help',
-      submenu: [
-        {
-          label: getTranslation('menu.learn-more'),
-          click: () => shell.openExternal('https://desktop.turbowarp.org/')
-        }
-      ]
-    }
-  ]));
-} else {
-  Menu.setApplicationMenu(null);
-}
+// if (isMac) {
+//   Menu.setApplicationMenu(Menu.buildFromTemplate([
+//     { role: 'appMenu' },
+//     {
+//       role: 'fileMenu',
+//       submenu: [
+//         { role: 'quit' },
+//         {
+//           label: getTranslation('menu.new-window'),
+//           accelerator: 'Cmd+N',
+//           click: () => {
+//             createEditorWindow();
+//           }
+//         }
+//       ]
+//     },
+//     { role: 'editMenu' },
+//     { role: 'viewMenu' },
+//     { role: 'windowMenu' },
+//     {
+//       role: 'help',
+//       submenu: [
+//         {
+//           label: getTranslation('menu.learn-more'),
+//           click: () => shell.openExternal('https://desktop.turbowarp.org/')
+//         }
+//       ]
+//     }
+//   ]));
+// } else {
+//   Menu.setApplicationMenu(null);
+// }
 
-const getURL = (route) => {
-  if (isDevelopment) {
-    return `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}/?route=${route}`;
-  }
-  return formatUrl({
-    pathname: pathUtil.join(__dirname, 'index.html'),
-    protocol: 'file',
-    search: `route=${route}`,
-    slashes: true
-  });
-};
+// const getURL = (route) => {
+//   if (isDevelopment) {
+//     return `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}/?route=${route}`;
+//   }
+//   return formatUrl({
+//     pathname: pathUtil.join(__dirname, 'index.html'),
+//     protocol: 'file',
+//     search: `route=${route}`,
+//     slashes: true
+//   });
+// };
 
 const closeWindowWhenPressEscape = (window) => {
   window.webContents.on('before-input-event', (e, input) => {
@@ -144,131 +144,131 @@ const closeWindowWhenPressEscape = (window) => {
   });
 };
 
-const getWindowOptions = (options) => {
-  if (isLinux) {
-    options.icon = pathUtil.join(staticDir, 'icon.png');
-  }
-  options.useContentSize = true;
-  options.minWidth = 200;
-  options.minHeight = 200;
-  options.webPreferences ||= {};
-  if (typeof options.webPreferences.preload === 'undefined') {
-    // only undefined should be replaced as null is interpreted as "no preload script"
-    options.webPreferences.preload = pathUtil.resolve(__dirname, 'preload.js')
-  }
+// const getWindowOptions = (options) => {
+//   if (isLinux) {
+//     options.icon = pathUtil.join(staticDir, 'icon.png');
+//   }
+//   options.useContentSize = true;
+//   options.minWidth = 200;
+//   options.minHeight = 200;
+//   options.webPreferences ||= {};
+//   if (typeof options.webPreferences.preload === 'undefined') {
+//     // only undefined should be replaced as null is interpreted as "no preload script"
+//     options.webPreferences.preload = pathUtil.resolve(__dirname, 'preload.js')
+//   }
 
-  const activeScreen = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
-  const bounds = activeScreen.workArea;
+//   const activeScreen = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
+//   const bounds = activeScreen.workArea;
 
-  options.width = Math.min(bounds.width, options.width);
-  options.height = Math.min(bounds.height, options.height);
+//   options.width = Math.min(bounds.width, options.width);
+//   options.height = Math.min(bounds.height, options.height);
 
-  options.x = bounds.x + ((bounds.width - options.width) / 2);
-  options.y = bounds.y + ((bounds.height - options.height) / 2);
+//   options.x = bounds.x + ((bounds.width - options.width) / 2);
+//   options.y = bounds.y + ((bounds.height - options.height) / 2);
 
-  return options;
-};
+//   return options;
+// };
 
-const createWindow = (url, options) => {
-  const window = new BrowserWindow(getWindowOptions(options));
-  window.loadURL(url);
-  return window;
-};
+// const createWindow = (url, options) => {
+//   const window = new BrowserWindow(getWindowOptions(options));
+//   window.loadURL(url);
+//   return window;
+// };
 
-const createEditorWindow = () => {
-  // Note: the route for this must be `editor`, otherwise the dev tools keyboard shortcuts will not work.
-  let url = getURL('editor');
-  const fileToOpen = filesToOpen.shift();
-  if (typeof fileToOpen !== 'undefined') {
-    url += `&file=${encodeURIComponent(fileToOpen)}`;
-    allowedToAccessFiles.add(fileToOpen);
-  }
-  const window = createWindow(url, {
-    title: APP_NAME,
-    width: 1280,
-    height: 800,
-    webPreferences: {
-      backgroundThrottling: isBackgroundThrottlingEnabled()
-    }
-  });
-  window.on('page-title-updated', (event, title, explicitSet) => {
-    event.preventDefault();
-    if (explicitSet && title) {
-      window.setTitle(`${title} - ${APP_NAME}`);
-    } else {
-      window.setTitle(APP_NAME);
-    }
-  });
-  // window.on('closed', () => {
-  //   editorWindows.delete(window);
-  //   if (editorWindows.size === 0) {
-  //     closeAllNonEditorWindows();
-  //   }
-  // });
-  // window.webContents.on('will-prevent-unload', (e) => {
-  //   const choice = dialog.showMessageBoxSync(window, {
-  //     title: APP_NAME,
-  //     type: 'info',
-  //     buttons: [
-  //       getTranslation('unload.stay'),
-  //       getTranslation('unload.leave')
-  //     ],
-  //     cancelId: 0,
-  //     defaultId: 0,
-  //     message: getTranslation('unload.message'),
-  //     detail: getTranslation('unload.detail')
-  //   });
-  //   if (choice === 1) {
-  //     e.preventDefault();
-  //   }
-  // });
-  window.webContents.setWindowOpenHandler((details) => {
-    if (isExtensionURL(details.url)) {
-      createExtensionsWindow(window.webContents);
-      return {
-        action: 'deny'
-      };
-    }
-    return defaultWindowOpenHandler(details);
-  });
-  editorWindows.add(window);
-  return window;
-};
+// const createEditorWindow = () => {
+//   // Note: the route for this must be `editor`, otherwise the dev tools keyboard shortcuts will not work.
+//   let url = getURL('editor');
+//   const fileToOpen = filesToOpen.shift();
+//   if (typeof fileToOpen !== 'undefined') {
+//     url += `&file=${encodeURIComponent(fileToOpen)}`;
+//     allowedToAccessFiles.add(fileToOpen);
+//   }
+//   const window = createWindow(url, {
+//     title: APP_NAME,
+//     width: 1280,
+//     height: 800,
+//     webPreferences: {
+//       backgroundThrottling: isBackgroundThrottlingEnabled()
+//     }
+//   });
+//   window.on('page-title-updated', (event, title, explicitSet) => {
+//     event.preventDefault();
+//     if (explicitSet && title) {
+//       window.setTitle(`${title} - ${APP_NAME}`);
+//     } else {
+//       window.setTitle(APP_NAME);
+//     }
+//   });
+//   // window.on('closed', () => {
+//   //   editorWindows.delete(window);
+//   //   if (editorWindows.size === 0) {
+//   //     closeAllNonEditorWindows();
+//   //   }
+//   // });
+//   // window.webContents.on('will-prevent-unload', (e) => {
+//   //   const choice = dialog.showMessageBoxSync(window, {
+//   //     title: APP_NAME,
+//   //     type: 'info',
+//   //     buttons: [
+//   //       getTranslation('unload.stay'),
+//   //       getTranslation('unload.leave')
+//   //     ],
+//   //     cancelId: 0,
+//   //     defaultId: 0,
+//   //     message: getTranslation('unload.message'),
+//   //     detail: getTranslation('unload.detail')
+//   //   });
+//   //   if (choice === 1) {
+//   //     e.preventDefault();
+//   //   }
+//   // });
+//   window.webContents.setWindowOpenHandler((details) => {
+//     if (isExtensionURL(details.url)) {
+//       createExtensionsWindow(window.webContents);
+//       return {
+//         action: 'deny'
+//       };
+//     }
+//     return defaultWindowOpenHandler(details);
+//   });
+//   editorWindows.add(window);
+//   return window;
+// };
 
-const createAboutWindow = () => {
-  if (!aboutWindow) {
-    aboutWindow = createWindow(getURL('about'), {
-      title: getTranslation('about'),
-      width: 800,
-      height: 450,
-      minimizable: false,
-      maximizable: false
-    });
-    aboutWindow.on('closed', () => {
-      aboutWindow = null;
-    });
-    closeWindowWhenPressEscape(aboutWindow);
-  }
-  aboutWindow.show();
-  aboutWindow.focus();
-};
+// const createAboutWindow = () => {
+//   if (!aboutWindow) {
+//     aboutWindow = createWindow(getURL('about'), {
+//       title: getTranslation('about'),
+//       width: 800,
+//       height: 450,
+//       minimizable: false,
+//       maximizable: false
+//     });
+//     aboutWindow.on('closed', () => {
+//       aboutWindow = null;
+//     });
+//     closeWindowWhenPressEscape(aboutWindow);
+//   }
+//   aboutWindow.show();
+//   aboutWindow.focus();
+// };
 
-const createAddonSettingsWindow = () => {
-  if (!addonSettingsWindow) {
-    addonSettingsWindow = createWindow(getURL('settings'), {
-      // The window will update its title to be something localized
-      title: 'Addon Settings',
-      width: 700,
-      height: 650
-    });
-    addonSettingsWindow.on('close', () => {
-      addonSettingsWindow = null;
-    });
-    closeWindowWhenPressEscape(addonSettingsWindow);
-  }
-  addonSettingsWindow.show();
-  addonSettingsWindow.focus();
-};
+// const createAddonSettingsWindow = () => {
+//   if (!addonSettingsWindow) {
+//     addonSettingsWindow = createWindow(getURL('settings'), {
+//       // The window will update its title to be something localized
+//       title: 'Addon Settings',
+//       width: 700,
+//       height: 650
+//     });
+//     addonSettingsWindow.on('close', () => {
+//       addonSettingsWindow = null;
+//     });
+//     closeWindowWhenPressEscape(addonSettingsWindow);
+//   }
+//   addonSettingsWindow.show();
+//   addonSettingsWindow.focus();
+// };
 
 const createPrivacyWindow = () => {
   if (!privacyWindow) {

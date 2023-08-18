@@ -8,7 +8,6 @@ class PrivacyWindow extends BaseWindow {
     this.window.setTitle(translate('privacy-policy'));
     this.window.setMinimizable(false);
     this.window.setMaximizable(false);
-    this.window.show();
   }
 
   getDimensions () {
@@ -17,7 +16,7 @@ class PrivacyWindow extends BaseWindow {
 
   static show () {
     const window = BaseWindow.singleton(PrivacyWindow);
-    window.window.show();
+    window.show();
   }
 }
 

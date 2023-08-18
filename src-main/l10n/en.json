@@ -30,5 +30,29 @@
   "about": {
     "string": "About",
     "context": "Title of about window"
+  },
+  "menu.new-window": {
+    "string": "New Window",
+    "context": "macOS menu bar item to open a new window"
+  },
+  "menu.learn-more": {
+    "string": "Learn more",
+    "context": "macOS menu bar item to learn more"
+  },
+  "context.open-link": {
+    "string": "Open Link",
+    "context": "Context menu item to open link"
+  },
+  "context.cut": {
+    "string": "Cut",
+    "context": "Context menu item to cut"
+  },
+  "context.copy": {
+    "string": "Copy",
+    "context": "Context menu item to copy"
+  },
+  "context.paste": {
+    "string": "Paste",
+    "context": "Context menu item to paste"
   }
 }

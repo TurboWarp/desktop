@@ -46,15 +46,16 @@ const DesktopHOC = function (WrappedComponent) {
 
       this.props.onLoadingStarted();
       (async () => {
-        const hasFile = await EditorPreload.hasFile();
-        if (!hasFile) {
+        // Note that 0 is a valid ID and does mean there is a file open
+        const id = await EditorPreload.getInitialFile();
+        if (id === null) {
           this.props.onHasInitialProject(false, this.props.loadingState);
           this.props.onLoadingCompleted();
           return;
         }
  
         this.props.onHasInitialProject(true, this.props.loadingState);
-        const file = await EditorPreload.getFile();
+        const file = await EditorPreload.getFile(id);
 
         const {name, data} = file;
         await this.props.vm.loadProject(data);
@@ -69,7 +70,7 @@ const DesktopHOC = function (WrappedComponent) {
         }
 
         if (name.endsWith('.sb3')) {
-          this.props.onSetFileHandle(new WrappedFileHandle(name));
+          this.props.onSetFileHandle(new WrappedFileHandle(id, name));
         }
       })().catch(error => {
         console.error(error);
@@ -91,9 +92,8 @@ const DesktopHOC = function (WrappedComponent) {
       }
 
       if (this.props.fileHandle !== prevProps.fileHandle) {
-        console.log(this.props.fileHandle, prevProps.fileHandle);
         if (this.props.fileHandle) {
-          EditorPreload.openedFile();
+          EditorPreload.openedFile(this.props.fileHandle.id);
         } else {
           EditorPreload.closedFile();
         }
@@ -136,6 +136,7 @@ const DesktopHOC = function (WrappedComponent) {
         locale,
         loadingState,
         projectChanged,
+        fileHandle,
         onFetchedInitialProjectData,
         onHasInitialProject,
         onLoadedProject,
@@ -160,6 +161,9 @@ const DesktopHOC = function (WrappedComponent) {
     locale: PropTypes.string.isRequired,
     loadingState: PropTypes.string.isRequired,
     projectChanged: PropTypes.bool.isRequired,
+    fileHandle: PropTypes.shape({
+      id: PropTypes.number.isRequired
+    }),
     onFetchedInitialProjectData: PropTypes.func.isRequired,
     onHasInitialProject: PropTypes.func.isRequired,
     onLoadedProject: PropTypes.func.isRequired,
@@ -176,6 +180,7 @@ const DesktopHOC = function (WrappedComponent) {
     locale: state.locales.locale,
     loadingState: state.scratchGui.projectState.loadingState,
     projectChanged: state.scratchGui.projectChanged,
+    fileHandle: state.scratchGui.tw.fileHandle,
     vm: state.scratchGui.vm
   });
 

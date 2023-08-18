@@ -8,7 +8,6 @@ class DesktopSettingsWindow extends BaseWindow {
     this.window.setTitle(translate('desktop-settings'));
     this.window.setMinimizable(false);
     this.window.setMaximizable(false);
-    this.window.show();
   }
 
   getDimensions () {
@@ -17,7 +16,7 @@ class DesktopSettingsWindow extends BaseWindow {
 
   static show () {
     const window = BaseWindow.singleton(DesktopSettingsWindow);
-    window.window.show();
+    window.show();
   }
 }
 
