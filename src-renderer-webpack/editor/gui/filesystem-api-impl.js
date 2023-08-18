@@ -128,9 +128,7 @@ class AbortError extends Error {
 }
 
 window.showSaveFilePicker = async (options) => {
-  const result = await EditorPreload.showSaveFilePicker({
-    suggestedName: options.suggestedName
-  });
+  const result = await EditorPreload.showSaveFilePicker(options.suggestedName);
   if (result === null) {
     throw new AbortError('No file selected');
   }
@@ -142,6 +140,5 @@ window.showOpenFilePicker = async () => {
   if (result === null) {
     throw new AbortError('No file selected');
   }
-  debugger;
   return [new WrappedFileHandle(result.id, result.name)];
 };

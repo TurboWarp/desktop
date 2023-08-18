@@ -1,5 +1,6 @@
 const BaseWindow = require('./base');
 const {PACKAGER_NAME} = require('../brand');
+const onBeforeRequest = require('../projects-on-before-request');
 
 class PackagerWindow extends BaseWindow {
   constructor (editorWindow) {
@@ -29,6 +30,10 @@ class PackagerWindow extends BaseWindow {
 
   static forEditor (editorWindow) {
     new PackagerWindow(editorWindow);
+  }
+
+  onBeforeRequest (details, callback) {
+    return onBeforeRequest(details, callback);
   }
 }
 

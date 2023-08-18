@@ -13,7 +13,7 @@ try {
   process.exit(1);
 }
 
-const outputDirectory = pathUtil.join(__dirname, '..', 'static', 'extensions.turbowarp.org');
+const outputDirectory = pathUtil.join(__dirname, '../dist-extensions/');
 const mode = 'desktop';
 const builder = new Builder(mode);
 const build = builder.build();

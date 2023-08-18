@@ -9,6 +9,7 @@ dist
 dist-renderer-webpack
 dist-library-files
 dist-packager
+dist-extensions
 
 # Debian release scripts create files that shouldn't be committed
 deb

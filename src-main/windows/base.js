@@ -135,6 +135,15 @@ class BaseWindow {
     // to be overridden
     return false;
   }
+
+  /**
+   * 
+   * @param {Electron.OnBeforeRequestListenerDetails} details
+   * @param {(response: Electron.CallbackResponse) => void} callback 
+   */
+  onBeforeRequest (details, callback) {
+    callback({});
+  }
 }
 
 module.exports = BaseWindow;

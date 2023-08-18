@@ -12,6 +12,7 @@ const {createAtomicWriteStream} = require('../atomic-write-stream');
 const {translate} = require('../l10n');
 const {APP_NAME} = require('../brand');
 const askForMediaAccess = require('../media-permissions');
+const onBeforeRequest = require('../projects-on-before-request');
 
 const readFile = promisify(fs.readFile);
 
@@ -296,6 +297,10 @@ class EditorWindow extends BaseWindow {
     }  
 
     return false;
+  }
+
+  onBeforeRequest (details, callback) {
+    return onBeforeRequest(details, callback);
   }
 }
 

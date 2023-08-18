@@ -28,6 +28,9 @@ if (!isAlreadyDownloaded()) {
       if (packagerInfo.sha256 !== sha256) {
         throw new Error(`Hash mismatch: expected ${packagerInfo.sha256} but found ${sha256}`);
       }
+      fs.mkdirSync(pathUtil.dirname(path), {
+        recursive: true
+      });
       fs.writeFileSync(path, buffer);
     })
     .then(() => {

@@ -8,7 +8,7 @@ const safelyOpenExternal = url => {
       'https:',
     ];
     if (ALLOWED_PROTOCOLS.includes(parsed.protocol)) {
-      return shell.openExternal(parsed.protocol);
+      return shell.openExternal(url);
     }
   } catch (e) {
     // ignore

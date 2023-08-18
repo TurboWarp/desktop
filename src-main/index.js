@@ -20,7 +20,6 @@ app.on('session-created', (session) => {
   // Permission requests are delegated to BaseWindow
 
   session.setPermissionCheckHandler((webContents, permission, requestingOrigin, details) => {
-    console.log('Permission check', permission);
     if (!details.isMainFrame) {
       return false;
     }
@@ -32,7 +31,6 @@ app.on('session-created', (session) => {
   });
 
   session.setPermissionRequestHandler((webContents, permission, callback, details) => {
-    console.log('Permission request', permission);
     if (!details.isMainFrame) {
       callback(false);
       return;
@@ -45,6 +43,24 @@ app.on('session-created', (session) => {
     window.handlePermissionRequest(permission, details).then((allowed) => {
       callback(allowed);
     });
+  });
+
+  session.webRequest.onBeforeRequest((details, callback) => {
+    const url = details.url.toLowerCase();
+    // Always allow devtools
+    if (url.startsWith('devtools:')) {
+      return callback({});
+    }
+
+    const webContents = details.webContents;
+    const window = BaseWindow.getWindowByWebContents(webContents);
+    if (!webContents || !window) {
+      return callback({
+        cancel: true
+      });
+    }
+
+    window.onBeforeRequest(details, callback);
   });
 });
 
