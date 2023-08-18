@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const {promisify} = require('util');
+const settings = require('./settings');
 
 const readdir = promisify(fs.readdir);
 
@@ -48,4 +49,20 @@ const onBeforeRequest = (details, callback) => {
   callback({});
 };
 
-module.exports = onBeforeRequest;
+const onHeadersReceived = (details, callback) => {
+  if (settings.bypassCORS) {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'access-control-allow-origin': '*'
+      }
+    })
+  } else {
+    callback({});
+  }
+};
+
+module.exports = {
+  onBeforeRequest,
+  onHeadersReceived
+};

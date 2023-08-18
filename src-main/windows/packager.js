@@ -1,6 +1,6 @@
 const BaseWindow = require('./base');
 const {PACKAGER_NAME} = require('../brand');
-const onBeforeRequest = require('../projects-on-before-request');
+const {onBeforeRequest, onHeadersReceived} = require('../project-request-filtering');
 const prompts = require('../prompts');
 const {translate} = require('../l10n');
 
@@ -87,7 +87,11 @@ class PackagerWindow extends BaseWindow {
   }
 
   onBeforeRequest (details, callback) {
-    return onBeforeRequest(details, callback);
+    onBeforeRequest(details, callback);
+  }
+
+  onHeadersReceived (details, callback) {
+    onHeadersReceived(details, callback);
   }
 }
 

@@ -65,6 +65,14 @@ app.on('session-created', (session) => {
 
     window.onBeforeRequest(details, callback);
   });
+
+  session.webRequest.onHeadersReceived((details, callback) => {
+    const window = BaseWindow.getWindowByWebContents(details.webContents);
+    if (!window) {
+      return callback({});
+    }
+    window.onHeadersReceived(details, callback);
+  });
 });
 
 app.on('web-contents-created', (event, webContents) => {

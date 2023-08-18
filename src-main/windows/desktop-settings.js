@@ -16,8 +16,8 @@ class DesktopSettingsWindow extends BaseWindow {
     ipc.on('get-settings', (event) => {
       event.returnValue = {
         updateChecker: settings.updateChecker,
-        microphone: '',
-        camera: '',
+        microphone: settings.microphone,
+        camera: settings.camera,
         hardwareAcceleration: settings.hardwareAcceleration,
         backgroundThrottling: settings.backgroundThrottling,
         bypassCORS: settings.bypassCORS
@@ -46,6 +46,7 @@ class DesktopSettingsWindow extends BaseWindow {
 
     ipc.handle('set-background-throttling', async (event, backgroundThrottling) => {
       settings.backgroundThrottling = backgroundThrottling;
+      BaseWindow.settingsChanged();
       await settings.save();
     });
 

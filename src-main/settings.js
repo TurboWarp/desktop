@@ -85,7 +85,7 @@ class Settings {
   }
 
   get bypassCORS () {
-    return this.data.bypassCORS !== false;
+    return this.data.bypassCORS === true;
   }
   set bypassCORS (bypassCORS) {
     this.data.bypassCORS = bypassCORS;

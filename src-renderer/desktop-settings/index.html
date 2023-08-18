@@ -52,6 +52,7 @@
           <!-- <option value="beta">Notify me about beta updates</option> -->
           <option value="stable">Notify me about stable updates</option>
           <option value="security">Notify me about security updates</option>
+          <!-- <option value="never">Never notify me about updates</option> -->
         </select>
         <script>
           const updateChecker = document.querySelector('.update-checker');
@@ -97,6 +98,13 @@
           return option;
         };
 
+        const addLoadingOption = (element) => {
+          while (element.firstChild) {
+            element.removeChild(element.firstChild);
+          }
+          element.appendChild(createStatusMessageOption('Loading...'));
+        };
+
         const addOptions = (element, selected, devices) => {
           while (element.firstChild) {
             element.removeChild(element.firstChild);
@@ -125,23 +133,25 @@
         };
 
         const enumerate = async () => {
-          if (!navigator.mediaDevices) {
-            throw new Error('mediaDevices not defined');
-          }
           return navigator.mediaDevices.enumerateDevices()
         };
 
-        enumerate()
-          .then((mediaDevices) => {
-            console.log(mediaDevices);
+        const updateLists = async () => {
+          addLoadingOption(selectedCamera);
+          addLoadingOption(selectedMicrophone);
+          try {
+            const mediaDevices = await navigator.mediaDevices.enumerateDevices();
             addOptions(selectedMicrophone, settings.microphone, mediaDevices.filter((i) => i.kind === 'audioinput'));
             addOptions(selectedCamera, settings.camera, mediaDevices.filter((i) => i.kind === 'videoinput'));
-          })
-          .catch((error) => {
+          } catch (e) {
             console.error(error);
             addErrorOption(selectedMicrophone, error);
             addErrorOption(selectedCamera, error);
-          });
+          }
+        };
+
+        updateLists();
+        navigator.mediaDevices.addEventListener('devicechange', updateLists);
       </script>
 
       <label>

@@ -9,6 +9,7 @@ class BaseWindow {
   constructor () {
     this.window = new BrowserWindow(this.getWindowOptions());
     this.window.webContents.setWindowOpenHandler(this.handleWindowOpen.bind(this));
+    this.applySettings();
 
     const cls = this.constructor;
     if (!windowsByClass.has(cls)) {
@@ -22,6 +23,22 @@ class BaseWindow {
         windows.splice(idx, 1);
       }
     });
+  }
+
+  static getAllWindows () {
+    const allWindows = [];
+    for (const windows of windowsByClass.values()) {
+      for (const window of windows) {
+        allWindows.push(window);
+      }
+    }
+    return allWindows;
+  }
+
+  static settingsChanged () {
+    for (const window of BaseWindow.getAllWindows()) {
+      window.applySettings();
+    }
   }
 
   static getWindowByWebContents (webContents) {
@@ -105,7 +122,7 @@ class BaseWindow {
 
   /**
    * @see {Electron.WebContents.setWindowOpenHandler}
-   * @param {Electron.HandlerDetails} details 
+   * @param {Electron.HandlerDetails} details
    */
   handleWindowOpen (details) {
     openExternal(details.url);
@@ -137,12 +154,26 @@ class BaseWindow {
   }
 
   /**
-   * 
    * @param {Electron.OnBeforeRequestListenerDetails} details
-   * @param {(response: Electron.CallbackResponse) => void} callback 
+   * @param {(response: Electron.CallbackResponse) => void} callback
    */
   onBeforeRequest (details, callback) {
+    // to be overridden
     callback({});
+  }
+
+  /**
+   *
+   * @param {Electron.OnHeadersReceivedListenerDetails} details
+   * @param {(response: Electron.HeadersReceivedResponse) => void} callback
+   */
+  onHeadersReceived (details, callback) {
+    // to be overridden
+    callback({});
+  }
+
+  applySettings () {
+    // to be overrridden
   }
 }
 

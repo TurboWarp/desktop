@@ -1,19 +1,20 @@
 const fs = require('fs');
 const {promisify} = require('util');
 const path = require('path');
-const {dialog, inAppPurchase} = require('electron');
+const {dialog} = require('electron');
 const BaseWindow = require('./base');
 const AddonsWindow = require('./addons');
 const DesktopSettingsWindow = require('./desktop-settings');
 const PrivacyWindow = require('./privacy');
 const AboutWindow = require('./about');
-const PackgerWindow = require('./packager');
+const PackagerWindow = require('./packager');
 const {createAtomicWriteStream} = require('../atomic-write-stream');
 const {translate} = require('../l10n');
 const {APP_NAME} = require('../brand');
 const askForMediaAccess = require('../media-permissions');
-const onBeforeRequest = require('../projects-on-before-request');
+const {onBeforeRequest, onHeadersReceived} = require('../project-request-filtering');
 const prompts = require('../prompts');
+const settings = require('../settings');
 
 const readFile = promisify(fs.readFile);
 
@@ -146,6 +147,13 @@ class EditorWindow extends BaseWindow {
       };
     });
 
+    ipc.handle('get-preferred-media-devices', () => {
+      return {
+        microphone: settings.microphone,
+        camera: settings.camera
+      };
+    });
+
     ipc.on('start-write-stream', async (startEvent, id) => {
       const file = getFileById(id);
       const port = startEvent.ports[0];
@@ -224,7 +232,7 @@ class EditorWindow extends BaseWindow {
     });
 
     ipc.handle('open-packager', () => {
-      PackgerWindow.forEditor(this);
+      PackagerWindow.forEditor(this);
     });
 
     ipc.handle('open-new-window', () => {
@@ -273,7 +281,7 @@ class EditorWindow extends BaseWindow {
   }
 
   handlePermissionCheck (permission, details) {
-    // Autoplay audio
+    // Autoplay audio and media device filtering
     if (permission === 'media') {
       return true;
     }
@@ -309,7 +317,15 @@ class EditorWindow extends BaseWindow {
   }
 
   onBeforeRequest (details, callback) {
-    return onBeforeRequest(details, callback);
+    onBeforeRequest(details, callback);
+  }
+
+  onHeadersReceived (details, callback) {
+    onHeadersReceived(details, callback);
+  }
+
+  applySettings () {
+    this.window.webContents.setBackgroundThrottling(settings.backgroundThrottling);
   }
 }
 
