@@ -41,3 +41,8 @@ window.addEventListener('message', (e) => {
     }
   }
 });
+
+contextBridge.exposeInMainWorld('PromptsPreload', {
+  alert: (message) => ipcRenderer.sendSync('alert', message),
+  confirm: (message) => ipcRenderer.sendSync('confirm', message),
+});

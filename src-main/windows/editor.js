@@ -13,6 +13,7 @@ const {translate} = require('../l10n');
 const {APP_NAME} = require('../brand');
 const askForMediaAccess = require('../media-permissions');
 const onBeforeRequest = require('../projects-on-before-request');
+const prompts = require('../prompts');
 
 const readFile = promisify(fs.readFile);
 
@@ -212,6 +213,14 @@ class EditorWindow extends BaseWindow {
       });
 
       port.start();
+    });
+
+    ipc.on('alert', (event, message) => {
+      event.returnValue = prompts.alert(this.window, message);
+    });
+
+    ipc.on('confirm', (event, message) => {
+      event.returnValue = prompts.confirm(this.window, message);
     });
 
     ipc.handle('open-packager', () => {

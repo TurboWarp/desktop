@@ -1,28 +1,36 @@
 const BaseWindow = require('./base');
 const {translate} = require('../l10n/index');
 const {APP_NAME} = require('../brand');
-
-/** @type {AddonsWindow|null} */
-let singleton = null;
+const prompts = require('../prompts');
 
 class AddonsWindow extends BaseWindow {
   constructor () {
     super();
 
-    this.window.loadURL(`tw-editor://./addons/index.html`);
-
-    this.window.setTitle(`${translate('addon-settings')} - ${APP_NAME}`);
     this.window.on('page-title-updated', event => {
       event.preventDefault();
     });
+    this.window.setTitle(`${translate('addon-settings')} - ${APP_NAME}`);
 
-    this.window.on('closed', () => {
-      singleton = null;
+    const ipc = this.window.webContents.ipc;
+
+    ipc.on('alert', (event, message) => {
+      event.returnValue = prompts.alert(this.window, message);
     });
+
+    ipc.on('confirm', (event, message) => {
+      event.returnValue = prompts.confirm(this.window, message);
+    });
+
+    this.window.loadURL(`tw-editor://./addons/index.html`);
   }
 
   getDimensions () {
     return [700, 650];
+  }
+
+  getPreload () {
+    return 'addons';
   }
 
   static show () {

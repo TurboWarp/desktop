@@ -5,6 +5,7 @@ import TWThemeHOC from 'scratch-gui/src/lib/tw-theme-hoc.jsx';
 
 import DesktopHOC from './desktop-hoc.jsx';
 import './gui.css';
+import '../browser-prompt-reimplementation.js';
 
 const WrappedGUI = compose(
   AppStateHOC,

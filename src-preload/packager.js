@@ -15,3 +15,8 @@ contextBridge.exposeInMainWorld('GlobalPackagerImporter', () => new Promise((res
   };
   ipcRenderer.postMessage('import-project-with-port', null, [channel.port2]);
 }));
+
+contextBridge.exposeInMainWorld('PromptsPreload', {
+  alert: (message) => ipcRenderer.sendSync('alert', message),
+  confirm: (message) => ipcRenderer.sendSync('confirm', message),
+});

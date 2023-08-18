@@ -82,5 +82,13 @@
   "crash.description": {
     "string": "Process crashed: {type}: {reason} ({code})",
     "context": "Appears when a process crashes"
+  },
+  "prompts.ok": {
+    "string": "OK",
+    "context": "Appears in alert dialogs and confirmation dialogs"
+  },
+  "prompts.cancel": {
+    "string": "Cancel",
+    "context": "Appears in confirmation dialogs"
   }
 }
