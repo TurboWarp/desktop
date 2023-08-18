@@ -63,19 +63,19 @@
     <content_attribute id="social-info">mild</content_attribute>
   </content_rating>
   <releases>
-    <release version="1.8.1" date="2023-06-20">
+    <release version="1.8.1" date="2023-6-20">
       <description>
         <ul>
-          <li>Fixed issues using custom extensions in the packager</li>
+          <li>Fixed issues using custom extensions in the packager (if issues remain, press "Reset All Settings" in packager)</li>
           <li>Fixed using an extension to fetch files from extensions.turbowarp.org in the editor</li>
           <li>Fixed Looks Plus "this sprite" option not working properly in clones</li>
         </ul>
       </description>
     </release>
-    <release version="1.8.0" date="2023-06-19">
+    <release version="1.8.0" date="2023-6-19">
       <description>
         <ul>
-          <li>Added more than 40 new extensions including Animated Text, Local Storage, BigInt, JSON, Clipping and Blending, Sensing Plus, Clones Plus, Looks Plus, and RegExp</li>
+          <li>Added more than 40 new extensions including Animated Text (like Scratch Lab), Local Storage, BigInt, JSON, Clipping and Blending, Sensing Plus, Clones Plus, Looks Plus, and RegExp</li>
           <li>Updated many extensions including Stretch, Runtime Options, and Files</li>
           <li>To protect user privacy, builtin extensions now ask for permission before allowing the project to contact untrusted websites</li>
           <li>Custom extensions can now be loaded from files or text</li>
@@ -88,13 +88,14 @@
         </ul>
       </description>
     </release>
-    <release version="1.7.0" date="2023-1-24">
+    <release version="1.7.1" date="2023-1-24">
       <description>
         <ul>
           <li>Added support for unsandboxed extensions from extensions.turbowarp.org</li>
           <li>The desktop app includes an offline copy of extensions.turbowarp.org</li>
           <li>Custom extensions will now be automatically loaded when you open a project made with recent versions of TurboWarp (a confirmation prompt appears for third-party extensions)</li>
           <li>Project saving now uses significantly less memory</li>
+          <li>The old button to open the packager in the "?" menu has been moved; use the button in the "File" menu instead. The old button has mentioned the new location for a while. This matches the web app.</li>
           <li>Added "Rename broadcasts" addon (enabled by default)</li>
           <li>Added "Collapsing sprite properties" addon</li>
           <li>Added "Costume editor snapping" addon</li>
@@ -110,7 +111,7 @@
         </ul>
       </description>
     </release>
-    <release version="1.6.1" date="2022-10-07">
+    <release version="1.6.1" date="2022-10-7">
       <description>
         <ul>
           <li>Fixed features that access your microphone or camera</li>
@@ -118,7 +119,7 @@
         </ul>
       </description>
     </release>
-    <release version="1.6.0" date="2022-10-02">
+    <release version="1.6.0" date="2022-10-2">
       <description>
         <ul>
           <li>New addon: Pick colors from stage (enabled by default)</li>
@@ -145,6 +146,7 @@
           <li>Fixed color picker overlay not covering the entire page</li>
           <li>Fixed some icons being unnecessarily draggable</li>
           <li>Fixed loading Scratch 2 projects with unusual JSON</li>
+          <li>We now have a repository for Debian/Ubuntu and their derivatives</li>
           <li>Updated packager: settings export and import, optimized memory use of packaged projects</li>
         </ul>
       </description>
@@ -158,7 +160,8 @@
           <li>Fixed backpacking JPEG costumes</li>
           <li>Fixed turbo mode stored in projects not applying properly</li>
           <li>Added option to disable hidden window throttling</li>
-          <li>Fixed some bugs in the hide flyout addon</li>
+          <li>Fixed some bugs in the auto-hiding block palette addon</li>
+          <li>Support for 32-bit x86 has been removed</li>
           <li>Updated packager: list color, version number, macOS Electron, Scratch Link support, more</li>
         </ul>
       </description>
@@ -181,7 +184,8 @@
           <li>Fixed custom extensions being able to corrupt projects if they return unexpected values</li>
           <li>Fixed custom extension error handling</li>
           <li>Fixed various other bugs</li>
-          <li>Linux on Apple Silicon should be supported now</li>
+          <li>Support for 32-bit x86 systems will be removed in v1.5.0 (32-bit ARM is not affected)</li>
+          <li>Added support for Linux on Apple Silicon</li>
           <li>Added donation links</li>
           <li>Updated packager: adds support for "☁ room id" special cloud behavior</li>
         </ul>
@@ -192,8 +196,8 @@
         <ul>
           <li>Fixed crash on some Linux systems</li>
           <li>Gamepad addon now supports buttons other than the left button and is compatible with pointerlock in the packager</li>
-          <li>Updated packager</li>
-          <li>Various bug fixes</li>
+          <li>Updated packager: relicensed to Apache 2.0 from LGPL3.0 for fewer restrictions, added "☁ set clipboard" and "☁ pasted" support to special cloud behaviors</li>
+          <li>Various other bug fixes</li>
         </ul>
       </description>
     </release>
@@ -219,7 +223,8 @@
       <description>
         <ul>
           <li>Fixed crash on startup on some systems</li>
-          <li>Various bug fixes</li>
+          <li>All windows now have proper language hints, fixes CJK characters looking weird in some windows</li>
+          <li>Added error message when any child process dies unexpectedly, not just renderer processes</li>
         </ul>
       </description>
     </release>
@@ -235,7 +240,6 @@
           <li>Fixed vertical centering of variable monitor values in certain conditions</li>
           <li>Fixed lines between tiled stamps when high quality pen is enabled</li>
           <li>Reduced lag related to folders addon</li>
-          <li>Updated packager: added variable color option, updated Electron environment, various fixes</li>
         </ul>
       </description>
     </release>
@@ -288,6 +292,5 @@
         </ul>
       </description>
     </release>
-    <release version="0.14.0" date="2021-12-19" />
   </releases>
 </component>
