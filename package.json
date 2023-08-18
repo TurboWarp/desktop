@@ -19,6 +19,7 @@
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.13.13",
     "@electron/notarize": "^2.1.0",
+    "async-limiter": "^2.0.0",
     "babel-loader": "^8.3.0",
     "copy-webpack-plugin": "^6.4.1",
     "css-loader": "^1.0.1",
@@ -52,11 +53,13 @@
       "src-main/**/*",
       "src-preload/**/*",
       "src-renderer/**/*",
-      "dist-renderer-webpack/**/*"
+      "dist-renderer-webpack/**/*",
+      "dist-library-files/**/*",
+      "dist-packager/**/*"
     ],
     "extraResources": [
       {
-        "from": "static/icon.png",
+        "from": "art/icon.png",
         "to": "icon.png"
       }
     ],

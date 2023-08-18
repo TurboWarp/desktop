@@ -20,6 +20,10 @@ const handleClickNewWindow = () => {
   EditorPreload.openNewWindow();
 };
 
+const handleClickPackager = () => {
+  EditorPreload.openPackager();
+};
+
 const handleClickDesktopSettings = () => {
   EditorPreload.openDesktopSettings();
 };
@@ -48,6 +52,7 @@ const GUIWithProps = () => (
 
     onClickAddonSettings={handleClickAddonSettings}
     onClickNewWindow={handleClickNewWindow}
+    onClickPackager={handleClickPackager}
     onClickAbout={[
       // TODO: translate
       {

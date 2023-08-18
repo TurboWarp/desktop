@@ -5,7 +5,8 @@ const FILE_SCHEMES = {
   'tw-editor': {
     root: path.resolve(__dirname, '../dist-renderer-webpack/editor'),
     standard: true,
-    supportFetch: true
+    supportFetch: true,
+    secure: true
   },
   'tw-desktop-settings': {
     root: path.resolve(__dirname, '../src-renderer/desktop-settings')
@@ -15,6 +16,14 @@ const FILE_SCHEMES = {
   },
   'tw-about': {
     root: path.resolve(__dirname, '../src-renderer/about')
+  },
+  'tw-packager': {
+    root: path.resolve(__dirname, '../dist-packager'),
+    standard: true,
+    secure: true
+  },
+  'tw-library': {
+    root: path.resolve(__dirname, '../dist-library-files')
   }
 };
 
@@ -22,7 +31,8 @@ protocol.registerSchemesAsPrivileged(Object.entries(FILE_SCHEMES).map(([scheme, 
   scheme,
   privileges: {
     standard: !!metadata.standard,
-    supportFetchAPI: !!metadata.supportFetch
+    supportFetchAPI: !!metadata.supportFetch,
+    secure: !!metadata.secure
   }
 })));
 
@@ -34,7 +44,7 @@ app.whenReady().then(() => {
     protocol.registerFileProtocol(scheme, (request, callback) => {
       const url = new URL(request.url);
       const resolved = path.join(root, url.pathname);
-      console.log(resolved);
+      // console.log(resolved);
       if (resolved.startsWith(root)) {
         callback(resolved);
       } else {

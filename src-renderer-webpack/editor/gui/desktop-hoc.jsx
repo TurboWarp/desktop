@@ -26,16 +26,16 @@ const DesktopHOC = function (WrappedComponent) {
     constructor (props) {
       super(props);
       this.state = {
-        title: null
+        title: ''
       };
       this.handleUpdateProjectTitle = this.handleUpdateProjectTitle.bind(this);
-      // this.handleExportProjectOverIPC = this.handleExportProjectOverIPC.bind(this);
-      // this.handleLoadExtensionOverIPC = this.handleLoadExtensionOverIPC.bind(this);
-      // localeChanged(this.props.locale);
     }
     componentDidMount () {
-      // ipcRenderer.on('export-project/start', this.handleExportProjectOverIPC);
-      // ipcRenderer.on('load-extension/start', this.handleLoadExtensionOverIPC);
+      EditorPreload.setExportForPackager(() => this.props.vm.saveProjectSb3('arraybuffer')
+        .then((buffer) => ({
+          name: this.state.title,
+          data: buffer
+        })));
 
       // This component is re-mounted when the locale changes, but we only want to load
       // the initial project once.
@@ -99,37 +99,10 @@ const DesktopHOC = function (WrappedComponent) {
         }
       }
     }
-    componentWillUnmount () {
-      // ipcRenderer.removeListener('export-project/start', this.handleExportProjectOverIPC);
-      // ipcRenderer.removeListener('load-extension/start', this.handleLoadExtensionOverIPC);
-    }
     handleUpdateProjectTitle (newTitle) {
       this.setState({
         title: newTitle
       });
-    }
-    async handleExportProjectOverIPC (event) {
-      // ipcRenderer.sendTo(event.senderId, 'export-project/ack');
-      // try {
-      //   const arrayBuffer = await this.props.vm.saveProjectSb3('arraybuffer');
-      //   ipcRenderer.sendTo(event.senderId, 'export-project/done', {
-      //     data: arrayBuffer,
-      //     name: document.title
-      //   });
-      // } catch (e) {
-      //   console.error(e);
-      //   ipcRenderer.sendTo(event.senderId, 'export-project/error', '' + e);
-      // }
-    }
-    handleLoadExtensionOverIPC (event, url) {
-      // this.props.vm.extensionManager.loadExtensionURL(url)
-      //   .then(() => {
-      //     ipcRenderer.sendTo(event.senderId, 'load-extension/done');
-      //   })
-      //   .catch((error) => {
-      //     console.error(error);
-      //     ipcRenderer.sendTo(event.senderId, 'load-extension/error', error);
-      //   });
     }
     render() {
       const {

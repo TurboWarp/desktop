@@ -1,49 +1,79 @@
 const {app} = require('electron');
 const path = require('path');
 
-const EditorWindow = require('./windows/editor');
-const openExternal = require('./open-external');
-require('./protocols');
-require('./context-menu');
-require('./shortcuts');
-require('./menu-bar');
-
 if (!app.requestSingleInstanceLock()) {
   app.exit();
 }
 
+const openExternal = require('./open-external');
+const BaseWindow = require('./windows/base');
+const EditorWindow = require('./windows/editor');
+require('./protocols');
+require('./context-menu');
+require('./shortcuts');
+require('./menu-bar');
+require('./crash-messages');
+
 app.enableSandbox();
 
 app.on('session-created', (session) => {
+  // Permission requests are delegated to BaseWindow
+
   session.setPermissionCheckHandler((webContents, permission, requestingOrigin, details) => {
-    return (
-      // Allow AudioContexts to autoplay
-      permission === 'media'
-    );
+    console.log('Permission check', permission);
+    if (!details.isMainFrame) {
+      return false;
+    }
+    const window = BaseWindow.getWindowByWebContents(webContents);
+    if (!window) {
+      return false;
+    }
+    return window.handlePermissionCheck(permission, details);
+  });
+
+  session.setPermissionRequestHandler((webContents, permission, callback, details) => {
+    console.log('Permission request', permission);
+    if (!details.isMainFrame) {
+      callback(false);
+      return;
+    }
+    const window = BaseWindow.getWindowByWebContents(webContents);
+    if (!window) {
+      callback(false);
+      return;
+    }
+    window.handlePermissionRequest(permission, details).then((allowed) => {
+      callback(allowed);
+    });
   });
 });
 
-app.on('web-contents-created', (_event, webContents) => {
+app.on('web-contents-created', (event, webContents) => {
   webContents.on('will-navigate', (event, url) => {
-    // Windows can always reload themselves, but that's it.
+    // Only allow windows to refresh
     if (webContents.getURL() !== url) {
       event.preventDefault();
       openExternal(event.url);
     }
   });
 
-  webContents.setWindowOpenHandler((event) => {
-    openExternal(event.url);
-    return {
-      action: 'deny'
-    };
-  });
+  // Overwritten by BaseWindow. We just set this here as a safety measure.
+  webContents.setWindowOpenHandler((details) => ({
+    action: 'deny'
+  }));
 });
 
+// macOS
 app.on('activate', () => {
-  if (app.isReady()) {
-    // TODO
+  if (app.isReady() && BaseWindow.getWindowsByClass(EditorWindow).length === 0) {
+    EditorWindow.openFiles([]);
   }
+});
+
+// macOS
+app.on('open-file', (event, path) => {
+  event.preventDefault();
+  EditorWindow.openFiles([path]);
 });
 
 const parseFilesFromArgv = (argv, workingDirectory) => {

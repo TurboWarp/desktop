@@ -10,9 +10,27 @@ contextBridge.exposeInMainWorld('EditorPreload', {
   setChanged: (changed) => ipcRenderer.invoke('set-changed', changed),
   openNewWindow: () => ipcRenderer.invoke('open-new-window'),
   openAddonSettings: () => ipcRenderer.invoke('open-addon-settings'),
+  openPackager: () => ipcRenderer.invoke('open-packager'),
   openDesktopSettings: () => ipcRenderer.invoke('open-desktop-settings'),
   openPrivacy: () => ipcRenderer.invoke('open-privacy'),
-  openAbout: () => ipcRenderer.invoke('open-about')
+  openAbout: () => ipcRenderer.invoke('open-about'),
+  setExportForPackager: (callback) => {
+    exportForPackager = callback;
+  }
+});
+
+let exportForPackager = () => Promise.reject(new Error('exportForPackager missing'));
+
+ipcRenderer.on('export-project-to-port', (e) => {
+  const port = e.ports[0];
+  exportForPackager()
+    .then(({data, name}) => {
+      port.postMessage({ data, name });
+    })
+    .catch((error) => {
+      console.error(error);
+      port.postMessage({ error: true });
+    });
 });
 
 window.addEventListener('message', (e) => {

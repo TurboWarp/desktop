@@ -1,12 +1,14 @@
 const { BrowserWindow, screen } = require('electron');
 const path = require('path');
+const openExternal = require('../open-external');
 
-/** @type {Map<unknown, BrowserWindow[]>} */
+/** @type {Map<unknown, BaseWindow[]>} */
 const windowsByClass = new Map();
 
 class BaseWindow {
   constructor () {
     this.window = new BrowserWindow(this.getWindowOptions());
+    this.window.webContents.setWindowOpenHandler(this.handleWindowOpen.bind(this));
 
     const cls = this.constructor;
     if (!windowsByClass.has(cls)) {
@@ -22,12 +24,23 @@ class BaseWindow {
     });
   }
 
-  static getWindows (cls) {
+  static getWindowByWebContents (webContents) {
+    for (const windows of windowsByClass.values()) {
+      for (const window of windows) {
+        if (window.window.webContents === webContents) {
+          return window;
+        }
+      }
+    }
+    return null;
+  }
+
+  static getWindowsByClass (cls) {
     return windowsByClass.get(cls) || [];
   }
 
   static singleton (cls) {
-    const windows = BaseWindow.getWindows(cls);
+    const windows = BaseWindow.getWindowsByClass(cls);
     if (windows.length) {
       return windows[0];
     }
@@ -88,6 +101,39 @@ class BaseWindow {
   show () {
     this.window.show();
     this.window.focus();
+  }
+
+  /**
+   * @see {Electron.WebContents.setWindowOpenHandler}
+   * @param {Electron.HandlerDetails} details 
+   */
+  handleWindowOpen (details) {
+    openExternal(details.url);
+    return {
+      action: 'deny'
+    };
+  }
+
+  /**
+   * @see {Electron.Session.setPermissionCheckHandler}
+   * @param {string} permisson
+   * @param {Electron.PermissionCheckHandlerHandlerDetails} details
+   * @returns {boolean}
+   */
+  handlePermissionCheck (permisson, details) {
+    // to be overridden
+    return false;
+  }
+
+  /**
+   * @see {Electron.Session.setPermissionRequestHandler}
+   * @param {string} permisson
+   * @param {Electron.PermissionRequestHandlerHandlerDetails} details
+   * @returns {Promise<boolean>}
+   */
+  async handlePermissionRequest (permisson, details) {
+    // to be overridden
+    return false;
   }
 }
 

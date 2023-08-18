@@ -54,5 +54,33 @@
   "context.paste": {
     "string": "Paste",
     "context": "Context menu item to paste"
+  },
+  "permission.audio-denied": {
+    "string": "Microphone Permission Denied",
+    "context": "Appears when someone doesn't give the app access to their microphone."
+  },
+  "permission.audio-denied-description": {
+    "string": "The app will not be able to record sounds or detect loudness.",
+    "context": "Appears when someone doesn't give the app access to their microphone."
+  },
+  "permission.video-denied": {
+    "string": "Camera Permission Denied",
+    "context": "Appears when someone doesn't give the app access to their camera."
+  },
+  "permission.video-denied-description": {
+    "string": "The app will not be able to take photos or use video sensing.",
+    "context": "Appears when someone doesn't give the app access to their camera."
+  },
+  "permission.macos-instructions": {
+    "string": "To change permissions, open System Preferences > Security & Privacy > Privacy > Camera or Microphone.",
+    "context": "Appears on macOS when someone doesn't give the app access to their camera or microphone"
+  },
+  "crash.title": {
+    "string": "Crashed",
+    "context": "Appears when a process crashes"
+  },
+  "crash.description": {
+    "string": "Process crashed: {type}: {reason} ({code})",
+    "context": "Appears when a process crashes"
   }
 }

@@ -7,9 +7,11 @@ const AddonsWindow = require('./addons');
 const DesktopSettingsWindow = require('./desktop-settings');
 const PrivacyWindow = require('./privacy');
 const AboutWindow = require('./about');
+const PackgerWindow = require('./packager');
 const {createAtomicWriteStream} = require('../atomic-write-stream');
 const {translate} = require('../l10n');
 const {APP_NAME} = require('../brand');
+const askForMediaAccess = require('../media-permissions');
 
 const readFile = promisify(fs.readFile);
 
@@ -211,6 +213,10 @@ class EditorWindow extends BaseWindow {
       port.start();
     });
 
+    ipc.handle('open-packager', () => {
+      PackgerWindow.forEditor(this);
+    });
+
     ipc.handle('open-new-window', () => {
       EditorWindow.openFiles([]);
     });
@@ -221,7 +227,7 @@ class EditorWindow extends BaseWindow {
 
     ipc.handle('open-desktop-settings', () => {
       DesktopSettingsWindow.show();
-    })
+    });
 
     ipc.handle('open-privacy', () => {
       PrivacyWindow.show();
@@ -254,6 +260,42 @@ class EditorWindow extends BaseWindow {
 
   getDimensions () {
     return [1280, 800];
+  }
+
+  handlePermissionCheck (permission, details) {
+    // Autoplay audio
+    if (permission === 'media') {
+      return true;
+    }
+
+    return false;
+  }
+
+  async handlePermissionRequest (permission, details) {
+    // Pointerlock extension and experiment
+    if (permission === 'pointerLock') {
+      return true;
+    }
+
+    // Notifications extension
+    if (permission === 'notifications') {
+      return callback(true);
+    }
+
+    // Attempting to record video or audio
+    if (permission === 'media') {
+      // mediaTypes is not guaranteed to exist
+      const mediaTypes = details.mediaTypes || [];
+      for (const mediaType of mediaTypes) {
+        const hasPermission = await askForMediaAccess(this.window, mediaType);
+        if (!hasPermission) {
+          return false;
+        }
+      }
+      return true;
+    }  
+
+    return false;
   }
 }
 
