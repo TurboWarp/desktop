@@ -270,118 +270,118 @@ const closeWindowWhenPressEscape = (window) => {
 //   addonSettingsWindow.focus();
 // };
 
-const createPrivacyWindow = () => {
-  if (!privacyWindow) {
-    privacyWindow = createWindow(getURL('privacy'), {
-      title: getTranslation('privacy'),
-      width: 800,
-      height: 700,
-      minimizable: false,
-      maximizable: false
-    });
-    privacyWindow.on('closed', () => {
-      privacyWindow = null;
-    });
-    closeWindowWhenPressEscape(privacyWindow);
-  }
-  privacyWindow.show();
-  privacyWindow.focus();
-};
+// const createPrivacyWindow = () => {
+//   if (!privacyWindow) {
+//     privacyWindow = createWindow(getURL('privacy'), {
+//       title: getTranslation('privacy'),
+//       width: 800,
+//       height: 700,
+//       minimizable: false,
+//       maximizable: false
+//     });
+//     privacyWindow.on('closed', () => {
+//       privacyWindow = null;
+//     });
+//     closeWindowWhenPressEscape(privacyWindow);
+//   }
+//   privacyWindow.show();
+//   privacyWindow.focus();
+// };
 
-const createDesktopSettingsWindow = () => {
-  if (!desktopSettingsWindow) {
-    desktopSettingsWindow = createWindow(getURL('desktop-settings'), {
-      title: getTranslation('desktop-settings'),
-      width: 500,
-      height: 450
-    });
-    desktopSettingsWindow.on('closed', () => {
-      desktopSettingsWindow = null;
-    });
-    closeWindowWhenPressEscape(desktopSettingsWindow);
-  }
-  desktopSettingsWindow.show();
-  desktopSettingsWindow.focus();
-};
+// const createDesktopSettingsWindow = () => {
+//   if (!desktopSettingsWindow) {
+//     desktopSettingsWindow = createWindow(getURL('desktop-settings'), {
+//       title: getTranslation('desktop-settings'),
+//       width: 500,
+//       height: 450
+//     });
+//     desktopSettingsWindow.on('closed', () => {
+//       desktopSettingsWindow = null;
+//     });
+//     closeWindowWhenPressEscape(desktopSettingsWindow);
+//   }
+//   desktopSettingsWindow.show();
+//   desktopSettingsWindow.focus();
+// };
 
-const createPackagerWindow = (editorWebContents) => {
-  const window = createWindow(`${getURL('packager')}&editor_id=${editorWebContents.id}`, {
-    title: PACKAGER_NAME,
-    width: 700,
-    height: 700,
-  });
-  closeWindowWhenPressEscape(window);
+// const createPackagerWindow = (editorWebContents) => {
+//   const window = createWindow(`${getURL('packager')}&editor_id=${editorWebContents.id}`, {
+//     title: PACKAGER_NAME,
+//     width: 700,
+//     height: 700,
+//   });
+//   closeWindowWhenPressEscape(window);
 
-  let defaultWindowTitle;
-  window.on('page-title-updated', (e, newTitle, explicitSet) => {
-    e.preventDefault();
-    if (!explicitSet) {
-      return;
-    }
-    // The packager's default name is quite long and we want to display a shorter title instead
-    if (!defaultWindowTitle) {
-      defaultWindowTitle = newTitle;
-    }
-    if (newTitle === defaultWindowTitle) {
-      window.setTitle(PACKAGER_NAME);
-    } else {
-      window.setTitle(newTitle);
-    }
-  });
+//   let defaultWindowTitle;
+//   window.on('page-title-updated', (e, newTitle, explicitSet) => {
+//     e.preventDefault();
+//     if (!explicitSet) {
+//       return;
+//     }
+//     // The packager's default name is quite long and we want to display a shorter title instead
+//     if (!defaultWindowTitle) {
+//       defaultWindowTitle = newTitle;
+//     }
+//     if (newTitle === defaultWindowTitle) {
+//       window.setTitle(PACKAGER_NAME);
+//     } else {
+//       window.setTitle(newTitle);
+//     }
+//   });
 
-  window.webContents.setWindowOpenHandler((details) => {
-    if (details.url === 'about:blank') {
-      // Opening preview window
-      return {
-        action: 'allow',
-        overrideBrowserWindowOptions: getWindowOptions({
-          title: getTranslation('loading-preview'),
-          width: 640,
-          height: 480,
-          webPreferences: {
-            // preview window can have arbitrary custom JS and should not have access to special APIs
-            preload: null
-          }
-        })
-      };
-    }
-    return defaultWindowOpenHandler(details);
-  });
-  window.webContents.on('did-create-window', (newWindow) => {
-    closeWindowWhenPressEscape(newWindow);
-  });
-  return window;
-};
+//   window.webContents.setWindowOpenHandler((details) => {
+//     if (details.url === 'about:blank') {
+//       // Opening preview window
+//       return {
+//         action: 'allow',
+//         overrideBrowserWindowOptions: getWindowOptions({
+//           title: getTranslation('loading-preview'),
+//           width: 640,
+//           height: 480,
+//           webPreferences: {
+//             // preview window can have arbitrary custom JS and should not have access to special APIs
+//             preload: null
+//           }
+//         })
+//       };
+//     }
+//     return defaultWindowOpenHandler(details);
+//   });
+//   window.webContents.on('did-create-window', (newWindow) => {
+//     closeWindowWhenPressEscape(newWindow);
+//   });
+//   return window;
+// };
 
-const createDataWindow = (url) => {
-  const window = createWindow(url, {
-    title: 'data: URL',
-    width: 480,
-    height: 360,
-    webPreferences: {
-      preload: null,
-      session: session.fromPartition('unsafe-data-url')
-    }
-  });
-  closeWindowWhenPressEscape(window);
-  window.on('closed', () => {
-    dataWindows.delete(window);
-  });
-  dataWindows.add(window);
-};
+// const createDataWindow = (url) => {
+//   const window = createWindow(url, {
+//     title: 'data: URL',
+//     width: 480,
+//     height: 360,
+//     webPreferences: {
+//       preload: null,
+//       session: session.fromPartition('unsafe-data-url')
+//     }
+//   });
+//   closeWindowWhenPressEscape(window);
+//   window.on('closed', () => {
+//     dataWindows.delete(window);
+//   });
+//   dataWindows.add(window);
+// };
 
-const createExtensionsWindow = (editorWebContents) => {
-  const window = createWindow(`tw-extensions://./index.html?editor_id=${editorWebContents.id}`, {
-    title: EXTENSION_GALLERY_NAME,
-    width: 950,
-    height: 700,
-  });
-  closeWindowWhenPressEscape(window);
-  extensionWindows.add(window);
-  window.on('closed', () => {
-    extensionWindows.delete(window);
-  });
-};
+// const createExtensionsWindow = (editorWebContents) => {
+//   const window = createWindow(`tw-extensions://./index.html?editor_id=${editorWebContents.id}`, {
+//     title: EXTENSION_GALLERY_NAME,
+//     width: 950,
+//     height: 700,
+//   });
+//   closeWindowWhenPressEscape(window);
+//   extensionWindows.add(window);
+//   window.on('closed', () => {
+//     extensionWindows.delete(window);
+//   });
+// };
 
 const getLastAccessedDirectory = () => store.get('last_accessed_directory') || '';
 const setLastAccessedFile = (filePath) => store.set('last_accessed_directory', pathUtil.dirname(filePath));
@@ -413,174 +413,174 @@ ipcMain.handle('show-open-dialog', async (event, options) => {
   return result;
 });
 
-ipcMain.handle('read-file', async (event, file) => {
-  if (!allowedToAccessFiles.has(file)) {
-    throw new Error('Not allowed to access file');
-  }
-  return await readFile(file);
-});
+// ipcMain.handle('read-file', async (event, file) => {
+//   if (!allowedToAccessFiles.has(file)) {
+//     throw new Error('Not allowed to access file');
+//   }
+//   return await readFile(file);
+// });
 
-ipcMain.on('write-file-with-port', async (startEvent, path) => {
-  const port = startEvent.ports[0];
+// ipcMain.on('write-file-with-port', async (startEvent, path) => {
+//   const port = startEvent.ports[0];
 
-  /** @type {NodeJS.WritableStream|null} */
-  let writeStream = null;
+//   /** @type {NodeJS.WritableStream|null} */
+//   let writeStream = null;
 
-  const handleError = (error) => {
-    console.error(error);
-    port.postMessage({
-      error
-    });
-    // Make sure the port is started as we can encounter an error before we normally
-    // begin to accept messages.
-    port.start();
-  };
+//   const handleError = (error) => {
+//     console.error(error);
+//     port.postMessage({
+//       error
+//     });
+//     // Make sure the port is started as we can encounter an error before we normally
+//     // begin to accept messages.
+//     port.start();
+//   };
 
-  try {
-    if (!allowedToAccessFiles.has(path)) {
-      throw new Error('Not allowed to access path');
-    }
-    writeStream = await createAtomicWriteStream(path);
-  } catch (error) {
-    handleError(error);
-    return;
-  }
+//   try {
+//     if (!allowedToAccessFiles.has(path)) {
+//       throw new Error('Not allowed to access path');
+//     }
+//     writeStream = await createAtomicWriteStream(path);
+//   } catch (error) {
+//     handleError(error);
+//     return;
+//   }
 
-  writeStream.on('atomic-error', handleError);
+//   writeStream.on('atomic-error', handleError);
 
-  const handleMessage = (data) => {
-    if (data.write) {
-      if (writeStream.write(data.write)) {
-        // Still more space in the buffer. Ask for more immediately.
-        return;
-      }
-      // Wait for the buffer to become empty before asking for more.
-      return new Promise(resolve => {
-        writeStream.once('drain', resolve);
-      });
-    } else if (data.finish) {
-      // Wait for the atomic file write to complete.
-      return new Promise(resolve => {
-        writeStream.once('atomic-finish', resolve);
-        writeStream.end();
-      });
-    } else if (data.abort) {
-      writeStream.emit('error', new Error('Aborted by renderer process'));
-      return;
-    }
-    throw new Error('Unknown message from renderer'); 
-  };
+//   const handleMessage = (data) => {
+//     if (data.write) {
+//       if (writeStream.write(data.write)) {
+//         // Still more space in the buffer. Ask for more immediately.
+//         return;
+//       }
+//       // Wait for the buffer to become empty before asking for more.
+//       return new Promise(resolve => {
+//         writeStream.once('drain', resolve);
+//       });
+//     } else if (data.finish) {
+//       // Wait for the atomic file write to complete.
+//       return new Promise(resolve => {
+//         writeStream.once('atomic-finish', resolve);
+//         writeStream.end();
+//       });
+//     } else if (data.abort) {
+//       writeStream.emit('error', new Error('Aborted by renderer process'));
+//       return;
+//     }
+//     throw new Error('Unknown message from renderer'); 
+//   };
 
-  port.on('message', async (messageEvent) => {
-    try {
-      const data = messageEvent.data;
-      const id = data.id;
-      const result = await handleMessage(data);
-      port.postMessage({
-        response: {
-          id,
-          result
-        }
-      });
-    } catch (error) {
-      handleError(error);
-    }
-  });
+//   port.on('message', async (messageEvent) => {
+//     try {
+//       const data = messageEvent.data;
+//       const id = data.id;
+//       const result = await handleMessage(data);
+//       port.postMessage({
+//         response: {
+//           id,
+//           result
+//         }
+//       });
+//     } catch (error) {
+//       handleError(error);
+//     }
+//   });
 
-  port.start();
-});
+//   port.start();
+// });
 
-ipcMain.on('open-new-window', () => {
-  createEditorWindow();
-});
+// ipcMain.on('open-new-window', () => {
+//   createEditorWindow();
+// });
 
-ipcMain.on('open-about', () => {
-  createAboutWindow();
-});
+// ipcMain.on('open-about', () => {
+//   createAboutWindow();
+// });
 
-ipcMain.on('open-addon-settings', () => {
-  createAddonSettingsWindow();
-});
+// ipcMain.on('open-addon-settings', () => {
+//   createAddonSettingsWindow();
+// });
 
-ipcMain.on('open-privacy-policy', () => {
-  createPrivacyWindow()
-});
+// ipcMain.on('open-privacy-policy', () => {
+//   createPrivacyWindow()
+// });
 
-ipcMain.on('open-desktop-settings', () => {
-  createDesktopSettingsWindow();
-});
+// ipcMain.on('open-desktop-settings', () => {
+//   createDesktopSettingsWindow();
+// });
 
-ipcMain.on('open-packager', (event) => {
-  createPackagerWindow(event.sender);
-});
+// ipcMain.on('open-packager', (event) => {
+//   createPackagerWindow(event.sender);
+// });
 
-ipcMain.handle('get-packager-html', async () => {
-  const compressed = await readFile(pathUtil.join(staticDir, 'packager.html.br'));
-  const uncomressed = await brotliDecompress(compressed);
-  return uncomressed;
-});
+// ipcMain.handle('get-packager-html', async () => {
+//   const compressed = await readFile(pathUtil.join(staticDir, 'packager.html.br'));
+//   const uncomressed = await brotliDecompress(compressed);
+//   return uncomressed;
+// });
 
-ipcMain.on('export-addon-settings', async (event, settings) => {
-  const result = await dialog.showSaveDialog(BrowserWindow.fromWebContents(event.sender), {
-    defaultPath: 'turbowarp-addon-setting.json',
-    filters: [
-      {
-        name: 'JSON',
-        extensions: ['json']
-      }
-    ]
-  });
-  if (result.canceled) {
-    return;
-  }
+// ipcMain.on('export-addon-settings', async (event, settings) => {
+//   const result = await dialog.showSaveDialog(BrowserWindow.fromWebContents(event.sender), {
+//     defaultPath: 'turbowarp-addon-setting.json',
+//     filters: [
+//       {
+//         name: 'JSON',
+//         extensions: ['json']
+//       }
+//     ]
+//   });
+//   if (result.canceled) {
+//     return;
+//   }
 
-  const path = result.filePath;
-  await writeFileAtomic(path, JSON.stringify(settings));
-});
+//   const path = result.filePath;
+//   await writeFileAtomic(path, JSON.stringify(settings));
+// });
 
-ipcMain.on('addon-settings-changed', (event, newSettings) => {
-  for (const window of editorWindows) {
-    window.webContents.send('addon-settings-changed', newSettings);
-  }
-});
+// ipcMain.on('addon-settings-changed', (event, newSettings) => {
+//   for (const window of editorWindows) {
+//     window.webContents.send('addon-settings-changed', newSettings);
+//   }
+// });
 
-ipcMain.on('set-represented-file', (event, filename) => {
-  const win = BrowserWindow.fromWebContents(event.sender);
-  win.setRepresentedFilename(filename || '');
-});
+// ipcMain.on('set-represented-file', (event, filename) => {
+//   const win = BrowserWindow.fromWebContents(event.sender);
+//   win.setRepresentedFilename(filename || '');
+// });
 
-ipcMain.on('set-file-changed', (event, changed) => {
-  const win = BrowserWindow.fromWebContents(event.sender);
-  win.setDocumentEdited(changed);
-});
+// ipcMain.on('set-file-changed', (event, changed) => {
+//   const win = BrowserWindow.fromWebContents(event.sender);
+//   win.setDocumentEdited(changed);
+// });
 
-ipcMain.on('alert', (event, message) => {
-  dialog.showMessageBoxSync(BrowserWindow.fromWebContents(event.sender), {
-    title: APP_NAME,
-    message: '' + message,
-    buttons: [
-      getTranslation('prompt.ok')
-    ],
-    noLink: true
-  });
-  // set returnValue to something to reply so the renderer can resume
-  event.returnValue = 1;
-});
+// ipcMain.on('alert', (event, message) => {
+//   dialog.showMessageBoxSync(BrowserWindow.fromWebContents(event.sender), {
+//     title: APP_NAME,
+//     message: '' + message,
+//     buttons: [
+//       getTranslation('prompt.ok')
+//     ],
+//     noLink: true
+//   });
+//   // set returnValue to something to reply so the renderer can resume
+//   event.returnValue = 1;
+// });
 
-ipcMain.on('confirm', (event, message) => {
-  const result = dialog.showMessageBoxSync(BrowserWindow.fromWebContents(event.sender), {
-    title: APP_NAME,
-    message: '' + message,
-    buttons: [
-      getTranslation('prompt.ok'),
-      getTranslation('prompt.cancel')
-    ],
-    defaultId: 0,
-    cancelId: 1,
-    noLink: true
-  }) === 0;
-  event.returnValue = result;
-});
+// ipcMain.on('confirm', (event, message) => {
+//   const result = dialog.showMessageBoxSync(BrowserWindow.fromWebContents(event.sender), {
+//     title: APP_NAME,
+//     message: '' + message,
+//     buttons: [
+//       getTranslation('prompt.ok'),
+//       getTranslation('prompt.cancel')
+//     ],
+//     defaultId: 0,
+//     cancelId: 1,
+//     noLink: true
+//   }) === 0;
+//   event.returnValue = result;
+// });
 
 const requestURLAsArrayBuffer = (url) => new Promise((resolve, reject) => {
   const request = net.request(url);
@@ -606,293 +606,293 @@ const requestURLAsArrayBuffer = (url) => new Promise((resolve, reject) => {
   request.end();
 });
 
-ipcMain.handle('request-url', (event, url) => {
-  if (!allowedToAccessFiles.has(url)) {
-    throw new Error('Not allowed to access URL');
-  }
-  return requestURLAsArrayBuffer(url);
-});
+// ipcMain.handle('request-url', (event, url) => {
+//   if (!allowedToAccessFiles.has(url)) {
+//     throw new Error('Not allowed to access URL');
+//   }
+//   return requestURLAsArrayBuffer(url);
+// });
 
-ipcMain.handle('get-project-metadata', (event, id) => {
-  if (!/^\d+$/.test(id)) {
-    throw new Error('Invalid project ID');
-  }
-  return requestURLAsArrayBuffer(`https://api.scratch.mit.edu/projects/${id}`);
-});
+// ipcMain.handle('get-project-metadata', (event, id) => {
+//   if (!/^\d+$/.test(id)) {
+//     throw new Error('Invalid project ID');
+//   }
+//   return requestURLAsArrayBuffer(`https://api.scratch.mit.edu/projects/${id}`);
+// });
 
-ipcMain.on('open-user-data', () => {
-  shell.showItemInFolder(app.getPath('userData'));
-});
+// ipcMain.on('open-user-data', () => {
+//   shell.showItemInFolder(app.getPath('userData'));
+// });
 
-app.on('window-all-closed', () => {
-  app.quit();
-});
+// app.on('window-all-closed', () => {
+//   app.quit();
+// });
 
 // Handle file opening on macOS
-app.on('open-file', (event, path) => {
-  event.preventDefault();
-  filesToOpen.push(path);
-  // This event can be emitted before we create the main window or while we're already running.
-  if (editorWindows.size > 0) {
-    createEditorWindow();
-  }
-});
+// app.on('open-file', (event, path) => {
+//   event.preventDefault();
+//   filesToOpen.push(path);
+//   // This event can be emitted before we create the main window or while we're already running.
+//   if (editorWindows.size > 0) {
+//     createEditorWindow();
+//   }
+// });
 
-app.on('session-created', (session) => {
-  session.setPermissionRequestHandler(handlePermissionRequest);
+// app.on('session-created', (session) => {
+//   session.setPermissionRequestHandler(handlePermissionRequest);
 
-  session.on('will-download', (event, item, webContents) => {
-    const extension = pathUtil.extname(item.getFilename()).replace(/^\./, '').toLowerCase();
-    const extensionName = getTranslationOrNull(`files.${extension}`);
-    if (extensionName) {
-      item.setSaveDialogOptions({
-        title: item.getFilename(),
-        filters: [
-          {
-            name: extensionName,
-            extensions: [extension]
-          }
-        ]
-      });
-    }
-  });
-});
+//   session.on('will-download', (event, item, webContents) => {
+//     const extension = pathUtil.extname(item.getFilename()).replace(/^\./, '').toLowerCase();
+//     const extensionName = getTranslationOrNull(`files.${extension}`);
+//     if (extensionName) {
+//       item.setSaveDialogOptions({
+//         title: item.getFilename(),
+//         filters: [
+//           {
+//             name: extensionName,
+//             extensions: [extension]
+//           }
+//         ]
+//       });
+//     }
+//   });
+// });
 
-app.on('web-contents-created', (event, webContents) => {
-  webContents.on('context-menu', (event, params) => {
-    const text = params.selectionText;
-    const hasText = !!text;
-    const menuItems = [];
+// app.on('web-contents-created', (event, webContents) => {
+//   webContents.on('context-menu', (event, params) => {
+//     const text = params.selectionText;
+//     const hasText = !!text;
+//     const menuItems = [];
 
-    if (params.misspelledWord && params.dictionarySuggestions.length > 0) {
-      for (const word of params.dictionarySuggestions) {
-        menuItems.push({
-          label: word,
-          click: () => {
-            webContents.replaceMisspelling(word);
-          }
-        });
-      }
-      menuItems.push({
-        type: 'separator'
-      });
-    }
+//     if (params.misspelledWord && params.dictionarySuggestions.length > 0) {
+//       for (const word of params.dictionarySuggestions) {
+//         menuItems.push({
+//           label: word,
+//           click: () => {
+//             webContents.replaceMisspelling(word);
+//           }
+//         });
+//       }
+//       menuItems.push({
+//         type: 'separator'
+//       });
+//     }
 
-    const url = params.linkURL;
-    if (params.linkURL) {
-      menuItems.push({
-        id: 'openLink',
-        label: getTranslation('context.open-link'),
-        enabled: !url.startsWith('blob:'),
-        click() {
-          if (isSafeOpenExternal(url)) {
-            shell.openExternal(url);
-          }
-        }
-      });
-      menuItems.push({
-        type: 'separator'
-      });
-    }
+//     const url = params.linkURL;
+//     if (params.linkURL) {
+//       menuItems.push({
+//         id: 'openLink',
+//         label: getTranslation('context.open-link'),
+//         enabled: !url.startsWith('blob:'),
+//         click() {
+//           if (isSafeOpenExternal(url)) {
+//             shell.openExternal(url);
+//           }
+//         }
+//       });
+//       menuItems.push({
+//         type: 'separator'
+//       });
+//     }
 
-    if (params.isEditable) {
-      menuItems.push({
-        id: 'cut',
-        label: getTranslation('context.cut'),
-        enabled: hasText,
-        click: () => {
-          clipboard.writeText(text);
-          webContents.cut();
-        }
-      });
-    }
-    if (hasText || params.isEditable) {
-      menuItems.push({
-        id: 'copy',
-        label: getTranslation('context.copy'),
-        enabled: hasText,
-        click: () => {
-          clipboard.writeText(text);
-        }
-      });
-    }
-    if (params.isEditable) {
-      menuItems.push({
-        id: 'Paste',
-        label: getTranslation('context.paste'),
-        click: () => {
-          webContents.paste();
-        }
-      });
-    }
+//     if (params.isEditable) {
+//       menuItems.push({
+//         id: 'cut',
+//         label: getTranslation('context.cut'),
+//         enabled: hasText,
+//         click: () => {
+//           clipboard.writeText(text);
+//           webContents.cut();
+//         }
+//       });
+//     }
+//     if (hasText || params.isEditable) {
+//       menuItems.push({
+//         id: 'copy',
+//         label: getTranslation('context.copy'),
+//         enabled: hasText,
+//         click: () => {
+//           clipboard.writeText(text);
+//         }
+//       });
+//     }
+//     if (params.isEditable) {
+//       menuItems.push({
+//         id: 'Paste',
+//         label: getTranslation('context.paste'),
+//         click: () => {
+//           webContents.paste();
+//         }
+//       });
+//     }
 
-    if (menuItems.length > 0) {
-      const menu = Menu.buildFromTemplate(menuItems);
-      menu.popup();
-    }
-  });
+//     if (menuItems.length > 0) {
+//       const menu = Menu.buildFromTemplate(menuItems);
+//       menu.popup();
+//     }
+//   });
 
-  if (!isMac) {
-    // On Mac, shortcuts are handled by the menu bar.
-    webContents.on('before-input-event', (e, input) => {
-      if (input.isAutoRepeat || input.isComposing || input.type !== 'keyDown' || input.meta) {
-        return;
-      }
-      const window = BrowserWindow.fromWebContents(webContents);
-      // Ctrl+Shift+I to open dev tools
-      if (
-        input.control &&
-        input.shift &&
-        input.key.toLowerCase() === 'i' &&
-        !input.alt
-      ) {
-        e.preventDefault();
-        webContents.toggleDevTools();
-      }
-      // Ctrl+N to open new window
-      if (
-        input.control &&
-        input.key.toLowerCase() === 'n'
-      ) {
-        e.preventDefault();
-        createEditorWindow();
-      }
-      // Ctrl+Equals/Plus to zoom in (depends on keyboard layout)
-      if (
-        input.control &&
-        (input.key === '=' || input.key === '+')
-      ) {
-        e.preventDefault();
-        webContents.setZoomLevel(webContents.getZoomLevel() + 1);
-      }
-      // Ctrl+Minus/Underscore to zoom out
-      if (
-        input.control &&
-        input.key === '-'
-      ) {
-        e.preventDefault();
-        webContents.setZoomLevel(webContents.getZoomLevel() - 1);
-      }
-      // Ctrl+0 to reset zoom
-      if (
-        input.control &&
-        input.key === '0'
-      ) {
-        e.preventDefault();
-        webContents.setZoomLevel(0);
-      }
-      // F11 and alt+enter to toggle fullscreen
-      if (
-        input.key === 'F11' ||
-        (input.key === 'Enter' && input.alt)
-      ) {
-        e.preventDefault();
-        window.setFullScreen(!window.isFullScreen());
-      }
-      // Escape to exit fullscreen
-      if (
-        input.key === 'Escape' &&
-        window.isFullScreen()
-      ) {
-        e.preventDefault();
-        // used by closeWindowWhenPressEscape
-        e.didJustLeaveFullScreen = true;
-        window.setFullScreen(false);
-      }
-      // Ctrl+R and Ctrl+Shift+R to reload
-      if (
-        input.control &&
-        input.key.toLowerCase() === 'r'
-      ) {
-        e.preventDefault();
-        if (input.shift) {
-          webContents.reloadIgnoringCache();
-        } else {
-          webContents.reload();
-        }
-      }
-    });
-  }
+//   if (!isMac) {
+//     // On Mac, shortcuts are handled by the menu bar.
+//     webContents.on('before-input-event', (e, input) => {
+//       if (input.isAutoRepeat || input.isComposing || input.type !== 'keyDown' || input.meta) {
+//         return;
+//       }
+//       const window = BrowserWindow.fromWebContents(webContents);
+//       // Ctrl+Shift+I to open dev tools
+//       if (
+//         input.control &&
+//         input.shift &&
+//         input.key.toLowerCase() === 'i' &&
+//         !input.alt
+//       ) {
+//         e.preventDefault();
+//         webContents.toggleDevTools();
+//       }
+//       // Ctrl+N to open new window
+//       if (
+//         input.control &&
+//         input.key.toLowerCase() === 'n'
+//       ) {
+//         e.preventDefault();
+//         createEditorWindow();
+//       }
+//       // Ctrl+Equals/Plus to zoom in (depends on keyboard layout)
+//       if (
+//         input.control &&
+//         (input.key === '=' || input.key === '+')
+//       ) {
+//         e.preventDefault();
+//         webContents.setZoomLevel(webContents.getZoomLevel() + 1);
+//       }
+//       // Ctrl+Minus/Underscore to zoom out
+//       if (
+//         input.control &&
+//         input.key === '-'
+//       ) {
+//         e.preventDefault();
+//         webContents.setZoomLevel(webContents.getZoomLevel() - 1);
+//       }
+//       // Ctrl+0 to reset zoom
+//       if (
+//         input.control &&
+//         input.key === '0'
+//       ) {
+//         e.preventDefault();
+//         webContents.setZoomLevel(0);
+//       }
+//       // F11 and alt+enter to toggle fullscreen
+//       if (
+//         input.key === 'F11' ||
+//         (input.key === 'Enter' && input.alt)
+//       ) {
+//         e.preventDefault();
+//         window.setFullScreen(!window.isFullScreen());
+//       }
+//       // Escape to exit fullscreen
+//       if (
+//         input.key === 'Escape' &&
+//         window.isFullScreen()
+//       ) {
+//         e.preventDefault();
+//         // used by closeWindowWhenPressEscape
+//         e.didJustLeaveFullScreen = true;
+//         window.setFullScreen(false);
+//       }
+//       // Ctrl+R and Ctrl+Shift+R to reload
+//       if (
+//         input.control &&
+//         input.key.toLowerCase() === 'r'
+//       ) {
+//         e.preventDefault();
+//         if (input.shift) {
+//           webContents.reloadIgnoringCache();
+//         } else {
+//           webContents.reload();
+//         }
+//       }
+//     });
+//   }
 
-  webContents.setWindowOpenHandler(defaultWindowOpenHandler);
+//   webContents.setWindowOpenHandler(defaultWindowOpenHandler);
 
-  webContents.on('will-navigate', (e, url) => {
-    if (url === 'mailto:contact@turbowarp.org') {
-      // If clicking on the contact email address, we'll let the OS figure out how to open it
-      return;
-    }
-    try {
-      const newURL = new URL(url);
-      const baseURL = new URL(getURL(''));
-      if (newURL.href.startsWith(baseURL.href)) {
-        // Let the editor reload itself
-        // For example, reloading to apply settings
-      } else {
-        e.preventDefault();
-        if (isSafeOpenExternal(url)) {
-          shell.openExternal(url);
-        }
-      }
-    } catch (e) {
-      e.preventDefault();
-    }
-  });
-});
+//   webContents.on('will-navigate', (e, url) => {
+//     if (url === 'mailto:contact@turbowarp.org') {
+//       // If clicking on the contact email address, we'll let the OS figure out how to open it
+//       return;
+//     }
+//     try {
+//       const newURL = new URL(url);
+//       const baseURL = new URL(getURL(''));
+//       if (newURL.href.startsWith(baseURL.href)) {
+//         // Let the editor reload itself
+//         // For example, reloading to apply settings
+//       } else {
+//         e.preventDefault();
+//         if (isSafeOpenExternal(url)) {
+//           shell.openExternal(url);
+//         }
+//       }
+//     } catch (e) {
+//       e.preventDefault();
+//     }
+//   });
+// });
 
-whenBackgroundThrottlingChanged((backgroundThrottlingEnabled) => {
-  for (const editorWindow of editorWindows) {
-    editorWindow.webContents.setBackgroundThrottling(backgroundThrottlingEnabled);
-  }
-});
+// whenBackgroundThrottlingChanged((backgroundThrottlingEnabled) => {
+//   for (const editorWindow of editorWindows) {
+//     editorWindow.webContents.setBackgroundThrottling(backgroundThrottlingEnabled);
+//   }
+// });
 
 // Allows certain versions of Scratch Link to work without an internet connection
 // https://github.com/LLK/scratch-desktop/blob/4b462212a8e406b15bcf549f8523645602b46064/src/main/index.js#L45
-app.commandLine.appendSwitch('host-resolver-rules', 'MAP device-manager.scratch.mit.edu 127.0.0.1');
+// app.commandLine.appendSwitch('host-resolver-rules', 'MAP device-manager.scratch.mit.edu 127.0.0.1');
 
-const acquiredLock = app.requestSingleInstanceLock();
-if (acquiredLock) {
-  const autoCreateEditorWindows = () => {
-    if (filesToOpen.length) {
-      while (filesToOpen.length) {
-        createEditorWindow();
-      }
-    } else {
-      createEditorWindow();
-    }
-  };
+// const acquiredLock = app.requestSingleInstanceLock();
+// if (acquiredLock) {
+//   const autoCreateEditorWindows = () => {
+//     if (filesToOpen.length) {
+//       while (filesToOpen.length) {
+//         createEditorWindow();
+//       }
+//     } else {
+//       createEditorWindow();
+//     }
+//   };
 
-  const resolveFilePath = (workingDirectory, file) => {
-    try {
-      // If the file is a full absolute URL, pass it through unmodified.
-      const _ = new URL(file);
-      return file;
-    } catch (e) {
-      return pathUtil.resolve(workingDirectory, file);
-    }
-  };
+//   const resolveFilePath = (workingDirectory, file) => {
+//     try {
+//       // If the file is a full absolute URL, pass it through unmodified.
+//       const _ = new URL(file);
+//       return file;
+//     } catch (e) {
+//       return pathUtil.resolve(workingDirectory, file);
+//     }
+//   };
 
-  for (const path of parseArgs(process.argv)) {
-    filesToOpen.push(resolveFilePath('', path));
-  }
+//   for (const path of parseArgs(process.argv)) {
+//     filesToOpen.push(resolveFilePath('', path));
+//   }
 
-  app.on('second-instance', (event, argv, workingDirectory) => {
-    for (const i of parseArgs(argv)) {
-      filesToOpen.push(resolveFilePath(workingDirectory, i));
-    }
-    autoCreateEditorWindows();
-  });
+//   app.on('second-instance', (event, argv, workingDirectory) => {
+//     for (const i of parseArgs(argv)) {
+//       filesToOpen.push(resolveFilePath(workingDirectory, i));
+//     }
+//     autoCreateEditorWindows();
+//   });
 
-  app.on('activate', () => {
-    if (app.isReady() && editorWindows.size === 0) {
-      createEditorWindow();
-    }
-  });
+//   app.on('activate', () => {
+//     if (app.isReady() && editorWindows.size === 0) {
+//       createEditorWindow();
+//     }
+//   });
 
-  app.whenReady().then(() => {
-    checkForUpdate();
-    autoCreateEditorWindows();
-  });
-} else {
-  console.log('Handing off to existing instance.');
-  app.quit();
-}
+//   app.whenReady().then(() => {
+//     checkForUpdate();
+//     autoCreateEditorWindows();
+//   });
+// } else {
+//   console.log('Handing off to existing instance.');
+//   app.quit();
+// }
