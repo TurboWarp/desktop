@@ -22,7 +22,7 @@ class AddonsWindow extends BaseWindow {
       event.returnValue = prompts.confirm(this.window, message);
     });
 
-    this.window.loadURL(`tw-editor://./addons/index.html`);
+    this.window.loadURL(`tw-editor://./addons/addons.html`);
   }
 
   getDimensions () {

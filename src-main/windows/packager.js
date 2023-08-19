@@ -11,6 +11,10 @@ class PackagerWindow extends BaseWindow {
     this.editorWindow = editorWindow;
     this.window.setTitle(PACKAGER_NAME);
 
+    this.window.on('page-title-updated', (event) => {
+      event.preventDefault();
+    });
+
     const ipc = this.window.webContents.ipc;
 
     ipc.on('import-project-with-port', (event) => {

@@ -1,6 +1,7 @@
 const BaseWindow = require('./base');
 const {translate} = require('../l10n');
 const packageJSON = require('../../package.json');
+const {APP_NAME} = require('../brand');
 
 class AboutWindow extends BaseWindow {
   constructor () {
@@ -8,7 +9,7 @@ class AboutWindow extends BaseWindow {
 
     this.window.setMinimizable(false);
     this.window.setMaximizable(false);
-    this.window.setTitle(translate('about'));
+    this.window.setTitle(translate('about').replace('{APP_NAME}', APP_NAME));
 
     const ipc = this.window.webContents.ipc;
 

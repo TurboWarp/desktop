@@ -24,7 +24,7 @@
     "context": "Title of privacy policy window"
   },
   "about": {
-    "string": "About",
+    "string": "About {APP_NAME}",
     "context": "Title of about window"
   },
   "menu.new-window": {
@@ -266,5 +266,13 @@
   "update.permanently-ignore": {
     "string": "Ignore this update",
     "context": "Appears in update available window. Checkbox to ignore this update permanently."
+  },
+  "prompt.okay": {
+    "string": "OK",
+    "context": "Button in text prompt dialog boxes"
+  },
+  "prompt.cancel": {
+    "string": "Cancel",
+    "context": "Button in text prompt dialog boxes"
   }
 }

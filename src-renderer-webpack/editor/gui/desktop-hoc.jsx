@@ -12,6 +12,7 @@ import {
 } from 'scratch-gui/src/reducers/project-state';
 import {setFileHandle} from 'scratch-gui/src/reducers/tw';
 import {WrappedFileHandle} from './filesystem-api-impl';
+import {setStrings} from '../prompt/prompt.js';
 
 let mountedOnce = false;
 
@@ -64,6 +65,10 @@ const DesktopHOC = function (WrappedComponent) {
 
       // Changing locale always re-mounts this component
       this.messages = EditorPreload.setLocale(this.props.locale);
+      setStrings({
+        okay: this.messages['prompt.okay'],
+        cancel: this.messages['prompt.cancel']
+      });
     }
     componentDidMount () {
       EditorPreload.setExportForPackager(() => this.props.vm.saveProjectSb3('arraybuffer')

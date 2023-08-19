@@ -1,13 +1,14 @@
 const {app, shell} = require('electron');
 const BaseWindow = require('./base');
 const {translate, getStrings, getLocale} = require('../l10n');
+const {APP_NAME} = require('../brand');
 const settings = require('../settings');
 
 class DesktopSettingsWindow extends BaseWindow {
   constructor () {
     super();
 
-    this.window.setTitle(translate('desktop-settings.title'));
+    this.window.setTitle(`${translate('desktop-settings.title')} - ${APP_NAME}`);
     this.window.setMinimizable(false);
     this.window.setMaximizable(false);
 

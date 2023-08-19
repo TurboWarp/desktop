@@ -4,7 +4,7 @@ import GUI from './gui.jsx';
 
 import './filesystem-api-impl.js';
 import './media-device-chooser-impl.js';
-import '../browser-prompt-reimplementation.js';
+import '../prompt/prompt.js';
 
 const appTarget = document.getElementById('app');
 document.body.classList.add('tw-loaded');
