@@ -4,6 +4,8 @@ const {translate} = require('../l10n');
 const settings = require('../settings');
 
 class MigrateWindow extends BaseWindow {
+  static LATEST_VERSION = 2;
+
   constructor () {
     super();
 
@@ -24,7 +26,7 @@ class MigrateWindow extends BaseWindow {
     });
 
     ipc.handle('done', async () => {
-      settings.migrated = true;
+      settings.dataVersion = MigrateWindow.LATEST_VERSION;
       await settings.save();
       this.resolveCallback();
       this.window.close();
@@ -37,7 +39,7 @@ class MigrateWindow extends BaseWindow {
   }
 
   getDimensions () {
-    return [300, 300];
+    return [400, 400];
   }
 
   getPreload () {

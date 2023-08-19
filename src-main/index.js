@@ -73,6 +73,12 @@ app.on('session-created', (session) => {
     }
     window.onHeadersReceived(details, callback);
   });
+
+  session.on('will-download', (event, item, webContents) => {
+    item.setSaveDialogOptions({
+      title: item.getFilename()
+    });
+  });
 });
 
 app.on('web-contents-created', (event, webContents) => {

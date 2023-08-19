@@ -5,42 +5,40 @@
   </head>
   <body>
     <script>
-      window.addEventListener('message', async (e) => {
-        if (e.origin !== 'file://') {
-          return;
-        }
-
-        const data = e.data;
-
-        if (data.localStorage) {
-          for (const [key, value] of Object.entries(data.localStorage)) {
+      const importData = async (data) => {
+        if (data.storage) {
+          for (const [key, value] of Object.entries(data.storage)) {
             localStorage[key] = value;
           }
         }
 
-        if (data.assets) {
+        if (data.assets && data.assets.length) {
           const items = data.assets;
           const DATABASE_NAME = 'p4-local-settings';
           const DATABASE_VERSION = 1;
           const STORE_NAME = 'blobs';
-          await new Promise((resolve) => {
+
+          await new Promise((resolve, reject) => {
             const openRequest = indexedDB.open(DATABASE_NAME, DATABASE_VERSION);
             openRequest.onerror = () => {
-              // TODO
+              reject(new Error(`Failed to open: ${openRequest.error}`));
             };
+
             openRequest.onupgradeneeded = (e) => {
               const db = e.target.result;
               db.createObjectStore(STORE_NAME, {
                 keyPath: 'id'
               });
             };
+
             openRequest.onsuccess = () => {
               const db = openRequest.result;
               const transaction = db.transaction([STORE_NAME], 'readwrite');
-              const store = transaction.objectStore(STORE_NAME);
               transaction.onerror = () => {
-                // TODO
+                reject(new Error(`Transaction error: ${transaction.error}`));
               };
+
+              const store = transaction.objectStore(STORE_NAME);
               const putNext = () => {
                 const request = store.put(items.shift());
                 request.onsuccess = () => {
@@ -55,11 +53,28 @@
             };
           });
         }
+      };
 
-        window.parent.postMessage('finish-import', 'file://');
+      const PARENT_ORIGIN = 'file://';
+
+      window.addEventListener('message', async (e) => {
+        if (e.origin !== PARENT_ORIGIN) {
+          return;
+        }
+
+        try {
+          await importData(e.data);
+          e.source.postMessage({ type: 'done' }, PARENT_ORIGIN);
+        } catch (error) {
+          console.error(error);
+          e.source.postMessage({
+            type: 'error',
+            error: `${error}`
+          }, PARENT_ORIGIN);
+        }
       });
 
-      window.parent.postMessage('start-import', 'file://');
+      window.parent.postMessage({ type: 'start' }, PARENT_ORIGIN);
     </script>
   </body>
 </html>

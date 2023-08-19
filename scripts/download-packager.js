@@ -4,7 +4,7 @@ const pathUtil = require('path');
 const {fetch} = require('./lib');
 const packagerInfo = require('./packager.json');
 
-const path = pathUtil.join(__dirname, '../src-packager/packager/standalone.html');
+const path = pathUtil.join(__dirname, '../src-renderer/packager/standalone.html');
 const sha256 = (buffer) => crypto.createHash('sha256').update(buffer).digest('hex');
 
 const isAlreadyDownloaded = () => {

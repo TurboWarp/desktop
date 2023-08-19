@@ -3,11 +3,71 @@
   <html>
     <meta charset="utf8">
     <style>
+      :root {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background-color: #333;
+        color: #eee;
+      }
 
+      iframe {
+        /* just to make sure the window frame runs, keep it "visible" */
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      .steps {
+
+      }
+      .step {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      .step-icon {
+        width: 2rem;
+        height: 2rem;
+      }
+      .step-icon[data-type="loading"] {
+        background-color: currentColor;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-size: cover;
+        -webkit-mask-image: url("./loading.svg");
+        animation-name: spin;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+      }
+      .step-icon[data-type="error"] {
+        background-image: url("./error.svg");
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+      .step-icon[data-type="success"] {
+        background-image: url("./check.svg");
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
     </style>
   </html>
   <body>
-    <h1>Migrating...</h1>
+    <h1>Finishing updates...</h1>
+    <p>This is a one-time process that may take a few moments.</p>
+    <div class="steps"></div>
+
     <script>
       /*
       Local Storage:
@@ -25,164 +85,10 @@
       TW_Backpack -> tw-editor
       */
 
-      let databases;
+      let databases = [];
 
-      window.addEventListener('message', (e) => {
-        if (e.origin === 'tw-editor://.') {
-          if (e.data === 'start-import') {
-            exportForEditor()
-              .then(({data, transfer}) => {
-                e.source.postMessage(data, 'tw-editor://.', transfer);
-              })
-              .catch((error) => {
-                console.error(error);
-                e.source.postMessage({}, 'tw-editor://.');
-              });
-          }
-
-          if (e.data === 'finish-import') {
-            migratePackager();
-          }
-        }
-
-        if (e.origin === 'tw-packager://.') {
-          if (e.data === 'start-import') {
-            exportForPackager()
-              .then(({data, transfer}) => {
-                e.source.postMessage(data, 'tw-packager://.', transfer);
-              })
-              .catch((error) => {
-                console.error(error);
-                e.source.postMessage({}, 'tw-packager://.');
-              });
-          }
-
-          if (e.data === 'finish-import') {
-            done();
-          }
-        }
-      });
-
-      const done = () => {
-        MigratePreload.done();
-      };
-
-      const exportForPackager = async () => {
-        const data = {};
-        const transfer = [];
-
-        data.localStorage = {};
-        for (const key of Object.keys(localStorage)) {
-          if (key.startsWith('SelectProject') || key.startsWith('PackagerOptions')) {
-            data.localStorage[key] = localStorage[key];
-          }
-        }
-
-        const DATABASE_NAME = 'p4-local-settings';
-        const DATABASE_VERSION = 1;
-        const STORE_NAME = 'blobs';
-        if (databases.find((i) => i.name === DATABASE_NAME && i.version === DATABASE_VERSION)) {
-          const assets = [];
-          await new Promise((resolve, reject) => {
-            const openRequest = indexedDB.open(DATABASE_NAME, DATABASE_VERSION);
-            openRequest.onerror = () => {
-              reject(new Error(`Failed to open: ${openRequest.error}`));
-            };
-            openRequest.onsuccess = () => {
-              const db = openRequest.result;
-              const transaction = db.transaction(STORE_NAME, 'readonly');
-              transaction.onerror = (e) => {
-                reject(new Error(`Transaction error: ${transaction.error}`));
-              };
-              const store = transaction.objectStore(STORE_NAME);
-              const request = store.openCursor();
-              request.onsuccess = (e) => {
-                const cursor = e.target.result;
-                if (cursor) {
-                  assets.push(cursor.value);
-                  if (cursor.value.data) {
-                    transfer.push(cursor.value.data);
-                  }
-                  cursor.continue();
-                } else {
-                  resolve();
-                }
-              };
-            };
-          });
-          data.assets = assets;
-        }
-
-        return {
-          data,
-          transfer
-        };
-      };
-
-      const migratePackager = () => {
-        const iframe = document.createElement('iframe');
-        iframe.src = 'tw-packager://./migrate-helper.html';
-        document.body.appendChild(iframe);
-      };
-
-      const exportForEditor = async () => {
-        const data = {};
-        const transfer = [];
-
-        const theme = localStorage.getItem('tw:theme');
-        if (theme) data.theme = theme;
-
-        const addons = localStorage.getItem('tw:addons');
-        if (addons) data.addons = addons;
-
-        const DATABASE_NAME = 'TW_Backpack';
-        const DATABASE_VERSION = 1;
-        const STORE_NAME = 'backpack';
-        if (databases.find((i) => i.name === DATABASE_NAME && i.version === DATABASE_VERSION)) {
-          const backpackItems = [];
-          await new Promise((resolve, reject) => {
-            const openRequest = indexedDB.open(DATABASE_NAME, DATABASE_VERSION);
-            openRequest.onerror = () => {
-              reject(new Error(`Failed to open: ${openRequest.error}`));
-            };
-            openRequest.onsuccess = () => {
-              const db = openRequest.result;
-              const transaction = db.transaction(STORE_NAME, 'readonly');
-              transaction.onerror = (e) => {
-                reject(new Error(`Transaction error: ${transaction.error}`));
-              };
-              const store = transaction.objectStore(STORE_NAME);
-              const request = store.openCursor();
-              request.onsuccess = (e) => {
-                const cursor = e.target.result;
-                if (cursor) {
-                  backpackItems.push(cursor.value);
-                  if (cursor.value.bodyData) {
-                    transfer.push(cursor.value.bodyData);
-                  }
-                  if (cursor.value.thumbnailData) {
-                    transfer.push(cursor.value.thumbnailData);
-                  }
-                  cursor.continue();
-                } else {
-                  resolve();
-                }
-              };
-            };
-          });
-          data.backpack = backpackItems;
-        }
-
-        return {
-          transfer,
-          data
-        };
-      };
-
-      const migrateEditor = () => {
-        const iframe = document.createElement('iframe');
-        iframe.src = 'tw-editor://./gui/migrate-helper.html';
-        document.body.appendChild(iframe);
+      const gatherMetadata = async () => {
+        databases = await indexedDB.databases();
       };
 
       const migrateDesktopSettings = async () => {
@@ -195,17 +101,179 @@
         if (camera) {
           await MigratePreload.setCamera(camera);
         }
-
-        migrateEditor();
       };
 
-      const gatherMetadata = async () => {
-        databases = await indexedDB.databases();
+      const exportDatabase = (databaseName, databaseVersion, storeName) => new Promise((resolve, reject) => {
+        if (!databases.find((i) => i.name === databaseName && i.version === databaseVersion)) {
+          return resolve(null);
+        }
 
-        migrateDesktopSettings();
+        const openRequest = indexedDB.open(databaseName, databaseVersion);
+        openRequest.onerror = () => {
+          reject(new Error(`Failed to open: ${openRequest.error}`));
+        };
+
+        openRequest.onsuccess = () => {
+          const db = openRequest.result;
+
+          const transaction = db.transaction(storeName, 'readonly');
+          transaction.onerror = (e) => {
+            reject(new Error(`Transaction error: ${transaction.error}`));
+          };
+
+          const items = [];
+          const transfer = [];
+
+          const store = transaction.objectStore(storeName);
+          const request = store.openCursor();
+          request.onsuccess = (e) => {
+            const cursor = e.target.result;
+            if (cursor) {
+              items.push(cursor.value);
+
+              for (const i of Object.values(cursor.value)) {
+                if (i instanceof ArrayBuffer || ArrayBuffer.isView(i)) {
+                  transfer.push(i);
+                }
+              }
+
+              cursor.continue();
+            } else {
+              resolve({
+                items,
+                transfer
+              });
+            }
+          };
+        };
+      });
+
+      const migrateEditor = async () => {
+        const theme = localStorage.getItem('tw:theme');
+        const addons = localStorage.getItem('tw:addons');
+        const backpack = await exportDatabase('TW_Backpack', 1, 'backpack');
+        const transfer = backpack ? backpack.transfer : [];
+
+        return new Promise((resolve, reject) => {
+          window.onmessage = async (e) => {
+            if (e.origin !== 'tw-editor://.') {
+              return;
+            }
+
+            const type = e.data.type;
+            if (type === 'start') {
+              e.source.postMessage({
+                theme,
+                addons,
+                backpack: backpack ? backpack.items : []
+              }, 'tw-editor://.', transfer);
+            } else if (type === 'error') {
+              reject(e.data.error);
+            } else if (type === 'done') {
+              resolve();
+            }
+          };
+
+          const iframe = document.createElement('iframe');
+          iframe.src = 'tw-editor://./gui/migrate-helper.html';
+          document.body.appendChild(iframe);
+        });
       };
 
-      gatherMetadata();
+      const migratePackager = async () => {
+        const storage = {};
+        for (const key of Object.keys(localStorage)) {
+          if (key.startsWith('SelectProject') || key.startsWith('PackagerOptions')) {
+            storage[key] = localStorage[key];
+          }
+        }
+
+        const assets = await exportDatabase('p4-local-settings', 1, 'blobs');
+        const transfer = assets ? assets.transfer : [];
+
+        return new Promise((resolve, reject) => {
+          window.onmessage = (e) => {
+            if (e.origin !== 'tw-packager://.') {
+              return;
+            }
+
+            const type = e.data.type;
+            if (type === 'start') {
+              e.source.postMessage({
+                storage,
+                assets: assets ? assets.items : []
+              }, 'tw-packager://.', transfer);
+            } else if (type === 'error') {
+              reject(e.data.error);
+            } else if (type === 'done') {
+              resolve();
+            }
+          };
+
+          const iframe = document.createElement('iframe');
+          iframe.src = 'tw-packager://./migrate-helper.html';
+          document.body.appendChild(iframe);
+        });
+      };
+
+      const finish = async () => {
+        await MigratePreload.done();
+      };
+
+      const migrate = async () => {
+        const steps = [
+          {
+            name: 'Preparing...',
+            callback: gatherMetadata
+          },
+          {
+            name: 'Transfering desktop settings...',
+            callback: migrateDesktopSettings
+          },
+          {
+            name: 'Transfering backpack and addon settings...',
+            callback: migrateEditor
+          },
+          {
+            name: 'Transfering packager settings...',
+            callback: migratePackager
+          },
+          {
+            name: 'Finishing up...',
+            callback: finish
+          }
+        ];
+
+        const stepsElement = document.querySelector('.steps');
+
+        for (const step of steps) {
+          const stepElement = document.createElement('div');
+          stepElement.className = 'step';
+
+          const iconElement = document.createElement('div');
+          iconElement.className = 'step-icon';
+          iconElement.dataset.type = 'loading';
+          stepElement.appendChild(iconElement);
+
+          const textElement = document.createElement('div');
+          textElement.textContent = step.name;
+          stepElement.appendChild(textElement);
+
+          stepsElement.appendChild(stepElement);
+
+          await new Promise(resolve => setTimeout(resolve, 500));
+
+          try {
+            await step.callback();
+            iconElement.dataset.type = 'success';
+          } catch (error) {
+            console.error(error);
+            iconElement.dataset.type = 'error';
+          }
+        }
+      };
+
+      migrate();
     </script>
   </body>
 </html>

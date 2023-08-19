@@ -3,14 +3,14 @@ const settings = require('./settings');
 const MigrateWindow = require('./windows/migrate');
 
 const migrate = async () => {
-  if (settings.migrated) {
+  if (settings.dataVersion === MigrateWindow.LATEST_VERSION) {
     return;
   }
 
-  // Detect fresh installs
+  // Don't need to migrate anything on a fresh install
   const cacheSize = await session.defaultSession.getCacheSize();
   if (cacheSize === 0) {
-    settings.migrated = true;
+    settings.dataVersion = MigrateWindow.LATEST_VERSION;
     await settings.save();
     return;
   }

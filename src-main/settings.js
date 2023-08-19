@@ -44,11 +44,11 @@ class Settings {
     await writeFileAtomic(PATH, JSON.stringify(serialized, null, 2));
   }
 
-  get migrated () {
-    return !!this.data.migrated;
+  get dataVersion () {
+    return this.data.dataVersion || 0;
   }
-  set migrated (migrated) {
-    this.data.migrated = true;
+  set dataVersion (dataVersion) {
+    this.data.dataVersion = dataVersion;
   }
 
   get updateChecker () {

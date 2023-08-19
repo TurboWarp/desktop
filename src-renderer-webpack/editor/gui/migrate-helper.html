@@ -5,13 +5,7 @@
   </head>
   <body>
     <script>
-      window.addEventListener('message', async (e) => {
-        if (e.origin !== 'file://') {
-          return;
-        }
-
-        const data = e.data;
-
+      const importData = async (data) => {
         if (data.theme) {
           localStorage.setItem('tw:theme', data.theme);
         }
@@ -20,17 +14,16 @@
           localStorage.setItem('tw:addons', data.addons);
         }
 
-        if (data.backpack) {
+        if (data.backpack && data.backpack.length) {
           const items = data.backpack;
           const DATABASE_NAME = 'TW_Backpack';
           const DATABASE_VERSION = 1;
           const STORE_NAME = 'backpack';
 
-          await new Promise((resolve) => {
+          await new Promise((resolve, reject) => {
             const openRequest = indexedDB.open(DATABASE_NAME, DATABASE_VERSION);
-
             openRequest.onerror = () => {
-              // TODO
+              reject(new Error(`Error opening DB: ${openRequest.error}`));
             };
 
             openRequest.onupgradeneeded = (e) => {
@@ -44,12 +37,11 @@
             openRequest.onsuccess = () => {
               const db = openRequest.result;
               const transaction = db.transaction([STORE_NAME], 'readwrite');
-              const store = transaction.objectStore(STORE_NAME);
-
               transaction.onerror = () => {
-                // TODO
+                reject(new Error(`Transaction error: ${transaction.error}`));
               };
 
+              const store = transaction.objectStore(STORE_NAME);
               const putNext = () => {
                 const request = store.put(items.shift());
                 request.onsuccess = () => {
@@ -60,16 +52,32 @@
                   }
                 };
               };
-
               putNext();
             };
           });
         }
+      };
 
-        window.parent.postMessage('finish-import', 'file://');
+      const PARENT_ORIGIN = 'file://';
+
+      window.addEventListener('message', async (e) => {
+        if (e.origin !== PARENT_ORIGIN) {
+          return;
+        }
+
+        try {
+          await importData(e.data);
+          e.source.postMessage({ type: 'done' }, PARENT_ORIGIN);
+        } catch (error) {
+          console.error(error);
+          e.source.postMessage({
+            type: 'error',
+            error: `${error}`
+          }, PARENT_ORIGIN);
+        }
       });
 
-      window.parent.postMessage('start-import', 'file://');
+      window.parent.postMessage({ type: 'start' }, PARENT_ORIGIN);
     </script>
   </body>
 </html>
