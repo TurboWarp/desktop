@@ -156,7 +156,7 @@ app.whenReady().then(() => {
         detail: translate('arm-translation.detail').replace('{APP_NAME}', APP_NAME)
       });
     }
-  
+
     EditorWindow.openFiles(parseFilesFromArgv(process.argv, process.cwd()));
     checkForUpdates();
   });

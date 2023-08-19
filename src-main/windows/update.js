@@ -32,7 +32,7 @@ class UpdateWindow extends BaseWindow {
       const SECOND = 1000;
       const MINUTE = SECOND * 60;
       const HOUR = MINUTE * 60;
-  
+
       let until;
       if (security) {
         // Security updates can't be ignored.
@@ -44,7 +44,7 @@ class UpdateWindow extends BaseWindow {
         until = new Date();
         until.setTime(until.getTime() + (HOUR * 6));
       }
-  
+
       // Imported late due to circular dependency
       const {ignoreUpdate} = require('../update-checker');
       ignoreUpdate(latestVersion, until);

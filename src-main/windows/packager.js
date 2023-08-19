@@ -32,7 +32,7 @@ class PackagerWindow extends BaseWindow {
       this.window.webContents.executeJavaScript(`
         window.alert = (message) => PromptsPreload.alert(message);
         window.confirm = (message) => PromptsPreload.confirm(message);
- 
+
         // Electron will try to clone the last value returned here, so make sure it doesn't try to clone a function
         void 0;
       `);

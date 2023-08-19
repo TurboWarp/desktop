@@ -66,7 +66,7 @@ class EditorWindow extends BaseWindow {
         this.window.setTitle(`${title} - ${APP_NAME}`);
       } else {
         this.window.setTitle(APP_NAME);
-      }    
+      }
     });
     this.window.setTitle(APP_NAME);
 
@@ -324,7 +324,7 @@ class EditorWindow extends BaseWindow {
         }
       }
       return true;
-    }  
+    }
 
     return false;
   }

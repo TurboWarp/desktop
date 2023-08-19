@@ -167,7 +167,7 @@ class BaseWindow {
       // Ctrl+N to open new window
       if (input.control && input.key.toLowerCase() === 'n') {
         event.preventDefault();
-        
+
         // Imported late to due circular dependencies
         const EditorWindow = require('./editor');
         EditorWindow.openFiles([]);

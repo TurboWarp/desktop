@@ -53,7 +53,7 @@ const DesktopHOC = function (WrappedComponent) {
           this.props.onLoadingCompleted();
           return;
         }
- 
+
         this.props.onHasInitialProject(true, this.props.loadingState);
         const file = await EditorPreload.getFile(id);
 
