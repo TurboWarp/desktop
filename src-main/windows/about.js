@@ -32,6 +32,10 @@ class AboutWindow extends BaseWindow {
     return 'about';
   }
 
+  isPopup () {
+    return true;
+  }
+
   static show () {
     const window = BaseWindow.singleton(AboutWindow);
     window.show();

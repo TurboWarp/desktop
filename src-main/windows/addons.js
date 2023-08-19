@@ -33,6 +33,10 @@ class AddonsWindow extends BaseWindow {
     return 'addons';
   }
 
+  isPopup () {
+    return true;
+  }
+
   static show () {
     const window = BaseWindow.singleton(AddonsWindow);
     window.show();

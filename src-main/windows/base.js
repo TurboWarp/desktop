@@ -9,6 +9,7 @@ class BaseWindow {
   constructor () {
     this.window = new BrowserWindow(this.getWindowOptions());
     this.window.webContents.setWindowOpenHandler(this.handleWindowOpen.bind(this));
+    this.window.webContents.on('before-input-event', this.handleInput.bind(this));
     this.applySettings();
 
     const cls = this.constructor;
@@ -72,6 +73,11 @@ class BaseWindow {
     return [200, 200];
   }
 
+  isPopup () {
+    // to be overridden
+    return false;
+  }
+
   getWindowOptions () {
     /** @type {Electron.BrowserWindowConstructorOptions} */
     const options = {};
@@ -129,6 +135,81 @@ class BaseWindow {
     return {
       action: 'deny'
     };
+  }
+
+  /**
+   * @param {Electron.Event} event
+   * @param {Electron.Input} input
+   */
+  handleInput (event, input) {
+    if (input.isAutoRepeat || input.isComposing || input.type !== 'keyDown' || input.meta) {
+      return;
+    }
+
+    // On macOS, these shortcuts are handled by the menu bar
+    if (process.platform !== 'darwin') {
+      const webContents = this.window.webContents;
+
+      // Ctrl+Shift+I to open dev tools
+      if (input.control && input.shift && input.key.toLowerCase() === 'i' && !input.alt) {
+        event.preventDefault();
+        webContents.toggleDevTools();
+      }
+
+      // Ctrl+N to open new window
+      if (input.control && input.key.toLowerCase() === 'n') {
+        event.preventDefault();
+        
+        // Imported late to due circular dependencies
+        const EditorWindow = require('./editor');
+        EditorWindow.openFiles([]);
+      }
+
+      // Ctrl+Equals/Plus to zoom in (depends on keyboard layout)
+      if (input.control && (input.key === '=' || input.key === '+')) {
+        event.preventDefault();
+        webContents.setZoomLevel(webContents.getZoomLevel() + 1);
+      }
+
+      // Ctrl+Minus/Underscore to zoom out
+      if (input.control && input.key === '-') {
+        event.preventDefault();
+        webContents.setZoomLevel(webContents.getZoomLevel() - 1);
+      }
+
+      // Ctrl+0 to reset zoom
+      if (input.control && input.key === '0') {
+        event.preventDefault();
+        webContents.setZoomLevel(0);
+      }
+
+      // F11 and alt+enter to toggle fullscreen
+      if (input.key === 'F11' || (input.key === 'Enter' && input.alt)) {
+        event.preventDefault();
+        this.window.setFullScreen(!this.window.isFullScreen());
+      }
+
+      // Escape to exit fullscreen or close popup windows
+      if (input.key === 'Escape') {
+        if (this.window.isFullScreen()) {
+          event.preventDefault();
+          this.window.setFullScreen(false);
+        } else if (this.isPopup()) {
+          event.preventDefault();
+          this.window.close();
+        }
+      }
+
+      // Ctrl+R and Ctrl+Shift+R to reload
+      if (input.control && input.key.toLowerCase() === 'r') {
+        event.preventDefault();
+        if (input.shift) {
+          webContents.reloadIgnoringCache();
+        } else {
+          webContents.reload();
+        }
+      }
+    }
   }
 
   /**

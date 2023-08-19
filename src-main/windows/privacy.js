@@ -14,6 +14,10 @@ class PrivacyWindow extends BaseWindow {
     return [800, 700];
   }
 
+  isPopup () {
+    return true;
+  }
+
   static show () {
     const window = BaseWindow.singleton(PrivacyWindow);
     window.show();

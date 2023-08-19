@@ -74,6 +74,10 @@ class UpdateWindow extends BaseWindow {
     return 'update';
   }
 
+  isPopup () {
+    return true;
+  }
+
   static updateAvailable (currentVersion, latestVersion, isSecurity) {
     new UpdateWindow(currentVersion, latestVersion, isSecurity);
   }

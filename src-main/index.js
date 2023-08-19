@@ -11,7 +11,6 @@ const EditorWindow = require('./windows/editor');
 const {checkForUpdates} = require('./update-checker');
 require('./protocols');
 require('./context-menu');
-require('./shortcuts');
 require('./menu-bar');
 require('./crash-messages');
 

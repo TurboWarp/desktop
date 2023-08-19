@@ -74,6 +74,10 @@ class DesktopSettingsWindow extends BaseWindow {
     return permission === 'media';
   }
 
+  isPopup () {
+    return true;
+  }
+
   static show () {
     const window = BaseWindow.singleton(DesktopSettingsWindow);
     window.show();

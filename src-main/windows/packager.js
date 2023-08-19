@@ -46,6 +46,14 @@ class PackagerWindow extends BaseWindow {
       const centerY = parentBounds.y + (parentBounds.height / 2) - (newBounds.height / 2);
       newWindow.setPosition(centerX, centerY);
       newWindow.show();
+
+      // Implement Escape to exit
+      newWindow.webContents.on('before-input-event', (event, input) => {
+        if (input.key === 'Escape') {
+          event.preventDefault();
+          newWindow.close();
+        }
+      });
     });
 
     this.window.loadURL('tw-packager://./packager.html');
@@ -58,6 +66,10 @@ class PackagerWindow extends BaseWindow {
 
   getDimensions () {
     return [700, 700];
+  }
+
+  isPopup () {
+    return true;
   }
 
   static forEditor (editorWindow) {
