@@ -1,33 +1,81 @@
 const BaseWindow = require('./base');
 const {translate} = require('../l10n');
+const {APP_NAME} = require('../brand');
+const openExternal = require('../open-external');
 
 class UpdateWindow extends BaseWindow {
-  constructor (latestVersion, isSecurity) {
+  constructor (currentVersion, latestVersion, security) {
     super();
 
-    this.window.setTitle(translate('update.title'));
+    this.window.setTitle(`${translate('update.title')} - ${APP_NAME}`);
 
-    const params = new URLSearchParams();
-    params.set('version', latestVersion);
-    params.set('security', isSecurity);
+    const ipc = this.window.webContents.ipc;
 
-    this.window.on('ready-to-show', () => {
+    ipc.on('get-info', (event) => {
+      event.returnValue = {
+        currentVersion,
+        latestVersion,
+        security
+      };
+    });
+
+    ipc.handle('download', () => {
+      this.window.destroy();
+
+      const params = new URLSearchParams();
+      params.set('from', currentVersion);
+      params.set('to', latestVersion);
+      openExternal(`https://desktop.turbowarp.org/update_available?${params}`);
+    });
+
+    const ignore = (permanently) => {
+      const SECOND = 1000;
+      const MINUTE = SECOND * 60;
+      const HOUR = MINUTE * 60;
+  
+      let until;
+      if (security) {
+        // Security updates can't be ignored.
+        until = new Date(0);
+      } else if (permanently) {
+        // 3000 ought to be enough years into the future...
+        until = new Date(3000, 0, 0);
+      } else {
+        until = new Date();
+        until.setTime(until.getTime() + (HOUR * 6));
+      }
+  
+      // Imported late due to circular dependency
+      const {ignoreUpdate} = require('../update-checker');
+      ignoreUpdate(latestVersion, until);
+    };
+
+    ipc.handle('ignore', (event, permanently) => {
+      this.window.destroy();
+      ignore(permanently);
+    });
+
+    this.window.on('close', () => {
+      ignore(false);
+    });
+
+    this.window.webContents.on('did-finish-load', () => {
       this.show();
-    })
+    });
 
-    this.window.loadURL(`tw-update://./update.html?${params.toString()}`);
+    this.window.loadURL('tw-update://./update.html');
   }
 
   getDimensions () {
-    return [500, 500];
+    return [600, 500];
   }
 
-  enableWebview () {
-    return true;
+  getPreload () {
+    return 'update';
   }
 
-  static updateAvailable (latestVersion, isSecurity) {
-    new UpdateWindow(latestVersion, isSecurity);
+  static updateAvailable (currentVersion, latestVersion, isSecurity) {
+    new UpdateWindow(currentVersion, latestVersion, isSecurity);
   }
 }
 

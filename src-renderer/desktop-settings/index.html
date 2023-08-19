@@ -49,16 +49,16 @@
       <label>
         <div class="label">Update checker</div>
         <select class="update-checker" autocomplete="off">
-          <!-- <option value="beta">Notify me about beta updates</option> -->
           <option value="stable">Notify me about stable updates</option>
           <option value="security">Notify me about security updates</option>
-          <!-- <option value="never">Never notify me about updates</option> -->
+          <option value="never">Never notify me about updates</option>
         </select>
         <script>
           const updateChecker = document.querySelector('.update-checker');
           updateChecker.addEventListener('change', (e) => {
             DesktopSettingsPreload.setUpdateChecker(e.target.value);
           });
+          updateChecker.value = settings.updateChecker;
         </script>
       </label>
 

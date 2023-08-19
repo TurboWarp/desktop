@@ -8,7 +8,7 @@ if (!app.requestSingleInstanceLock()) {
 const openExternal = require('./open-external');
 const BaseWindow = require('./windows/base');
 const EditorWindow = require('./windows/editor');
-const checkForUpdates = require('./update-checker');
+const {checkForUpdates} = require('./update-checker');
 require('./protocols');
 require('./context-menu');
 require('./shortcuts');

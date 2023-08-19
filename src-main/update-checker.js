@@ -24,11 +24,6 @@ const fetchVersionJSON = () => new Promise((resolve, reject) => {
     });
 
     response.on('end', () => {
-      data = JSON.stringify({
-        latest: '1.99.0-fake-version',
-        yanked: '1.8.1'
-      });
-
       try {
         resolve(JSON.parse(data));
       } catch (e) {
@@ -53,14 +48,41 @@ const checkForUpdates = async () => {
   const latestVersion = json.latest;
   const yanked = json.yanked;
 
+  // Security updates can not be ignored.
   if (semverSatisfies(currentVersion, yanked)) {
-    UpdateWindow.updateAvailable(latestVersion, true);
+    UpdateWindow.updateAvailable(currentVersion, latestVersion, true);
     return;
   }
 
-  if (settings.updateChecker === 'stable' && semverLt(currentVersion, latestVersion)) {
-    UpdateWindow.updateAvailable(latestVersion, false);
+  if (settings.updateChecker === 'security') {
+    // Nothing further to check
+    return;
+  }
+
+  const now = Date.now();
+  const ignoredUpdate = settings.ignoredUpdate;
+  const ignoredUpdateUntil = settings.ignoredUpdateUntil * 1000;
+  if (ignoredUpdate === latestVersion && now < ignoredUpdateUntil) {
+    // This update was ignored
+    return;
+  }
+
+  if (semverLt(currentVersion, latestVersion)) {
+    UpdateWindow.updateAvailable(currentVersion, latestVersion, false);
   }
 };
 
-module.exports = checkForUpdates;
+/**
+ * @param {string} version
+ * @param {Date} until
+ */
+const ignoreUpdate = async (version, until) => {
+  settings.ignoredUpdate = version;
+  settings.ignoredUpdateUntil = Math.floor(until.getTime() / 1000);
+  await settings.save();
+};
+
+module.exports = {
+  checkForUpdates,
+  ignoreUpdate
+};

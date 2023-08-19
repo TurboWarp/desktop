@@ -70,6 +70,20 @@ class Settings {
     this.data.updateChecker = updateChecker;
   }
 
+  get ignoredUpdate () {
+    return this.data.ignoredUpdate || null;
+  }
+  set ignoredUpdate (ignoredUpdate) {
+    this.data.ignoredUpdate = ignoredUpdate;
+  }
+
+  get ignoredUpdateUntil () {
+    return this.data.ignoredUpdateUntil || 0;
+  }
+  set ignoredUpdateUntil (ignoredUpdateUntil) {
+    this.data.ignoredUpdateUntil = ignoredUpdateUntil;
+  }
+
   get camera () {
     return this.data.camera || null;
   }
