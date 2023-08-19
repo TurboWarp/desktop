@@ -259,25 +259,16 @@ class EditorWindow extends BaseWindow {
     this.show();
   }
 
-  /**
-   * @param {string[]} files
-   */
-  static openFiles (files) {
-    if (files.length === 0) {
-      new EditorWindow(null);
-    } else {
-      for (const file of files) {
-        new EditorWindow(file);
-      }
-    }
-  }
-
   getPreload () {
     return 'editor';
   }
 
   getDimensions () {
     return [1280, 800];
+  }
+
+  getBackgroundColor () {
+    return '#333333';
   }
 
   handlePermissionCheck (permission, details) {
@@ -326,6 +317,19 @@ class EditorWindow extends BaseWindow {
 
   applySettings () {
     this.window.webContents.setBackgroundThrottling(settings.backgroundThrottling);
+  }
+
+  /**
+   * @param {string[]} files
+   */
+  static openFiles (files) {
+    if (files.length === 0) {
+      new EditorWindow(null);
+    } else {
+      for (const file of files) {
+        new EditorWindow(file);
+      }
+    }
   }
 }
 

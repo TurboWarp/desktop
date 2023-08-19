@@ -70,12 +70,18 @@ class BaseWindow {
   }
 
   getDimensions () {
+    // to be overridden
     return [200, 200];
   }
 
   isPopup () {
     // to be overridden
     return false;
+  }
+
+  getBackgroundColor () {
+    // to be overridden
+    return '#ffffff';
   }
 
   getWindowOptions () {
@@ -113,9 +119,11 @@ class BaseWindow {
       options.webPreferences.preload = path.resolve(__dirname, '../../src-preload/', `${preloadName}.js`);
     }
 
+    options.backgroundColor = this.getBackgroundColor();
+
     // On Linux the icon doesn't get baked into the executable as it does on other platforms
     if (process.platform === 'linux') {
-      options.icon = path.resolve(__dirname, '../../icon.png');
+      options.icon = path.resolve(__dirname, '../../art/icon.png');
     }
 
     return options;

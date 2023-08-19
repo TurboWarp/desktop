@@ -72,6 +72,10 @@ class PackagerWindow extends BaseWindow {
     return true;
   }
 
+  getBackgroundColor () {
+    return '#111111';
+  }
+
   static forEditor (editorWindow) {
     new PackagerWindow(editorWindow);
   }

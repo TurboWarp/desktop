@@ -46,6 +46,10 @@ class MigrateWindow extends BaseWindow {
     return 'migrate';
   }
 
+  getBackgroundColor () {
+    return '#333333';
+  }
+
   static run () {
     const window = new MigrateWindow();
     return window.promise;

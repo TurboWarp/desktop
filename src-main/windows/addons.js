@@ -37,6 +37,10 @@ class AddonsWindow extends BaseWindow {
     return true;
   }
 
+  getBackgroundColor () {
+    return '#222222';
+  }
+
   static show () {
     const window = BaseWindow.singleton(AddonsWindow);
     window.show();
