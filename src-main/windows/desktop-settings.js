@@ -59,7 +59,7 @@ class DesktopSettingsWindow extends BaseWindow {
       shell.showItemInFolder(app.getPath('userData'));
     });
 
-    this.window.loadURL('tw-desktop-settings://./index.html');
+    this.window.loadURL('tw-desktop-settings://./desktop-settings.html');
   }
 
   getDimensions () {

@@ -4,7 +4,7 @@ const {translate} = require('../l10n');
 class PrivacyWindow extends BaseWindow {
   constructor () {
     super();
-    this.window.loadURL('tw-privacy://./index.html');
+    this.window.loadURL('tw-privacy://./privacy.html');
     this.window.setTitle(translate('privacy-policy'));
     this.window.setMinimizable(false);
     this.window.setMaximizable(false);
