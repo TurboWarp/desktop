@@ -21,6 +21,38 @@ const getProjectTitle = (file) => {
   return match[1];
 };
 
+const handleClickAddonSettings = () => {
+  EditorPreload.openAddonSettings();
+};
+
+const handleClickNewWindow = () => {
+  EditorPreload.openNewWindow();
+};
+
+const handleClickPackager = () => {
+  EditorPreload.openPackager();
+};
+
+const handleClickDesktopSettings = () => {
+  EditorPreload.openDesktopSettings();
+};
+
+const handleClickPrivacy = () => {
+  EditorPreload.openPrivacy();
+};
+
+const handleClickAbout = () => {
+  EditorPreload.openAbout();
+};
+
+const handleClickSourceCode = () => {
+  window.open('https://github.com/TurboWarp');
+};
+
+const handleClickDonate = () => {
+  window.open('https://github.com/sponsors/GarboMuffin');
+};
+
 const DesktopHOC = function (WrappedComponent) {
   class DesktopComponent extends React.Component {
     constructor (props) {
@@ -29,6 +61,9 @@ const DesktopHOC = function (WrappedComponent) {
         title: ''
       };
       this.handleUpdateProjectTitle = this.handleUpdateProjectTitle.bind(this);
+
+      // Changing locale always re-mounts this component
+      this.messages = EditorPreload.setLocale(this.props.locale);
     }
     componentDidMount () {
       EditorPreload.setExportForPackager(() => this.props.vm.saveProjectSb3('arraybuffer')
@@ -124,6 +159,31 @@ const DesktopHOC = function (WrappedComponent) {
         <WrappedComponent
           projectTitle={this.state.title}
           onUpdateProjectTitle={this.handleUpdateProjectTitle}
+          onClickAddonSettings={handleClickAddonSettings}
+          onClickNewWindow={handleClickNewWindow}
+          onClickPackager={handleClickPackager}
+          onClickAbout={[
+            {
+              title: this.messages['in-app-about.desktop-settings'],
+              onClick: handleClickDesktopSettings
+            },
+            {
+              title: this.messages['in-app-about.privacy'],
+              onClick: handleClickPrivacy
+            },
+            {
+              title: this.messages['in-app-about.about'],
+              onClick: handleClickAbout
+            },
+            {
+              title: this.messages['in-app-about.source-code'],
+              onClick: handleClickSourceCode
+            },
+            {
+              title: this.messages['in-app-about.donate'],
+              onClick: handleClickDonate
+            }
+          ]}      
           {...props}
         />
       );

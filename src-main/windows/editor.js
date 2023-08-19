@@ -9,7 +9,7 @@ const PrivacyWindow = require('./privacy');
 const AboutWindow = require('./about');
 const PackagerWindow = require('./packager');
 const {createAtomicWriteStream} = require('../atomic-write-stream');
-const {translate} = require('../l10n');
+const {translate, updateLocale, getAllStrings} = require('../l10n');
 const {APP_NAME} = require('../brand');
 const askForMediaAccess = require('../media-permissions');
 const {onBeforeRequest, onHeadersReceived} = require('../project-request-filtering');
@@ -86,6 +86,16 @@ class EditorWindow extends BaseWindow {
         name: path.basename(file),
         data: data
       }
+    });
+
+    ipc.on('set-locale', async (event, locale) => {
+      if (settings.locale !== locale) {
+        settings.locale = locale;
+        updateLocale(locale);
+        // Let the save happen in the background, not important
+        Promise.resolve().then(() => settings.save());
+      }
+      event.returnValue = getAllStrings();
     });
 
     ipc.handle('set-changed', (event, changed) => {

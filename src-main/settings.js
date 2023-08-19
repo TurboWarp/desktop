@@ -7,6 +7,9 @@ const PATH = path.resolve(app.getPath('userData'), 'tw_config.json');
 
 const migrateLegacyData = (legacyData) => {
   const options = {};
+  if (typeof legacyData.locale === 'string') {
+    options.locale = legacyData.locale;
+  }
   if (legacyData.bypass_cors === true) {
     options.bypassCORS = true;
   }
@@ -52,6 +55,13 @@ class Settings {
   }
   set dataVersion (dataVersion) {
     this.data.dataVersion = dataVersion;
+  }
+
+  get locale () {
+    return this.data.locale || 'es';
+  }
+  set locale (locale) {
+    this.data.locale = locale;
   }
 
   get updateChecker () {

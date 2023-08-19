@@ -110,5 +110,25 @@
   "arm-translation.detail": {
     "string": "You're using {APP_NAME} in a translation such as Apple Rosetta. Please install the native ARM version instead as it will perform better and use less battery.",
     "context": "Appears when running the app in an environment like Rosetta"
+  },
+  "in-app-about.desktop-settings": {
+    "string": "Desktop Setting",
+    "context": "Part of the in-app (?) button's menu. Opens desktop settings window."
+  },
+  "in-app-about.privacy": {
+    "string": "Privacy Policy",
+    "context": "Part of the in-app (?) button's menu. Opens privacy policy window."
+  },
+  "in-app-about.about": {
+    "string": "About",
+    "context": "Part of the in-app (?) button's menu. Opens about window."
+  },
+  "in-app-about.source-code": {
+    "string": "Source Code",
+    "context": "Part of the in-app (?) button's menu. Opens link to source code."
+  },
+  "in-app-about.donate": {
+    "string": "Donate",
+    "context": "Part of the in-app (?) button's menu. Opens link to donation page."
   }
 }

@@ -1,1 +1,6 @@
-{}
+{
+    "es": {
+        "unload.stay": "ES TEST",
+        "in-app-about.about": "ES TEST 2"
+    }
+}

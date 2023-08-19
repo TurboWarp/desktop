@@ -7,6 +7,7 @@ contextBridge.exposeInMainWorld('EditorPreload', {
   closedFile: () => ipcRenderer.invoke('closed-file'),
   showSaveFilePicker: (suggestedName) => ipcRenderer.invoke('show-save-file-picker', suggestedName),
   showOpenFilePicker: () => ipcRenderer.invoke('show-open-file-picker'),
+  setLocale: (locale) => ipcRenderer.sendSync('set-locale', locale),
   setChanged: (changed) => ipcRenderer.invoke('set-changed', changed),
   openNewWindow: () => ipcRenderer.invoke('open-new-window'),
   openAddonSettings: () => ipcRenderer.invoke('open-addon-settings'),

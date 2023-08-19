@@ -1,16 +1,17 @@
 const englishTranslationsWithContext = require('./en.json');
 const otherTranslations = require('./generated-translations.json');
+const settings = require('../settings');
 
 const englishTranslations = {};
 for (const [id, message] of Object.entries(englishTranslationsWithContext)) {
   englishTranslations[id] = message.string;
 }
 
-let currentLocale = 'en';
-let currentTranslations = englishTranslations;
+let currentLocale;
+let currentStrings;
 
-const getTranslations = locale => {
-  const result = Object.assign({}, englishTranslationsWithContext);
+const loadTranslations = (locale) => {
+  const result = Object.assign({}, englishTranslations);
 
   // Try with and without the - for regional variants
   const possible = [locale];
@@ -28,23 +29,21 @@ const getTranslations = locale => {
   return result;
 };
 
-const getLocales = () => [
-  'en',
-  ...Object.keys(otherTranslations)
-];
-
-const setLocale = locale => {
+const updateLocale = (locale) => {
   currentLocale = locale;
-  currentTranslations = getTranslations(locale);
+  currentStrings = loadTranslations(locale);
 };
 
-const translate = id => {
-  return currentTranslations[id] || id;
+const translate = (id) => {
+  return currentStrings[id] || id;
 };
+
+const getAllStrings = () => currentStrings;
+
+updateLocale(settings.locale);
 
 module.exports = {
-  getTranslations,
-  getLocales,
-  setLocale,
-  translate
+  updateLocale,
+  translate,
+  getAllStrings
 };
