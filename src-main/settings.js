@@ -10,6 +10,9 @@ const migrateLegacyData = (legacyData) => {
   if (typeof legacyData.locale === 'string') {
     options.locale = legacyData.locale;
   }
+  if (legacyData.disable_update_checker === true) {
+    options.updateChecker = 'never';
+  }
   if (legacyData.bypass_cors === true) {
     options.bypassCORS = true;
   }

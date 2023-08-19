@@ -100,7 +100,7 @@
     "context": "Appears when running the app in an environment like Rosetta"
   },
   "in-app-about.desktop-settings": {
-    "string": "Desktop Setting",
+    "string": "Desktop Settings",
     "context": "Part of the in-app (?) button's menu. Opens desktop settings window."
   },
   "in-app-about.privacy": {
@@ -139,6 +139,10 @@
     "string": "Never notify me about updates",
     "context": "Update checker configuration option"
   },
+  "desktop-settings.disabled-updates": {
+    "string": "Disabling the update checker is not recommended as you will not be notified about security updates.",
+    "context": "Warning that appears in desktop settings when the update checker is disabled"
+  },
   "desktop-settings.microphone": {
     "string": "Selected Microphone",
     "context": "Label of dropdown to select active microphone"
@@ -159,17 +163,33 @@
     "string": "Error: {error}",
     "context": "Appears in dropdown to select camera or microphone if there was an error"
   },
+  "desktop-settings.media-devices-changed": {
+    "string": "You may have to restart the application for microphone or camera changes to apply.",
+    "context": "Warning that appears in desktop settings after changing the selected camera or microphone"
+  },
   "desktop-settings.hardware-acceleration": {
     "string": "Use hardware acceleration (requires restart)",
     "context": "Desktop settings option to toggle hardware acceleration"
+  },
+  "desktop-settings.hardware-acceleration-disabled": {
+    "string": "Disabling hardware acceleration is not recommended as hardware acceleration almost always improves performance",
+    "context": "Warning that appears in desktop settings when hardware acceleration is disabled"
   },
   "desktop-settings.background-throttling": {
     "string": "Sleep hidden windows",
     "context": "Desktop settings option to disable background window throttling"
   },
+  "desktop-settings.background-throttling-disabled": {
+    "string": "Allowing hidden windows to remain active will result in higher CPU usage and lower battery life",
+    "context": "Warning that appears in desktop settings when background throttling is disabled"
+  },
   "desktop-settings.bypass-cors": {
     "string": "Allow extensions to access any website",
     "context": "Desktop settings option to let extensions bypass normal security stuff"
+  },
+  "desktop-settings.bypass-cors-enabled": {
+    "string": "This disables \"CORS\" checks, a web security feature. Malicious projects or extensions may be able to access any website or device on your network.",
+    "context": "Warning that appears in desktop settings when bypass CORS is enabled"
   },
   "desktop-settings.open-user-data": {
     "string": "Open User Data",

@@ -23,19 +23,28 @@
       }
       label {
         display: block;
-        margin: 8px 0;
+        margin: 0.5rem 0;
       }
       .label {
         font-weight: bold;
-        margin-bottom: 2px;
+        margin-bottom: 0.25rem;
       }
       select {
         width: 100%;
         font: inherit;
       }
       button {
+        display: block;
         cursor: pointer;
         font: inherit;
+        margin: 0.5rem 0;
+      }
+      .warning {
+        background-color: yellow;
+        color: black;
+        border: 1px solid black;
+        border-radius: 0.25rem;
+        padding: 0.5rem;
       }
     </style>
   </head>
@@ -58,19 +67,24 @@
           <option value="security"></option>
           <option value="never"></option>
         </select>
-        <script>
-          const updateCheckerSelect = document.querySelector('.update-checker-select');
-          updateCheckerSelect.addEventListener('change', (e) => {
-            DesktopSettingsPreload.setUpdateChecker(e.target.value);
-          });
-          updateCheckerSelect.value = settings.updateChecker;
-
-          document.querySelector('.update-checker-label').textContent = strings['desktop-settings.update-checker'];
-          updateCheckerSelect.querySelector('[value=stable]').textContent = strings['desktop-settings.notify-stable'];
-          updateCheckerSelect.querySelector('[value=security]').textContent = strings['desktop-settings.notify-security'];
-          updateCheckerSelect.querySelector('[value=never]').textContent = strings['desktop-settings.notify-never'];
-        </script>
       </label>
+      <div class="warning update-checker-warning"></div>
+      <script>
+        const updateCheckerSelect = document.querySelector('.update-checker-select');
+        const updateCheckerWarning = document.querySelector('.update-checker-warning');
+        updateCheckerSelect.onchange = () => {
+          DesktopSettingsPreload.setUpdateChecker(updateCheckerSelect.value);
+          updateCheckerWarning.hidden = updateCheckerSelect.value !== 'never';
+        };
+        updateCheckerSelect.value = settings.updateChecker;
+        updateCheckerSelect.onchange();
+
+        document.querySelector('.update-checker-label').textContent = strings['desktop-settings.update-checker'];
+        updateCheckerSelect.querySelector('[value=stable]').textContent = strings['desktop-settings.notify-stable'];
+        updateCheckerSelect.querySelector('[value=security]').textContent = strings['desktop-settings.notify-security'];
+        updateCheckerSelect.querySelector('[value=never]').textContent = strings['desktop-settings.notify-never'];
+        updateCheckerWarning.textContent = strings['desktop-settings.disabled-updates'];
+      </script>
 
       <label>
         <div class="label selected-microphone-label"></div>
@@ -79,9 +93,10 @@
         </select>
         <script>
           const selectedMicrophoneSelect = document.querySelector('.selected-microphone-select');
-          selectedMicrophoneSelect.addEventListener('change', (e) => {
-            DesktopSettingsPreload.setMicrophone(e.target.value);
-          });
+          selectedMicrophoneSelect.onchange = () => {
+            DesktopSettingsPreload.setMicrophone(selectedMicrophoneSelect.value);
+            mediaDeviceWarning.hidden = false;
+          };
 
           document.querySelector('.selected-microphone-label').textContent = strings['desktop-settings.microphone'];
           selectedMicrophoneSelect.firstChild.textContent = strings['desktop-settings.loading'];
@@ -95,9 +110,10 @@
         </select>
         <script>
           const selectedCameraSelect = document.querySelector('.selected-camera-select');
-          selectedCameraSelect.addEventListener('change', (e) => {
-            DesktopSettingsPreload.setCamera(e.target.value);
-          });
+          selectedCameraSelect.onchange = () => {
+            DesktopSettingsPreload.setCamera(selectedCameraSelect.value);
+            mediaDeviceWarning.hidden = false;
+          };
           selectedCameraSelect.value = settings.microphone;
 
           document.querySelector('.selected-camera-label').textContent = strings['desktop-settings.camera'];
@@ -105,7 +121,12 @@
         </script>
       </label>
 
+      <div class="warning media-device-warning" hidden></div>
+
       <script>
+        const mediaDeviceWarning = document.querySelector('.media-device-warning');
+        mediaDeviceWarning.textContent = strings['desktop-settings.media-devices-changed'];
+
         const createStatusMessageOption = (text) => {
           const option = document.createElement('option');
           option.selected = true;
@@ -175,48 +196,61 @@
       <label>
         <input type="checkbox" class="hardware-acceleration-checkbox" autocomplete="off">
         <span class="hardware-acceleration-label"></span>
-        <script>
-          const hardwareAcceleration = document.querySelector('.hardware-acceleration-checkbox');
-          hardwareAcceleration.addEventListener('change', (e) => {
-            DesktopSettingsPreload.setHardwareAcceleration(e.target.checked);
-          });
-          hardwareAcceleration.checked = settings.hardwareAcceleration;
-
-          document.querySelector('.hardware-acceleration-label').textContent = strings['desktop-settings.hardware-acceleration'];
-        </script>
       </label>
+      <div class="warning hardware-acceleration-warning"></div>
+      <script>
+        const hardwareAcceleration = document.querySelector('.hardware-acceleration-checkbox');
+        const hardwareAccelerationWarning = document.querySelector('.hardware-acceleration-warning');
+        hardwareAcceleration.onchange = () => {
+          DesktopSettingsPreload.setHardwareAcceleration(hardwareAcceleration.checked);
+          hardwareAccelerationWarning.hidden = hardwareAcceleration.checked;
+        };
+        hardwareAcceleration.checked = settings.hardwareAcceleration;
+        hardwareAcceleration.onchange();
+
+        document.querySelector('.hardware-acceleration-label').textContent = strings['desktop-settings.hardware-acceleration'];
+        hardwareAccelerationWarning.textContent = strings['desktop-settings.hardware-acceleration-disabled'];
+      </script>
 
       <label>
         <input type="checkbox" class="background-throttling-checkbox" autocomplete="off">
         <span class="background-throttling-label"></span>
-        <script>
-          const backgroundThrottling = document.querySelector('.background-throttling-checkbox');
-          backgroundThrottling.addEventListener('change', (e) => {
-            DesktopSettingsPreload.setBackgroundThrottling(e.target.checked);
-          });
-          backgroundThrottling.checked = settings.backgroundThrottling;
-
-          document.querySelector('.background-throttling-label').textContent = strings['desktop-settings.background-throttling'];
-        </script>
       </label>
+      <div class="warning background-throttling-warning"></div>
+      <script>
+        const backgroundThrottling = document.querySelector('.background-throttling-checkbox');
+        const backgroundThrottlingWarning = document.querySelector('.background-throttling-warning');
+        backgroundThrottling.onchange = () => {
+          DesktopSettingsPreload.setBackgroundThrottling(backgroundThrottling.checked);
+          backgroundThrottlingWarning.hidden = backgroundThrottling.checked;
+        };
+        backgroundThrottling.checked = settings.backgroundThrottling;
+        backgroundThrottling.onchange();
+
+        document.querySelector('.background-throttling-label').textContent = strings['desktop-settings.background-throttling'];
+        backgroundThrottlingWarning.textContent = strings['desktop-settings.background-throttling-disabled'];
+      </script>
 
       <label>
         <input type="checkbox" class="bypass-cors-checkbox" autocomplete="off">
         <span class="bypass-cors-label"></span>
-        <script>
-          const bypassCORS = document.querySelector('.bypass-cors-checkbox');
-          bypassCORS.addEventListener('change', (e) => {
-            DesktopSettingsPreload.setBypassCORS(e.target.checked);
-          });
-          bypassCORS.checked = settings.bypassCORS;
-
-          document.querySelector('.bypass-cors-label').textContent = strings['desktop-settings.bypass-cors'];
-        </script>
       </label>
+      <div class="warning bypass-cors-warning"></div>
+      <script>
+        const bypassCORS = document.querySelector('.bypass-cors-checkbox');
+        const bypassCORSWarning = document.querySelector('.bypass-cors-warning');
+        bypassCORS.onchange = () => {
+          DesktopSettingsPreload.setBypassCORS(bypassCORS.checked);
+          bypassCORSWarning.hidden = !bypassCORS.checked;
+        };
+        bypassCORS.checked = settings.bypassCORS;
+        bypassCORS.onchange();
 
-      <div>
-        <button class="open-user-data"></button>
-      </div>
+        document.querySelector('.bypass-cors-label').textContent = strings['desktop-settings.bypass-cors'];
+        bypassCORSWarning.textContent = strings['desktop-settings.bypass-cors-enabled'];
+      </script>
+
+      <button class="open-user-data"></button>
       <script>
         const openUserData = document.querySelector('.open-user-data');
         openUserData.addEventListener('click', () => {
