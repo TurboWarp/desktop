@@ -87,7 +87,7 @@ app.on('web-contents-created', (event, webContents) => {
     // TODO: this probably isnt secure if the window can pushstate popstate etc.
     if (webContents.getURL() !== url) {
       event.preventDefault();
-      openExternal(event.url);
+      openExternal(url);
     }
   });
 

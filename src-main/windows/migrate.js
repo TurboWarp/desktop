@@ -39,7 +39,7 @@ class MigrateWindow extends BaseWindow {
   }
 
   getDimensions () {
-    return [400, 400];
+    return [450, 400];
   }
 
   getPreload () {

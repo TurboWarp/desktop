@@ -9,6 +9,9 @@
         color: #eee;
       }
 
+      a {
+        color: #4af;
+      }
       iframe {
         /* just to make sure the window frame runs, keep it "visible" */
         width: 1px;
@@ -18,9 +21,19 @@
         top: 0;
         left: 0;
       }
+      h1, p {
+        margin: 0;
+      }
+      main {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
 
       .steps {
-
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
       }
       .step {
         display: flex;
@@ -29,8 +42,8 @@
         align-items: center;
       }
       .step-icon {
-        width: 2rem;
-        height: 2rem;
+        width: 1.5rem;
+        height: 1.5rem;
       }
       .step-icon[data-type="loading"] {
         background-color: currentColor;
@@ -52,7 +65,9 @@
         background-size: contain;
         background-repeat: no-repeat;
       }
-
+      .error {
+        font-family: monospace;
+      }
       @keyframes spin {
         0% {
           transform: rotate(0);
@@ -61,12 +76,44 @@
           transform: rotate(360deg);
         }
       }
+
+      .error-next-steps {
+        display: none;
+        flex-direction: column;
+        gap: 0.5rem;
+        font-weight: bold;
+      }
+      .continue-anyways {
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        background-color: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        font-weight: bold;
+        width: 100%;
+      }
+      .continue-anyways:disabled {
+        opacity: 0.8;
+      }
     </style>
   </html>
   <body>
-    <h1>Finishing updates...</h1>
-    <p>This is a one-time process that may take a few moments.</p>
-    <div class="steps"></div>
+    <main>
+      <h1>Finishing updates...</h1>
+      <p>This is a one-time process that may take a few moments.</p>
+  
+      <div class="error-next-steps">
+        <p>
+          <span>Some of your data could not be transferred. Please send a screenshot of this window to:</span>
+          <a href="mailto:contact@turbowarp.org">contact@turbowarp.org</a>
+        </p>
+        <button class="continue-anyways">Continue Anyways</button>
+      </div>
+
+      <div class="steps"></div>
+    </main>
 
     <script>
       /*
@@ -220,56 +267,59 @@
         await MigratePreload.done();
       };
 
+      const stepsElement = document.querySelector('.steps');
+      const errorNextStepsElement = document.querySelector('.error-next-steps');
+      const continueAnywaysButton = document.querySelector('.continue-anyways');
+      let anyError = false;
+
+      continueAnywaysButton.addEventListener('click', (e) => {
+        e.target.disabled = true;
+        finish();
+      });
+
+      const runStep = async (name, callback) => {
+        const stepElement = document.createElement('div');
+        stepElement.className = 'step';
+
+        const iconElement = document.createElement('div');
+        iconElement.className = 'step-icon';
+        iconElement.dataset.type = 'loading';
+        stepElement.appendChild(iconElement);
+
+        const textElement = document.createElement('div');
+        textElement.textContent = name;
+        stepElement.appendChild(textElement);
+
+        stepsElement.appendChild(stepElement);
+
+        await new Promise(resolve => setTimeout(resolve, 250));
+
+        try {
+          await callback();
+          iconElement.dataset.type = 'success';
+        } catch (error) {
+          console.error(error);
+          iconElement.dataset.type = 'error';
+
+          anyError = true;
+
+          const errorElement = document.createElement('div');
+          errorElement.className = 'error';
+          errorElement.textContent = error;
+          stepsElement.appendChild(errorElement);
+        }
+      };
+
       const migrate = async () => {
-        const steps = [
-          {
-            name: 'Preparing...',
-            callback: gatherMetadata
-          },
-          {
-            name: 'Transfering desktop settings...',
-            callback: migrateDesktopSettings
-          },
-          {
-            name: 'Transfering backpack and addon settings...',
-            callback: migrateEditor
-          },
-          {
-            name: 'Transfering packager settings...',
-            callback: migratePackager
-          },
-          {
-            name: 'Finishing up...',
-            callback: finish
-          }
-        ];
+        await runStep('Preparing...', gatherMetadata);
+        await runStep('Transfering desktop settings...', migrateDesktopSettings);
+        await runStep('Transfering backpack and addon settings...', migrateEditor);
+        await runStep('Transfering packager settings...', migratePackager);
 
-        const stepsElement = document.querySelector('.steps');
-
-        for (const step of steps) {
-          const stepElement = document.createElement('div');
-          stepElement.className = 'step';
-
-          const iconElement = document.createElement('div');
-          iconElement.className = 'step-icon';
-          iconElement.dataset.type = 'loading';
-          stepElement.appendChild(iconElement);
-
-          const textElement = document.createElement('div');
-          textElement.textContent = step.name;
-          stepElement.appendChild(textElement);
-
-          stepsElement.appendChild(stepElement);
-
-          await new Promise(resolve => setTimeout(resolve, 500));
-
-          try {
-            await step.callback();
-            iconElement.dataset.type = 'success';
-          } catch (error) {
-            console.error(error);
-            iconElement.dataset.type = 'error';
-          }
+        if (anyError) {
+          errorNextStepsElement.style.display = 'flex';
+        } else {
+          await runStep('Finalizing', finish);
         }
       };
 
