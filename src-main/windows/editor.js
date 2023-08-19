@@ -105,8 +105,8 @@ class EditorWindow extends BaseWindow {
 
     ipc.handle('show-open-file-picker', async () => {
       const result = await dialog.showOpenDialog(this.window, {
-        // TODO: remember last location
         properties: ['openFile'],
+        defaultPath: settings.lastDirectory,
         filters: [
           {
             name: 'Scratch Project',
@@ -117,7 +117,11 @@ class EditorWindow extends BaseWindow {
       if (result.canceled) {
         return null;
       }
+
       const file = result.filePaths[0];
+      settings.lastDirectory = path.dirname(file);
+      await settings.save();
+
       this.openedFiles.push(file);
       return {
         id: this.openedFiles.length - 1,
@@ -127,8 +131,7 @@ class EditorWindow extends BaseWindow {
 
     ipc.handle('show-save-file-picker', async (event, suggestedName) => {
       const result = await dialog.showSaveDialog(this.window, {
-        // TODO: remember last location,
-        defaultPath: `${suggestedName}.sb3`,
+        defaultPath: path.join(settings.lastDirectory, suggestedName),
         filters: [
           {
             name: 'Scratch 3 Project',
@@ -139,7 +142,11 @@ class EditorWindow extends BaseWindow {
       if (result.canceled) {
         return null;
       }
+
       const file = result.filePath;
+      settings.lastDirectory = path.dirname(file);
+      await settings.save();
+
       this.openedFiles.push(file);
       return {
         id: this.openedFiles.length - 1,

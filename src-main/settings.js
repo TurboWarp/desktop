@@ -16,6 +16,9 @@ const migrateLegacyData = (legacyData) => {
   if (legacyData.background_throttling === false) {
     options.backgroundThrottling = false;
   }
+  if (typeof legacyData.last_accessed_directory === 'string') {
+    options.lastDirectory = legacyData.last_accessed_directory;
+  }
   return options;
 };
 
@@ -105,6 +108,13 @@ class Settings {
   }
   set backgroundThrottling (backgroundThrottling) {
     this.data.backgroundThrottling = backgroundThrottling;
+  }
+
+  get lastDirectory () {
+    return this.data.lastDirectory || app.getPath('downloads');
+  }
+  set lastDirectory (lastDirectory) {
+    this.data.lastDirectory = lastDirectory;
   }
 }
 
