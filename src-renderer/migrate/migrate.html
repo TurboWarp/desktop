@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+  <html>
+    <meta charset="utf8">
+    <style>
+
+    </style>
+  </html>
+  <body>
+    <h1>Migrating...</h1>
+    <script>
+      /*
+      Local Storage:
+      twd:audio_id -> settings microphone
+      twd:video_id -> settings camera
+      tw:theme -> tw-editor tw:theme
+      tw:addons -> tw-editor tw:addons
+      SelectProject.type -> tw-packager
+      SelectProject.id -> tw-packager
+      PackagerOptions.* -> tw-packager
+
+      IndexedDB:
+      p4-local-settings -> tw-packager
+      p4-large-assets -> abandon
+      TW_Backpack -> tw-editor
+      */
+
+      let databases;
+
+      window.addEventListener('message', (e) => {
+        if (e.origin === 'tw-editor://.') {
+          if (e.data === 'start-import') {
+            exportForEditor()
+              .then(({data, transfer}) => {
+                e.source.postMessage(data, 'tw-editor://.', transfer);
+              })
+              .catch((error) => {
+                console.error(error);
+                e.source.postMessage({}, 'tw-editor://.');
+              });
+          }
+
+          if (e.data === 'finish-import') {
+            migratePackager();
+          }
+        }
+
+        if (e.origin === 'tw-packager://.') {
+          if (e.data === 'start-import') {
+            exportForPackager()
+              .then(({data, transfer}) => {
+                e.source.postMessage(data, 'tw-packager://.', transfer);
+              })
+              .catch((error) => {
+                console.error(error);
+                e.source.postMessage({}, 'tw-packager://.');
+              });
+          }
+
+          if (e.data === 'finish-import') {
+            done();
+          }
+        }
+      });
+
+      const done = () => {
+        MigratePreload.done();
+      };
+
+      const exportForPackager = async () => {
+        const data = {};
+        const transfer = [];
+
+        data.localStorage = {};
+        for (const key of Object.keys(localStorage)) {
+          if (key.startsWith('SelectProject') || key.startsWith('PackagerOptions')) {
+            data.localStorage[key] = localStorage[key];
+          }
+        }
+
+        const DATABASE_NAME = 'p4-local-settings';
+        const DATABASE_VERSION = 1;
+        const STORE_NAME = 'blobs';
+        if (databases.find((i) => i.name === DATABASE_NAME && i.version === DATABASE_VERSION)) {
+          const assets = [];
+          await new Promise((resolve, reject) => {
+            const openRequest = indexedDB.open(DATABASE_NAME, DATABASE_VERSION);
+            openRequest.onerror = () => {
+              reject(new Error(`Failed to open: ${openRequest.error}`));
+            };
+            openRequest.onsuccess = () => {
+              const db = openRequest.result;
+              const transaction = db.transaction(STORE_NAME, 'readonly');
+              transaction.onerror = (e) => {
+                reject(new Error(`Transaction error: ${transaction.error}`));
+              };
+              const store = transaction.objectStore(STORE_NAME);
+              const request = store.openCursor();
+              request.onsuccess = (e) => {
+                const cursor = e.target.result;
+                if (cursor) {
+                  assets.push(cursor.value);
+                  if (cursor.value.data) {
+                    transfer.push(cursor.value.data);
+                  }
+                  cursor.continue();
+                } else {
+                  resolve();
+                }
+              };
+            };
+          });
+          data.assets = assets;
+        }
+
+        return {
+          data,
+          transfer
+        };
+      };
+
+      const migratePackager = () => {
+        const iframe = document.createElement('iframe');
+        iframe.src = 'tw-packager://./migrate-helper.html';
+        document.body.appendChild(iframe);
+      };
+
+      const exportForEditor = async () => {
+        const data = {};
+        const transfer = [];
+
+        const theme = localStorage.getItem('tw:theme');
+        if (theme) data.theme = theme;
+
+        const addons = localStorage.getItem('tw:addons');
+        if (addons) data.addons = addons;
+
+        const DATABASE_NAME = 'TW_Backpack';
+        const DATABASE_VERSION = 1;
+        const STORE_NAME = 'backpack';
+        if (databases.find((i) => i.name === DATABASE_NAME && i.version === DATABASE_VERSION)) {
+          const backpackItems = [];
+          await new Promise((resolve, reject) => {
+            const openRequest = indexedDB.open(DATABASE_NAME, DATABASE_VERSION);
+            openRequest.onerror = () => {
+              reject(new Error(`Failed to open: ${openRequest.error}`));
+            };
+            openRequest.onsuccess = () => {
+              const db = openRequest.result;
+              const transaction = db.transaction(STORE_NAME, 'readonly');
+              transaction.onerror = (e) => {
+                reject(new Error(`Transaction error: ${transaction.error}`));
+              };
+              const store = transaction.objectStore(STORE_NAME);
+              const request = store.openCursor();
+              request.onsuccess = (e) => {
+                const cursor = e.target.result;
+                if (cursor) {
+                  backpackItems.push(cursor.value);
+                  if (cursor.value.bodyData) {
+                    transfer.push(cursor.value.bodyData);
+                  }
+                  if (cursor.value.thumbnailData) {
+                    transfer.push(cursor.value.thumbnailData);
+                  }
+                  cursor.continue();
+                } else {
+                  resolve();
+                }
+              };
+            };
+          });
+          data.backpack = backpackItems;
+        }
+
+        return {
+          transfer,
+          data
+        };
+      };
+
+      const migrateEditor = () => {
+        const iframe = document.createElement('iframe');
+        iframe.src = 'tw-editor://./gui/migrate-helper.html';
+        document.body.appendChild(iframe);
+      };
+
+      const migrateDesktopSettings = async () => {
+        const microphone = localStorage.getItem('twd:audio_id');
+        if (microphone) {
+          await MigratePreload.setMicrophone(microphone);
+        }
+
+        const camera = localStorage.getItem('twd:video_id');
+        if (camera) {
+          await MigratePreload.setCamera(camera);
+        }
+
+        migrateEditor();
+      };
+
+      const gatherMetadata = async () => {
+        databases = await indexedDB.databases();
+
+        migrateDesktopSettings();
+      };
+
+      gatherMetadata();
+    </script>
+  </body>
+</html>

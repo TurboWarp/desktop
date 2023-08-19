@@ -71,7 +71,7 @@ module.exports = [
                     },
                     {
                         context: 'src-renderer-webpack/editor/gui/',
-                        from: 'index.html'
+                        from: '*.html'
                     }
                 ]
             })
@@ -96,7 +96,7 @@ module.exports = [
                 patterns: [
                     {
                         context: 'src-renderer-webpack/editor/addons/',
-                        from: 'index.html'
+                        from: '*.html'
                     }
                 ]
             })

@@ -6,9 +6,7 @@ const {writeFileAtomic} = require('./atomic-write-stream');
 const PATH = path.resolve(app.getPath('userData'), 'tw_config.json');
 
 const migrateLegacyData = (legacyData) => {
-  const options = {
-    unmigrated: true
-  };
+  const options = {};
   if (legacyData.bypass_cors === true) {
     options.bypassCORS = true;
   }
@@ -46,21 +44,11 @@ class Settings {
     await writeFileAtomic(PATH, JSON.stringify(serialized, null, 2));
   }
 
-  get unmigrated () {
-    return !!this.data.unmigrated;
+  get migrated () {
+    return !!this.data.migrated;
   }
-  set unmigrated (unmigrated) {
-    if (unmigrated) {
-      throw new Error('unmigrated can only be disabled');
-    }
-    delete this.data.unmigrated;
-  }
-
-  get lastVersion () {
-    return this.data.lastVersion || '0.0.0';
-  }
-  set lastVersion (lastVersion) {
-    this.data.lastVersion = lastVersion;
+  set migrated (migrated) {
+    this.data.migrated = true;
   }
 
   get updateChecker () {

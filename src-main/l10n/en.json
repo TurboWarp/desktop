@@ -98,5 +98,9 @@
   "update.title": {
     "string": "Update Available",
     "context": "Title of update window"
+  },
+  "migrate.title": {
+    "string": "Updating...",
+    "context": "Titlle of window that appears when doing some one-time update work"
   }
 }

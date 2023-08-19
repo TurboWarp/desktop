@@ -26,7 +26,7 @@ const FILE_SCHEMES = {
     root: path.resolve(__dirname, '../src-renderer/about')
   },
   'tw-packager': {
-    root: path.resolve(__dirname, '../dist-packager'),
+    root: path.resolve(__dirname, '../src-renderer/packager'),
     standard: true,
     secure: true
   },

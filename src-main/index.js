@@ -9,6 +9,7 @@ const openExternal = require('./open-external');
 const BaseWindow = require('./windows/base');
 const EditorWindow = require('./windows/editor');
 const {checkForUpdates} = require('./update-checker');
+const migrate = require('./migrate');
 require('./protocols');
 require('./context-menu');
 require('./menu-bar');
@@ -77,6 +78,7 @@ app.on('session-created', (session) => {
 app.on('web-contents-created', (event, webContents) => {
   webContents.on('will-navigate', (event, url) => {
     // Only allow windows to refresh
+    // TODO: this probably isnt secure if the window can pushstate popstate etc.
     if (webContents.getURL() !== url) {
       event.preventDefault();
       openExternal(event.url);
@@ -87,6 +89,12 @@ app.on('web-contents-created', (event, webContents) => {
   webContents.setWindowOpenHandler((details) => ({
     action: 'deny'
   }));
+});
+
+app.on('window-all-closed', () => {
+  if (!isMigrating) {
+    app.quit();
+  }
 });
 
 // macOS
@@ -118,11 +126,22 @@ const parseFilesFromArgv = (argv, workingDirectory) => {
   return argv.map(i => path.resolve(workingDirectory, i));
 };
 
+let isMigrating = true;
+let migratePromise = null;
+
 app.on('second-instance', (event, argv, workingDirectory) => {
-  EditorWindow.openFiles(parseFilesFromArgv(argv, workingDirectory));
+  migratePromise.then(() => {
+    EditorWindow.openFiles(parseFilesFromArgv(argv, workingDirectory));
+  });
 });
 
 app.whenReady().then(() => {
-  EditorWindow.openFiles(parseFilesFromArgv(process.argv, process.cwd()));
-  checkForUpdates();
+  migratePromise = migrate().then(() => {
+    isMigrating = false;
+  });
+
+  migratePromise.then(() => {
+    EditorWindow.openFiles(parseFilesFromArgv(process.argv, process.cwd()));
+    checkForUpdates();
+  });
 });

@@ -255,7 +255,7 @@ class EditorWindow extends BaseWindow {
       AboutWindow.show();
     });
 
-    this.window.loadURL(`tw-editor://./gui/index.html`);
+    this.window.loadURL('tw-editor://./gui/index.html');
     this.show();
   }
 

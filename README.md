@@ -20,7 +20,7 @@ Due to TurboWarp's rather unique security requirements (the existence of custom 
  - **src-renderer-webpack** runs in an Electron renderer process to make the editor work. This is built by webpack as **dist-renderer-webpack**.
  - **src-renderer** also runs in an Electron renderer process. This is used for things like the privacy policy window where webpack is completely unnecessary.
  - **src-preload** runs as preload scripts in an Electron renderer process. They export glue functions to allow renderer and main to talk to each other in a somewhat controlled manner.
- - **dist-library-files**, **dist-packager**, and **dist-extensions** contain additional static resources managed by manual fetch scripts.
+ - **dist-library-files** and **dist-extensions** contain additional static resources managed by manual fetch scripts.
 
 <!-- ```bash
 git clone --recursive https://github.com/TurboWarp/desktop turbowarp-desktop

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8">
+  </head>
+  <body>
+    <script>
+      window.addEventListener('message', async (e) => {
+        if (e.origin !== 'file://') {
+          return;
+        }
+
+        const data = e.data;
+
+        if (data.localStorage) {
+          for (const [key, value] of Object.entries(data.localStorage)) {
+            localStorage[key] = value;
+          }
+        }
+
+        if (data.assets) {
+          const items = data.assets;
+          const DATABASE_NAME = 'p4-local-settings';
+          const DATABASE_VERSION = 1;
+          const STORE_NAME = 'blobs';
+          await new Promise((resolve) => {
+            const openRequest = indexedDB.open(DATABASE_NAME, DATABASE_VERSION);
+            openRequest.onerror = () => {
+              // TODO
+            };
+            openRequest.onupgradeneeded = (e) => {
+              const db = e.target.result;
+              db.createObjectStore(STORE_NAME, {
+                keyPath: 'id'
+              });
+            };
+            openRequest.onsuccess = () => {
+              const db = openRequest.result;
+              const transaction = db.transaction([STORE_NAME], 'readwrite');
+              const store = transaction.objectStore(STORE_NAME);
+              transaction.onerror = () => {
+                // TODO
+              };
+              const putNext = () => {
+                const request = store.put(items.shift());
+                request.onsuccess = () => {
+                  if (items.length) {
+                    putNext();
+                  } else {
+                    resolve();
+                  }
+                };
+              };
+              putNext();
+            };
+          });
+        }
+
+        window.parent.postMessage('finish-import', 'file://');
+      });
+
+      window.parent.postMessage('start-import', 'file://');
+    </script>
+  </body>
+</html>

@@ -14,7 +14,9 @@
     "electron:start": "electron src-main/index.js",
     "electron:package:dir": "electron-builder --dir"
   },
-  "dependencies": {},
+  "dependencies": {
+    "semver": "^7.5.3"
+  },
   "devDependencies": {
     "@babel/core": "^7.22.10",
     "@babel/preset-env": "^7.12.16",
@@ -31,7 +33,6 @@
     "postcss-loader": "^4.2.0",
     "postcss-simple-vars": "^6.0.3",
     "scratch-gui": "git+https://github.com/TurboWarp/scratch-gui.git#develop",
-    "semver": "^7.5.3",
     "style-loader": "^0.23.0",
     "url-loader": "^4.1.1",
     "webpack": "^4.46.0",
@@ -51,12 +52,12 @@
     "appId": "org.turbowarp.desktop",
     "productName": "TurboWarp",
     "files": [
+      "node_modules/**/*",
       "src-main/**/*",
       "src-preload/**/*",
       "src-renderer/**/*",
       "dist-renderer-webpack/**/*",
-      "dist-library-files/**/*",
-      "dist-packager/**/*"
+      "dist-library-files/**/*"
     ],
     "extraResources": [
       {

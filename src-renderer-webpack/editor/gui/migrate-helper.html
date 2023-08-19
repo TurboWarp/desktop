@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8">
+  </head>
+  <body>
+    <script>
+      window.addEventListener('message', async (e) => {
+        if (e.origin !== 'file://') {
+          return;
+        }
+
+        const data = e.data;
+
+        if (data.theme) {
+          localStorage.setItem('tw:theme', data.theme);
+        }
+
+        if (data.addons) {
+          localStorage.setItem('tw:addons', data.addons);
+        }
+
+        if (data.backpack) {
+          const items = data.backpack;
+          const DATABASE_NAME = 'TW_Backpack';
+          const DATABASE_VERSION = 1;
+          const STORE_NAME = 'backpack';
+
+          await new Promise((resolve) => {
+            const openRequest = indexedDB.open(DATABASE_NAME, DATABASE_VERSION);
+
+            openRequest.onerror = () => {
+              // TODO
+            };
+
+            openRequest.onupgradeneeded = (e) => {
+              const db = e.target.result;
+              db.createObjectStore(STORE_NAME, {
+                keyPath: 'id',
+                autoIncrement: true
+              });
+            };
+
+            openRequest.onsuccess = () => {
+              const db = openRequest.result;
+              const transaction = db.transaction([STORE_NAME], 'readwrite');
+              const store = transaction.objectStore(STORE_NAME);
+
+              transaction.onerror = () => {
+                // TODO
+              };
+
+              const putNext = () => {
+                const request = store.put(items.shift());
+                request.onsuccess = () => {
+                  if (items.length) {
+                    putNext();
+                  } else {
+                    resolve();
+                  }
+                };
+              };
+
+              putNext();
+            };
+          });
+        }
+
+        window.parent.postMessage('finish-import', 'file://');
+      });
+
+      window.parent.postMessage('start-import', 'file://');
+    </script>
+  </body>
+</html>
