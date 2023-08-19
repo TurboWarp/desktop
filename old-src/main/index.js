@@ -126,23 +126,23 @@ const filesToOpen = [];
 //   });
 // };
 
-const closeWindowWhenPressEscape = (window) => {
-  window.webContents.on('before-input-event', (e, input) => {
-    if (
-      input.type === 'keyDown' &&
-      input.key === 'Escape' &&
-      !input.control &&
-      !input.alt &&
-      !input.meta &&
-      !input.isAutoRepeat &&
-      !input.isComposing &&
-      // set by logic in web-contents-created
-      !e.didJustLeaveFullScreen
-    ) {
-      window.close();
-    }
-  });
-};
+// const closeWindowWhenPressEscape = (window) => {
+//   window.webContents.on('before-input-event', (e, input) => {
+//     if (
+//       input.type === 'keyDown' &&
+//       input.key === 'Escape' &&
+//       !input.control &&
+//       !input.alt &&
+//       !input.meta &&
+//       !input.isAutoRepeat &&
+//       !input.isComposing &&
+//       // set by logic in web-contents-created
+//       !e.didJustLeaveFullScreen
+//     ) {
+//       window.close();
+//     }
+//   });
+// };
 
 // const getWindowOptions = (options) => {
 //   if (isLinux) {
@@ -383,35 +383,35 @@ const closeWindowWhenPressEscape = (window) => {
 //   });
 // };
 
-const getLastAccessedDirectory = () => store.get('last_accessed_directory') || '';
-const setLastAccessedFile = (filePath) => store.set('last_accessed_directory', pathUtil.dirname(filePath));
+// const getLastAccessedDirectory = () => store.get('last_accessed_directory') || '';
+// const setLastAccessedFile = (filePath) => store.set('last_accessed_directory', pathUtil.dirname(filePath));
 
-ipcMain.handle('show-save-dialog', async (event, options) => {
-  const result = await dialog.showSaveDialog(BrowserWindow.fromWebContents(event.sender), {
-    filters: options.filters,
-    defaultPath: pathUtil.join(getLastAccessedDirectory(), options.suggestedName)
-  });
-  if (!result.canceled) {
-    const {filePath} = result;
-    setLastAccessedFile(filePath);
-    allowedToAccessFiles.add(filePath);
-  }
-  return result;
-});
+// ipcMain.handle('show-save-dialog', async (event, options) => {
+//   const result = await dialog.showSaveDialog(BrowserWindow.fromWebContents(event.sender), {
+//     filters: options.filters,
+//     defaultPath: pathUtil.join(getLastAccessedDirectory(), options.suggestedName)
+//   });
+//   if (!result.canceled) {
+//     const {filePath} = result;
+//     setLastAccessedFile(filePath);
+//     allowedToAccessFiles.add(filePath);
+//   }
+//   return result;
+// });
 
-ipcMain.handle('show-open-dialog', async (event, options) => {
-  const result = await dialog.showOpenDialog(BrowserWindow.fromWebContents(event.sender), {
-    filters: options.filters,
-    properties: ['openFile'],
-    defaultPath: getLastAccessedDirectory()
-  });
-  if (!result.canceled) {
-    const [filePath] = result.filePaths;
-    setLastAccessedFile(filePath);
-    allowedToAccessFiles.add(filePath);
-  }
-  return result;
-});
+// ipcMain.handle('show-open-dialog', async (event, options) => {
+//   const result = await dialog.showOpenDialog(BrowserWindow.fromWebContents(event.sender), {
+//     filters: options.filters,
+//     properties: ['openFile'],
+//     defaultPath: getLastAccessedDirectory()
+//   });
+//   if (!result.canceled) {
+//     const [filePath] = result.filePaths;
+//     setLastAccessedFile(filePath);
+//     allowedToAccessFiles.add(filePath);
+//   }
+//   return result;
+// });
 
 // ipcMain.handle('read-file', async (event, file) => {
 //   if (!allowedToAccessFiles.has(file)) {
