@@ -1,7 +1,10 @@
+const {app, dialog} = require('electron');
+const path = require('path');
 const BaseWindow = require('./base');
 const {translate} = require('../l10n/index');
 const {APP_NAME} = require('../brand');
 const prompts = require('../prompts');
+const {writeFileAtomic} = require('../atomic-write-stream');
 
 class AddonsWindow extends BaseWindow {
   constructor () {
@@ -20,6 +23,22 @@ class AddonsWindow extends BaseWindow {
 
     ipc.on('confirm', (event, message) => {
       event.returnValue = prompts.confirm(this.window, message);
+    });
+
+    ipc.handle('export-settings', async (event, settings) => {
+      const result = await dialog.showSaveDialog(this.window, {
+        defaultPath: path.join(app.getPath('downloads'), 'turbowarp-addon-settings.json'),
+        filters: [
+          {
+            name: 'JSON',
+            extensions: ['json']
+          }
+        ]
+      });
+      if (result.canceled) {
+        return;
+      }
+      await writeFileAtomic(result.filePath, settings);
     });
 
     this.window.loadURL(`tw-editor://./addons/addons.html`);

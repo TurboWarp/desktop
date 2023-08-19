@@ -79,13 +79,13 @@
     "string": "Process crashed: {type}: {reason} ({code})",
     "context": "Appears when a process crashes"
   },
-  "prompts.ok": {
+  "prompt.ok": {
     "string": "OK",
-    "context": "Appears in alert dialogs and confirmation dialogs"
+    "context": "Appears in alert boxes, confirmation messages, and text prompts"
   },
-  "prompts.cancel": {
+  "prompt.cancel": {
     "string": "Cancel",
-    "context": "Appears in confirmation dialogs"
+    "context": "Appears in confirmation messages and text prompts"
   },
   "packager.loading-preview": {
     "string": "Loading...",
@@ -266,13 +266,5 @@
   "update.permanently-ignore": {
     "string": "Ignore this update",
     "context": "Appears in update available window. Checkbox to ignore this update permanently."
-  },
-  "prompt.okay": {
-    "string": "OK",
-    "context": "Button in text prompt dialog boxes"
-  },
-  "prompt.cancel": {
-    "string": "Cancel",
-    "context": "Button in text prompt dialog boxes"
   }
 }

@@ -228,7 +228,7 @@ class BaseWindow {
    */
   handlePermissionCheck (permisson, details) {
     // to be overridden
-    return false;
+    return permisson === 'accessibility-events';
   }
 
   /**

@@ -1,7 +1,7 @@
 import styles from './prompt.css';
 
 let strings = {
-  okay: 'OK',
+  ok: 'OK',
   cancel: 'Cancel'
 };
 
@@ -41,10 +41,10 @@ const _prompt = (message, defaultValue) => new Promise((resolve) => {
   cancelButton.textContent = strings.cancel;
   buttonRow.append(cancelButton);
 
-  const okayButton = document.createElement('button');
-  okayButton.className = styles.okayButton;
-  okayButton.textContent = strings.okay;
-  buttonRow.append(okayButton);
+  const okButton = document.createElement('button');
+  okButton.className = styles.okButton;
+  okButton.textContent = strings.ok;
+  buttonRow.append(okButton);
 
   const finish = (value) => {
     document.removeEventListener('keydown', globalOnKeyDown);
@@ -69,7 +69,7 @@ const _prompt = (message, defaultValue) => new Promise((resolve) => {
     finish(null);
   });
 
-  okayButton.addEventListener('click', () => {
+  okButton.addEventListener('click', () => {
     finish(input.value);
   });
 

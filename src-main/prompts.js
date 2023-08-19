@@ -12,7 +12,7 @@ const alert = (window, message) => {
   dialog.showMessageBoxSync(window, {
     message: '' + message,
     buttons: [
-      translate('prompts.ok')
+      translate('prompt.ok')
     ],
     noLink: true
   });
@@ -27,8 +27,8 @@ const confirm = (window, message) => {
   const result = dialog.showMessageBoxSync(window, {
     message: '' + message,
     buttons: [
-      translate('prompts.ok'),
-      translate('prompts.cancel')
+      translate('prompt.ok'),
+      translate('prompt.cancel')
     ],
     defaultId: 0,
     cancelId: 1,

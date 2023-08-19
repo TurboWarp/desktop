@@ -66,7 +66,7 @@ const DesktopHOC = function (WrappedComponent) {
       // Changing locale always re-mounts this component
       this.messages = EditorPreload.setLocale(this.props.locale);
       setStrings({
-        okay: this.messages['prompt.okay'],
+        ok: this.messages['prompt.ok'],
         cancel: this.messages['prompt.cancel']
       });
     }
