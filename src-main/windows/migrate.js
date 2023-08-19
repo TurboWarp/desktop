@@ -1,4 +1,5 @@
 const path = require('path');
+const {app} = require('electron');
 const BaseWindow = require('./base');
 const {translate} = require('../l10n');
 const settings = require('../settings');
@@ -14,7 +15,7 @@ class MigrateWindow extends BaseWindow {
     });
 
     const ipc = this.window.webContents.ipc;
-    
+
     ipc.handle('set-microphone', async (event, microphone) => {
       settings.microphone = microphone;
       await settings.save();
@@ -29,7 +30,14 @@ class MigrateWindow extends BaseWindow {
       settings.dataVersion = MigrateWindow.LATEST_VERSION;
       await settings.save();
       this.resolveCallback();
-      this.window.close();
+
+      // destroy() to skip close event listener
+      this.window.destroy();
+    });
+
+    this.window.on('close', () => {
+      // If migration is closed mid-process, don't let the app continue
+      app.quit();
     });
 
     this.window.setTitle(translate('migrate.title'));
