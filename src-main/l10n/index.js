@@ -38,12 +38,15 @@ const translate = (id) => {
   return currentStrings[id] || id;
 };
 
-const getAllStrings = () => currentStrings;
+const getLocale = () => currentLocale;
+
+const getStrings = () => currentStrings;
 
 updateLocale(settings.locale);
 
 module.exports = {
   updateLocale,
   translate,
-  getAllStrings
+  getLocale,
+  getStrings
 };

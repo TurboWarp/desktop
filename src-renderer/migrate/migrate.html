@@ -102,12 +102,12 @@
   </html>
   <body>
     <main>
-      <h1>Finishing updates...</h1>
-      <p>This is a one-time process that may take a few moments.</p>
+      <h1 class="title"></h1>
+      <p class="description">This is a one-time process that may take a few moments.</p>
 
       <div class="error-next-steps">
         <p>
-          <span>Some of your data could not be transferred. Please send a screenshot of this window to:</span>
+          <span class="error-message">Some of your data could not be transferred. Please send a screenshot of this window to:</span>
           <a href="mailto:contact@turbowarp.org">contact@turbowarp.org</a>
         </p>
         <button class="continue-anyways">Continue Anyways</button>
@@ -131,10 +131,21 @@
       p4-local-settings -> tw-packager
       p4-large-assets -> abandon
       TW_Backpack -> tw-editor
+      TW_AutoSave -> abandon
       */
 
-      let databases = [];
+      const {strings, locale} = MigratePreload.getStrings();
+      document.documentElement.lang = locale;
 
+      document.querySelector('.title').textContent = strings['migrate.title'];
+      document.querySelector('.description').textContent = strings['migrate.description'];
+      document.querySelector('.error-message').textContent = strings['migrate.error'];
+      const stepsElement = document.querySelector('.steps');
+      const errorNextStepsElement = document.querySelector('.error-next-steps');
+      const continueAnywaysButton = document.querySelector('.continue-anyways');
+      continueAnywaysButton.textContent = strings['migrate.continue-anyways'];
+
+      let databases = [];
       const gatherMetadata = async () => {
         databases = await indexedDB.databases();
       };
@@ -268,16 +279,7 @@
         await MigratePreload.done();
       };
 
-      const stepsElement = document.querySelector('.steps');
-      const errorNextStepsElement = document.querySelector('.error-next-steps');
-      const continueAnywaysButton = document.querySelector('.continue-anyways');
       let anyError = false;
-
-      continueAnywaysButton.addEventListener('click', (e) => {
-        e.target.disabled = true;
-        finish();
-      });
-
       const runStep = async (name, callback) => {
         const stepElement = document.createElement('div');
         stepElement.className = 'step';
@@ -312,17 +314,22 @@
       };
 
       const migrate = async () => {
-        await runStep('Preparing...', gatherMetadata);
-        await runStep('Transfering desktop settings...', migrateDesktopSettings);
-        await runStep('Transfering backpack and addon settings...', migrateEditor);
-        await runStep('Transfering packager settings...', migratePackager);
+        await runStep(strings['migrate.preparing'], gatherMetadata);
+        await runStep(strings['migrate.transfer-desktop'], migrateDesktopSettings);
+        await runStep(strings['migrate.transfer-editor'], migrateEditor);
+        await runStep(strings['migrate.transfer-packager'], migratePackager);
 
         if (anyError) {
           errorNextStepsElement.style.display = 'flex';
         } else {
-          await runStep('Finalizing', finish);
+          await runStep(strings['migrate.finalizing'], finish);
         }
       };
+
+      continueAnywaysButton.addEventListener('click', (e) => {
+        e.target.disabled = true;
+        finish();
+      });
 
       migrate();
     </script>

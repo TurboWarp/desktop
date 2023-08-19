@@ -1,17 +1,24 @@
 const {app, shell} = require('electron');
 const BaseWindow = require('./base');
-const {translate} = require('../l10n');
+const {translate, getStrings, getLocale} = require('../l10n');
 const settings = require('../settings');
 
 class DesktopSettingsWindow extends BaseWindow {
   constructor () {
     super();
 
-    this.window.setTitle(translate('desktop-settings'));
+    this.window.setTitle(translate('desktop-settings.title'));
     this.window.setMinimizable(false);
     this.window.setMaximizable(false);
 
     const ipc = this.window.webContents.ipc;
+
+    ipc.on('get-strings', (event) => {
+      event.returnValue = {
+        locale: getLocale(),
+        strings: getStrings()
+      }
+    });
 
     ipc.on('get-settings', (event) => {
       event.returnValue = {

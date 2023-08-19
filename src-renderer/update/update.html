@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src https://desktop.turbowarp.org">
@@ -76,34 +76,55 @@
   <body>
     <main>
       <script>
+        const {appName, locale, strings} = UpdatePreload.getStrings();
+        document.documentElement.lang = locale;
+
         const info = UpdatePreload.getInfo();
         if (info.security) {
           document.body.classList.add('security');
         }
       </script>
 
-      <h1 class="if-normal">An update is available</h1>
-      <h1 class="if-security">A security update is available</h1>
+      <h1 class="normal-title if-normal"></h1>
+      <h1 class="security-title if-security"></h1>
+      <script>
+        document.querySelector('.normal-title').textContent = strings['update.normal-title'];
+        document.querySelector('.security-title').textContent = strings['update.security-title'];
+      </script>
 
-      <p class="if-normal">TurboWarp Desktop v1.2.3 is now available.</p>
-      <p class="if-security">TurboWarp Desktop v1.2.3 is now available. This release contains security fixes. Updating is highly recommended.</p>
+      <p class="normal-description if-normal"></p>
+      <p class="security-description if-security"></p>
+      <script>
+        const appNameVersion = `${appName} v${info.latestVersion}`;
+        document.querySelector('.normal-description').textContent = strings['update.normal-description'].replace('{appNameVersion}', appNameVersion);
+        document.querySelector('.security-description').textContent = strings['update.security-description'].replace('{appNameVersion}', appNameVersion);;
+      </script>
 
       <div class="update-log">
-        <p class="loading">Loading...</p>
+        <p class="loading"></p>
       </div>
+      <script>
+        document.querySelector('.loading').textContent = strings['update.loading'];
+      </script>
 
-      <button class="download-button">Download Update</button>
-      <button class="ignore-button">Remind me later</button>
-
-      <label class="permanently-ignore-outer if-normal">
-        <input type="checkbox" class="permanently-ignore">
-        Permanently ignore this update
-      </label>
-
+      <button class="download-button"></button>
+      <button class="ignore-button"></button>
       <script>
         const downloadButton = document.querySelector('.download-button');
         const ignoreButton = document.querySelector('.ignore-button');
-        const permanentCheckbox = document.querySelector('.permanently-ignore');
+        downloadButton.textContent = strings['update.download-button'];
+        ignoreButton.textContent = strings['update.ignore-button'];
+      </script>
+
+      <label class="permanently-ignore-outer if-normal">
+        <input type="checkbox" class="permanently-ignore-checkbox">
+        <span class="permanently-ignore-label"></span>
+      </label>
+
+      <script>
+        document.querySelector('.permanently-ignore-label').textContent = strings['update.permanently-ignore'];
+
+        const permanentCheckbox = document.querySelector('.permanently-ignore-checkbox');
         downloadButton.addEventListener('click', () => {
           UpdatePreload.download();
         });
@@ -146,6 +167,8 @@
 
             const releaseNotes = releases.filter(({version}) => compareVersions(info.currentVersion, version) === 2);
             if (releaseNotes.length) {
+              changelog.lang = 'en';
+
               for (const {version, date, notes} of releaseNotes) {
                 const titleElement = document.createElement('h2');
                 titleElement.textContent = `v${version} (${date})`;

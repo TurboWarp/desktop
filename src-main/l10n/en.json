@@ -19,10 +19,6 @@
     "string": "Addon Settings",
     "context": "Title of addon settings window"
   },
-  "desktop-settings": {
-    "string": "Desktop Settings",
-    "context": "Title of desktop settings window"
-  },
   "privacy-policy": {
     "string": "Privacy Policy",
     "context": "Title of privacy policy window"
@@ -95,14 +91,6 @@
     "string": "Loading...",
     "context": "Loading message for packager preview windows"
   },
-  "update.title": {
-    "string": "Update Available",
-    "context": "Title of update window"
-  },
-  "migrate.title": {
-    "string": "Updating...",
-    "context": "Titlle of window that appears when doing some one-time update work"
-  },
   "arm-translation.title": {
     "string": "Please download the ARM version instead",
     "context": "Appears when running the app in an environment like Rosetta"
@@ -130,5 +118,133 @@
   "in-app-about.donate": {
     "string": "Donate",
     "context": "Part of the in-app (?) button's menu. Opens link to donation page."
+  },
+  "desktop-settings.title": {
+    "string": "Desktop Settings",
+    "context": "Title of desktop settings window"
+  },
+  "desktop-settings.update-checker": {
+    "string": "Update Checker",
+    "context": "Label of dropdown to configure the update checker"
+  },
+  "desktop-settings.notify-stable": {
+    "string": "Notify me about stable updates",
+    "context": "Update checker configuration option"
+  },
+  "desktop-settings.notify-security": {
+    "string": "Notify me about security updates",
+    "context": "Update checker configuration option"
+  },
+  "desktop-settings.notify-never": {
+    "string": "Never notify me about updates",
+    "context": "Update checker configuration option"
+  },
+  "desktop-settings.microphone": {
+    "string": "Selected Microphone",
+    "context": "Label of dropdown to select active microphone"
+  },
+  "desktop-settings.camera": {
+    "string": "Selected Camera",
+    "context": "Label of dropdown to select active camera"
+  },
+  "desktop-settings.loading": {
+    "string": "Loading...",
+    "context": "Placeholder item in dropdown while data is being fetched"
+  },
+  "desktop-settings.no-devices": {
+    "string": "No devices",
+    "context": "Appears in dropdown to select camera or microphone if none were found"
+  },
+  "desktop-settings.error": {
+    "string": "Error: {error}",
+    "context": "Appears in dropdown to select camera or microphone if there was an error"
+  },
+  "desktop-settings.hardware-acceleration": {
+    "string": "Use hardware acceleration (requires restart)",
+    "context": "Desktop settings option to toggle hardware acceleration"
+  },
+  "desktop-settings.background-throttling": {
+    "string": "Sleep hidden windows",
+    "context": "Desktop settings option to disable background window throttling"
+  },
+  "desktop-settings.bypass-cors": {
+    "string": "Allow extensions to access any website",
+    "context": "Desktop settings option to let extensions bypass normal security stuff"
+  },
+  "desktop-settings.open-user-data": {
+    "string": "Open User Data",
+    "context": "Button in desktop settings to open the user data folder"
+  },
+  "migrate.title": {
+    "string": "Finishing update...",
+    "context": "Title of window that does various things to finish an update"
+  },
+  "migrate.description": {
+    "string": "This is a one-time process that may take a few moments.",
+    "context": "More information about process to finish an update"
+  },
+  "migrate.error": {
+    "string": "Some of your data could not be transferred. Please send a screenshot of this window to:",
+    "context": "Appears when there was an error finishing an update."
+  },
+  "migrate.continue-anyways": {
+    "string": "Continue Anyways",
+    "context": "Appears when there was an error finishing an update."
+  },
+  "migrate.preparing": {
+    "string": "Preparing...",
+    "context": "Status message that appears while finishing an update."
+  },
+  "migrate.transfer-desktop": {
+    "string": "Transfering desktop settings...",
+    "context": "Status message that appears while finishing an update."
+  },
+  "migrate.transfer-editor": {
+    "string": "Transfering backpack and addon settings...",
+    "context": "Status message that appears while finishing an update."
+  },
+  "migrate.transfer-packager": {
+    "string": "Transfering packager settings...",
+    "context": "Status message that appears while finishing an update."
+  },
+  "migrate.finalizing": {
+    "string": "Finalizing...",
+    "context": "Status message that appears while finishing an update."
+  },
+  "update.window-title": {
+    "string": "Update Available",
+    "context": "Title of update available window"
+  },
+  "update.normal-title": {
+    "string": "An update is available",
+    "context": "Header of update available window for normal update"
+  },
+  "update.security-title": {
+    "string": "A security update is available",
+    "context": "Header of update available window for security updates"
+  },
+  "update.normal-description": {
+    "string": "{appNameVersion} is now available.",
+    "context": "Description of update available window for normal update. {appNameVersion} will be replaced with something like 'TurboWarp Desktop v1.2.3'."
+  },
+  "update.security-description": {
+    "string": "{appNameVersion} is now available. This release contains security fixes. Updating is highly recommended.",
+    "context": "Description of update available window for security update. {appNameVersion} will be replaced with something like 'TurboWarp Desktop v1.2.3'."
+  },
+  "update.loading": {
+    "string": "Loading...",
+    "context": "Appears in update available window while the changelog is still loading"
+  },
+  "update.download-button": {
+    "string": "Download Update",
+    "context": "Appears in update available window. Button to download the update."
+  },
+  "update.ignore-button": {
+    "string": "Remind me later",
+    "context": "Appears in update available window. Button to ignore this update temporarily."
+  },
+  "update.permanently-ignore": {
+    "string": "Ignore this update",
+    "context": "Appears in update available window. Checkbox to ignore this update permanently."
   }
 }

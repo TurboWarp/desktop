@@ -9,7 +9,7 @@ const PrivacyWindow = require('./privacy');
 const AboutWindow = require('./about');
 const PackagerWindow = require('./packager');
 const {createAtomicWriteStream} = require('../atomic-write-stream');
-const {translate, updateLocale, getAllStrings} = require('../l10n');
+const {translate, updateLocale, getStrings} = require('../l10n');
 const {APP_NAME} = require('../brand');
 const askForMediaAccess = require('../media-permissions');
 const {onBeforeRequest, onHeadersReceived} = require('../project-request-filtering');
@@ -95,7 +95,7 @@ class EditorWindow extends BaseWindow {
         // Let the save happen in the background, not important
         Promise.resolve().then(() => settings.save());
       }
-      event.returnValue = getAllStrings();
+      event.returnValue = getStrings();
     });
 
     ipc.handle('set-changed', (event, changed) => {

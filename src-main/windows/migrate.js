@@ -1,7 +1,7 @@
 const path = require('path');
 const {app} = require('electron');
 const BaseWindow = require('./base');
-const {translate} = require('../l10n');
+const {translate, getStrings, getLocale} = require('../l10n');
 const settings = require('../settings');
 
 class MigrateWindow extends BaseWindow {
@@ -15,6 +15,13 @@ class MigrateWindow extends BaseWindow {
     });
 
     const ipc = this.window.webContents.ipc;
+
+    ipc.on('get-strings', (event) => {
+      event.returnValue = {
+        locale: getLocale(),
+        strings: getStrings()
+      };
+    });
 
     ipc.handle('set-microphone', async (event, microphone) => {
       settings.microphone = microphone;

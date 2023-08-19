@@ -1,5 +1,5 @@
 const BaseWindow = require('./base');
-const {translate} = require('../l10n');
+const {translate, getLocale, getStrings} = require('../l10n');
 const {APP_NAME} = require('../brand');
 const openExternal = require('../open-external');
 
@@ -7,9 +7,17 @@ class UpdateWindow extends BaseWindow {
   constructor (currentVersion, latestVersion, security) {
     super();
 
-    this.window.setTitle(`${translate('update.title')} - ${APP_NAME}`);
+    this.window.setTitle(`${translate('update.window-title')} - ${APP_NAME}`);
 
     const ipc = this.window.webContents.ipc;
+
+    ipc.on('get-strings', (event) => {
+      event.returnValue = {
+        appName: APP_NAME,
+        locale: getLocale(),
+        strings: getStrings()
+      };
+    });
 
     ipc.on('get-info', (event) => {
       event.returnValue = {

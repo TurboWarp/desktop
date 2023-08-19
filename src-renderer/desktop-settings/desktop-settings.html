@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
@@ -18,7 +18,7 @@
         min-height: 100vh;
         border: 20px solid hsla(0, 100%, 65%, 1);
       }
-      h1 {
+      .title {
         margin-top: 0;
       }
       label {
@@ -41,52 +41,67 @@
   </head>
   <body>
     <main>
-      <h1>Desktop Settings</h1>
-
       <script>
+        const {locale, strings} = DesktopSettingsPreload.getStrings();
+        document.documentElement.lang = locale;
+
         const settings = DesktopSettingsPreload.getSettings();
       </script>
 
+      <h1 class="title"></h1>
+      <script>document.querySelector('.title').textContent = strings['desktop-settings.title'];</script>
+
       <label>
-        <div class="label">Update checker</div>
-        <select class="update-checker" autocomplete="off">
-          <option value="stable">Notify me about stable updates</option>
-          <option value="security">Notify me about security updates</option>
-          <option value="never">Never notify me about updates</option>
+        <div class="label update-checker-label"></div>
+        <select class="update-checker-select" autocomplete="off">
+          <option value="stable"></option>
+          <option value="security"></option>
+          <option value="never"></option>
         </select>
         <script>
-          const updateChecker = document.querySelector('.update-checker');
-          updateChecker.addEventListener('change', (e) => {
+          const updateCheckerSelect = document.querySelector('.update-checker-select');
+          updateCheckerSelect.addEventListener('change', (e) => {
             DesktopSettingsPreload.setUpdateChecker(e.target.value);
           });
-          updateChecker.value = settings.updateChecker;
+          updateCheckerSelect.value = settings.updateChecker;
+
+          document.querySelector('.update-checker-label').textContent = strings['desktop-settings.update-checker'];
+          updateCheckerSelect.querySelector('[value=stable]').textContent = strings['desktop-settings.notify-stable'];
+          updateCheckerSelect.querySelector('[value=security]').textContent = strings['desktop-settings.notify-security'];
+          updateCheckerSelect.querySelector('[value=never]').textContent = strings['desktop-settings.notify-never'];
         </script>
       </label>
 
       <label>
-        <div class="label">Selected microphone</div>
-        <select class="selected-microphone" autocomplete="off">
-          <option selected disabled>Loading...</option>
+        <div class="label selected-microphone-label"></div>
+        <select class="selected-microphone-select" autocomplete="off">
+          <option selected disabled></option>
         </select>
         <script>
-          const selectedMicrophone = document.querySelector('.selected-microphone');
-          selectedMicrophone.addEventListener('change', (e) => {
+          const selectedMicrophoneSelect = document.querySelector('.selected-microphone-select');
+          selectedMicrophoneSelect.addEventListener('change', (e) => {
             DesktopSettingsPreload.setMicrophone(e.target.value);
           });
+
+          document.querySelector('.selected-microphone-label').textContent = strings['desktop-settings.microphone'];
+          selectedMicrophoneSelect.firstChild.textContent = strings['desktop-settings.loading'];
         </script>
       </label>
 
       <label>
-        <div class="label">Selected camera</div>
-        <select class="selected-camera" autocomplete="off">
-          <option selected disabled>Loading...</option>
+        <div class="label selected-camera-label"></div>
+        <select class="selected-camera-select" autocomplete="off">
+          <option selected disabled></option>
         </select>
         <script>
-          const selectedCamera = document.querySelector('.selected-camera');
-          selectedCamera.addEventListener('change', (e) => {
+          const selectedCameraSelect = document.querySelector('.selected-camera-select');
+          selectedCameraSelect.addEventListener('change', (e) => {
             DesktopSettingsPreload.setCamera(e.target.value);
           });
-          selectedCamera.value = settings.microphone;
+          selectedCameraSelect.value = settings.microphone;
+
+          document.querySelector('.selected-camera-label').textContent = strings['desktop-settings.camera'];
+          selectedCameraSelect.firstChild.textContent = strings['desktop-settings.loading'];
         </script>
       </label>
 
@@ -103,7 +118,7 @@
           while (element.firstChild) {
             element.removeChild(element.firstChild);
           }
-          element.appendChild(createStatusMessageOption('Loading...'));
+          element.appendChild(createStatusMessageOption(strings['desktop-settings.loading']));
         };
 
         const addOptions = (element, selected, devices) => {
@@ -112,7 +127,7 @@
           }
 
           if (devices.length === 0) {
-            element.appendChild(createStatusMessageOption('No devices'));
+            element.appendChild(createStatusMessageOption(strings['desktop-settings.no-devices']));
           } else {
             for (const device of devices) {
               const option = document.createElement('option');
@@ -130,7 +145,9 @@
           while (element.firstChild) {
             element.removeChild(element.firstChild);
           }
-          element.appendChild(createStatusMessageOption(`Error: ${error}`));
+          element.appendChild(createStatusMessageOption(
+            strings['desktop-settings.error'].replace('{error}', error)
+          ));
         };
 
         const enumerate = async () => {
@@ -138,16 +155,16 @@
         };
 
         const updateLists = async () => {
-          addLoadingOption(selectedCamera);
-          addLoadingOption(selectedMicrophone);
+          addLoadingOption(selectedCameraSelect);
+          addLoadingOption(selectedMicrophoneSelect);
           try {
             const mediaDevices = await navigator.mediaDevices.enumerateDevices();
-            addOptions(selectedMicrophone, settings.microphone, mediaDevices.filter((i) => i.kind === 'audioinput'));
-            addOptions(selectedCamera, settings.camera, mediaDevices.filter((i) => i.kind === 'videoinput'));
-          } catch (e) {
+            addOptions(selectedMicrophoneSelect, settings.microphone, mediaDevices.filter((i) => i.kind === 'audioinput'));
+            addOptions(selectedCameraSelect, settings.camera, mediaDevices.filter((i) => i.kind === 'videoinput'));
+          } catch (error) {
             console.error(error);
-            addErrorOption(selectedMicrophone, error);
-            addErrorOption(selectedCamera, error);
+            addErrorOption(selectedMicrophoneSelect, error);
+            addErrorOption(selectedCameraSelect, error);
           }
         };
 
@@ -156,49 +173,57 @@
       </script>
 
       <label>
-        <input type="checkbox" class="hardware-acceleration" autocomplete="off">
-        Use hardware acceleration (requires restart)
+        <input type="checkbox" class="hardware-acceleration-checkbox" autocomplete="off">
+        <span class="hardware-acceleration-label"></span>
         <script>
-          const hardwareAcceleration = document.querySelector('.hardware-acceleration');
+          const hardwareAcceleration = document.querySelector('.hardware-acceleration-checkbox');
           hardwareAcceleration.addEventListener('change', (e) => {
             DesktopSettingsPreload.setHardwareAcceleration(e.target.checked);
           });
           hardwareAcceleration.checked = settings.hardwareAcceleration;
+
+          document.querySelector('.hardware-acceleration-label').textContent = strings['desktop-settings.hardware-acceleration'];
         </script>
       </label>
 
       <label>
-        <input type="checkbox" class="background-throttling" autocomplete="off">
-        Sleep hidden windows
+        <input type="checkbox" class="background-throttling-checkbox" autocomplete="off">
+        <span class="background-throttling-label"></span>
         <script>
-          const backgroundThrottling = document.querySelector('.background-throttling');
+          const backgroundThrottling = document.querySelector('.background-throttling-checkbox');
           backgroundThrottling.addEventListener('change', (e) => {
             DesktopSettingsPreload.setBackgroundThrottling(e.target.checked);
           });
           backgroundThrottling.checked = settings.backgroundThrottling;
+
+          document.querySelector('.background-throttling-label').textContent = strings['desktop-settings.background-throttling'];
         </script>
       </label>
 
       <label>
-        <input type="checkbox" class="bypass-cors" autocomplete="off">
-        Allow extensions to access any website
+        <input type="checkbox" class="bypass-cors-checkbox" autocomplete="off">
+        <span class="bypass-cors-label"></span>
         <script>
-          const bypassCORS = document.querySelector('.bypass-cors');
+          const bypassCORS = document.querySelector('.bypass-cors-checkbox');
           bypassCORS.addEventListener('change', (e) => {
             DesktopSettingsPreload.setBypassCORS(e.target.checked);
           });
           bypassCORS.checked = settings.bypassCORS;
+
+          document.querySelector('.bypass-cors-label').textContent = strings['desktop-settings.bypass-cors'];
         </script>
       </label>
 
       <div>
-        <button class="open-user-data">Open user data folder</button>
+        <button class="open-user-data"></button>
       </div>
       <script>
         const openUserData = document.querySelector('.open-user-data');
         openUserData.addEventListener('click', () => {
           DesktopSettingsPreload.openUserData();
         });
+
+        openUserData.textContent = strings['desktop-settings.open-user-data'];
       </script>
     </main>
   </body>
