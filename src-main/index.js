@@ -1,4 +1,4 @@
-const {app} = require('electron');
+const {app, dialog} = require('electron');
 const path = require('path');
 
 if (!app.requestSingleInstanceLock()) {
@@ -9,7 +9,9 @@ const openExternal = require('./open-external');
 const BaseWindow = require('./windows/base');
 const EditorWindow = require('./windows/editor');
 const {checkForUpdates} = require('./update-checker');
+const {translate} = require('./l10n');
 const migrate = require('./migrate');
+const {APP_NAME} = require('./brand');
 require('./protocols');
 require('./context-menu');
 require('./menu-bar');
@@ -147,6 +149,14 @@ app.whenReady().then(() => {
   });
 
   migratePromise.then(() => {
+    if (app.runningUnderARM64Translation) {
+      dialog.showMessageBox({
+        type: 'warning',
+        message: translate('arm-translation.title'),
+        detail: translate('arm-translation.detail').replace('{APP_NAME}', APP_NAME)
+      });
+    }
+  
     EditorWindow.openFiles(parseFilesFromArgv(process.argv, process.cwd()));
     checkForUpdates();
   });

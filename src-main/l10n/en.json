@@ -102,5 +102,13 @@
   "migrate.title": {
     "string": "Updating...",
     "context": "Titlle of window that appears when doing some one-time update work"
+  },
+  "arm-translation.title": {
+    "string": "Please download the ARM version instead",
+    "context": "Appears when running the app in an environment like Rosetta"
+  },
+  "arm-translation.detail": {
+    "string": "You're using {APP_NAME} in a translation such as Apple Rosetta. Please install the native ARM version instead as it will perform better and use less battery.",
+    "context": "Appears when running the app in an environment like Rosetta"
   }
 }
