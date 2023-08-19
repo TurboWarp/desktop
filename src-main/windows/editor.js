@@ -1,7 +1,7 @@
 const fs = require('fs');
 const {promisify} = require('util');
 const path = require('path');
-const {dialog} = require('electron');
+const {app, dialog} = require('electron');
 const BaseWindow = require('./base');
 const AddonsWindow = require('./addons');
 const DesktopSettingsWindow = require('./desktop-settings');
@@ -253,6 +253,21 @@ class EditorWindow extends BaseWindow {
 
     ipc.handle('open-about', () => {
       AboutWindow.show();
+    });
+
+    ipc.handle('get-advanced-customizations', async () => {
+      const USERSCRIPT_PATH = path.join(app.getPath('userData'), 'userscript.js');
+      const USERSTYLE_PATH = path.join(app.getPath('userData'), 'userstyle.css');
+
+      const [userscript, userstyle] = await Promise.all([
+        readFile(USERSCRIPT_PATH, 'utf-8').catch(() => ''),
+        readFile(USERSTYLE_PATH, 'utf-8').catch(() => '')
+      ]);
+
+      return {
+        userscript,
+        userstyle
+      };
     });
 
     this.window.loadURL('tw-editor://./gui/index.html');

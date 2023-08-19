@@ -15,6 +15,7 @@ contextBridge.exposeInMainWorld('EditorPreload', {
   openPrivacy: () => ipcRenderer.invoke('open-privacy'),
   openAbout: () => ipcRenderer.invoke('open-about'),
   getPreferredMediaDevices: () => ipcRenderer.invoke('get-preferred-media-devices'),
+  getAdvancedCustomizations: () => ipcRenderer.invoke('get-advanced-customizations'),
   setExportForPackager: (callback) => {
     exportForPackager = callback;
   }
