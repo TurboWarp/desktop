@@ -25,16 +25,13 @@ jobs:
       with:
         node-version: 14.x
         cache: npm
-    - name: Install Dependencies
+    - name: Install dependencies
       run: npm ci
-    - name: Download Library Files
+    - name: Fetch
       run: npm run fetch
 
     - name: Compile
-      run: npm run compile
-      env:
-        NODE_OPTIONS: --max-old-space-size=4096
-        TW_ENABLE_UPDATE_CHECKER: "1"
+      run: npm run webpack:compile
 
     - name: Package Windows
       if: runner.os == 'Windows'
@@ -47,11 +44,8 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Package Microsoft Store
-      # Microsoft Store artifact needs to completely recompile the JS since we don't want the update checker
       if: runner.os == 'Windows'
-      run: npm run dist -- --windows appx --x64 --ia32 --arm64 --publish never
-      env:
-        NODE_OPTIONS: --max-old-space-size=4096
+      run: npx electron-builder --windows appx --x64 --ia32 --arm64 --publish never npm run dist
     - name: Upload Microsoft Store Artifact
       if: runner.os == 'Windows'
       uses: actions/upload-artifact@v3

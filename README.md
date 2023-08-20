@@ -22,42 +22,23 @@ Due to TurboWarp's rather unique security requirements (the existence of custom 
  - **src-preload** runs as preload scripts in an Electron renderer process. They export glue functions to allow renderer and main to talk to each other in a somewhat controlled manner.
  - **dist-library-files** and **dist-extensions** contain additional static resources managed by manual fetch scripts.
 
-<!-- ```bash
-git clone --recursive https://github.com/TurboWarp/desktop turbowarp-desktop
-cd turbowarp-desktop
-```
+We use submodules, so clone using `git clone --recursive https://github.com/TurboWarp/desktop turbowarp-desktop`.
 
-We use git submodules for some dependencies so either use `--recursive` or run `git submodule init` later.
+Installl dependencies with `npm ci` and download extra files like the packager and library files with `npm run fetch`.
 
-Install dependencies after each update:
+Build the webpack portions with `npm run webpack:compile` or `npm run webpack:watch`.
 
-```bash
-npm ci
-```
+For development, use `npm run electron:start`.
 
-Download library files, packager HTML, and extensions after each update:
+For development using the correct app ID, use `npm run electron:package:dir` and start the unpacked version in `dist`.
 
-```
-npm run fetch
-```
+For final production builds, use `electron-builder` CLI.
 
-Build:
+## Advanced customizations
 
-```bash
-# Development
-npm start
+TurboWarp Desktop lets you configure custom JS and CSS without rebuilding the app.
 
-# Production (output is in `dist` folder)
-npm run dist
-# If it crashes with "JavaScript heap out of memory", try:
-NODE_OPTIONS=--max-old-space-size=4096 npm run dist
-``` -->
-
-<!-- ## Advanced customizations
-
-TurboWarp Desktop lets you configure custom JS and CSS.
-
-Find TurboWarp Desktop's data path by using the list below or by clicking "?" in the top right corner, then "Desktop Settings", then "Open User Data Folder", then opening the highlighted folder.
+Find TurboWarp Desktop's data path by using the list below or by clicking "?" in the top right corner, then "Desktop Settings", then "Open User Data", then opening the highlighted folder.
 
  - Windows (except Microsoft Store): `%APPDATA%/turbowarp-desktop`
  - Microsoft Store: Open `%LOCALAPPDATA%/Packages`, find the folder with the word `TurboWarpDesktop` in it, then open `LocalCache/Roaming/turbowarp-desktop`
@@ -66,7 +47,7 @@ Find TurboWarp Desktop's data path by using the list below or by clicking "?" in
  - Linux (Snap): `~/snap/turbowarp-desktop/current/.config/turbowarp-desktop`
  - Linux (Flatpak): `~/.var/app/org.turbowarp.TurboWarp/config/turbowarp-desktop`
 
-Create the file `userscript.js` in this folder to configure custom JS. Create the file `userstyle.css` in this folder to configure custom CSS. Completely restart TurboWarp Desktop (including all windows) to apply. -->
+Create the file `userscript.js` in this folder to configure custom JS. Create the file `userstyle.css` in this folder to configure custom CSS. Completely restart TurboWarp Desktop (including all windows) to apply.
 
 ## Uninstall
 
