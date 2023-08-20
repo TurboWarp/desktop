@@ -121,11 +121,14 @@
       Local Storage:
       twd:audio_id -> settings microphone
       twd:video_id -> settings camera
-      tw:theme -> tw-editor tw:theme
-      tw:addons -> tw-editor tw:addons
+      tw:theme -> tw-editor
+      tw:addons -> tw-editor
+      extensions.turbowarp.org/local-storage: -> tw-editor
       SelectProject.type -> tw-packager
       SelectProject.id -> tw-packager
       PackagerOptions.* -> tw-packager
+      P4.locale -> tw-packager
+      P4.theme -> tw-packager
 
       IndexedDB:
       p4-local-settings -> tw-packager
@@ -183,6 +186,25 @@
           const items = [];
           const transfer = [];
 
+          const readAsArrayBuffer = (blob) => new Promise((resolve, reject) => {
+            const fr = new FileReader();
+            fr.onsuccess = () => resolve(fr.result);
+            fr.onerror = () => reject(new Error(`Failed to read blob: ${fr.error}`));
+            fr.readAsArrayBuffer(blob);
+          });
+
+          const blobsToBuffers = async () => {
+            for (const item of items) {
+              for (const [key, value] of Object.entries(item)) {
+                if (value instanceof Blob) {
+                  const buffer = await readAsArrayBuffer(value);
+                  item[key] = buffer;
+                  transfer.push(buffer);
+                }
+              }
+            }
+          };
+
           const store = transaction.objectStore(storeName);
           const request = store.openCursor();
           request.onsuccess = (e) => {
@@ -198,6 +220,7 @@
 
               cursor.continue();
             } else {
+              blobsToBuffers();
               resolve({
                 items,
                 transfer
@@ -208,8 +231,13 @@
       });
 
       const migrateEditor = async () => {
-        const theme = localStorage.getItem('tw:theme');
-        const addons = localStorage.getItem('tw:addons');
+        const storage = {};
+        for (const key of Object.keys(localStorage)) {
+          if (key === 'tw:theme' || key === 'tw:addons' || key.startsWith('extensions.turbowarp.org/local-storage:')) {
+            storage[key] = localStorage[key];
+          }
+        }
+
         const backpack = await exportDatabase('TW_Backpack', 1, 'backpack');
         const transfer = backpack ? backpack.transfer : [];
 
@@ -222,8 +250,7 @@
             const type = e.data.type;
             if (type === 'start') {
               e.source.postMessage({
-                theme,
-                addons,
+                storage,
                 backpack: backpack ? backpack.items : []
               }, 'tw-editor://.', transfer);
             } else if (type === 'error') {
@@ -242,7 +269,7 @@
       const migratePackager = async () => {
         const storage = {};
         for (const key of Object.keys(localStorage)) {
-          if (key.startsWith('SelectProject') || key.startsWith('PackagerOptions')) {
+          if (key.startsWith('SelectProject') || key.startsWith('PackagerOptions') || key === 'P4.locale' || key === 'P4.theme') {
             storage[key] = localStorage[key];
           }
         }

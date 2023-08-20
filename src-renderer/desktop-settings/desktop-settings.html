@@ -76,8 +76,8 @@
           DesktopSettingsPreload.setUpdateChecker(updateCheckerSelect.value);
           updateCheckerWarning.hidden = updateCheckerSelect.value !== 'never';
         };
+        updateCheckerWarning.hidden = updateCheckerSelect.value !== 'never';
         updateCheckerSelect.value = settings.updateChecker;
-        updateCheckerSelect.onchange();
 
         document.querySelector('.update-checker-label').textContent = strings['desktop-settings.update-checker'];
         updateCheckerSelect.querySelector('[value=stable]').textContent = strings['desktop-settings.notify-stable'];
@@ -205,8 +205,8 @@
           DesktopSettingsPreload.setHardwareAcceleration(hardwareAcceleration.checked);
           hardwareAccelerationWarning.hidden = hardwareAcceleration.checked;
         };
+        hardwareAccelerationWarning.hidden = hardwareAcceleration.checked;
         hardwareAcceleration.checked = settings.hardwareAcceleration;
-        hardwareAcceleration.onchange();
 
         document.querySelector('.hardware-acceleration-label').textContent = strings['desktop-settings.hardware-acceleration'];
         hardwareAccelerationWarning.textContent = strings['desktop-settings.hardware-acceleration-disabled'];
@@ -222,10 +222,9 @@
         const backgroundThrottlingWarning = document.querySelector('.background-throttling-warning');
         backgroundThrottling.onchange = () => {
           DesktopSettingsPreload.setBackgroundThrottling(backgroundThrottling.checked);
-          backgroundThrottlingWarning.hidden = backgroundThrottling.checked;
         };
+        backgroundThrottlingWarning.hidden = backgroundThrottling.checked;
         backgroundThrottling.checked = settings.backgroundThrottling;
-        backgroundThrottling.onchange();
 
         document.querySelector('.background-throttling-label').textContent = strings['desktop-settings.background-throttling'];
         backgroundThrottlingWarning.textContent = strings['desktop-settings.background-throttling-disabled'];
@@ -241,10 +240,9 @@
         const bypassCORSWarning = document.querySelector('.bypass-cors-warning');
         bypassCORS.onchange = () => {
           DesktopSettingsPreload.setBypassCORS(bypassCORS.checked);
-          bypassCORSWarning.hidden = !bypassCORS.checked;
         };
+        bypassCORSWarning.hidden = !bypassCORS.checked;
         bypassCORS.checked = settings.bypassCORS;
-        bypassCORS.onchange();
 
         document.querySelector('.bypass-cors-label').textContent = strings['desktop-settings.bypass-cors'];
         bypassCORSWarning.textContent = strings['desktop-settings.bypass-cors-enabled'];

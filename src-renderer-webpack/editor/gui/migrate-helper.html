@@ -7,12 +7,10 @@
   <body>
     <script>
       const importData = async (data) => {
-        if (data.theme) {
-          localStorage.setItem('tw:theme', data.theme);
-        }
-
-        if (data.addons) {
-          localStorage.setItem('tw:addons', data.addons);
+        if (data.storage) {
+          for (const [key, value] of Object.entries(data.storage)) {
+            localStorage[key] = value;
+          }
         }
 
         if (data.backpack && data.backpack.length) {
