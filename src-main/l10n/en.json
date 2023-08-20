@@ -35,19 +35,19 @@
     "string": "Learn more",
     "developer_comment": "macOS menu bar item to learn more"
   },
-  "developer_comment.open-link": {
+  "context.open-link": {
     "string": "Open Link",
     "developer_comment": "Context menu item to open link"
   },
-  "developer_comment.cut": {
+  "context.cut": {
     "string": "Cut",
     "developer_comment": "Context menu item to cut"
   },
-  "developer_comment.copy": {
+  "context.copy": {
     "string": "Copy",
     "developer_comment": "Context menu item to copy"
   },
-  "developer_comment.paste": {
+  "context.paste": {
     "string": "Paste",
     "developer_comment": "Context menu item to paste"
   },
