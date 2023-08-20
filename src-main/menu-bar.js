@@ -18,7 +18,7 @@ if (process.platform === 'darwin') {
           label: translate('menu.new-window'),
           accelerator: 'Cmd+N',
           click: () => {
-            EditorWindow.openFiles([]);
+            EditorWindow.newWindow();
           }
         }
       ]

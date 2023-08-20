@@ -1,50 +1,20 @@
-const https = require('https');
 const semverLt = require('semver/functions/lt');
 const semverSatisfies = require('semver/functions/satisfies');
 const settings = require('./settings');
 const UpdateWindow = require('./windows/update');
 const packageJSON = require('../package.json');
+const privilegedFetchAsBuffer = require('./fetch');
 
 const currentVersion = packageJSON.version;
 const URL = 'https://desktop.turbowarp.org/version.json';
-
-const fetchVersionJSON = () => new Promise((resolve, reject) => {
-  const request = https.request(URL);
-
-  request.on('response', (response) => {
-    const statusCode = response.statusCode;
-    if (statusCode !== 200) {
-      reject(new Error(`Unexpected status code: ${statusCode}`))
-      return;
-    }
-
-    let data = '';
-    response.on('data', (chunk) => {
-      data += chunk.toString();
-    });
-
-    response.on('end', () => {
-      try {
-        resolve(JSON.parse(data));
-      } catch (e) {
-        reject(new Error('Could not parse'));
-      }
-    })
-  });
-
-  request.on('error', (e) => {
-    reject(e);
-  });
-
-  request.end();
-});
 
 const checkForUpdates = async () => {
   if (settings.updateChecker === 'never') {
     return;
   }
 
-  const json = await fetchVersionJSON();
+  const jsonBuffer = await privilegedFetchAsBuffer(URL);
+  const json = JSON.parse(jsonBuffer.toString());
   const latestVersion = json.latest;
   const yanked = json.yanked;
 

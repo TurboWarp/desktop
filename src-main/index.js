@@ -108,17 +108,18 @@ app.on('window-all-closed', () => {
 // macOS
 app.on('activate', () => {
   if (app.isReady() && BaseWindow.getWindowsByClass(EditorWindow).length === 0) {
-    EditorWindow.openFiles([]);
+    EditorWindow.newWindow();
   }
 });
 
 // macOS
 app.on('open-file', (event, path) => {
   event.preventDefault();
-  EditorWindow.openFiles([path]);
+  // The path we get should already be absolute
+  EditorWindow.openFiles([path], '');
 });
 
-const parseFilesFromArgv = (argv, workingDirectory) => {
+const parseFilesFromArgv = (argv) => {
   // argv could be any of:
   // turbowarp.exe project.sb3
   // electron.exe --inspect=sdf main.js project.sb3
@@ -131,7 +132,7 @@ const parseFilesFromArgv = (argv, workingDirectory) => {
   // defaultApp is true when the path to the app is in argv
   argv = argv.slice(process.defaultApp ? 2 : 1);
 
-  return argv.map(i => path.resolve(workingDirectory, i));
+  return argv;
 };
 
 let isMigrating = true;
@@ -139,7 +140,7 @@ let migratePromise = null;
 
 app.on('second-instance', (event, argv, workingDirectory) => {
   migratePromise.then(() => {
-    EditorWindow.openFiles(parseFilesFromArgv(argv, workingDirectory));
+    EditorWindow.openFiles(parseFilesFromArgv(argv), workingDirectory);
   });
 });
 
@@ -157,7 +158,7 @@ app.whenReady().then(() => {
       });
     }
 
-    EditorWindow.openFiles(parseFilesFromArgv(process.argv, process.cwd()));
+    EditorWindow.openFiles(parseFilesFromArgv(process.argv), process.cwd());
     checkForUpdates();
   });
 });

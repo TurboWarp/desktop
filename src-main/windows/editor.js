@@ -15,12 +15,76 @@ const askForMediaAccess = require('../media-permissions');
 const {onBeforeRequest, onHeadersReceived} = require('../project-request-filtering');
 const prompts = require('../prompts');
 const settings = require('../settings');
+const privilegedFetchAsBuffer = require('../fetch');
 
 const readFile = promisify(fs.readFile);
 
+const TYPE_FILE = 'file';
+const TYPE_URL = 'url';
+const TYPE_SCRATCH = 'scratch';
+
+class OpenedFile {
+  constructor (type, path) {
+    /** @type {TYPE_FILE|TYPE_URL|TYPE_ID} */
+    this.type = type;
+
+    /**
+     * Absolute file path or URL
+     * @type {string}
+     */
+    this.path = path;
+  }
+
+  async read () {
+    if (this.type === TYPE_FILE) {
+      return {
+        name: path.basename(this.path),
+        data: await readFile(this.path)
+      };
+    }
+
+    if (this.type === TYPE_URL) {
+      return {
+        name: path.basename(this.path),
+        data: await privilegedFetchAsBuffer(this.path)
+      };
+    }
+
+    if (this.type === TYPE_SCRATCH) {
+      const metadataBuffer = await privilegedFetchAsBuffer(`https://api.scratch.mit.edu/projects/${this.path}`);
+      const metadata = JSON.parse(metadataBuffer.toString());
+      const token = metadata.project_token;
+      const title = metadata.title;
+      const projectBuffer = await privilegedFetchAsBuffer(`https://projects.scratch.mit.edu/${this.path}?token=${token}`);
+      return {
+        name: title,
+        data: projectBuffer
+      };
+    }
+
+    throw new Error(`Unknown type: ${this.type}`);
+  }
+}
+
+const parseOpenedFile = (file, workingDirectory) => {
+  try {
+    const url = new URL(file);
+    if (url.protocol === 'http:' || url.protocol === 'https:') {
+      const scratchMatch = file.match(/^https?:\/\/scratch\.mit\.edu\/projects\/(\d+)\/?/);
+      if (scratchMatch) {
+        return new OpenedFile(TYPE_SCRATCH, scratchMatch[1]);
+      }
+      return new OpenedFile(TYPE_URL, file);
+    }
+  } catch (e) {
+    // Error means it was not a URL
+  }
+  return new OpenedFile(TYPE_FILE, path.resolve(workingDirectory, file));
+};
+
 class EditorWindow extends BaseWindow {
   /**
-   * @param {string|null} file
+   * @param {OpenedFile|null} file
    */
   constructor (file) {
     super();
@@ -29,18 +93,22 @@ class EditorWindow extends BaseWindow {
     // old projects after you load the next one, but our handling of file handles in scratch-gui is
     // pretty bad right now, so this is the best compromise.
     this.openedFiles = [];
-    this.activeFileId = -1;
+    this.activeFileIndex = -1;
 
     if (file !== null) {
       this.openedFiles.push(file);
-      this.activeFileId = 0;
+      this.activeFileIndex = 0;
     }
 
-    const getFileById = (id) => {
-      if (typeof id !== 'number' || typeof this.openedFiles[id] !== 'string') {
+    const getFileByIndex = (index) => {
+      if (typeof index !== 'number') {
+        throw new Error('File ID not number');
+      }
+      const value = this.openedFiles[index];
+      if (!(value instanceof OpenedFile)) {
         throw new Error('Invalid file ID');
       }
-      return this.openedFiles[id];
+      return this.openedFiles[index];
     };
 
     this.window.webContents.on('will-prevent-unload', (event) => {
@@ -73,19 +141,20 @@ class EditorWindow extends BaseWindow {
     const ipc = this.window.webContents.ipc;
 
     ipc.handle('get-initial-file', () => {
-      if (this.activeFileId === -1) {
+      if (this.activeFileIndex === -1) {
         return null;
       }
-      return this.activeFileId;
+      return this.activeFileIndex;
     });
 
-    ipc.handle('get-file', async (event, id) => {
-      const file = getFileById(id);
-      const data = await readFile(file);
+    ipc.handle('get-file', async (event, index) => {
+      const file = getFileByIndex(index);
+      const {name, data} = await file.read();
       return {
-        name: path.basename(file),
-        data: data
-      }
+        name,
+        type: file.type,
+        data
+      };
     });
 
     ipc.on('set-locale', async (event, locale) => {
@@ -102,14 +171,17 @@ class EditorWindow extends BaseWindow {
       this.window.setDocumentEdited(changed);
     });
 
-    ipc.handle('opened-file', (event, id) => {
-      const file = getFileById(id);
-      this.activeFileId = id;
-      this.window.setRepresentedFilename(file);
+    ipc.handle('opened-file', (event, index) => {
+      const file = getFileByIndex(index);
+      if (file.type !== TYPE_FILE) {
+        throw new Error('Not a file');
+      }
+      this.activeFileIndex = index;
+      this.window.setRepresentedFilename(file.path);
     });
 
     ipc.handle('closed-file', () => {
-      this.activeFileId = -1;
+      this.activeFileIndex = -1;
       this.window.setRepresentedFilename('');
     });
 
@@ -132,7 +204,7 @@ class EditorWindow extends BaseWindow {
       settings.lastDirectory = path.dirname(file);
       await settings.save();
 
-      this.openedFiles.push(file);
+      this.openedFiles.push(new OpenedFile(TYPE_FILE, file));
       return {
         id: this.openedFiles.length - 1,
         name: path.basename(file)
@@ -157,7 +229,7 @@ class EditorWindow extends BaseWindow {
       settings.lastDirectory = path.dirname(file);
       await settings.save();
 
-      this.openedFiles.push(file);
+      this.openedFiles.push(new OpenedFile(TYPE_FILE, file));
       return {
         id: this.openedFiles.length - 1,
         name: path.basename(file)
@@ -171,8 +243,12 @@ class EditorWindow extends BaseWindow {
       };
     });
 
-    ipc.on('start-write-stream', async (startEvent, id) => {
-      const file = getFileById(id);
+    ipc.on('start-write-stream', async (startEvent, index) => {
+      const file = getFileByIndex(index);
+      if (file.type !== TYPE_FILE) {
+        throw new Error('Not a file');
+      }
+
       const port = startEvent.ports[0];
 
       /** @type {NodeJS.WritableStream|null} */
@@ -190,7 +266,7 @@ class EditorWindow extends BaseWindow {
       };
 
       try {
-        writeStream = await createAtomicWriteStream(file);
+        writeStream = await createAtomicWriteStream(file.path);
       } catch (error) {
         handleError(error);
         return;
@@ -253,7 +329,7 @@ class EditorWindow extends BaseWindow {
     });
 
     ipc.handle('open-new-window', () => {
-      EditorWindow.openFiles([]);
+      EditorWindow.newWindow();
     });
 
     ipc.handle('open-addon-settings', () => {
@@ -353,15 +429,20 @@ class EditorWindow extends BaseWindow {
 
   /**
    * @param {string[]} files
+   * @param {string} workingDirectory
    */
-  static openFiles (files) {
+  static openFiles (files, workingDirectory) {
     if (files.length === 0) {
-      new EditorWindow(null);
+      EditorWindow.newWindow();
     } else {
       for (const file of files) {
-        new EditorWindow(file);
+        new EditorWindow(parseOpenedFile(file, workingDirectory));
       }
     }
+  }
+
+  static newWindow () {
+    new EditorWindow(null);
   }
 }
 

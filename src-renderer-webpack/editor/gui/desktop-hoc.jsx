@@ -16,9 +16,13 @@ import {setStrings} from '../prompt/prompt.js';
 
 let mountedOnce = false;
 
-const getProjectTitle = (file) => {
-  const match = file.match(/([^/\\]+)\.sb[2|3]?$/);
-  if (!match) return null;
+/**
+ * @param {string} filename
+ * @returns {string}
+ */
+const getDefaultProjectTitle = (filename) => {
+  const match = filename.match(/([^/\\]+)\.sb[2|3]?$/);
+  if (!match) return filename;
   return match[1];
 };
 
@@ -95,21 +99,21 @@ const DesktopHOC = function (WrappedComponent) {
         }
 
         this.props.onHasInitialProject(true, this.props.loadingState);
-        const file = await EditorPreload.getFile(id);
+        const {name, type, data} = await EditorPreload.getFile(id);
+        console.log(data);
 
-        const {name, data} = file;
         await this.props.vm.loadProject(data);
         this.props.onLoadingCompleted();
         this.props.onLoadedProject(this.props.loadingState, true);
 
-        const title = getProjectTitle(name);
+        const title = getDefaultProjectTitle(name);
         if (title) {
           this.setState({
             title
           });
         }
 
-        if (name.endsWith('.sb3')) {
+        if (type === 'file' && name.endsWith('.sb3')) {
           this.props.onSetFileHandle(new WrappedFileHandle(id, name));
         }
       })().catch(error => {

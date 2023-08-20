@@ -170,7 +170,7 @@ class BaseWindow {
 
         // Imported late to due circular dependencies
         const EditorWindow = require('./editor');
-        EditorWindow.openFiles([]);
+        EditorWindow.newWindow();
       }
 
       // Ctrl+Equals/Plus to zoom in (depends on keyboard layout)
