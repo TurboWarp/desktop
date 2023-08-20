@@ -4,12 +4,9 @@ let Builder;
 try {
   Builder = require('../extensions/development/builder');
 } catch (e) {
-  if (e.code === 'MODULE_NOT_FOUND') {
-    console.error('Could not load TurboWarp/extensions build scripts, most likely because the submodule is missing.');
-    console.error('Try running: `git submodule init` and `git submodule update`');
-  } else {
-    console.error(e);
-  }
+  console.error('Could not load TurboWarp/extensions build scripts, most likely because the submodule is missing.');
+  console.error('Try running: `git submodule init` and `git submodule update`');
+  console.error(e);
   process.exit(1);
 }
 
