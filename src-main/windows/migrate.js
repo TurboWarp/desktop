@@ -23,16 +23,6 @@ class MigrateWindow extends BaseWindow {
       };
     });
 
-    ipc.handle('set-microphone', async (event, microphone) => {
-      settings.microphone = microphone;
-      await settings.save();
-    });
-
-    ipc.handle('set-camera', async (event, camera) => {
-      settings.camera = camera;
-      await settings.save();
-    });
-
     ipc.handle('done', async () => {
       settings.dataVersion = MigrateWindow.LATEST_VERSION;
       await settings.save();

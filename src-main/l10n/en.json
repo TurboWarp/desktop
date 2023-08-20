@@ -215,10 +215,6 @@
     "string": "Preparing...",
     "developer_comment": "Status message that appears while finishing an update."
   },
-  "migrate.transfer-desktop": {
-    "string": "Transfering desktop settings...",
-    "developer_comment": "Status message that appears while finishing an update."
-  },
   "migrate.transfer-editor": {
     "string": "Transfering backpack and addon settings...",
     "developer_comment": "Status message that appears while finishing an update."

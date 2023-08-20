@@ -119,8 +119,8 @@
     <script>
       /*
       Local Storage:
-      twd:audio_id -> settings microphone
-      twd:video_id -> settings camera
+      twd:audio_id -> abandon (IDs differ across origins)
+      twd:video_id -> abandon (IDs differ across origins)
       tw:theme -> tw-editor
       tw:addons -> tw-editor
       tw:language -> tw-editor
@@ -136,7 +136,7 @@
       p4-local-settings -> tw-packager
       p4-large-assets -> abandon
       TW_Backpack -> tw-editor
-      TW_AutoSave -> abandon
+      TW_AutoSave -> abandon (likely to be very large)
       */
 
       const {strings, locale} = MigratePreload.getStrings();
@@ -153,18 +153,6 @@
       let databases = [];
       const gatherMetadata = async () => {
         databases = await indexedDB.databases();
-      };
-
-      const migrateDesktopSettings = async () => {
-        const microphone = localStorage.getItem('twd:audio_id');
-        if (microphone) {
-          await MigratePreload.setMicrophone(microphone);
-        }
-
-        const camera = localStorage.getItem('twd:video_id');
-        if (camera) {
-          await MigratePreload.setCamera(camera);
-        }
       };
 
       const exportDatabase = (databaseName, databaseVersion, storeName) => new Promise((resolve, reject) => {
@@ -344,7 +332,6 @@
 
       const migrate = async () => {
         await runStep(strings['migrate.preparing'], gatherMetadata);
-        await runStep(strings['migrate.transfer-desktop'], migrateDesktopSettings);
         await runStep(strings['migrate.transfer-editor'], migrateEditor);
         await runStep(strings['migrate.transfer-packager'], migratePackager);
 
