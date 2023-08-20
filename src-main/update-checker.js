@@ -40,7 +40,7 @@ const fetchVersionJSON = () => new Promise((resolve, reject) => {
 });
 
 const checkForUpdates = async () => {
-  if (settings.updateChecker === 'disabled') {
+  if (settings.updateChecker === 'never') {
     return;
   }
 
