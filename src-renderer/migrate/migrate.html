@@ -123,6 +123,8 @@
       twd:video_id -> settings camera
       tw:theme -> tw-editor
       tw:addons -> tw-editor
+      tw:language -> tw-editor
+      tw:username -> tw-editor
       extensions.turbowarp.org/local-storage: -> tw-editor
       SelectProject.type -> tw-packager
       SelectProject.id -> tw-packager
@@ -233,7 +235,7 @@
       const migrateEditor = async () => {
         const storage = {};
         for (const key of Object.keys(localStorage)) {
-          if (key === 'tw:theme' || key === 'tw:addons' || key.startsWith('extensions.turbowarp.org/local-storage:')) {
+          if (key === 'tw:theme' || key === 'tw:addons' || key === 'tw:language' || key === 'tw:username' || key.startsWith('extensions.turbowarp.org/local-storage:')) {
             storage[key] = localStorage[key];
           }
         }
