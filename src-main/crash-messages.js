@@ -1,8 +1,10 @@
 const {app, dialog, BrowserWindow} = require('electron');
 const {translate} = require('./l10n');
+const {APP_NAME} = require('./brand');
 
 const showCrashMessage = (window, type, code, reason) => {
   dialog.showMessageBoxSync(window, {
+    title: APP_NAME,
     type: 'error',
     message: translate('crash.title'),
     detail: translate('crash.description')

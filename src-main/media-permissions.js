@@ -1,5 +1,6 @@
 const {systemPreferences, dialog} = require('electron');
 const {translate} = require('./l10n');
+const {APP_NAME} = require('./brand');
 
 const showPermissionDeniedWarning = (window, mediaType) => {
   const title = translate(`permission.${mediaType}-denied`);
@@ -7,6 +8,7 @@ const showPermissionDeniedWarning = (window, mediaType) => {
   // This prompt currently is only visible in macOS
   const instructions = translate('permission.macos-instructions');
   dialog.showMessageBox(window, {
+    title: APP_NAME,
     type: 'warning',
     message: title,
     detail: `${description}\n\n${instructions}`

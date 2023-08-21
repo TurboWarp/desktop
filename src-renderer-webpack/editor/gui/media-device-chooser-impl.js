@@ -1,5 +1,4 @@
 const constrain = (originalConstraint, deviceId, allDevices) => {
-  debugger;
   const device = allDevices.find((i) => i.deviceId === deviceId);
   if (!device) {
     // The device we're looking for doesn't exist. No reason to constrain it.

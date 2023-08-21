@@ -31,7 +31,9 @@ app.on('session-created', (session) => {
     if (!window) {
       return false;
     }
-    return window.handlePermissionCheck(permission, details);
+    const allowed = window.handlePermissionCheck(permission, details);
+    console.log('finish check', allowed);
+    return allowed;
   });
 
   session.setPermissionRequestHandler((webContents, permission, callback, details) => {
@@ -46,6 +48,7 @@ app.on('session-created', (session) => {
       return;
     }
     window.handlePermissionRequest(permission, details).then((allowed) => {
+      console.log('finish request', permission, allowed);
       callback(allowed);
     });
   });
@@ -156,6 +159,7 @@ app.whenReady().then(() => {
 
     if (app.runningUnderARM64Translation) {
       dialog.showMessageBox({
+        title: APP_NAME,
         type: 'warning',
         message: translate('arm-translation.title'),
         detail: translate('arm-translation.detail').replace('{APP_NAME}', APP_NAME)

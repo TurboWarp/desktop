@@ -112,6 +112,7 @@ class EditorWindow extends BaseWindow {
 
     this.window.webContents.on('will-prevent-unload', (event) => {
       const choice = dialog.showMessageBoxSync(this.window, {
+        ttie: APP_NAME,
         type: 'info',
         buttons: [
           translate('unload.stay'),

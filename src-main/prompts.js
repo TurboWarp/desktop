@@ -3,6 +3,7 @@
 
 const {dialog} = require('electron');
 const {translate} = require('./l10n');
+const {APP_NAME} = require('./brand');
 
 /**
  * @param {Electron.BrowserWindow} window
@@ -10,6 +11,7 @@ const {translate} = require('./l10n');
  */
 const alert = (window, message) => {
   dialog.showMessageBoxSync(window, {
+    title: APP_NAME,
     message: '' + message,
     buttons: [
       translate('prompt.ok')
@@ -25,6 +27,7 @@ const alert = (window, message) => {
  */
 const confirm = (window, message) => {
   const result = dialog.showMessageBoxSync(window, {
+    title: APP_NAME,
     message: '' + message,
     buttons: [
       translate('prompt.ok'),
