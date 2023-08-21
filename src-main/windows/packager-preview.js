@@ -1,5 +1,6 @@
 const BaseWindow = require('./base');
 const ProjectsCommonHandlers = require('../projects-common-handlers');
+const {translate} = require('../l10n');
 
 class PackagerPreviewWindow extends BaseWindow {
   constructor (parentWindow, existingWindow) {
@@ -33,6 +34,22 @@ class PackagerPreviewWindow extends BaseWindow {
 
   onHeadersReceived (details, callback) {
     ProjectsCommonHandlers.onHeadersReceived(details, callback);
+  }
+
+  static getBrowserWindowOverrides () {
+    return {
+      title: translate('packager.loading-preview'),
+      // TODO: would be best to autodetect the right size
+      width: 480,
+      height: 360,
+      useContentSize: true,
+      backgroundColor: '#000000',
+      webPreferences: {
+        preload: null
+      },
+      // constructor will show it
+      show: false
+    };
   }
 }
 

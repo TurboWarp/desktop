@@ -78,18 +78,7 @@ class PackagerWindow extends BaseWindow {
       return {
         action: 'allow',
         outlivesOpener: true,
-        overrideBrowserWindowOptions: {
-          title: translate('packager.loading-preview'),
-          // TODO: would be best to autodetect the right size
-          width: 480,
-          height: 360,
-          backgroundColor: '#000000',
-          webPreferences: {
-            preload: null
-          },
-          // Visibility will be handled by did-create-window
-          show: false
-        }
+        overrideBrowserWindowOptions: PackagerPreviewWindow.getBrowserWindowOverrides()
       };
     }
     return super.handleWindowOpen(details);
