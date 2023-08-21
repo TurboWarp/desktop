@@ -107,16 +107,22 @@ app.on('window-all-closed', () => {
 
 // macOS
 app.on('activate', () => {
-  if (app.isReady() && BaseWindow.getWindowsByClass(EditorWindow).length === 0) {
+  if (app.isReady() && !isMigrating && BaseWindow.getWindowsByClass(EditorWindow).length === 0) {
     EditorWindow.newWindow();
   }
 });
 
 // macOS
+const filesQueuedToOpen = [];
 app.on('open-file', (event, path) => {
   event.preventDefault();
-  // The path we get should already be absolute
-  EditorWindow.openFiles([path], '');
+  // This event can be called before ready.
+  if (app.isReady() && !isMigrating) {
+    // The path we get should already be absolute
+    EditorWindow.openFiles([path], '');
+  } else {
+    filesQueuedToOpen.push(path);
+  }
 });
 
 const parseFilesFromArgv = (argv) => {
@@ -147,9 +153,7 @@ app.on('second-instance', (event, argv, workingDirectory) => {
 app.whenReady().then(() => {
   migratePromise = migrate().then(() => {
     isMigrating = false;
-  });
 
-  migratePromise.then(() => {
     if (app.runningUnderARM64Translation) {
       dialog.showMessageBox({
         type: 'warning',
@@ -158,7 +162,11 @@ app.whenReady().then(() => {
       });
     }
 
-    EditorWindow.openFiles(parseFilesFromArgv(process.argv), process.cwd());
+    EditorWindow.openFiles([
+      ...filesQueuedToOpen,
+      ...parseFilesFromArgv(process.argv)
+    ], process.cwd());
+
     checkForUpdates();
   });
 });
