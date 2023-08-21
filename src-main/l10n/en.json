@@ -262,5 +262,37 @@
   "update.permanently-ignore": {
     "string": "Ignore this update",
     "developer_comment": "Appears in update available window. Checkbox to ignore this update permanently."
+  },
+  "files.svg": {
+    "string": "SVG Image",
+    "context": "Appears in file saving dialog when exporting a vector costume"
+  },
+  "files.png": {
+    "string": "PNG Image",
+    "context": "Appears in file saving dialog when exporting a bitmap costume"
+  },
+  "files.wav": {
+    "string": "WAV Sound",
+    "context": "Appears in file saving dialog when exporting a sound"
+  },
+  "files.sprite3": {
+    "string": "Scratch 3 Sprite",
+    "context": "Appears in file saving dialog when exporting a sprite"
+  },
+  "files.txt": {
+    "string": "Text Document",
+    "context": "Appears in file saving dialog when exporting a list"
+  },
+  "files.webm": {
+    "string": "WebM Video",
+    "context": "Appears in file saving dialog when exporting a video with an addon"
+  },
+  "files.html": {
+    "stirng": "HTML File",
+    "context": "Appears in file saving dialog when saving some types of packaged projects"
+  },
+  "files.zip": {
+    "string": "Zip File",
+    "context": "Appears in file saving dialog when saving some types of packaged projects"
   }
 }

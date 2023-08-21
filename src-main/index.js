@@ -9,7 +9,7 @@ const openExternal = require('./open-external');
 const BaseWindow = require('./windows/base');
 const EditorWindow = require('./windows/editor');
 const {checkForUpdates} = require('./update-checker');
-const {translate} = require('./l10n');
+const {translate, tranlateOrNull} = require('./l10n');
 const migrate = require('./migrate');
 const {APP_NAME} = require('./brand');
 require('./protocols');
@@ -80,9 +80,24 @@ app.on('session-created', (session) => {
   });
 
   session.on('will-download', (event, item, webContents) => {
-    item.setSaveDialogOptions({
+    const options = {
+      // The default filename is a better title than "blob:..."
       title: item.getFilename()
-    });
+    };
+
+    // Ensure that the type selector shows proper names on Windows instead of things like "SPRITE3 File"
+    const extension = path.extname(item.getFilename()).replace(/^\./, '').toLowerCase();
+    const translated = tranlateOrNull(`files.${extension}`);
+    if (translated !== null) {
+      options.filters = [
+        {
+          name: translated,
+          extensions: [extension]
+        }
+      ];
+    }
+
+    item.setSaveDialogOptions(options);
   });
 });
 

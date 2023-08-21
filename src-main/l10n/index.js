@@ -34,9 +34,9 @@ const updateLocale = (locale) => {
   currentStrings = loadTranslations(locale);
 };
 
-const translate = (id) => {
-  return currentStrings[id] || id;
-};
+const translate = (id) => currentStrings[id] || id;
+
+const tranlateOrNull = (id) => currentStrings[id] || null;
 
 const getLocale = () => currentLocale;
 
@@ -47,6 +47,7 @@ updateLocale(settings.locale);
 module.exports = {
   updateLocale,
   translate,
+  tranlateOrNull,
   getLocale,
   getStrings
 };
