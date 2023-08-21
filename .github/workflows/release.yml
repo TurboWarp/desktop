@@ -45,7 +45,7 @@ jobs:
 
     - name: Package Microsoft Store
       if: runner.os == 'Windows'
-      run: npx electron-builder --windows appx --x64 --ia32 --arm64 --publish never npm run dist
+      run: npx electron-builder --windows appx --x64 --ia32 --arm64 --publish never
     - name: Upload Microsoft Store Artifact
       if: runner.os == 'Windows'
       uses: actions/upload-artifact@v3
