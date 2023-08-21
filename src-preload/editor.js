@@ -45,6 +45,25 @@ window.addEventListener('message', (e) => {
   }
 });
 
+ipcRenderer.on('enumerate-media-devices', (e) => {
+  navigator.mediaDevices.enumerateDevices()
+    .then((devices) => {
+      e.sender.send('enumerated-media-devices', {
+        devices: devices.map((device) => ({
+          deviceId: device.deviceId,
+          kind: device.kind,
+          label: device.label
+        }))
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+      e.sender.send('enumerated-media-devices', {
+        error: `${error}`
+      });
+    });
+});
+
 contextBridge.exposeInMainWorld('PromptsPreload', {
   alert: (message) => ipcRenderer.sendSync('alert', message),
   confirm: (message) => ipcRenderer.sendSync('confirm', message),

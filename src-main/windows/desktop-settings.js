@@ -37,6 +37,16 @@ class DesktopSettingsWindow extends BaseWindow {
       await settings.save();
     });
 
+    ipc.handle('enumerate-media-devices', async () => {
+      // Imported late due to circular dependencies
+      const EditorWindow = require('./editor');
+      const anEditorWindow = BaseWindow.getWindowsByClass(EditorWindow)[0];
+      if (!anEditorWindow) {
+        throw new Error('Editor must be open');
+      }
+      return anEditorWindow.enumerateMediaDevices();
+    });
+
     ipc.handle('set-microphone', async (event, microphone) => {
       settings.microphone = microphone;
       await settings.save();
@@ -76,10 +86,6 @@ class DesktopSettingsWindow extends BaseWindow {
 
   getPreload () {
     return 'desktop-settings';
-  }
-
-  handlePermissionCheck (permission) {
-    return permission === 'media';
   }
 
   isPopup () {

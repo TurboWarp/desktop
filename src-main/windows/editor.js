@@ -427,6 +427,20 @@ class EditorWindow extends BaseWindow {
     this.window.webContents.setBackgroundThrottling(settings.backgroundThrottling);
   }
 
+  enumerateMediaDevices () {
+    // Used by desktop settings
+    return new Promise((resolve, reject) => {
+      this.window.webContents.ipc.once('enumerated-media-devices', (event, result) => {
+        if (typeof result.error !== 'undefined') {
+          reject(result.error);
+        } else {
+          resolve(result.devices);
+        }
+      });
+      this.window.webContents.send('enumerate-media-devices');
+    });
+  }
+
   /**
    * @param {string[]} files
    * @param {string} workingDirectory

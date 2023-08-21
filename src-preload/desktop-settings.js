@@ -4,6 +4,7 @@ contextBridge.exposeInMainWorld('DesktopSettingsPreload', {
   getStrings: () => ipcRenderer.sendSync('get-strings'),
   getSettings: () => ipcRenderer.sendSync('get-settings'),
   setUpdateChecker: (updateChecker) => ipcRenderer.invoke('set-update-checker', updateChecker),
+  enumerateMediaDevices: () => ipcRenderer.invoke('enumerate-media-devices'),
   setMicrophone: (microphone) => ipcRenderer.invoke('set-microphone', microphone),
   setCamera: (camera) => ipcRenderer.invoke('set-camera', camera),
   setHardwareAcceleration: (hardwareAcceleration) => ipcRenderer.invoke('set-hardware-acceleration', hardwareAcceleration),

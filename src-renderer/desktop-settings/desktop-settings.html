@@ -76,8 +76,8 @@
           DesktopSettingsPreload.setUpdateChecker(updateCheckerSelect.value);
           updateCheckerWarning.hidden = updateCheckerSelect.value !== 'never';
         };
-        updateCheckerWarning.hidden = updateCheckerSelect.value !== 'never';
         updateCheckerSelect.value = settings.updateChecker;
+        updateCheckerWarning.hidden = updateCheckerSelect.value !== 'never';
 
         document.querySelector('.update-checker-label').textContent = strings['desktop-settings.update-checker'];
         updateCheckerSelect.querySelector('[value=stable]').textContent = strings['desktop-settings.notify-stable'];
@@ -171,15 +171,14 @@
           ));
         };
 
-        const enumerate = async () => {
-          return navigator.mediaDevices.enumerateDevices()
-        };
-
         const updateLists = async () => {
           addLoadingOption(selectedCameraSelect);
           addLoadingOption(selectedMicrophoneSelect);
           try {
-            const mediaDevices = await navigator.mediaDevices.enumerateDevices();
+            // We can't use enumerateDevices() directly because we run on a different origin than the editor,
+            // and the browser randomizes the IDs per origin for privacy (which is silly for us, but thankfully
+            // easy to work around)
+            const mediaDevices = await DesktopSettingsPreload.enumerateMediaDevices();
             addOptions(selectedMicrophoneSelect, settings.microphone, mediaDevices.filter((i) => i.kind === 'audioinput'));
             addOptions(selectedCameraSelect, settings.camera, mediaDevices.filter((i) => i.kind === 'videoinput'));
           } catch (error) {
@@ -190,7 +189,6 @@
         };
 
         updateLists();
-        navigator.mediaDevices.addEventListener('devicechange', updateLists);
       </script>
 
       <label>
@@ -205,8 +203,8 @@
           DesktopSettingsPreload.setHardwareAcceleration(hardwareAcceleration.checked);
           hardwareAccelerationWarning.hidden = hardwareAcceleration.checked;
         };
-        hardwareAccelerationWarning.hidden = hardwareAcceleration.checked;
         hardwareAcceleration.checked = settings.hardwareAcceleration;
+        hardwareAccelerationWarning.hidden = hardwareAcceleration.checked;
 
         document.querySelector('.hardware-acceleration-label').textContent = strings['desktop-settings.hardware-acceleration'];
         hardwareAccelerationWarning.textContent = strings['desktop-settings.hardware-acceleration-disabled'];
@@ -222,9 +220,10 @@
         const backgroundThrottlingWarning = document.querySelector('.background-throttling-warning');
         backgroundThrottling.onchange = () => {
           DesktopSettingsPreload.setBackgroundThrottling(backgroundThrottling.checked);
+          backgroundThrottlingWarning.hidden = backgroundThrottling.checked;
         };
-        backgroundThrottlingWarning.hidden = backgroundThrottling.checked;
         backgroundThrottling.checked = settings.backgroundThrottling;
+        backgroundThrottlingWarning.hidden = backgroundThrottling.checked;
 
         document.querySelector('.background-throttling-label').textContent = strings['desktop-settings.background-throttling'];
         backgroundThrottlingWarning.textContent = strings['desktop-settings.background-throttling-disabled'];
@@ -240,9 +239,10 @@
         const bypassCORSWarning = document.querySelector('.bypass-cors-warning');
         bypassCORS.onchange = () => {
           DesktopSettingsPreload.setBypassCORS(bypassCORS.checked);
+          bypassCORSWarning.hidden = !bypassCORS.checked;
         };
-        bypassCORSWarning.hidden = !bypassCORS.checked;
         bypassCORS.checked = settings.bypassCORS;
+        bypassCORSWarning.hidden = !bypassCORS.checked;
 
         document.querySelector('.bypass-cors-label').textContent = strings['desktop-settings.bypass-cors'];
         bypassCORSWarning.textContent = strings['desktop-settings.bypass-cors-enabled'];

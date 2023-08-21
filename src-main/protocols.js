@@ -15,9 +15,7 @@ const FILE_SCHEMES = {
     secure: true
   },
   'tw-desktop-settings': {
-    root: path.resolve(__dirname, '../src-renderer/desktop-settings'),
-    standard: true,
-    secure: true
+    root: path.resolve(__dirname, '../src-renderer/desktop-settings')
   },
   'tw-privacy': {
     root: path.resolve(__dirname, '../src-renderer/privacy')
