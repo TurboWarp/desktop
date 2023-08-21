@@ -43,7 +43,8 @@ const base = {
                             postcssOptions: {
                                 plugins: [
                                     'postcss-import',
-                                    'postcss-simple-vars'
+                                    'postcss-simple-vars',
+                                    'autoprefixer'
                                 ]
                             }
                         }

@@ -23,6 +23,7 @@
     "@babel/preset-react": "^7.13.13",
     "@electron/notarize": "^2.1.0",
     "async-limiter": "^2.0.0",
+    "autoprefixer": "^9.8.8",
     "babel-loader": "^8.3.0",
     "copy-webpack-plugin": "^6.4.1",
     "css-loader": "^1.0.1",
