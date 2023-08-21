@@ -41,7 +41,7 @@ class AddonsWindow extends BaseWindow {
       await writeFileAtomic(result.filePath, settings);
     });
 
-    this.window.loadURL(`tw-editor://./addons/addons.html`);
+    this.loadURL(`tw-editor://./addons/addons.html`);
   }
 
   getDimensions () {

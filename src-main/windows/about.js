@@ -22,7 +22,7 @@ class AboutWindow extends BaseWindow {
       };
     });
 
-    this.window.loadURL('tw-about://./about.html');
+    this.loadURL('tw-about://./about.html');
   }
 
   getDimensions () {

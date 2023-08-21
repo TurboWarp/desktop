@@ -71,7 +71,7 @@ class UpdateWindow extends BaseWindow {
       this.show();
     });
 
-    this.window.loadURL('tw-update://./update.html');
+    this.loadURL('tw-update://./update.html');
   }
 
   getDimensions () {

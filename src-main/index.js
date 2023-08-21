@@ -85,9 +85,9 @@ app.on('session-created', (session) => {
 
 app.on('web-contents-created', (event, webContents) => {
   webContents.on('will-navigate', (event, url) => {
-    // Only allow windows to refresh
-    // TODO: this probably isnt secure if the window can pushstate popstate etc.
-    if (webContents.getURL() !== url) {
+    // Only allow windows to refresh, not navigate anywhere.
+    const window = BaseWindow.getWindowByWebContents(webContents);
+    if (!window || url !== window.initialURL) {
       event.preventDefault();
       openExternal(url);
     }

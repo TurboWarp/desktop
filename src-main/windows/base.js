@@ -12,6 +12,8 @@ class BaseWindow {
     this.window.webContents.on('before-input-event', this.handleInput.bind(this));
     this.applySettings();
 
+    this.initialURL = 'about:blank';
+
     const cls = this.constructor;
     if (!windowsByClass.has(cls)) {
       windowsByClass.set(cls, []);
@@ -129,6 +131,11 @@ class BaseWindow {
     return options;
   }
 
+  loadURL (url) {
+    this.initialURL = url;
+    return this.window.loadURL(url);
+  }
+
   show () {
     this.window.show();
     this.window.focus();
@@ -208,14 +215,10 @@ class BaseWindow {
         }
       }
 
-      // Ctrl+R and Ctrl+Shift+R to reload
+      // Ctrl+R to reload
       if (input.control && input.key.toLowerCase() === 'r') {
         event.preventDefault();
-        if (input.shift) {
-          webContents.reloadIgnoringCache();
-        } else {
-          webContents.reload();
-        }
+        webContents.loadURL(this.initialURL);
       }
     }
   }

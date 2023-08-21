@@ -60,7 +60,7 @@ class PackagerWindow extends BaseWindow {
       });
     });
 
-    this.window.loadURL('tw-packager://./standalone.html');
+    this.loadURL('tw-packager://./standalone.html');
     this.show();
   }
 

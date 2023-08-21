@@ -5,10 +5,10 @@ const {APP_NAME} = require('../brand');
 class PrivacyWindow extends BaseWindow {
   constructor () {
     super();
-    this.window.loadURL('tw-privacy://./privacy.html');
     this.window.setTitle(`${translate('privacy-policy')} - ${APP_NAME}`);
     this.window.setMinimizable(false);
     this.window.setMaximizable(false);
+    this.loadURL('tw-privacy://./privacy.html');
   }
 
   getDimensions () {
