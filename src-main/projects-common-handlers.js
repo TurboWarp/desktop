@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const {promisify} = require('util');
+const askForMediaAccess = require('./media-permissions');
 const settings = require('./settings');
 
 const readdir = promisify(fs.readdir);
@@ -62,7 +63,53 @@ const onHeadersReceived = (details, callback) => {
   }
 };
 
+const handlePermissionCheck = (permission, details) => (
+  // Autoplay audio and media device enumeration
+  permission === 'media' ||
+
+  // Entering fullscreen with enhanced fullscreen addon
+  permission === 'window-placement' ||
+
+  // Notifications extension
+  permission === 'notifications' ||
+
+  // Custom fonts menu
+  permission === 'local-fonts'
+);
+
+const handlePermissionRequest = async (permission, details) => {
+  // Attempting to record video or audio
+  if (permission === 'media') {
+    // mediaTypes is not guaranteed to exist
+    const mediaTypes = details.mediaTypes || [];
+    for (const mediaType of mediaTypes) {
+      const hasPermission = await askForMediaAccess(this.window, mediaType);
+      if (!hasPermission) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  return (
+    // Enhanced fullscreen addon
+    permission === 'fullscreen' ||
+
+    // Pointerlock extension and experiment
+    permission === 'pointerLock' ||
+
+    // Notifications extension
+    permission === 'notifications' ||
+
+    // Clipboard extension
+    permission === 'clipboard-sanitized-write' ||
+    permission === 'clipboard-read'
+  );
+};
+
 module.exports = {
   onBeforeRequest,
-  onHeadersReceived
+  onHeadersReceived,
+  handlePermissionCheck,
+  handlePermissionRequest
 };

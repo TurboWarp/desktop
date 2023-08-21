@@ -11,8 +11,7 @@ const PackagerWindow = require('./packager');
 const {createAtomicWriteStream} = require('../atomic-write-stream');
 const {translate, updateLocale, getStrings} = require('../l10n');
 const {APP_NAME} = require('../brand');
-const askForMediaAccess = require('../media-permissions');
-const {onBeforeRequest, onHeadersReceived} = require('../project-request-filtering');
+const ProjectsCommonHandlers = require('../projects-common-handlers');
 const prompts = require('../prompts');
 const settings = require('../settings');
 const privilegedFetchAsBuffer = require('../fetch');
@@ -380,47 +379,19 @@ class EditorWindow extends BaseWindow {
   }
 
   handlePermissionCheck (permission, details) {
-    // Autoplay audio and media device filtering
-    if (permission === 'media') {
-      return true;
-    }
-
-    return false;
+    return ProjectsCommonHandlers.handlePermissionCheck(permission, details);
   }
 
-  async handlePermissionRequest (permission, details) {
-    // Pointerlock extension and experiment
-    if (permission === 'pointerLock') {
-      return true;
-    }
-
-    // Notifications extension
-    if (permission === 'notifications') {
-      return callback(true);
-    }
-
-    // Attempting to record video or audio
-    if (permission === 'media') {
-      // mediaTypes is not guaranteed to exist
-      const mediaTypes = details.mediaTypes || [];
-      for (const mediaType of mediaTypes) {
-        const hasPermission = await askForMediaAccess(this.window, mediaType);
-        if (!hasPermission) {
-          return false;
-        }
-      }
-      return true;
-    }
-
-    return false;
+  handlePermissionRequest (permission, details) {
+    return ProjectsCommonHandlers.handlePermissionRequest(permission, details);
   }
 
   onBeforeRequest (details, callback) {
-    onBeforeRequest(details, callback);
+    ProjectsCommonHandlers.onBeforeRequest(details, callback);
   }
 
   onHeadersReceived (details, callback) {
-    onHeadersReceived(details, callback);
+    ProjectsCommonHandlers.onHeadersReceived(details, callback);
   }
 
   applySettings () {

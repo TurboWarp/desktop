@@ -6,8 +6,8 @@ const openExternal = require('../open-external');
 const windowsByClass = new Map();
 
 class BaseWindow {
-  constructor () {
-    this.window = new BrowserWindow(this.getWindowOptions());
+  constructor (existingWindow) {
+    this.window = existingWindow || new BrowserWindow(this.getWindowOptions());
     this.window.webContents.setWindowOpenHandler(this.handleWindowOpen.bind(this));
     this.window.webContents.on('before-input-event', this.handleInput.bind(this));
     this.applySettings();
@@ -216,7 +216,7 @@ class BaseWindow {
       }
 
       // Ctrl+R to reload
-      if (input.control && input.key.toLowerCase() === 'r') {
+      if (input.control && input.key.toLowerCase() === 'r' && this.initialURL !== 'about:blank') {
         event.preventDefault();
         webContents.loadURL(this.initialURL);
       }

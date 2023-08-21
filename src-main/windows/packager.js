@@ -1,6 +1,7 @@
 const BaseWindow = require('./base');
 const {PACKAGER_NAME} = require('../brand');
-const {onBeforeRequest, onHeadersReceived} = require('../project-request-filtering');
+const ProjectsCommonHandlers = require('../projects-common-handlers');
+const PackagerPreviewWindow = require('./packager-preview');
 const prompts = require('../prompts');
 const {translate} = require('../l10n');
 
@@ -48,22 +49,8 @@ class PackagerWindow extends BaseWindow {
       `);
     });
 
-    this.window.webContents.on('did-create-window', (newWindow, details) => {
-      // Center the window on the parent
-      const parentBounds = this.window.getBounds();
-      const newBounds = newWindow.getBounds();
-      const centerX = parentBounds.x + (parentBounds.width / 2) - (newBounds.width / 2);
-      const centerY = parentBounds.y + (parentBounds.height / 2) - (newBounds.height / 2);
-      newWindow.setPosition(centerX, centerY);
-      newWindow.show();
-
-      // Implement Escape to exit
-      newWindow.webContents.on('before-input-event', (event, input) => {
-        if (input.key === 'Escape') {
-          event.preventDefault();
-          newWindow.close();
-        }
-      });
+    this.window.webContents.on('did-create-window', (newWindow) => {
+      new PackagerPreviewWindow(this.window, newWindow);
     });
 
     this.loadURL('tw-packager://./standalone.html');
@@ -84,10 +71,6 @@ class PackagerWindow extends BaseWindow {
 
   getBackgroundColor () {
     return '#111111';
-  }
-
-  static forEditor (editorWindow) {
-    new PackagerWindow(editorWindow);
   }
 
   handleWindowOpen (details) {
@@ -113,11 +96,11 @@ class PackagerWindow extends BaseWindow {
   }
 
   onBeforeRequest (details, callback) {
-    onBeforeRequest(details, callback);
+    ProjectsCommonHandlers.onBeforeRequest(details, callback);
   }
 
-  onHeadersReceived (details, callback) {
-    onHeadersReceived(details, callback);
+  static forEditor (editorWindow) {
+    new PackagerWindow(editorWindow);
   }
 }
 
