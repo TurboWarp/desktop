@@ -1,10 +1,10 @@
 const {app, dialog} = require('electron');
-const path = require('path');
 
 if (!app.requestSingleInstanceLock()) {
   app.exit();
 }
 
+const path = require('path');
 const openExternal = require('./open-external');
 const BaseWindow = require('./windows/base');
 const EditorWindow = require('./windows/editor');
