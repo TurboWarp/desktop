@@ -8,6 +8,7 @@ class PackagerWindow extends BaseWindow {
   constructor (editorWindow) {
     super();
 
+    /** @type {BaseWindow} */
     this.editorWindow = editorWindow;
     this.window.setTitle(PACKAGER_NAME);
 
@@ -18,8 +19,13 @@ class PackagerWindow extends BaseWindow {
     const ipc = this.window.webContents.ipc;
 
     ipc.on('import-project-with-port', (event) => {
-      // TODO: editor window may have been destroyed by this point
       const port = event.ports[0];
+      if (this.editorWindow.window.isDestroyed()) {
+        port.postMessage({
+          error: true
+        });
+        return;
+      }
       this.editorWindow.window.webContents.postMessage('export-project-to-port', null, [port]);
     });
 
