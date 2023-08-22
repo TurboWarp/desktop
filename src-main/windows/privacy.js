@@ -12,7 +12,10 @@ class PrivacyWindow extends BaseWindow {
   }
 
   getDimensions () {
-    return [800, 700];
+    return {
+      width: 800,
+      height: 700
+    };
   }
 
   isPopup () {

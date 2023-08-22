@@ -1,9 +1,7 @@
 const BaseWindow = require('./base');
 const {PACKAGER_NAME} = require('../brand');
-const ProjectsCommonHandlers = require('../projects-common-handlers');
 const PackagerPreviewWindow = require('./packager-preview');
 const prompts = require('../prompts');
-const {translate} = require('../l10n');
 
 class PackagerWindow extends BaseWindow {
   constructor (editorWindow) {
@@ -11,8 +9,8 @@ class PackagerWindow extends BaseWindow {
 
     /** @type {BaseWindow} */
     this.editorWindow = editorWindow;
-    this.window.setTitle(PACKAGER_NAME);
 
+    this.window.setTitle(PACKAGER_NAME);
     this.window.on('page-title-updated', (event) => {
       event.preventDefault();
     });
@@ -62,7 +60,10 @@ class PackagerWindow extends BaseWindow {
   }
 
   getDimensions () {
-    return [700, 700];
+    return {
+      width: 700,
+      height: 700
+    };
   }
 
   isPopup () {
@@ -85,7 +86,14 @@ class PackagerWindow extends BaseWindow {
   }
 
   onBeforeRequest (details, callback) {
-    ProjectsCommonHandlers.onBeforeRequest(details, callback);
+    const parsed = new URL(details.url);
+    if (parsed.origin === 'https://extensions.turbowarp.org') {
+      return callback({
+        redirectURL: `tw-extensions://./${parsed.pathname}`
+      });
+    }
+
+    return super.onBeforeRequest(details, callback);
   }
 
   static forEditor (editorWindow) {

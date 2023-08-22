@@ -75,7 +75,10 @@ class UpdateWindow extends BaseWindow {
   }
 
   getDimensions () {
-    return [600, 500];
+    return {
+      width: 600,
+      height: 500
+    };
   }
 
   getPreload () {

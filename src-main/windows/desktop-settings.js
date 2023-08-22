@@ -81,7 +81,10 @@ class DesktopSettingsWindow extends BaseWindow {
   }
 
   getDimensions () {
-    return [500, 450];
+    return {
+      width: 500,
+      height: 450
+    };
   }
 
   getPreload () {

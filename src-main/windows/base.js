@@ -7,12 +7,13 @@ const windowsByClass = new Map();
 
 class BaseWindow {
   constructor (existingWindow) {
+    /** @type {Electron.BrowserWindow} */
     this.window = existingWindow || new BrowserWindow(this.getWindowOptions());
     this.window.webContents.setWindowOpenHandler(this.handleWindowOpen.bind(this));
     this.window.webContents.on('before-input-event', this.handleInput.bind(this));
     this.applySettings();
 
-    this.initialURL = 'about:blank';
+    this.initialURL = null;
 
     const cls = this.constructor;
     if (!windowsByClass.has(cls)) {
@@ -67,13 +68,34 @@ class BaseWindow {
     return new cls();
   }
 
+  /**
+   * @param {Electron.Rectangle} area
+   * @param {{width: number; height: number;}} preferredDimensions
+   * @returns {Electron.Rectangle}
+   */
+  static calculateWindowBounds (area, preferredDimensions) {
+    const width = Math.min(area.width, preferredDimensions.width);
+    const height = Math.min(area.height, preferredDimensions.height);
+    const x = area.x + ((area.width - width) / 2);
+    const y = area.y + ((area.height - height) / 2);
+    return {
+      x,
+      y,
+      width,
+      height
+    };
+  }
+
   getPreload () {
     // to be overridden
   }
 
   getDimensions () {
     // to be overridden
-    return [200, 200];
+    return {
+      width: 200,
+      height: 200
+    };
   }
 
   isPopup () {
@@ -90,10 +112,6 @@ class BaseWindow {
     /** @type {Electron.BrowserWindowConstructorOptions} */
     const options = {};
 
-    const dimensions = this.getDimensions();
-    options.width = dimensions[0];
-    options.height = dimensions[1];
-
     options.useContentSize = true;
     options.minWidth = 200;
     options.minHeight = 200;
@@ -103,11 +121,11 @@ class BaseWindow {
 
     // Electron's default window placement handles multimonitor setups extremely poorly on Linux
     const activeScreen = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
-    const bounds = activeScreen.workArea;
-    options.width = Math.min(bounds.width, options.width);
-    options.height = Math.min(bounds.height, options.height);
-    options.x = bounds.x + ((bounds.width - options.width) / 2);
-    options.y = bounds.y + ((bounds.height - options.height) / 2);
+    const bounds = BaseWindow.calculateWindowBounds(activeScreen.workArea, this.getDimensions());
+    options.x = bounds.x;
+    options.y = bounds.y;
+    options.width = bounds.width;
+    options.height = bounds.height;
 
     // These should all be redundant already, but defense-in-depth.
     options.webPreferences = {
@@ -216,7 +234,7 @@ class BaseWindow {
       }
 
       // Ctrl+R to reload
-      if (input.control && input.key.toLowerCase() === 'r' && this.initialURL !== 'about:blank') {
+      if (input.control && input.key.toLowerCase() === 'r' && this.initialURL !== null) {
         event.preventDefault();
         webContents.loadURL(this.initialURL);
       }

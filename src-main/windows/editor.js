@@ -2,7 +2,7 @@ const fs = require('fs');
 const {promisify} = require('util');
 const path = require('path');
 const {app, dialog} = require('electron');
-const BaseWindow = require('./base');
+const ProjectRunningWindow = require('./project-running-window');
 const AddonsWindow = require('./addons');
 const DesktopSettingsWindow = require('./desktop-settings');
 const PrivacyWindow = require('./privacy');
@@ -11,7 +11,6 @@ const PackagerWindow = require('./packager');
 const {createAtomicWriteStream} = require('../atomic-write-stream');
 const {translate, updateLocale, getStrings} = require('../l10n');
 const {APP_NAME} = require('../brand');
-const ProjectsCommonHandlers = require('../projects-common-handlers');
 const prompts = require('../prompts');
 const settings = require('../settings');
 const privilegedFetchAsBuffer = require('../fetch');
@@ -81,7 +80,7 @@ const parseOpenedFile = (file, workingDirectory) => {
   return new OpenedFile(TYPE_FILE, path.resolve(workingDirectory, file));
 };
 
-class EditorWindow extends BaseWindow {
+class EditorWindow extends ProjectRunningWindow {
   /**
    * @param {OpenedFile|null} file
    */
@@ -372,27 +371,14 @@ class EditorWindow extends BaseWindow {
   }
 
   getDimensions () {
-    return [1280, 800];
+    return {
+      width: 1280,
+      height: 800
+    };
   }
 
   getBackgroundColor () {
     return '#333333';
-  }
-
-  handlePermissionCheck (permission, details) {
-    return ProjectsCommonHandlers.handlePermissionCheck(permission, details);
-  }
-
-  handlePermissionRequest (permission, details) {
-    return ProjectsCommonHandlers.handlePermissionRequest(permission, details);
-  }
-
-  onBeforeRequest (details, callback) {
-    ProjectsCommonHandlers.onBeforeRequest(details, callback);
-  }
-
-  onHeadersReceived (details, callback) {
-    ProjectsCommonHandlers.onHeadersReceived(details, callback);
   }
 
   applySettings () {

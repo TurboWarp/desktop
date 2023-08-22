@@ -45,7 +45,10 @@ class AddonsWindow extends BaseWindow {
   }
 
   getDimensions () {
-    return [700, 650];
+    return {
+      width: 700,
+      height: 650
+    };
   }
 
   getPreload () {

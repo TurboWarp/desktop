@@ -26,7 +26,10 @@ class AboutWindow extends BaseWindow {
   }
 
   getDimensions () {
-    return [750, 650];
+    return {
+      width: 750,
+      height: 650
+    };
   }
 
   getPreload () {

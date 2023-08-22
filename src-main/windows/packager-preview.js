@@ -1,39 +1,18 @@
 const BaseWindow = require('./base');
-const ProjectsCommonHandlers = require('../projects-common-handlers');
+const ProjectRunningWindow = require('./project-running-window');
 const {translate} = require('../l10n');
 
-class PackagerPreviewWindow extends BaseWindow {
+class PackagerPreviewWindow extends ProjectRunningWindow {
   constructor (parentWindow, existingWindow) {
     super(existingWindow);
 
-    // Center the window on the parent
-    const parentBounds = parentWindow.getBounds();
-    const newBounds = this.window.getBounds();
-    const centerX = parentBounds.x + (parentBounds.width / 2) - (newBounds.width / 2);
-    const centerY = parentBounds.y + (parentBounds.height / 2) - (newBounds.height / 2);
-    this.window.setPosition(centerX, centerY);
+    this.window.setBounds(BaseWindow.calculateWindowBounds(parentWindow.getBounds(), this.window.getBounds()));
 
     this.show();
   }
 
   isPopup () {
     return true;
-  }
-
-  handlePermissionCheck (permission, details) {
-    return ProjectsCommonHandlers.handlePermissionCheck(permission, details);
-  }
-
-  handlePermissionRequest (permission, details) {
-    return ProjectsCommonHandlers.handlePermissionRequest(permission, details);
-  }
-
-  onBeforeRequest (details, callback) {
-    ProjectsCommonHandlers.onBeforeRequest(details, callback);
-  }
-
-  onHeadersReceived (details, callback) {
-    ProjectsCommonHandlers.onHeadersReceived(details, callback);
   }
 
   static getBrowserWindowOverrides () {
