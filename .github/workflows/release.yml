@@ -16,9 +16,6 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
-    env:
-      NODE_ENV: production
-
     steps:
     - uses: actions/checkout@v3
       with:
@@ -35,6 +32,8 @@ jobs:
 
     - name: Compile
       run: npm run webpack:compile
+      env:
+        NODE_ENV: production
 
     - name: Package Windows
       if: runner.os == 'Windows'
