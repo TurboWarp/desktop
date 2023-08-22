@@ -3,6 +3,7 @@ const path = require('path')
 const {promisify} = require('util');
 const BaseWindow = require('./base');
 const settings = require('../settings');
+const askForMediaAccess = require('../media-permissions');
 
 const readdir = promisify(fs.readdir);
 
