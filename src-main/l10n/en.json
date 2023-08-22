@@ -163,6 +163,10 @@
     "string": "Error: {error}",
     "developer_comment": "Appears in dropdown to select camera or microphone if there was an error"
   },
+  "desktop-settings.editor-must-be-open": {
+    "string": "Error: Open editor to configure devices",
+    "developer_comment": "Appears in dropdown to select camera or microphone if the editor is not open"
+  },
   "desktop-settings.media-devices-changed": {
     "string": "You may have to restart the application for microphone or camera changes to apply.",
     "developer_comment": "Warning that appears in desktop settings after changing the selected camera or microphone"

@@ -42,6 +42,7 @@ class DesktopSettingsWindow extends BaseWindow {
       const EditorWindow = require('./editor');
       const anEditorWindow = BaseWindow.getWindowsByClass(EditorWindow)[0];
       if (!anEditorWindow) {
+        // If you change this error message, please make sure to update desktop settings' error handling
         throw new Error('Editor must be open');
       }
       return anEditorWindow.enumerateMediaDevices();
