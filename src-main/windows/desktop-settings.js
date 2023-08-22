@@ -3,6 +3,7 @@ const BaseWindow = require('./base');
 const {translate, getStrings, getLocale} = require('../l10n');
 const {APP_NAME} = require('../brand');
 const settings = require('../settings');
+const {isEnabledAtBuildTime} = require('../update-checker');
 
 class DesktopSettingsWindow extends BaseWindow {
   constructor () {
@@ -23,6 +24,7 @@ class DesktopSettingsWindow extends BaseWindow {
 
     ipc.on('get-settings', (event) => {
       event.returnValue = {
+        updateCheckerAllowed: isEnabledAtBuildTime(),
         updateChecker: settings.updateChecker,
         microphone: settings.microphone,
         camera: settings.camera,

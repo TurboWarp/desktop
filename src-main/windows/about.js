@@ -16,6 +16,7 @@ class AboutWindow extends BaseWindow {
     ipc.on('get-info', (event) => {
       event.returnValue = {
         version: packageJSON.version,
+        dist: packageJSON.tw_dist || 'none',
         electron: process.versions.electron,
         platform: process.platform,
         arch: process.arch

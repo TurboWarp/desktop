@@ -123,6 +123,10 @@
     "string": "Desktop Settings",
     "developer_comment": "Title of desktop settings window"
   },
+  "desktop-settings.update-checker-not-allowed": {
+    "string": "Update checker is always disabled in this build.",
+    "developer_comment": "Appears in desktop settings when the update checker is not available."
+  },
   "desktop-settings.update-checker": {
     "string": "Update Checker",
     "developer_comment": "Label of dropdown to configure the update checker"

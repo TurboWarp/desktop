@@ -8,8 +8,10 @@ const privilegedFetchAsBuffer = require('./fetch');
 const currentVersion = packageJSON.version;
 const URL = 'https://desktop.turbowarp.org/version.json';
 
+const isEnabledAtBuildTime = () => packageJSON.tw_update === 'yes';
+
 const checkForUpdates = async () => {
-  if (settings.updateChecker === 'never') {
+  if (!isEnabledAtBuildTime() || settings.updateChecker === 'never') {
     return;
   }
 
@@ -53,6 +55,7 @@ const ignoreUpdate = async (version, until) => {
 };
 
 module.exports = {
+  isEnabledAtBuildTime,
   checkForUpdates,
   ignoreUpdate
 };

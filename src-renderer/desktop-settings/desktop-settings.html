@@ -46,6 +46,10 @@
         border-radius: 0.25rem;
         padding: 0.5rem;
       }
+
+      [hidden] {
+        display: none !important;
+      }
     </style>
   </head>
   <body>
@@ -60,7 +64,8 @@
       <h1 class="title"></h1>
       <script>document.querySelector('.title').textContent = strings['desktop-settings.title'];</script>
 
-      <label>
+      <p class="update-checker-disabled"></p>
+      <label class="update-checker-outer">
         <div class="label update-checker-label"></div>
         <select class="update-checker-select" autocomplete="off">
           <option value="stable"></option>
@@ -70,20 +75,31 @@
       </label>
       <div class="warning update-checker-warning"></div>
       <script>
-        const updateCheckerSelect = document.querySelector('.update-checker-select');
+        const updateCheckerDisabledMessage = document.querySelector('.update-checker-disabled');
+        const updateCheckerOuter = document.querySelector('.update-checker-outer');
         const updateCheckerWarning = document.querySelector('.update-checker-warning');
-        updateCheckerSelect.onchange = () => {
-          DesktopSettingsPreload.setUpdateChecker(updateCheckerSelect.value);
-          updateCheckerWarning.hidden = updateCheckerSelect.value !== 'never';
-        };
-        updateCheckerSelect.value = settings.updateChecker;
-        updateCheckerWarning.hidden = updateCheckerSelect.value !== 'never';
 
-        document.querySelector('.update-checker-label').textContent = strings['desktop-settings.update-checker'];
-        updateCheckerSelect.querySelector('[value=stable]').textContent = strings['desktop-settings.notify-stable'];
-        updateCheckerSelect.querySelector('[value=security]').textContent = strings['desktop-settings.notify-security'];
-        updateCheckerSelect.querySelector('[value=never]').textContent = strings['desktop-settings.notify-never'];
-        updateCheckerWarning.textContent = strings['desktop-settings.disabled-updates'];
+        updateCheckerDisabledMessage.hidden = settings.updateCheckerAllowed;
+        updateCheckerOuter.hidden = !settings.updateCheckerAllowed;
+        updateCheckerWarning.hidden = !settings.updateCheckerAllowed;
+
+        if (settings.updateCheckerAllowed) {
+          const updateCheckerSelect = document.querySelector('.update-checker-select');
+          updateCheckerSelect.onchange = () => {
+            DesktopSettingsPreload.setUpdateChecker(updateCheckerSelect.value);
+            updateCheckerWarning.hidden = updateCheckerSelect.value !== 'never';
+          };
+          updateCheckerSelect.value = settings.updateChecker;
+          updateCheckerWarning.hidden = updateCheckerSelect.value !== 'never';
+  
+          document.querySelector('.update-checker-label').textContent = strings['desktop-settings.update-checker'];
+          updateCheckerSelect.querySelector('[value=stable]').textContent = strings['desktop-settings.notify-stable'];
+          updateCheckerSelect.querySelector('[value=security]').textContent = strings['desktop-settings.notify-security'];
+          updateCheckerSelect.querySelector('[value=never]').textContent = strings['desktop-settings.notify-never'];
+          updateCheckerWarning.textContent = strings['desktop-settings.disabled-updates'];
+        } else {
+          updateCheckerDisabledMessage.textContent = strings['desktop-settings.update-checker-not-allowed'];
+        }
       </script>
 
       <label>

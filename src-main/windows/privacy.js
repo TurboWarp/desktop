@@ -2,12 +2,17 @@ const BaseWindow = require('./base');
 const DesktopSettingsWindow = require('./desktop-settings');
 const {translate} = require('../l10n');
 const {APP_NAME} = require('../brand');
+const {isEnabledAtBuildTime} = require('../update-checker');
 
 class PrivacyWindow extends BaseWindow {
   constructor () {
     super();
 
     const ipc = this.window.webContents.ipc;
+
+    ipc.on('is-update-checker-allowed', (e) => {
+      e.returnValue = isEnabledAtBuildTime();
+    });
 
     ipc.handle('open-desktop-settings', () => {
       DesktopSettingsWindow.show();
