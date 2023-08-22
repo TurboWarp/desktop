@@ -79,10 +79,10 @@ class BaseWindow {
     const x = area.x + ((area.width - width) / 2);
     const y = area.y + ((area.height - height) / 2);
     return {
-      x,
-      y,
-      width,
-      height
+      x: Math.round(x),
+      y: Math.round(y),
+      width: Math.round(width),
+      height: Math.round(height)
     };
   }
 
