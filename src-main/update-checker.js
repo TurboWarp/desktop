@@ -1,5 +1,4 @@
 const semverLt = require('semver/functions/lt');
-const semverSatisfies = require('semver/functions/satisfies');
 const settings = require('./settings');
 const UpdateWindow = require('./windows/update');
 const packageJSON = require('../package.json');
@@ -18,10 +17,10 @@ const checkForUpdates = async () => {
   const jsonBuffer = await privilegedFetchAsBuffer(URL);
   const json = JSON.parse(jsonBuffer.toString());
   const latestVersion = json.latest;
-  const yanked = json.yanked;
+  const oldestSafe = json.oldest_safe;
 
   // Security updates can not be ignored.
-  if (semverSatisfies(currentVersion, yanked)) {
+  if (semverLt(currentVersion, oldestSafe)) {
     UpdateWindow.updateAvailable(currentVersion, latestVersion, true);
     return;
   }
