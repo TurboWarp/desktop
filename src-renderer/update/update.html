@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src https://desktop.turbowarp.org">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: black;
+        background-color: white;
+      }
+      main {
+        padding: 20px;
+        box-sizing: border-box;
+        width: 100vw;
+        height: 100vh;
+        border: 20px solid hsla(0, 100%, 65%, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      h1, h2, p {
+        margin: 0;
+      }
+      ul {
+        margin: 0.5rem 0;
+      }
+
+      .update-log {
+        width: 100%;
+        flex-grow: 1;
+        border: 0;
+        overflow: auto;
+      }
+      .loading, .error, .empty {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      button {
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        border: 1px solid hsla(0, 0%, 0%, 0.15);
+        font-weight: bold;
+      }
+      .download-button {
+        color: black;
+        background-color: #24cd11;
+      }
+      .ignore-button {
+
+      }
+      label {
+        cursor: pointer;
+      }
+
+      .if-security {
+        display: none;
+      }
+      .security .if-security {
+        display: initial;
+      }
+      .security .if-normal {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <script>
+        const {appName, locale, strings} = UpdatePreload.getStrings();
+        document.documentElement.lang = locale;
+
+        const info = UpdatePreload.getInfo();
+        if (info.security) {
+          document.body.classList.add('security');
+        }
+      </script>
+
+      <h1 class="normal-title if-normal"></h1>
+      <h1 class="security-title if-security"></h1>
+      <script>
+        document.querySelector('.normal-title').textContent = strings['update.normal-title'];
+        document.querySelector('.security-title').textContent = strings['update.security-title'];
+      </script>
+
+      <p class="normal-description if-normal"></p>
+      <p class="security-description if-security"></p>
+      <script>
+        const appNameVersion = `${appName} v${info.latestVersion}`;
+        document.querySelector('.normal-description').textContent = strings['update.normal-description'].replace('{appNameVersion}', appNameVersion);
+        document.querySelector('.security-description').textContent = strings['update.security-description'].replace('{appNameVersion}', appNameVersion);;
+      </script>
+
+      <div class="update-log">
+        <p class="loading"></p>
+      </div>
+      <script>
+        document.querySelector('.loading').textContent = strings['update.loading'];
+      </script>
+
+      <button class="download-button"></button>
+      <button class="ignore-button"></button>
+      <script>
+        const downloadButton = document.querySelector('.download-button');
+        const ignoreButton = document.querySelector('.ignore-button');
+        downloadButton.textContent = strings['update.download-button'];
+        ignoreButton.textContent = strings['update.ignore-button'];
+      </script>
+
+      <label class="permanently-ignore-outer if-normal">
+        <input type="checkbox" class="permanently-ignore-checkbox">
+        <span class="permanently-ignore-label"></span>
+      </label>
+
+      <script>
+        document.querySelector('.permanently-ignore-label').textContent = strings['update.permanently-ignore'];
+
+        const permanentCheckbox = document.querySelector('.permanently-ignore-checkbox');
+        downloadButton.addEventListener('click', () => {
+          UpdatePreload.download();
+        });
+        ignoreButton.addEventListener('click', () => {
+          UpdatePreload.ignore(permanentCheckbox.checked);
+        });
+
+        const compareVersions = (a, b) => {
+          const partsA = a.split('-')[0].split('.');
+          const partsB = b.split('-')[0].split('.');
+          const expectedLength = 3;
+          for (var i = 0; i < expectedLength; i++) {
+            const itemA = +partsA[i];
+            const itemB = +partsB[i];
+            if (itemA > itemB) {
+              return 1;
+            } else if (itemA < itemB) {
+              return 2;
+            }
+          }
+          return 0;
+        };
+
+        const removeChildren = (el) => {
+          while (el.firstChild) {
+            el.removeChild(el.firstChild);
+          }
+        };
+
+        const changelog = document.querySelector('.update-log');
+        fetch(`https://desktop.turbowarp.org/changelog.json?version=${info.latestVersion}`)
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(`HTTP error ${res.status}`);
+            }
+            return res.json();
+          })
+          .then((releases) => {
+            removeChildren(changelog);
+
+            const releaseNotes = releases.filter(({version}) => compareVersions(info.currentVersion, version) === 2);
+            if (releaseNotes.length) {
+              changelog.lang = 'en';
+
+              for (const {version, date, notes} of releaseNotes) {
+                const titleElement = document.createElement('h2');
+                titleElement.textContent = `v${version} (${date})`;
+                changelog.appendChild(titleElement);
+
+                const ul = document.createElement('ul');
+                for (const note of notes) {
+                  const li = document.createElement('li');
+                  li.textContent = note;
+                  ul.appendChild(li);
+                }
+                changelog.appendChild(ul);
+              }
+            } else {
+              const p = document.createElement('p');
+              p.className = 'empty';
+              p.textContent = 'Changelog not available yet.';
+              changelog.appendChild(p);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+
+            removeChildren(changelog);
+            const p = document.createElement('p');
+            p.className = 'error';
+            p.textContent = `Error loading changelog: ${error}`;
+            changelog.appendChild(p);
+          });
+      </script>
+    </main>
+  </body>
+</html>

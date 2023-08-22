@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+  <html>
+    <meta charset="utf8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src file:; frame-src tw-editor: tw-packager:">
+    <style>
+      :root {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background-color: #333;
+        color: #eee;
+      }
+
+      a {
+        color: #4af;
+      }
+      iframe {
+        /* just to make sure the window frame runs, keep it "visible" */
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      h1, p {
+        margin: 0;
+      }
+      main {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .step {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      .step-icon {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+      .step-icon[data-type="loading"] {
+        background-color: currentColor;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-size: cover;
+        -webkit-mask-image: url("./loading.svg");
+        animation-name: spin;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+      }
+      .step-icon[data-type="error"] {
+        background-image: url("./error.svg");
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+      .step-icon[data-type="success"] {
+        background-image: url("./check.svg");
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+      .error {
+        font-family: monospace;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .error-next-steps {
+        display: none;
+        flex-direction: column;
+        gap: 0.5rem;
+        font-weight: bold;
+      }
+      .continue-anyways {
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        background-color: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        font-weight: bold;
+        width: 100%;
+      }
+      .continue-anyways:disabled {
+        opacity: 0.8;
+      }
+    </style>
+  </html>
+  <body>
+    <main>
+      <h1 class="title"></h1>
+      <p class="description">This is a one-time process that may take a few moments.</p>
+
+      <div class="error-next-steps">
+        <p>
+          <span class="error-message">Some of your data could not be transferred. Please send a screenshot of this window to:</span>
+          <a href="mailto:contact@turbowarp.org">contact@turbowarp.org</a>
+        </p>
+        <button class="continue-anyways">Continue Anyways</button>
+      </div>
+
+      <div class="steps"></div>
+    </main>
+
+    <script>
+      /*
+      Local Storage:
+      twd:audio_id -> abandon (IDs differ across origins)
+      twd:video_id -> abandon (IDs differ across origins)
+      tw:theme -> tw-editor
+      tw:addons -> tw-editor
+      tw:language -> tw-editor
+      tw:username -> tw-editor
+      extensions.turbowarp.org/local-storage: -> tw-editor
+      SelectProject.type -> tw-packager
+      SelectProject.id -> tw-packager
+      PackagerOptions.* -> tw-packager
+      P4.locale -> tw-packager
+      P4.theme -> tw-packager
+
+      IndexedDB:
+      p4-local-settings -> tw-packager
+      p4-large-assets -> abandon
+      TW_Backpack -> tw-editor
+      TW_AutoSave -> abandon (likely to be very large)
+      */
+
+      const {strings, locale} = MigratePreload.getStrings();
+      document.documentElement.lang = locale;
+
+      document.querySelector('.title').textContent = strings['migrate.title'];
+      document.querySelector('.description').textContent = strings['migrate.description'];
+      document.querySelector('.error-message').textContent = strings['migrate.error'];
+      const stepsElement = document.querySelector('.steps');
+      const errorNextStepsElement = document.querySelector('.error-next-steps');
+      const continueAnywaysButton = document.querySelector('.continue-anyways');
+      continueAnywaysButton.textContent = strings['migrate.continue-anyways'];
+
+      let databases = [];
+      const gatherMetadata = async () => {
+        databases = await indexedDB.databases();
+      };
+
+      const exportDatabase = (databaseName, databaseVersion, storeName) => new Promise((resolve, reject) => {
+        if (!databases.find((i) => i.name === databaseName && i.version === databaseVersion)) {
+          return resolve(null);
+        }
+
+        const openRequest = indexedDB.open(databaseName, databaseVersion);
+        openRequest.onerror = () => {
+          reject(new Error(`Failed to open: ${openRequest.error}`));
+        };
+
+        openRequest.onsuccess = () => {
+          const db = openRequest.result;
+
+          const transaction = db.transaction(storeName, 'readonly');
+          transaction.onerror = (e) => {
+            reject(new Error(`Transaction error: ${transaction.error}`));
+          };
+
+          const items = [];
+          const transfer = [];
+
+          const readAsArrayBuffer = (blob) => new Promise((resolve, reject) => {
+            const fr = new FileReader();
+            fr.onsuccess = () => resolve(fr.result);
+            fr.onerror = () => reject(new Error(`Failed to read blob: ${fr.error}`));
+            fr.readAsArrayBuffer(blob);
+          });
+
+          const blobsToBuffers = async () => {
+            for (const item of items) {
+              for (const [key, value] of Object.entries(item)) {
+                if (value instanceof Blob) {
+                  const buffer = await readAsArrayBuffer(value);
+                  item[key] = buffer;
+                  transfer.push(buffer);
+                }
+              }
+            }
+          };
+
+          const store = transaction.objectStore(storeName);
+          const request = store.openCursor();
+          request.onsuccess = (e) => {
+            const cursor = e.target.result;
+            if (cursor) {
+              items.push(cursor.value);
+
+              for (const i of Object.values(cursor.value)) {
+                if (i instanceof ArrayBuffer || ArrayBuffer.isView(i)) {
+                  transfer.push(i);
+                }
+              }
+
+              cursor.continue();
+            } else {
+              blobsToBuffers();
+              resolve({
+                items,
+                transfer
+              });
+            }
+          };
+        };
+      });
+
+      const migrateEditor = async () => {
+        const storage = {};
+        for (const key of Object.keys(localStorage)) {
+          if (key === 'tw:theme' || key === 'tw:addons' || key === 'tw:language' || key === 'tw:username' || key.startsWith('extensions.turbowarp.org/local-storage:')) {
+            storage[key] = localStorage[key];
+          }
+        }
+
+        const backpack = await exportDatabase('TW_Backpack', 1, 'backpack');
+        const transfer = backpack ? backpack.transfer : [];
+
+        return new Promise((resolve, reject) => {
+          window.onmessage = async (e) => {
+            if (e.origin !== 'tw-editor://.') {
+              return;
+            }
+
+            const type = e.data.type;
+            if (type === 'start') {
+              e.source.postMessage({
+                storage,
+                backpack: backpack ? backpack.items : []
+              }, 'tw-editor://.', transfer);
+            } else if (type === 'error') {
+              reject(e.data.error);
+            } else if (type === 'done') {
+              resolve();
+            }
+          };
+
+          const iframe = document.createElement('iframe');
+          iframe.src = 'tw-editor://./gui/migrate-helper.html';
+          document.body.appendChild(iframe);
+        });
+      };
+
+      const migratePackager = async () => {
+        const storage = {};
+        for (const key of Object.keys(localStorage)) {
+          if (key.startsWith('SelectProject') || key.startsWith('PackagerOptions') || key === 'P4.locale' || key === 'P4.theme') {
+            storage[key] = localStorage[key];
+          }
+        }
+
+        const assets = await exportDatabase('p4-local-settings', 1, 'blobs');
+        const transfer = assets ? assets.transfer : [];
+
+        return new Promise((resolve, reject) => {
+          window.onmessage = (e) => {
+            if (e.origin !== 'tw-packager://.') {
+              return;
+            }
+
+            const type = e.data.type;
+            if (type === 'start') {
+              e.source.postMessage({
+                storage,
+                assets: assets ? assets.items : []
+              }, 'tw-packager://.', transfer);
+            } else if (type === 'error') {
+              reject(e.data.error);
+            } else if (type === 'done') {
+              resolve();
+            }
+          };
+
+          const iframe = document.createElement('iframe');
+          iframe.src = 'tw-packager://./migrate-helper.html';
+          document.body.appendChild(iframe);
+        });
+      };
+
+      const finish = async () => {
+        await MigratePreload.done();
+      };
+
+      let anyError = false;
+      const runStep = async (name, callback) => {
+        const stepElement = document.createElement('div');
+        stepElement.className = 'step';
+
+        const iconElement = document.createElement('div');
+        iconElement.className = 'step-icon';
+        iconElement.dataset.type = 'loading';
+        stepElement.appendChild(iconElement);
+
+        const textElement = document.createElement('div');
+        textElement.textContent = name;
+        stepElement.appendChild(textElement);
+
+        stepsElement.appendChild(stepElement);
+
+        await new Promise(resolve => setTimeout(resolve, 250));
+
+        try {
+          await callback();
+          iconElement.dataset.type = 'success';
+        } catch (error) {
+          console.error(error);
+          iconElement.dataset.type = 'error';
+
+          anyError = true;
+
+          const errorElement = document.createElement('div');
+          errorElement.className = 'error';
+          errorElement.textContent = error;
+          stepsElement.appendChild(errorElement);
+        }
+      };
+
+      const migrate = async () => {
+        await runStep(strings['migrate.preparing'], gatherMetadata);
+        await runStep(strings['migrate.transfer-editor'], migrateEditor);
+        await runStep(strings['migrate.transfer-packager'], migratePackager);
+
+        if (anyError) {
+          errorNextStepsElement.style.display = 'flex';
+        } else {
+          await runStep(strings['migrate.finalizing'], finish);
+        }
+      };
+
+      continueAnywaysButton.addEventListener('click', (e) => {
+        e.target.disabled = true;
+        finish();
+      });
+
+      migrate();
+    </script>
+  </body>
+</html>

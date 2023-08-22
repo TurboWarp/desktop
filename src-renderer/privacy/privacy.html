@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline';">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: black;
+        background-color: white;
+      }
+      main {
+        padding: 20px;
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 100vh;
+        border: 20px solid hsla(0, 100%, 65%, 1);
+      }
+      pre {
+        font-size: 0.8em;
+        overflow-x: hidden;
+      }
+      h1 {
+        margin-top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Privacy Policy</h1>
+
+      <h2>Update Checker</h2>
+      <p>This app contains an update checker which <a href="#" class="open-desktop-settings">can be disabled in desktop settings</a>.</p>
+      <script>
+        document.querySelector('.open-desktop-settings').addEventListener('click', () => {
+          PrivacyPreload.openDesktopSettings();
+        });
+      </script>
+
+      <h2>TODO</h2>
+
+      <p>Any concerns related to privacy or any other matter should be sent to: <a href="mailto:contact@turbowarp.org">contact@turbowarp.org</a></p>
+    </main>
+  </body>
+</html>

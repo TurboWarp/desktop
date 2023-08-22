@@ -1,36 +1,43 @@
 {
   "name": "turbowarp-desktop",
   "description": "Scratch mod with a compiler, dark mode, a bunch of addons, and more.",
-  "version": "1.8.1",
+  "version": "1.9.0-alpha.4",
   "license": "GPL-3.0",
   "author": {
     "email": "contact@turbowarp.org",
     "name": "Thomas Weber"
   },
   "scripts": {
-    "dev": "npm run start",
-    "start": "electron-webpack dev",
-    "compile": "electron-webpack",
-    "dist": "npm run compile && electron-builder",
-    "dist:dir": "npm run compile && electron-builder --dir",
-    "fetch": "node scripts/download-library-files.js && node scripts/download-packager.js && node scripts/prepare-extensions.js"
+    "fetch": "node scripts/download-library-files.js && node scripts/download-packager.js && node scripts/prepare-extensions.js",
+    "webpack:compile": "webpack",
+    "webpack:watch": "webpack --watch",
+    "electron:start": "electron src-main/index.js",
+    "electron:package:dir": "electron-builder --dir"
   },
-  "dependencies": {},
+  "dependencies": {
+    "semver": "^7.5.3"
+  },
   "devDependencies": {
+    "@babel/core": "^7.22.10",
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.13.13",
     "@electron/notarize": "^2.1.0",
-    "@turbowarp/electron-webpack": "^2.9.1",
-    "css-loader": "^5.0.2",
+    "async-limiter": "^2.0.0",
+    "autoprefixer": "^9.8.8",
+    "babel-loader": "^8.3.0",
+    "copy-webpack-plugin": "^6.4.1",
+    "css-loader": "^1.0.1",
     "electron": "^22.3.13",
     "electron-builder": "^24.4.0",
     "postcss": "^8.4.13",
     "postcss-import": "^14.0.0",
     "postcss-loader": "^4.2.0",
     "postcss-simple-vars": "^6.0.3",
-    "scratch-gui": "git+https://github.com/TurboWarp/scratch-gui.git#desktop",
-    "semver": "^7.5.3",
-    "webpack": "~4.46.0"
+    "scratch-gui": "git+https://github.com/TurboWarp/scratch-gui.git#develop",
+    "style-loader": "^0.23.0",
+    "url-loader": "^4.1.1",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^4.10.0"
   },
   "homepage": "https://desktop.turbowarp.org/",
   "repository": {
@@ -41,10 +48,25 @@
     "url": "https://github.com/TurboWarp/desktop/issues",
     "email": "contact@turbowarp.org"
   },
+  "main": "./src-main/index.js",
   "build": {
-    "extends": "file:node_modules/@turbowarp/electron-webpack/out/electron-builder.js",
     "appId": "org.turbowarp.desktop",
     "productName": "TurboWarp",
+    "files": [
+      "node_modules/**/*",
+      "src-main/**/*",
+      "src-preload/**/*",
+      "src-renderer/**/*",
+      "dist-renderer-webpack/**/*",
+      "dist-library-files/**/*",
+      "dist-extensions/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "art/icon.png",
+        "to": "icon.png"
+      }
+    ],
     "win": {
       "artifactName": "${productName} Portable ${version} ${arch}.${ext}",
       "icon": "build/icon.ico",
@@ -169,18 +191,6 @@
       }
     ],
     "afterSign": "scripts/after-sign.js"
-  },
-  "electronWebpack": {
-    "main": {
-      "webpackConfig": "webpack.main.js",
-      "extraEntries": [
-        "@/preload.js"
-      ]
-    },
-    "renderer": {
-      "webpackConfig": "webpack.renderer.js",
-      "template": "src/renderer/template.html"
-    }
   },
   "private": true
 }
