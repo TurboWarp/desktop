@@ -49,7 +49,6 @@ class Settings {
     const serialized = {
       v2: this.data
     };
-    console.log('Saving', serialized);
     await writeFileAtomic(PATH, JSON.stringify(serialized, null, 2));
   }
 

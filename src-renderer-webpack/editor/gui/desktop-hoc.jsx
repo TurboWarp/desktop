@@ -100,7 +100,6 @@ const DesktopHOC = function (WrappedComponent) {
 
         this.props.onHasInitialProject(true, this.props.loadingState);
         const {name, type, data} = await EditorPreload.getFile(id);
-        console.log(data);
 
         await this.props.vm.loadProject(data);
         this.props.onLoadingCompleted();
