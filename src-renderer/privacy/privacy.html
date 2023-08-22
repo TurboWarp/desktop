@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline';">
     <style>
       body {
         margin: 0;
@@ -30,8 +30,18 @@
   <body>
     <main>
       <h1>Privacy Policy</h1>
-      <p>TODO: Update this</p>
-      <p><a href="mailto:contact@turbowarp.org">contact@turbowarp.org</a></p>
+
+      <h2>Update Checker</h2>
+      <p>This app contains an update checker which <a href="#" class="open-desktop-settings">can be disabled in desktop settings</a>.</p>
+      <script>
+        document.querySelector('.open-desktop-settings').addEventListener('click', () => {
+          PrivacyPreload.openDesktopSettings();
+        });
+      </script>
+
+      <h2>TODO</h2>
+
+      <p>Any concerns related to privacy or any other matter should be sent to: <a href="mailto:contact@turbowarp.org">contact@turbowarp.org</a></p>
     </main>
   </body>
 </html>
