@@ -57,7 +57,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: appx
-        path: tw_dist/*.appx
+        path: dist/*.appx
 
     - name: Package macOS
       if: runner.os == 'macOS'
