@@ -65,8 +65,8 @@ update_aur() {
 	git pull
 	sed -E -i "s/pkgver=.*/pkgver=$version/" PKGBUILD
 	sed -E -i "s/pkgrel=.*/pkgrel=1/" PKGBUILD
-	rm *.tar.zst
-	rm *.tar.gz
+	rm *.tar.zst || true
+	rm *.tar.gz || true
 	updpkgsums
 	makepkg --printsrcinfo > .SRCINFO
 	makepkg -si
@@ -80,9 +80,9 @@ update_aur() {
 update_snap() {
 	echo "Updating snap"
 	cd "$src"
-	mkdir -p dist
-	rm dist/*.snap
-	npm run dist -- --linux snap
+	rm dist/*.snap || true
+	NODE_ENV=production npm run webpack:compile
+	npx electron-builder --linux snap --publish never --config.extraMetadata.tw_dist="prod-snap-$(uname -m)"
 	snap install --dangerous dist/TurboWarp-*.snap
 	snap run turbowarp-desktop
 	await_confirmation
