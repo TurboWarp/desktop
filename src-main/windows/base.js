@@ -143,7 +143,8 @@ class BaseWindow {
 
     // On Linux the icon doesn't get baked into the executable as it does on other platforms
     if (process.platform === 'linux') {
-      options.icon = path.resolve(__dirname, '../../art/icon.png');
+      // This path won't work in development but it will work in production
+      options.icon = path.resolve(__dirname, '../../../icon.png');
     }
 
     return options;
