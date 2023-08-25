@@ -132,6 +132,8 @@
           UpdatePreload.ignore(permanentCheckbox.checked);
         });
 
+        const A_IS_NEWER = 1;
+        const B_IS_NEWER = 2;
         const compareVersions = (a, b) => {
           const partsA = a.split('-')[0].split('.');
           const partsB = b.split('-')[0].split('.');
@@ -140,12 +142,25 @@
             const itemA = +partsA[i];
             const itemB = +partsB[i];
             if (itemA > itemB) {
-              return 1;
+              return A_IS_NEWER;
             } else if (itemA < itemB) {
-              return 2;
+              return B_IS_NEWER;
             }
           }
-          return 0;
+
+          const prereleaseA = a.split('-')[1];
+          const prereleaseB = b.split('-')[1];
+          if (prereleaseA === prereleaseB) {
+            return 0;
+          } else if (prereleaseA && !prereleaseB) {
+            return B_IS_NEWER;
+          } else if (prereleaseB && !prereleaseA) {
+            return A_IS_NEWER;
+          } else if (prereleaseA > prereleaseB) {
+            return A_IS_NEWER;
+          } else {
+            return B_IS_NEWER;
+          }
         };
 
         const removeChildren = (el) => {
@@ -162,14 +177,20 @@
             }
             return res.json();
           })
-          .then((releases) => {
+          .then((allReleases) => {
             removeChildren(changelog);
 
-            const releaseNotes = releases.filter(({version}) => compareVersions(info.currentVersion, version) === 2);
-            if (releaseNotes.length) {
+            const filteredReleases = allReleases.filter((release) => (
+              // Only show notes that are newer than the current version
+              compareVersions(info.currentVersion, release.version) === B_IS_NEWER &&
+              // Only show notes that are older than the version we're upgrading to
+              compareVersions(info.latestVersion, release.version) !== B_IS_NEWER
+            ));
+
+            if (filteredReleases.length) {
               changelog.lang = 'en';
 
-              for (const {version, date, notes} of releaseNotes) {
+              for (const {version, date, notes} of filteredReleases) {
                 const titleElement = document.createElement('h2');
                 titleElement.textContent = `v${version} (${date})`;
                 changelog.appendChild(titleElement);

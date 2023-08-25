@@ -68,6 +68,7 @@
       <label class="update-checker-outer">
         <div class="label update-checker-label"></div>
         <select class="update-checker-select" autocomplete="off">
+          <option value="unstable"></option>
           <option value="stable"></option>
           <option value="security"></option>
           <option value="never"></option>
@@ -93,6 +94,7 @@
           updateCheckerWarning.hidden = updateCheckerSelect.value !== 'never';
   
           document.querySelector('.update-checker-label').textContent = strings['desktop-settings.update-checker'];
+          updateCheckerSelect.querySelector('[value=unstable]').textContent = strings['desktop-settings.notify-unstable'];
           updateCheckerSelect.querySelector('[value=stable]').textContent = strings['desktop-settings.notify-stable'];
           updateCheckerSelect.querySelector('[value=security]').textContent = strings['desktop-settings.notify-security'];
           updateCheckerSelect.querySelector('[value=never]').textContent = strings['desktop-settings.notify-never'];

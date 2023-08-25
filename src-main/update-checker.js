@@ -16,12 +16,13 @@ const checkForUpdates = async () => {
 
   const jsonBuffer = await privilegedFetchAsBuffer(URL);
   const json = JSON.parse(jsonBuffer.toString());
-  const latestVersion = json.latest;
+  const latestStable = json.latest;
+  const latestUnstable = json.latest_unstable;
   const oldestSafe = json.oldest_safe;
 
   // Security updates can not be ignored.
   if (semverLt(currentVersion, oldestSafe)) {
-    UpdateWindow.updateAvailable(currentVersion, latestVersion, true);
+    UpdateWindow.updateAvailable(currentVersion, latestStable, true);
     return;
   }
 
@@ -30,16 +31,17 @@ const checkForUpdates = async () => {
     return;
   }
 
+  const latest = settings.updateChecker === 'unstable' ? latestUnstable : latestStable;
   const now = Date.now();
   const ignoredUpdate = settings.ignoredUpdate;
   const ignoredUpdateUntil = settings.ignoredUpdateUntil * 1000;
-  if (ignoredUpdate === latestVersion && now < ignoredUpdateUntil) {
+  if (ignoredUpdate === latest && now < ignoredUpdateUntil) {
     // This update was ignored
     return;
   }
 
-  if (semverLt(currentVersion, latestVersion)) {
-    UpdateWindow.updateAvailable(currentVersion, latestVersion, false);
+  if (semverLt(currentVersion, latest)) {
+    UpdateWindow.updateAvailable(currentVersion, latest, false);
   }
 };
 
