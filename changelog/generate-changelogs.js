@@ -45,7 +45,7 @@ const parse = () => {
   sections.shift();
 
   for (const section of sections) {
-    const version = section.match(/\d+\.\d+\.\d+/)[0];
+    const version = section.match(/\d+\.\d+\.\d+(?:-[\w.-]+)?/)[0];
     const date = new Date(section.match(/\((\d+-\d+-\d+)\)/)[1]);
 
     /** @type {Release} */
@@ -128,13 +128,11 @@ const generateMetainfo = (releases) => {
 const generateJSON = (releases) => {
   const data = [];
   for (const {version, date, notes} of releases) {
-    if (lte(version, releasedVersion)) {
-      data.push({
-        version,
-        date: `${date.getUTCFullYear()}-${date.getMonth() + 1}-${date.getDate()}`,
-        notes
-      });
-    }
+    data.push({
+      version,
+      date: `${date.getUTCFullYear()}-${date.getMonth() + 1}-${date.getDate()}`,
+      notes
+    });
   }
 
   const path = pathUtil.join(__dirname, '../docs/changelog.json');

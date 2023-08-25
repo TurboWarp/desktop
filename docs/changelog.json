@@ -1,5 +1,24 @@
 [
   {
+    "version": "1.9.0-beta.4",
+    "date": "2023-8-24",
+    "notes": [
+      "Desktop app was rewritten for improved security",
+      "Added custom reporters",
+      "Added custom fonts",
+      "New extensions: HTTP, Cast, NFCWarp, Clipboard, Zip, More Motion, LZ String, Longman Dictionary, Skins, All Menus, Custom Styles, Deltatime, Wake Lock",
+      "Brand new restore point system that is much more reliable than the old one. Now stores multiple restore points and the interval can be customized",
+      "The builtin costume, sound, sprite, and extension libraries now let you mark items as favorites so they show up first",
+      "Extension gallery is no longer a separate window, rather it is built in to the editor",
+      "Improved file saving error handling",
+      "Fixed backpacking scripts and sprites that contain custom extensions",
+      "Allow importing .ogg, .flac, and .aac audio files",
+      "Updated prompt modal",
+      "Removed \"for each\" block from the palette because it causes various issues",
+      "Fixed a lot of bugs"
+    ]
+  },
+  {
     "version": "1.8.1",
     "date": "2023-6-19",
     "notes": [
