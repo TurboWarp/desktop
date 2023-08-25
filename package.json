@@ -92,13 +92,10 @@
       "showNameOnTiles": true,
       "languages": [
         "en-US",
-        "fr",
         "nl",
         "de",
         "it",
-        "ja",
-        "ru",
-        "es-ES"
+        "ko"
       ]
     },
     "nsis": {
