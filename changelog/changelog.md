@@ -2,6 +2,23 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.9.0 (2024-01-01)
+
+ - !!! FIX THE DATE !!!
+ - Desktop app was rewritten for improved security
+ - Added custom reporters
+ - Added custom fonts
+ - New extensions: HTTP, Cast, NFCWarp, Clipboard, Zip, More Motion, LZ String, Longman Dictionary, Skins, All Menus, Custom Styles, Deltatime, Wake Lock
+ - Brand new restore point system that is much more reliable than the old one. Now stores multiple restore points and the interval can be customized
+ - The builtin costume, sound, sprite, and extension libraries now let you mark items as favorites so they show up first
+ - Extension gallery is no longer a separate window, rather it is built in to the editor
+ - Improved file saving error handling
+ - Fixed backpacking scripts and sprites that contain custom extensions
+ - Allow importing .ogg, .flac, and .aac audio files
+ - Updated prompt modal
+ - Removed "for each" block from the palette because it causes various issues
+ - Fixed a lot of bugs
+
 # 1.8.1 (2023-06-20)
 
  - Fixed issues using custom extensions in the packager (if issues remain, press "Reset All Settings" in packager)
