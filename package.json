@@ -28,7 +28,7 @@
     "babel-loader": "^8.3.0",
     "copy-webpack-plugin": "^6.4.1",
     "css-loader": "^1.0.1",
-    "electron": "^22.3.13",
+    "electron": "^24.8.1",
     "electron-builder": "^24.4.0",
     "postcss": "^8.4.13",
     "postcss-import": "^14.0.0",
