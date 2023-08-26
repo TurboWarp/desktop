@@ -1,14 +1,14 @@
 [
   {
     "version": "1.9.0-beta.6",
-    "date": "2023-8-24",
+    "date": "2023-8-25",
     "notes": [
       "Fixed mouse inputs."
     ]
   },
   {
     "version": "1.9.0-beta.4",
-    "date": "2023-8-24",
+    "date": "2023-8-25",
     "notes": [
       "Desktop app was rewritten for improved security",
       "Added custom reporters",
@@ -27,7 +27,7 @@
   },
   {
     "version": "1.8.1",
-    "date": "2023-6-19",
+    "date": "2023-6-20",
     "notes": [
       "Fixed issues using custom extensions in the packager (if issues remain, press \"Reset All Settings\" in packager)",
       "Fixed using an extension to fetch files from extensions.turbowarp.org in the editor",
@@ -36,7 +36,7 @@
   },
   {
     "version": "1.8.0",
-    "date": "2023-6-18",
+    "date": "2023-6-19",
     "notes": [
       "Added more than 40 new extensions including Animated Text (like Scratch Lab), Local Storage, BigInt, JSON, Clipping and Blending, Sensing Plus, Clones Plus, Looks Plus, and RegExp",
       "Updated many extensions including Stretch, Runtime Options, and Files",
@@ -54,7 +54,7 @@
   },
   {
     "version": "1.7.1",
-    "date": "2023-1-23",
+    "date": "2023-1-24",
     "notes": [
       "Added support for unsandboxed extensions from extensions.turbowarp.org",
       "The desktop app includes an offline copy of extensions.turbowarp.org",
@@ -79,7 +79,7 @@
   },
   {
     "version": "1.6.1",
-    "date": "2022-10-6",
+    "date": "2022-10-7",
     "notes": [
       "Fixed features that access your microphone or camera",
       "Fixed addon settings import not importing some color options"
@@ -87,7 +87,7 @@
   },
   {
     "version": "1.6.0",
-    "date": "2022-10-1",
+    "date": "2022-10-2",
     "notes": [
       "New addon: Pick colors from stage (enabled by default)",
       "New addon: Zebra striping",
@@ -120,7 +120,7 @@
   },
   {
     "version": "1.5.0",
-    "date": "2022-7-22",
+    "date": "2022-7-23",
     "notes": [
       "New addon: Reverse order of project controls",
       "New addon: Hide stage and sprite pane",
@@ -136,7 +136,7 @@
   },
   {
     "version": "1.4.0",
-    "date": "2022-6-23",
+    "date": "2022-6-24",
     "notes": [
       "Moved the builtin copy of the TurboWarp Packager to the File > Package project menu",
       "Added a sound duration indicator to the sound editor",
@@ -162,7 +162,7 @@
   },
   {
     "version": "1.3.1",
-    "date": "2022-5-17",
+    "date": "2022-5-18",
     "notes": [
       "Fixed crash on some Linux systems",
       "Gamepad addon now supports buttons other than the left button and is compatible with pointerlock in the packager",
@@ -172,7 +172,7 @@
   },
   {
     "version": "1.3.0",
-    "date": "2022-5-2",
+    "date": "2022-5-3",
     "notes": [
       "New addon: Customizable default costume editor colors",
       "The app now registers itself as a file handler for .sb and sb2 files in addition to .sb3",
@@ -182,7 +182,7 @@
   },
   {
     "version": "1.2.2",
-    "date": "2022-4-12",
+    "date": "2022-4-13",
     "notes": [
       "Fixed mouse actions in gamepad support addon in packager",
       "Fixed blocks like \"insert x at any of list\" to insert at a random location"
@@ -190,7 +190,7 @@
   },
   {
     "version": "1.2.1",
-    "date": "2022-4-9",
+    "date": "2022-4-10",
     "notes": [
       "Fixed crash on startup on some systems",
       "All windows now have proper language hints, fixes CJK characters looking weird in some windows",
@@ -199,7 +199,7 @@
   },
   {
     "version": "1.2.0",
-    "date": "2022-4-8",
+    "date": "2022-4-9",
     "notes": [
       "Added option to configure which microphone and camera the app should use",
       "Added option to disable hardware acceleration",
@@ -221,7 +221,7 @@
   },
   {
     "version": "1.1.2",
-    "date": "2022-2-19",
+    "date": "2022-2-20",
     "notes": [
       "Fixed automatically loading project in packager",
       "Fixed significant lag when displaying variable monitors caused by the \"Hide new variables\" addon",
