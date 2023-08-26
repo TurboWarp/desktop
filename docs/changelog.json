@@ -1,10 +1,9 @@
 [
   {
-    "version": "1.9.0-beta.5",
-    "date": "2024-12-31",
+    "version": "1.9.0-beta.6",
+    "date": "2023-8-24",
     "notes": [
-      "NOT A REAL UPDATE. Just a test to see if the update checker works.",
-      "Try ignoring it without pressing the checkmark and see if it comes back after six hours, or check the box and see if it goes away forever."
+      "Fixed mouse inputs."
     ]
   },
   {

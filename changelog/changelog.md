@@ -2,10 +2,9 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.9.0-beta.5 (2024-01-01)
+# 1.9.0-beta.6 (2023-08-25)
 
- - NOT A REAL UPDATE. Just a test to see if the update checker works.
- - Try ignoring it without pressing the checkmark and see if it comes back after six hours, or check the box and see if it goes away forever.
+ - Fixed mouse inputs.
 
 # 1.9.0-beta.4 (2023-08-25)
 
