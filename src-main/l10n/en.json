@@ -200,7 +200,7 @@
     "developer_comment": "Desktop settings option to let extensions bypass normal security stuff"
   },
   "desktop-settings.bypass-cors-enabled": {
-    "string": "This disables \"CORS\" checks, a web security feature. Malicious projects or extensions may be able to access any website or device on your network.",
+    "string": "This disables several web security features designed to protect you. Malicious projects or extensions will be able to access any website or device on your network.",
     "developer_comment": "Warning that appears in desktop settings when bypass CORS is enabled"
   },
   "desktop-settings.open-user-data": {
