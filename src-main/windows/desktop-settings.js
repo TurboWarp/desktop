@@ -30,7 +30,8 @@ class DesktopSettingsWindow extends BaseWindow {
         camera: settings.camera,
         hardwareAcceleration: settings.hardwareAcceleration,
         backgroundThrottling: settings.backgroundThrottling,
-        bypassCORS: settings.bypassCORS
+        bypassCORS: settings.bypassCORS,
+        spellchecker: settings.spellchecker
       };
     });
 
@@ -73,6 +74,12 @@ class DesktopSettingsWindow extends BaseWindow {
 
     ipc.handle('set-bypass-cors', async (event, bypassCORS) => {
       settings.bypassCORS = bypassCORS;
+      await settings.save();
+    });
+
+    ipc.handle('set-spellchecker', async (event, spellchecker) => {
+      settings.spellchecker = spellchecker;
+      BaseWindow.settingsChanged();
       await settings.save();
     });
 

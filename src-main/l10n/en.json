@@ -207,6 +207,10 @@
     "string": "This disables several web security features designed to protect you. Malicious projects or extensions will be able to access any website or device on your network.",
     "developer_comment": "Warning that appears in desktop settings when bypass CORS is enabled"
   },
+  "desktop-settings.spellchecker": {
+    "string": "Enable spell checker",
+    "developer_comment": "Option in desktop settings to disable spell checking"
+  },
   "desktop-settings.open-user-data": {
     "string": "Open User Data",
     "developer_comment": "Button in desktop settings to open the user data folder"

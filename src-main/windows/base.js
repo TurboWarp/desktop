@@ -1,6 +1,7 @@
-const { BrowserWindow, screen } = require('electron');
+const { BrowserWindow, screen, session } = require('electron');
 const path = require('path');
 const openExternal = require('../open-external');
+const settings = require('../settings');
 
 /** @type {Map<unknown, BaseWindow[]>} */
 const windowsByClass = new Map();
@@ -40,6 +41,8 @@ class BaseWindow {
   }
 
   static settingsChanged () {
+    session.defaultSession.setSpellCheckerEnabled(settings.spellchecker);
+
     for (const window of BaseWindow.getAllWindows()) {
       window.applySettings();
     }

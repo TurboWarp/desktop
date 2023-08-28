@@ -169,6 +169,8 @@ app.on('second-instance', (event, argv, workingDirectory) => {
 });
 
 app.whenReady().then(() => {
+  BaseWindow.settingsChanged();
+
   migratePromise = migrate().then(() => {
     isMigrating = false;
 

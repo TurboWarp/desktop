@@ -10,5 +10,6 @@ contextBridge.exposeInMainWorld('DesktopSettingsPreload', {
   setHardwareAcceleration: (hardwareAcceleration) => ipcRenderer.invoke('set-hardware-acceleration', hardwareAcceleration),
   setBackgroundThrottling: (backgroundThrottling) => ipcRenderer.invoke('set-background-throttling', backgroundThrottling),
   setBypassCORS: (bypassCORS) => ipcRenderer.invoke('set-bypass-cors', bypassCORS),
+  setSpellchecker: (spellchecker) => ipcRenderer.invoke('set-spellchecker', spellchecker),
   openUserData: () => ipcRenderer.invoke('open-user-data')
 });

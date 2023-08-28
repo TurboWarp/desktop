@@ -269,6 +269,19 @@
         bypassCORSWarning.textContent = strings['desktop-settings.bypass-cors-enabled'];
       </script>
 
+      <label>
+        <input type="checkbox" class="spellchecker-checkbox" autocomplete="off">
+        <span class="spellchecker-label"></span>
+      </label>
+      <script>
+        const spellchecker = document.querySelector('.spellchecker-checkbox');
+        spellchecker.onchange = () => {
+          DesktopSettingsPreload.setSpellchecker(spellchecker.checked);
+        };
+        spellchecker.checked = settings.spellchecker;
+        document.querySelector('.spellchecker-label').textContent = strings['desktop-settings.spellchecker'];
+      </script>
+
       <button class="open-user-data"></button>
       <script>
         const openUserData = document.querySelector('.open-user-data');

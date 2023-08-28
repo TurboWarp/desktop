@@ -128,6 +128,13 @@ class Settings {
   set lastDirectory (lastDirectory) {
     this.data.lastDirectory = lastDirectory;
   }
+
+  get spellchecker () {
+    return this.data.spellchecker !== false;
+  }
+  set spellchecker (spellchecker) {
+    this.data.spellchecker = spellchecker;
+  }
 }
 
 const settings = new Settings();
