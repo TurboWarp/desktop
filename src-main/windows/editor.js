@@ -43,7 +43,7 @@ class OpenedFile {
 
     if (this.type === TYPE_URL) {
       return {
-        name: path.basename(this.path),
+        name: decodeURIComponent(path.basename(this.path)),
         data: await privilegedFetchAsBuffer(this.path)
       };
     }
