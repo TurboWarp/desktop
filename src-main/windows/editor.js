@@ -399,6 +399,19 @@ class EditorWindow extends ProjectRunningWindow {
     });
   }
 
+  handleWindowOpen (details) {
+    // Open extension sample projects in-app
+    const match = details.url.match(
+      /^tw-editor:\/\/\.\/gui\/gui\.html\?project_url=(https:\/\/extensions\.turbowarp\.org\/samples\/.+\.sb3)$/
+    );
+    if (match) {
+      EditorWindow.openFiles([
+        match[1]
+      ]);
+    }
+    return super.handleWindowOpen(details);
+  }
+
   /**
    * @param {string[]} files
    * @param {string} workingDirectory

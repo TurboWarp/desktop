@@ -1,4 +1,5 @@
 const path = require('path');
+const {DefinePlugin} = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const base = {
@@ -64,6 +65,9 @@ module.exports = [
         },
         entry: './src-renderer-webpack/editor/gui/index.jsx',
         plugins: [
+            new DefinePlugin({
+                'process.env.ROOT': '""'
+            }),
             new CopyWebpackPlugin({
                 patterns: [
                     {
