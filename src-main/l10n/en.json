@@ -35,6 +35,10 @@
     "string": "Learn more",
     "developer_comment": "macOS menu bar item to learn more"
   },
+  "context.add-to-dictionary": {
+    "string": "Add to Dictionary",
+    "developer_comment": "Context menu item that appears when right clicking on a misspelled word"
+  },
   "context.open-link": {
     "string": "Open Link",
     "developer_comment": "Context menu item to open link"

@@ -8,7 +8,7 @@ app.on('web-contents-created', (_event, webContents) => {
     const hasText = !!text;
     const menuItems = [];
 
-    if (params.misspelledWord && params.dictionarySuggestions.length > 0) {
+    if (params.misspelledWord) {
       for (const word of params.dictionarySuggestions) {
         menuItems.push({
           label: word,
@@ -17,6 +17,12 @@ app.on('web-contents-created', (_event, webContents) => {
           }
         });
       }
+      menuItems.push({
+        label: translate('context.add-to-dictionary'),
+        click: () => {
+          webContents.session.addWordToSpellCheckerDictionary(params.misspelledWord);
+        }
+      });
       menuItems.push({
         type: 'separator'
       });
