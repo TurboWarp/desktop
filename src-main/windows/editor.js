@@ -20,10 +20,11 @@ const readFile = promisify(fs.readFile);
 const TYPE_FILE = 'file';
 const TYPE_URL = 'url';
 const TYPE_SCRATCH = 'scratch';
+const TYPE_SAMPLE = 'sample';
 
 class OpenedFile {
   constructor (type, path) {
-    /** @type {TYPE_FILE|TYPE_URL|TYPE_ID} */
+    /** @type {TYPE_FILE|TYPE_URL|TYPE_ID|TYPE_SAMPLE} */
     this.type = type;
 
     /**
@@ -60,23 +61,52 @@ class OpenedFile {
       };
     }
 
+    if (this.type === TYPE_SAMPLE) {
+      const sampleRoot = path.resolve(__dirname, '../../dist-extensions/samples/');
+      const joined = path.join(sampleRoot, this.path);
+      if (joined.startsWith(sampleRoot)) {
+        return {
+          name: this.path,
+          data: await readFile(joined)
+        };
+      }
+      throw new Error('Unsafe join');
+    }
+
     throw new Error(`Unknown type: ${this.type}`);
   }
 }
 
 const parseOpenedFile = (file, workingDirectory) => {
+  let url;
   try {
-    const url = new URL(file);
+    url = new URL(file);
+  } catch (e) {
+    // Error means it was not a valid full URL
+  }
+
+  if (url) {
     if (url.protocol === 'http:' || url.protocol === 'https:') {
+      // Scratch URLs require special treatment as they are not direct downloads.
       const scratchMatch = file.match(/^https?:\/\/scratch\.mit\.edu\/projects\/(\d+)\/?/);
       if (scratchMatch) {
         return new OpenedFile(TYPE_SCRATCH, scratchMatch[1]);
       }
+
+      // Need to manually redirect extension samples to the copies we already have offline as the
+      // fetching code will not go through web request handlers or custom protocols.
+      const sampleMatch = file.match(/^https?:\/\/extensions\.turbowarp\.org\/samples\/(.+\.sb3)$/);
+      if (sampleMatch) {
+        return new OpenedFile(TYPE_SAMPLE, decodeURIComponent(sampleMatch[1]));
+      }
+
       return new OpenedFile(TYPE_URL, file);
     }
-  } catch (e) {
-    // Error means it was not a URL
+
+    // It was a full valid URL, but we don't support this protocol
+    throw new Error(`Unsupported URL: ${url}`);
   }
+
   return new OpenedFile(TYPE_FILE, path.resolve(workingDirectory, file));
 };
 
@@ -402,7 +432,7 @@ class EditorWindow extends ProjectRunningWindow {
   handleWindowOpen (details) {
     // Open extension sample projects in-app
     const match = details.url.match(
-      /^tw-editor:\/\/\.\/gui\/gui\.html\?project_url=(https:\/\/extensions\.turbowarp\.org\/samples\/.+\.sb3)$/
+      /^tw-editor:\/\/\.\/gui\/editor\?project_url=(https:\/\/extensions\.turbowarp\.org\/samples\/.+\.sb3)$/
     );
     if (match) {
       EditorWindow.openFiles([
