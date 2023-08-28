@@ -109,24 +109,19 @@ class ProjectRunningWindow extends BaseWindow {
   onHeadersReceived (details, callback) {
     if (settings.bypassCORS) {
       const newHeaders = {
-        // keep these all lowercase
         'access-control-allow-origin': '*',
-        'x-frame-options': 'allow'
       };
-
-      // TODO: Content-Security-Policy frame-ancestors can still block
-
-      // requestHeaders are not normalized, we need to make sure to override the other
-      // capitalizations on our own
-      const finalHeaders = {...newHeaders};
       for (const key of Object.keys(details.responseHeaders)) {
-        if (!Object.prototype.hasOwnProperty.call(newHeaders, key.toLowerCase())) {
-          finalHeaders[key] = details.responseHeaders[key];
+        // Headers from Electron are not normalized, so we have to make sure to remove uppercased
+        // variations on our own.
+        const normalized = key.toLowerCase();
+        if (normalized !== 'access-control-allow-origin' && normalized !== 'x-frame-options') {
+          newHeaders[key] = details.responseHeaders[key];
         }
       }
 
       return callback({
-        responseHeaders: finalHeaders
+        responseHeaders: newHeaders
       });
     }
 
