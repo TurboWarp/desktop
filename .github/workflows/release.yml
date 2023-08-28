@@ -31,9 +31,7 @@ jobs:
       run: npm run fetch
 
     - name: Compile
-      run: npm run webpack:compile
-      env:
-        NODE_ENV: production
+      run: npm run webpack:prod
 
     - name: Package Windows
       if: runner.os == 'Windows'
