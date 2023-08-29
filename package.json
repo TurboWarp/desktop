@@ -117,6 +117,8 @@
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist",
       "extendInfo": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "LSMultipleInstancesProhibited": true,
         "NSCameraUsageDescription": "This app requires camera access when using the video sensing blocks.",
         "NSMicrophoneUsageDescription": "This app requires microphone access when recording sounds or detecting loudness."
       },
@@ -126,6 +128,16 @@
           "target": "dmg"
         }
       ]
+    },
+    "mas": {
+      "hardenedRuntime": false,
+      "entitlements": "build/entitlements.mas.plist",
+      "entitlementsInherit": "build/entitlements.mas.inherit.plist",
+      "provisioningProfile": "build/distribution.provisionprofile"
+    },
+    "masDev": {
+      "type": "development",
+      "provisioningProfile": "build/development.provisionprofile"
     },
     "linux": {
       "artifactName": "${productName}-${os}-${arch}-${version}.${ext}",
