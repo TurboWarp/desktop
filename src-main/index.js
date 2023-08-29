@@ -1,6 +1,8 @@
 const {app, dialog} = require('electron');
 
-if (!app.requestSingleInstanceLock()) {
+// requestSingleInstanceLock() crashes the app in signed MAS builds
+// https://github.com/electron/electron/issues/15958
+if (!process.mas && !app.requestSingleInstanceLock()) {
   app.exit();
 }
 
