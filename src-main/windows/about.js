@@ -18,7 +18,7 @@ class AboutWindow extends BaseWindow {
         version: packageJSON.version,
         dist: packageJSON.tw_dist || 'none',
         electron: process.versions.electron,
-        platform: process.platform,
+        platform: process.mas ? `${process.platform}-mas` : process.platform,
         arch: process.arch
       };
     });

@@ -68,7 +68,9 @@ const DesktopHOC = function (WrappedComponent) {
       this.handleUpdateProjectTitle = this.handleUpdateProjectTitle.bind(this);
 
       // Changing locale always re-mounts this component
-      this.messages = EditorPreload.setLocale(this.props.locale);
+      const stateFromMain = EditorPreload.setLocale(this.props.locale);
+      this.messages = stateFromMain.strings;
+      this.isMAS = stateFromMain.mas;
       setStrings({
         ok: this.messages['prompt.ok'],
         cancel: this.messages['prompt.cancel']
@@ -187,10 +189,13 @@ const DesktopHOC = function (WrappedComponent) {
               title: this.messages['in-app-about.source-code'],
               onClick: handleClickSourceCode
             },
-            {
-              title: this.messages['in-app-about.donate'],
-              onClick: handleClickDonate
-            }
+            // Donation link must be hidden in MAS builds for App store compliance
+            ...(this.isMAS ? [] : [
+              {
+                title: this.messages['in-app-about.donate'],
+                onClick: handleClickDonate
+              }
+            ])
           ]}      
           {...props}
         />

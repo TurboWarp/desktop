@@ -193,7 +193,10 @@ class EditorWindow extends ProjectRunningWindow {
         // Let the save happen in the background, not important
         Promise.resolve().then(() => settings.save());
       }
-      event.returnValue = getStrings();
+      event.returnValue = {
+        strings: getStrings(),
+        mas: !!process.mas
+      };
     });
 
     ipc.handle('set-changed', (event, changed) => {

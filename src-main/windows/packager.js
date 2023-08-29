@@ -17,6 +17,10 @@ class PackagerWindow extends BaseWindow {
 
     const ipc = this.window.webContents.ipc;
 
+    ipc.on('is-mas', (event) => {
+      event.returnValue = !!process.mas;
+    });
+
     ipc.on('import-project-with-port', (event) => {
       const port = event.ports[0];
       if (this.editorWindow.window.isDestroyed()) {
