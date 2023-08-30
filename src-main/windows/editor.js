@@ -142,7 +142,7 @@ class EditorWindow extends ProjectRunningWindow {
 
     this.window.webContents.on('will-prevent-unload', (event) => {
       const choice = dialog.showMessageBoxSync(this.window, {
-        ttie: APP_NAME,
+        title: APP_NAME,
         type: 'info',
         buttons: [
           translate('unload.stay'),
