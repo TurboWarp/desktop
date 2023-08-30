@@ -27,9 +27,17 @@
     "string": "About {APP_NAME}",
     "developer_comment": "Title of about window"
   },
+  "menu.about": {
+    "string": "About {APP_NAME}",
+    "developer_comment": "macOS menu bar item to open about window"
+  },
   "menu.new-window": {
     "string": "New Window",
-    "developer_comment": "macOS menu bar item to open a new window"
+    "developer_comment": "macOS menu bar item to open a new editor window"
+  },
+  "menu.settings": {
+    "string": "Settings",
+    "developer_comment": "macOS menu bar item to open desktop settings window"
   },
   "menu.learn-more": {
     "string": "Learn more",

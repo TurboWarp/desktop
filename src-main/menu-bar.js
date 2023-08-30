@@ -1,49 +1,98 @@
 const {Menu} = require('electron');
 const {translate} = require('./l10n');
 const openExternal = require('./open-external');
-const EditorWindow = require('./windows/editor');
+const {APP_NAME} = require('./brand');
+const AboutWindow = require('./windows/about');
+const DesktopSettingsWindow = require('./windows/desktop-settings');
 
-if (process.platform === 'darwin') {
-  Menu.setApplicationMenu(Menu.buildFromTemplate([
-    {
-      role: 'appMenu'
-    },
-    {
-      role: 'fileMenu',
-      submenu: [
-        {
-          role: 'quit'
-        },
-        {
-          label: translate('menu.new-window'),
-          accelerator: 'Cmd+N',
-          click: () => {
-            EditorWindow.newWindow();
+const rebuildMenuBar = () => {
+  if (process.platform === 'darwin') {
+    Menu.setApplicationMenu(Menu.buildFromTemplate([
+      {
+        label: APP_NAME,
+        submenu: [
+          {
+            label: translate('menu.about').replace('{APP_NAME}', APP_NAME),
+            click: () => {
+              AboutWindow.show();
+            }
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: translate('menu.settings'),
+            accelerator: 'Cmd+,',
+            click: () => {
+              DesktopSettingsWindow.show()
+            }
+          },
+          {
+            type: 'separator'
+          },
+          {
+            role: 'services'
+          },
+          {
+            type: 'separator'
+          },
+          {
+            role: 'hide'
+          },
+          {
+            role: 'hideOthers'
+          },
+          {
+            role: 'unhide'
+          },
+          {
+            type: 'separator'
+          },
+          {
+            role: 'quit'
           }
-        }
-      ]
-    },
-    {
-      role: 'editMenu'
-    },
-    {
-      role: 'viewMenu'
-    },
-    {
-      role: 'windowMenu'
-    },
-    {
-      role: 'help',
-      submenu: [
-        {
-          label: translate('menu.learn-more'),
-          click: () => {
-            openExternal('https://desktop.turbowarp.org/')
+        ]
+      },
+      {
+        role: 'fileMenu',
+        submenu: [
+          {
+            label: translate('menu.new-window'),
+            accelerator: 'Cmd+N',
+            click: () => {
+              // Imported late due to circular dependency
+              const EditorWindow = require('./windows/editor');
+              EditorWindow.newWindow();
+            }
           }
-        }
-      ]
-    }
-  ]));
-} else {
-  Menu.setApplicationMenu(null);
-}
+        ]
+      },
+      {
+        role: 'editMenu'
+      },
+      {
+        role: 'viewMenu'
+      },
+      {
+        role: 'windowMenu'
+      },
+      {
+        role: 'help',
+        submenu: [
+          {
+            label: translate('menu.learn-more'),
+            click: () => {
+              openExternal('https://desktop.turbowarp.org/')
+            }
+          }
+        ]
+      }
+    ]));
+  } else {
+    Menu.setApplicationMenu(null);
+  }
+};
+
+rebuildMenuBar();
+
+module.exports = rebuildMenuBar;
