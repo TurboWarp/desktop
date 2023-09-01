@@ -45,6 +45,7 @@
       .step-icon {
         width: 1.5rem;
         height: 1.5rem;
+        flex-shrink: 0;
       }
       .step-icon[data-type="loading"] {
         background-color: currentColor;
@@ -78,8 +79,8 @@
         }
       }
 
-      .error-next-steps {
-        display: none;
+      .error-next-steps, .timed-out-next-steps {
+        display: flex;
         flex-direction: column;
         gap: 0.5rem;
         font-weight: bold;
@@ -98,19 +99,31 @@
       .continue-anyways:disabled {
         opacity: 0.8;
       }
+
+      [hidden] {
+        display: none !important;
+      }
     </style>
   </html>
   <body>
     <main>
       <h1 class="title"></h1>
-      <p class="description">This is a one-time process that may take a few moments.</p>
+      <p class="description"></p>
 
-      <div class="error-next-steps">
+      <div class="error-next-steps" hidden>
         <p>
-          <span class="error-message">Some of your data could not be transferred. Please send a screenshot of this window to:</span>
+          <span class="error-message"></span>
           <a href="mailto:contact@turbowarp.org">contact@turbowarp.org</a>
         </p>
-        <button class="continue-anyways">Continue Anyways</button>
+        <button class="continue-anyways"></button>
+      </div>
+
+      <div class="timed-out-next-steps" hidden>
+        <p>
+          <span class="timed-out-message"></span>
+          <a href="mailto:contact@turbowarp.org">contact@turbowarp.org</a>
+        </p>
+        <button class="continue-anyways"></button>
       </div>
 
       <div class="steps"></div>
@@ -145,10 +158,19 @@
       document.querySelector('.title').textContent = strings['migrate.title'];
       document.querySelector('.description').textContent = strings['migrate.description'];
       document.querySelector('.error-message').textContent = strings['migrate.error'];
+      document.querySelector('.timed-out-message').textContent = strings['migrate.timed-out'];
+
       const stepsElement = document.querySelector('.steps');
       const errorNextStepsElement = document.querySelector('.error-next-steps');
-      const continueAnywaysButton = document.querySelector('.continue-anyways');
-      continueAnywaysButton.textContent = strings['migrate.continue-anyways'];
+      const timedOutNextStepsElement = document.querySelector('.timed-out-next-steps');
+
+      for (const button of document.querySelectorAll('.continue-anyways')) {
+        button.textContent = strings['migrate.continue-anyways'];
+        button.addEventListener('click', (e) => {
+          e.target.disabled = true;
+          finish();
+        });
+      }
 
       let databases = [];
       const gatherMetadata = async () => {
@@ -331,21 +353,27 @@
       };
 
       const migrate = async () => {
+        const timeoutId = setTimeout(() => {
+          timedOutNextStepsElement.hidden = false;
+        }, 10 * 1000);
+
         await runStep(strings['migrate.preparing'], gatherMetadata);
-        await runStep(strings['migrate.transfer-editor'], migrateEditor);
-        await runStep(strings['migrate.transfer-packager'], migratePackager);
+
+        if (!anyError) {
+          // Preparing must succeed for both of these, but each of these can fail
+          // independently.
+          await runStep(strings['migrate.transfer-editor'], migrateEditor);
+          await runStep(strings['migrate.transfer-packager'], migratePackager);
+        }
 
         if (anyError) {
-          errorNextStepsElement.style.display = 'flex';
+          clearTimeout(timeoutId);
+          timedOutNextStepsElement.hidden = true;
+          errorNextStepsElement.hidden = false;
         } else {
           await runStep(strings['migrate.finalizing'], finish);
         }
       };
-
-      continueAnywaysButton.addEventListener('click', (e) => {
-        e.target.disabled = true;
-        finish();
-      });
 
       migrate();
     </script>
