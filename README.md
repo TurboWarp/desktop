@@ -43,7 +43,7 @@ Repeat the three previous sets of commands every time you pull changes from GitH
 
 Due to the security requirements mandated by custom extensions existing, our desktop app is significantly more complicated than Scratch's.
 
- - **src-main** is what runs in Electron's main process. There is no build step; this code is included as-is. `src-main/index.js` is the entry point to the entire app.
+ - **src-main** is what runs in Electron's main process. There is no build step; this code is included as-is. `src-main/entrypoint.js` is the entry point to the entire app.
  - **src-renderer-webpack** runs in an Electron renderer process to make the editor work. This is built by webpack as **dist-renderer-webpack**.
  - **src-renderer** also runs in an Electron renderer process, but without webpack. This is used for things like the privacy policy window.
  - **src-preload** runs as preload scripts in an Electron renderer process. They export glue functions to allow renderer and main to talk to each other in a somewhat controlled manner.

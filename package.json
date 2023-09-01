@@ -12,7 +12,7 @@
     "webpack:compile": "webpack",
     "webpack:watch": "webpack --watch",
     "webpack:prod": "cross-env NODE_ENV=production webpack",
-    "electron:start": "electron src-main/index.js",
+    "electron:start": "electron src-main/entrypoint.js",
     "electron:package:dir": "electron-builder --dir"
   },
   "dependencies": {
@@ -51,7 +51,7 @@
     "url": "https://github.com/TurboWarp/desktop/issues",
     "email": "contact@turbowarp.org"
   },
-  "main": "./src-main/index.js",
+  "main": "./src-main/entrypoint.js",
   "build": {
     "appId": "org.turbowarp.desktop",
     "productName": "TurboWarp",
