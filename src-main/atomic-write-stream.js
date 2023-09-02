@@ -57,7 +57,12 @@ const createAtomicWriteStream = async (path) => {
 
   const originalMode = await getOriginalMode(path);
 
-  const tempPath = getTemporaryPath(path);
+  // Mac App Store sandbox is *very* restrictive so the atomic writing with a
+  // temporary file won't work :(
+  // Here we still prevent concurrent writes, at least, but not atomic
+  const atomicSupported = !process.mas;
+
+  const tempPath = atomicSupported ? getTemporaryPath(path) : path;
   const fd = await promisify(fs.open)(tempPath, 'w', originalMode);
   const writeStream = fs.createWriteStream(null, {
     fd,
@@ -75,12 +80,14 @@ const createAtomicWriteStream = async (path) => {
       // ignore; file might already be closed
     }
 
-    try {
-      // TODO: it might make sense to leave the broken file on the disk so that there is a chance
-      // of recovery?
-      await promisify(fs.unlink)(tempPath);
-    } catch (e) {
-      // ignore; file might have been removed already
+    if (atomicSupported) {
+      try {
+        // TODO: it might make sense to leave the broken file on the disk so that there is a chance
+        // of recovery?
+        await promisify(fs.unlink)(tempPath);
+      } catch (e) {
+        // ignore; file might have been removed already
+      }
     }
 
     writeStream.emit('atomic-error', error);
@@ -91,7 +98,11 @@ const createAtomicWriteStream = async (path) => {
     try {
       await promisify(fs.fsync)(fd);
       await promisify(fs.close)(fd);
-      await promisify(fs.rename)(tempPath, path);
+
+      if (atomicSupported) {
+        await promisify(fs.rename)(tempPath, path);
+      }
+
       writeStream.emit('atomic-finish');
       releaseFileLock();
     } catch (error) {
