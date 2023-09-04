@@ -8,10 +8,10 @@ const getTemporaryPath = (originalPath) => {
   // The temporary file needs to be located on the same physical disk as the actual file,
   // otherwise we won't be able to rename it.
   let random = '';
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 7; i++) {
     random += Math.floor(Math.random() * 10).toString();
   }
-  return originalPath + '.temp' + random;
+  return `${originalPath}.${random}`;
 };
 
 const getOriginalMode = async (path) => {
