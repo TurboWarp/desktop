@@ -14,6 +14,7 @@ npm run webpack:prod
 
 echo ""
 echo "Packaging for MAS"
+rm -rf dist/mas-universal
 npx electron-builder --mac mas --universal --config.extraMetadata.tw_dist=prod-mas
 
 # TODO: look into Transporter CLI
