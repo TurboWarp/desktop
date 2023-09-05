@@ -2,6 +2,16 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.9.0-rc (2023-09-5)
+
+ - The last beta update! Hopefully!
+ - You can now disable the spellchecker in desktop settings
+ - You can now add unrecognized words to the dictionary
+ - Extension sample projects now open in-app
+ - Fixed "Allow extensions to access any website" not working for some websites
+ - Slightly improve macOS menu bar
+ - Preparations for a possible Mac App Store release
+
 # 1.9.0-beta.6 (2023-08-25)
 
  - Fixed mouse inputs.

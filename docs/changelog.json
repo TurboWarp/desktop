@@ -1,5 +1,18 @@
 [
   {
+    "version": "1.9.0-rc",
+    "date": "2023-9-5",
+    "notes": [
+      "The last beta update! Hopefully!",
+      "You can now disable the spellchecker in desktop settings",
+      "You can now add unrecognized words to the dictionary",
+      "Extension sample projects now open in-app",
+      "Fixed \"Allow extensions to access any website\" not working for some websites",
+      "Slightly improve macOS menu bar",
+      "Preparations for a possible Mac App Store release"
+    ]
+  },
+  {
     "version": "1.9.0-beta.6",
     "date": "2023-8-25",
     "notes": [
