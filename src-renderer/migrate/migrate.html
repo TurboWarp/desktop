@@ -200,7 +200,7 @@
 
           const readAsArrayBuffer = (blob) => new Promise((resolve, reject) => {
             const fr = new FileReader();
-            fr.onsuccess = () => resolve(fr.result);
+            fr.onload = () => resolve(fr.result);
             fr.onerror = () => reject(new Error(`Failed to read blob: ${fr.error}`));
             fr.readAsArrayBuffer(blob);
           });
