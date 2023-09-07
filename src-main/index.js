@@ -190,6 +190,11 @@ app.whenReady().then(() => {
       ...parseFilesFromArgv(process.argv)
     ], process.cwd());
 
+    if (BaseWindow.getAllWindows().length === 0) {
+      // No windows were successfully opened. Let's just quit.
+      app.quit();
+    }
+
     checkForUpdates();
   });
 });
