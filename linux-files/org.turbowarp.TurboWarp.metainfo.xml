@@ -67,7 +67,20 @@
     <release version="1.9.0" date="2023-9-8">
       <description>
         <ul>
-          <li>TODO :)</li>
+          <li>Desktop app was rewritten for improved security</li>
+          <li>Added custom reporters</li>
+          <li>Added custom fonts</li>
+          <li>Added 15+ new extensions including Clipboard, More Motion, Iframe, Color picker, Custom Styles, and Wake Lock</li>
+          <li>New restore point system that is more reliable, more efficient, and stores multiple restore points instead of just one</li>
+          <li>The builtin extension, costume, backdrop, and sprite libraries let you mark items as favorites</li>
+          <li>Extension gallery is now built into the extension list, not a separate window</li>
+          <li>New update checker that shows you the changelog for each new version</li>
+          <li>Can now ignore misspelled words or turn off the spellchecker entirely</li>
+          <li>Allow importing .ogg, .flac, and .aac audio files</li>
+          <li>Removed "for each" block from the palette because it causes various issues</li>
+          <li>Improved error handling</li>
+          <li>Fixed backpacking scripts and sprites that contain custom extensions</li>
+          <li>Fixed a lot of bugs</li>
         </ul>
       </description>
     </release>

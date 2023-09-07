@@ -38,7 +38,7 @@ const releasedVersion = require('../docs/version.json').latest;
 /** @returns {Release[]} */
 const parse = () => {
   const releaseData = [];
-  const source = fs.readFileSync(pathUtil.join(__dirname, 'changelog.md'), 'utf-8');
+  const source = fs.readFileSync(pathUtil.join(__dirname, '../changelog.md'), 'utf-8');
   const sections = source.split(/^# /gm);
 
   // Remove the information section at the start
