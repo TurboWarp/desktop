@@ -4,7 +4,20 @@ Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **form
 
 # 1.9.0 (2023-09-08)
 
- - TODO :)
+ - Desktop app was rewritten for improved security
+ - Added custom reporters
+ - Added custom fonts
+ - Added 15+ new extensions including Clipboard, More Motion, Iframe, Color picker, Custom Styles, and Wake Lock
+ - New restore point system that is more reliable, more efficient, and stores multiple restore points instead of just one
+ - The builtin extension, costume, backdrop, and sprite libraries let you mark items as favorites
+ - Extension gallery is now built into the extension list, not a separate window
+ - New update checker that shows you the changelog for each new version
+ - Can now ignore misspelled words or turn off the spellchecker entirely
+ - Allow importing .ogg, .flac, and .aac audio files
+ - Removed "for each" block from the palette because it causes various issues
+ - Improved error handling
+ - Fixed backpacking scripts and sprites that contain custom extensions
+ - Fixed a lot of bugs
 
 # 1.9.0-rc2 (2023-09-07)
 
