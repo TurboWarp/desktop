@@ -1,5 +1,5 @@
 // It's very important that all error-handling code here be as minimal and
-// self contained as possible  to ensure that the error handling does not
+// self contained as possible to ensure that the error handling does not
 // itself have errors.
 
 const {app, dialog} = require('electron');
@@ -15,10 +15,10 @@ try {
         type: 'error',
         title: APP_NAME,
         message: `Error in promise: ${stringifyError(error)}`
-      });  
+      });
     });
   });
-  
+
   require('./index');
 } catch (error) {
   console.error('Error starting main process:', error);
