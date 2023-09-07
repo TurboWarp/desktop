@@ -195,6 +195,12 @@ app.whenReady().then(() => {
       app.quit();
     }
 
-    checkForUpdates();
+    checkForUpdates()
+      .catch((error) => {
+        // We don't want to show a full error message when updates couldn't be fetched.
+        // The website might be down, the internet might be broken, might be a school
+        // network that blocks turbowarp.org, etc.
+        console.error('Error checking for updates:', error);
+      });
   });
 });
