@@ -104,8 +104,8 @@ const parseOpenedFile = (file, workingDirectory) => {
       return new OpenedFile(TYPE_URL, file);
     }
 
-    // It was a full valid URL, but we don't support this protocol
-    throw new Error(`Unsupported URL: ${url}`);
+    // Don't throw an error just because we don't recognize the URL protocol as
+    // Windows paths look close enough to real URLs to be parsed successfully.
   }
 
   return new OpenedFile(TYPE_FILE, path.resolve(workingDirectory, file));
