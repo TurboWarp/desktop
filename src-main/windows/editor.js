@@ -25,7 +25,7 @@ const TYPE_SAMPLE = 'sample';
 
 class OpenedFile {
   constructor (type, path) {
-    /** @type {TYPE_FILE|TYPE_URL|TYPE_ID|TYPE_SAMPLE} */
+    /** @type {TYPE_FILE|TYPE_URL|TYPE_SCRATCH|TYPE_SAMPLE} */
     this.type = type;
 
     /**
