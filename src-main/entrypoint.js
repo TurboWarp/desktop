@@ -7,18 +7,18 @@ const {app, dialog} = require('electron');
 const APP_NAME = 'TurboWarp Desktop';
 const stringifyError = (error) => (error && error.stack) ? error.stack : error;
 
-process.on('unhandledRejection', (error) => {
-  console.error('Error in promise:', error);
-  app.whenReady().then(() => {
-    dialog.showMessageBoxSync({
-      type: 'error',
-      title: APP_NAME,
-      message: `Error in promise: ${stringifyError(error)}`
-    });  
-  });
-});
-
 try {
+  process.on('unhandledRejection', (error) => {
+    console.error('Error in promise:', error);
+    app.whenReady().then(() => {
+      dialog.showMessageBoxSync({
+        type: 'error',
+        title: APP_NAME,
+        message: `Error in promise: ${stringifyError(error)}`
+      });  
+    });
+  });
+  
   require('./index');
 } catch (error) {
   console.error('Error starting main process:', error);
