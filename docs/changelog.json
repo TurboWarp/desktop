@@ -1,5 +1,21 @@
 [
   {
+    "version": "1.9.0",
+    "date": "2023-9-8",
+    "notes": [
+      "TODO :)"
+    ]
+  },
+  {
+    "version": "1.9.0-rc2",
+    "date": "2023-9-7",
+    "notes": [
+      "Fixed opening files on Windows hopefully",
+      "Errors that happen in the \"background\" will now show error dialogs",
+      "Iframe and color picker extensions should work in packager"
+    ]
+  },
+  {
     "version": "1.9.0-rc",
     "date": "2023-9-5",
     "notes": [

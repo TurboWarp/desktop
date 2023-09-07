@@ -2,6 +2,16 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.9.0 (2023-09-08)
+
+ - TODO :)
+
+# 1.9.0-rc2 (2023-09-07)
+
+ - Fixed opening files on Windows hopefully
+ - Errors that happen in the "background" will now show error dialogs
+ - Iframe and color picker extensions should work in packager
+
 # 1.9.0-rc (2023-09-5)
 
  - The last beta update! Hopefully!
