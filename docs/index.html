@@ -294,20 +294,31 @@
       }
       .alternative-download-links > div {
         margin: 8px 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 4px 8px;
       }
       .alternative-download-links ul {
         margin: 0;
         padding: 0;
-        display: inline-flex;
+        display: flex;
         justify-content: center;
+        gap: 8px;
       }
       .alternative-download-links li {
         display: block;
         padding: 0;
         margin: 0;
       }
-      .alternative-download-links a {
-        margin: 0 8px;
+
+      .beta-badge {
+        border-radius: 4px;
+        padding: 2px 5px;
+        border-bottom: 2px solid #6f0073;
+        background: #b117f8;
+        color: white;
       }
 
       .picture {
@@ -735,11 +746,13 @@
           <li><a href="#linux">Linux</a></li>
         </ul>
       </div>
+
       <div><b l10n="webapp" l10n-description="Followed by link to turbowarp.org/editor">Or use our web app in any browser:</b> <a href="https://turbowarp.org/editor">turbowarp.org/editor</a></div>
 
-      <!-- when there is no beta update, leave it hidden so we don't lose the l10n string -->
+      <!-- when there is no beta update, leave this hidden so we don't lose the l10n string -->
       <div>
-        <b><span l10n="beta" l10n-description="Followed by a version number eg. v1.7.2-beta.1 that is a link to learn more about the current beta release.">Beta version available:</span></b>
+        <span class="beta-badge" l10n="beta-badge" l10n-description="Part of the beta update available message.">New!</span>
+        <b l10n="beta" l10n-description="Followed by a version number eg. v1.7.2-beta.1 that is a link to learn more about the current beta release.">Beta version available:</b>
         <a href="https://github.com/TurboWarp/desktop/releases/tag/v1.9.0-rc2">v1.9.0 release candidate 2</a>
       </div>
     </div>
