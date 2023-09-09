@@ -7,7 +7,13 @@ await_confirmation() {
 	read
 }
 
+# Set up an agent so we only need to enter any SSH passwords once
+echo "Setting up SSH agent"
+eval "$(ssh-agent)"
+ssh-add
+
 echo "THINGS TO CHECK BEFORE RUNNING:"
+echo " - git pull"
 echo " - pacman -Syu"
 echo " - flatpak update"
 echo " - snap refresh"
@@ -17,30 +23,29 @@ echo " - (?) > About > Is the version right?"
 cd "$(dirname "$0")"
 src="$(pwd)/.."
 cd "$src"
-echo "src: $src"
 
-await_confirmation
+# Make sure we've been manually updated as I don't know what will happen if we pull changes
+# to this script while it's already running.
+git fetch
+if [ "$(git rev-parse HEAD)" == "$(git rev-parse @{u})" ]; then
+	echo "Source is up-to-date"
+else
+	echo "Source is outdated, please run: git pull"
+	exit 1
+fi
 
-# Set up an agent so we only need to enter any SSH passwords once
-echo "Setting up SSH agent"
-eval "$(ssh-agent)"
-ssh-add
-
-update_source() {
-	echo "Updating source"
-	cd "$src"
-	git checkout master
-	git pull
-	git submodule update
-	npm ci
-	npm run fetch
-}
-
-update_source
 version="$(jq -r .version package.json)"
 commit="$(git rev-parse HEAD)"
 echo "version $version, commit $commit"
 await_confirmation
+
+prepare_source() {
+	echo "Preparing source"
+	cd "$src"
+	git submodule update
+	npm ci
+	npm run fetch
+}
 
 update_flatpak() {
 	echo "Updating flatpak"
@@ -101,6 +106,7 @@ update_debian() {
 	./everything.sh
 }
 
+prepare_source
 update_flatpak
 update_aur
 update_snap
