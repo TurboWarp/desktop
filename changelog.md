@@ -17,6 +17,7 @@ Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **form
  - Removed "for each" block from the palette because it causes various issues
  - Improved error handling
  - Fixed backpacking scripts and sprites that contain custom extensions
+ - Fixed text to speech blocks
  - Fixed a lot of bugs
 
 # 1.8.1 (2023-06-20)
