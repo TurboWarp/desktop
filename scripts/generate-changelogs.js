@@ -33,8 +33,6 @@ const escapeXmlText = (xml) => xml.replace(/[<>&]/g, c => {
   }
 });
 
-const releasedVersion = require('../docs/version.json').latest;
-
 /** @returns {Release[]} */
 const parse = () => {
   const releaseData = [];
@@ -68,6 +66,10 @@ const parse = () => {
  * @param {Release[]} releases
  */
 const generateHomepage = (releases) => {
+  const path = pathUtil.join(__dirname, '../docs/index.html');
+  let source = fs.readFileSync(path, 'utf-8');
+  const releasedVersion = source.match(/const VERSION *= *["']([\d\w\.\-]+)["']/i)[1];
+
   let html = '';
   for (const {version, date, notes} of releases) {
     if (lte(version, releasedVersion)) {
@@ -82,8 +84,6 @@ const generateHomepage = (releases) => {
     }
   }
 
-  const path = pathUtil.join(__dirname, '../docs/index.html');
-  let source = fs.readFileSync(path, 'utf-8');
   source = source.replace(
     /<!-- CHANGELOG_START -->[\s\S]*<!-- CHANGELOG_END -->/m,
     `<!-- CHANGELOG_START -->\n${html}        <!-- CHANGELOG_END -->`

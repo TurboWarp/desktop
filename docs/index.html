@@ -460,6 +460,10 @@
       [data-os="unsupported"] [data-if-os="unsupported"] {
         display: initial;
       }
+
+      [hidden] {
+        display: none !important;
+      }
     </style>
   </head>
 
@@ -519,7 +523,7 @@
     <script type="generated-locale-names">{"en":"English","ca":"Català","de":"Deutsch","es":"Español (España)","it":"Italiano","ja":"日本語","ko":"한국어","nl":"Nederlands","pt-br":"Português Brasileiro","sv":"Svenska","tr":"Türkçe","zh-cn":"简体中文"}</script>
 
     <script>
-      const VERSION = '1.8.1';
+      const VERSION = '1.9.0';
 
       // OS-specific styles
       const getOS = () => {
@@ -751,7 +755,7 @@
       <div><b l10n="webapp" l10n-description="Followed by link to turbowarp.org/editor">Or use our web app in any browser:</b> <a href="https://turbowarp.org/editor">turbowarp.org/editor</a></div>
 
       <!-- when there is no beta update, leave this hidden so we don't lose the l10n string -->
-      <div>
+      <div hidden>
         <span class="beta-badge" l10n="beta-badge" l10n-description="Part of the beta update available message.">New!</span>
         <b l10n="beta" l10n-description="Followed by a version number eg. v1.7.2-beta.1 that is a link to learn more about the current beta release.">Beta version available:</b>
         <a href="https://github.com/TurboWarp/desktop/releases/tag/v1.9.0-rc2">v1.9.0 release candidate 2</a>
@@ -872,6 +876,25 @@
       <h2 l10n="changelog">Changelog</h2>
       <div lang="en">
         <!-- CHANGELOG_START -->
+        <div data-version="1.9.0">
+          <h3>v1.9.0 (September 8 2023)</h3>
+          <ul>
+            <li>Desktop app was rewritten for improved security</li>
+            <li>Added custom reporters</li>
+            <li>Added custom fonts</li>
+            <li>Added 15+ new extensions including Clipboard, More Motion, Iframe, Color picker, Custom Styles, and Wake Lock</li>
+            <li>New restore point system that is more reliable, more efficient, and stores multiple restore points instead of just one</li>
+            <li>The builtin extension, costume, backdrop, and sprite libraries let you mark items as favorites</li>
+            <li>Extension gallery is now built into the extension list, not a separate window</li>
+            <li>New update checker that shows you the changelog for each new version</li>
+            <li>Can now ignore misspelled words or turn off the spellchecker entirely</li>
+            <li>Allow importing .ogg, .flac, and .aac audio files</li>
+            <li>Removed "for each" block from the palette because it causes various issues</li>
+            <li>Improved error handling</li>
+            <li>Fixed backpacking scripts and sprites that contain custom extensions</li>
+            <li>Fixed a lot of bugs</li>
+          </ul>
+        </div>
         <div data-version="1.8.1">
           <h3>v1.8.1 (June 20 2023)</h3>
           <ul>
