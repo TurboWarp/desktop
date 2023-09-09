@@ -548,31 +548,38 @@
       document.body.setAttribute('data-os', getOS());
 
       // Changelog page
-      const INVALID_VERSIONS = 0;
-      const A_IS_OLDER = 1;
-      const B_IS_OLDER = 2;
-      const VERSIONS_ARE_EQUAL = 3;
+      const VERSIONS_ARE_EQUAL = 0;
+      const A_IS_NEWER = 1;
+      const B_IS_NEWER = 2;
       const compareVersions = (a, b) => {
-        var partsA = a.split('-')[0].split('.');
-        var partsB = b.split('-')[0].split('.');
-        var expectedLength = 3;
-        if (partsA.length !== expectedLength || partsB.length !== expectedLength) {
-          return INVALID_VERSIONS;
-        }
+        const partsA = a.split('-')[0].split('.');
+        const partsB = b.split('-')[0].split('.');
+        const expectedLength = 3;
         for (var i = 0; i < expectedLength; i++) {
-          var itemA = +partsA[i];
-          var itemB = +partsB[i];
-          if (isNaN(itemA) || isNaN(itemB)) {
-            return INVALID_VERSIONS;
-          }
+          const itemA = +partsA[i];
+          const itemB = +partsB[i];
           if (itemA > itemB) {
-            return B_IS_OLDER;
+            return A_IS_NEWER;
           } else if (itemA < itemB) {
-            return A_IS_OLDER;
+            return B_IS_NEWER;
           }
         }
-        return VERSIONS_ARE_EQUAL;
+
+        const prereleaseA = a.split('-')[1];
+        const prereleaseB = b.split('-')[1];
+        if (prereleaseA === prereleaseB) {
+          return VERSIONS_ARE_EQUAL;
+        } else if (prereleaseA && !prereleaseB) {
+          return B_IS_NEWER;
+        } else if (prereleaseB && !prereleaseA) {
+          return A_IS_NEWER;
+        } else if (prereleaseA > prereleaseB) {
+          return A_IS_NEWER;
+        } else {
+          return B_IS_NEWER;
+        }
       };
+
       const searchParams = new URLSearchParams(location.search);
       const isChangelogPage = searchParams.has('changelog') || searchParams.has('from') || searchParams.has('to');
       const comingFromVersion = searchParams.get('from') || '0.0.0';
@@ -666,7 +673,7 @@
         const version = element.getAttribute('data-version');
         if (version) {
           const result = compareVersions(comingFromVersion, version);
-          if (result === B_IS_OLDER || result === VERSIONS_ARE_EQUAL) {
+          if (result === A_IS_NEWER || result === VERSIONS_ARE_EQUAL) {
             element.style.display = 'none';
           }
         }
