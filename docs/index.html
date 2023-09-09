@@ -313,12 +313,21 @@
         margin: 0;
       }
 
-      .beta-badge {
+      .beta-badge, .security-badge {
         border-radius: 4px;
         padding: 2px 5px;
-        border-bottom: 2px solid #6f0073;
-        background: #b117f8;
+        border-bottom-width: 2px;
+        border-bottom-style: solid;
+      }
+      .beta-badge {
         color: white;
+        background-color: #b117f8;
+        border-color: #6f0073;
+      }
+      .security-badge {
+        color: black;
+        background-color: #fffb00;
+        border-color: rgb(205, 205, 0);
       }
 
       .picture {
@@ -754,19 +763,17 @@
 
       <div><b l10n="webapp" l10n-description="Followed by link to turbowarp.org/editor">Or use our web app in any browser:</b> <a href="https://turbowarp.org/editor">turbowarp.org/editor</a></div>
 
+      <div>
+        <b class="security-badge" l10n="security-advisory" l10n-description="Followed by a link to learn more about a recent security-related bug">Security Advisory:</b>
+        <a href="https://github.com/TurboWarp/desktop/security/advisories/GHSA-wg4p-vj7h-q82q"> CVE-2023-40168</a>
+      </div>
+
       <!-- when there is no beta update, leave this hidden so we don't lose the l10n string -->
       <div hidden>
         <span class="beta-badge" l10n="beta-badge" l10n-description="Part of the beta update available message.">New!</span>
         <b l10n="beta" l10n-description="Followed by a version number eg. v1.7.2-beta.1 that is a link to learn more about the current beta release.">Beta version available:</b>
         <a href="https://github.com/TurboWarp/desktop/releases/tag/v1.9.0-rc2">v1.9.0 release candidate 2</a>
       </div>
-    </div>
-
-    <div class="security-advisory" lang="en">
-      <h2>Security Advisory</h2>
-      <p>Versions of TurboWarp Desktop prior to 1.8.0 allowed malicious projects or extensions to silently read files from your computer and upload them to a remote server. Updating is <b>HIGHLY RECOMMENDED</b>.</p>
-      <p>You can check your current version by pressing the (?) button in the top right corner of the app then "About".</p>
-      <p><a href="https://github.com/TurboWarp/desktop/security/advisories/GHSA-wg4p-vj7h-q82q">CVE-2023-40168 - GHSA-wg4p-vj7h-q82q</a></p>
     </div>
 
     <div class="picture picture-editor">
