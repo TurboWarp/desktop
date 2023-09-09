@@ -16,6 +16,7 @@
       "Removed \"for each\" block from the palette because it causes various issues",
       "Improved error handling",
       "Fixed backpacking scripts and sprites that contain custom extensions",
+      "Fixed text to speech blocks",
       "Fixed a lot of bugs"
     ]
   },
