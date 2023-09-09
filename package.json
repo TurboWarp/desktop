@@ -1,36 +1,46 @@
 {
   "name": "turbowarp-desktop",
   "description": "Scratch mod with a compiler, dark mode, a bunch of addons, and more.",
-  "version": "1.6.1",
+  "version": "1.9.0",
   "license": "GPL-3.0",
   "author": {
     "email": "contact@turbowarp.org",
     "name": "Thomas Weber"
   },
   "scripts": {
-    "dev": "npm run start",
-    "start": "electron-webpack dev",
-    "compile": "electron-webpack",
-    "dist": "npm run compile && electron-builder",
-    "dist:dir": "npm run compile && electron-builder --dir",
-    "fetch": "node scripts/download-library-files.js && node scripts/download-packager.js"
+    "fetch": "node scripts/download-library-files.js && node scripts/download-packager.js && node scripts/prepare-extensions.js",
+    "webpack:compile": "webpack",
+    "webpack:watch": "webpack --watch",
+    "webpack:prod": "cross-env NODE_ENV=production webpack",
+    "electron:start": "electron src-main/entrypoint.js",
+    "electron:package:dir": "electron-builder --dir"
   },
-  "dependencies": {},
+  "dependencies": {
+    "semver": "^7.5.3"
+  },
   "devDependencies": {
+    "@babel/core": "^7.22.11",
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.13.13",
-    "@turbowarp/electron-webpack": "^2.9.1",
-    "css-loader": "^5.0.2",
-    "electron": "^21.1.1",
-    "electron-builder": "^23.3.3",
+    "@electron/notarize": "^2.1.0",
+    "adm-zip": "^0.5.10",
+    "async-limiter": "^2.0.0",
+    "autoprefixer": "^9.8.8",
+    "babel-loader": "^8.3.0",
+    "copy-webpack-plugin": "^6.4.1",
+    "cross-env": "^7.0.3",
+    "css-loader": "^1.0.1",
+    "electron": "^22.3.23",
+    "electron-builder": "^24.6.4",
     "postcss": "^8.4.13",
     "postcss-import": "^14.0.0",
     "postcss-loader": "^4.2.0",
     "postcss-simple-vars": "^6.0.3",
-    "scratch-gui": "git+https://github.com/TurboWarp/scratch-gui.git#desktop",
-    "semver": "^7.3.4",
-    "webpack": "~4.46.0",
-    "write-file-atomic": "^4.0.1"
+    "scratch-gui": "git+https://github.com/TurboWarp/scratch-gui.git#develop",
+    "style-loader": "^0.23.0",
+    "url-loader": "^4.1.1",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^4.10.0"
   },
   "homepage": "https://desktop.turbowarp.org/",
   "repository": {
@@ -41,10 +51,25 @@
     "url": "https://github.com/TurboWarp/desktop/issues",
     "email": "contact@turbowarp.org"
   },
+  "main": "./src-main/entrypoint.js",
   "build": {
-    "extends": "file:node_modules/@turbowarp/electron-webpack/out/electron-builder.js",
     "appId": "org.turbowarp.desktop",
     "productName": "TurboWarp",
+    "files": [
+      "node_modules/**/*",
+      "src-main/**/*",
+      "src-preload/**/*",
+      "src-renderer/**/*",
+      "dist-renderer-webpack/**/*",
+      "dist-library-files/**/*",
+      "dist-extensions/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "art/icon.png",
+        "to": "icon.png"
+      }
+    ],
     "win": {
       "artifactName": "${productName} Portable ${version} ${arch}.${ext}",
       "icon": "build/icon.ico",
@@ -67,7 +92,14 @@
       "publisher": "CN=18FA7D4F-01BF-49F2-BF56-782DCEA49C69",
       "publisherDisplayName": "Thomas Weber",
       "backgroundColor": "#4c97ff",
-      "showNameOnTiles": true
+      "showNameOnTiles": true,
+      "languages": [
+        "en-US",
+        "nl",
+        "de",
+        "it",
+        "ko"
+      ]
     },
     "nsis": {
       "artifactName": "${productName} Setup ${version} ${arch}.${ext}",
@@ -82,9 +114,11 @@
       "darkModeSupport": true,
       "gatekeeperAssess": false,
       "hardenedRuntime": true,
-      "entitlements": "entitlements.mac.plist",
-      "entitlementsInherit": "entitlements.mac.plist",
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
       "extendInfo": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "LSMultipleInstancesProhibited": true,
         "NSCameraUsageDescription": "This app requires camera access when using the video sensing blocks.",
         "NSMicrophoneUsageDescription": "This app requires microphone access when recording sounds or detecting loudness."
       },
@@ -94,6 +128,16 @@
           "target": "dmg"
         }
       ]
+    },
+    "mas": {
+      "hardenedRuntime": false,
+      "entitlements": "build/entitlements.mas.plist",
+      "entitlementsInherit": "build/entitlements.mas.inherit.plist",
+      "provisioningProfile": "build/distribution.provisionprofile"
+    },
+    "masDev": {
+      "type": "development",
+      "provisioningProfile": "build/development.provisionprofile"
     },
     "linux": {
       "artifactName": "${productName}-${os}-${arch}-${version}.${ext}",
@@ -157,19 +201,8 @@
         "repo": "desktop",
         "owner": "TurboWarp"
       }
-    ]
-  },
-  "electronWebpack": {
-    "main": {
-      "webpackConfig": "webpack.main.js",
-      "extraEntries": [
-        "@/preload.js"
-      ]
-    },
-    "renderer": {
-      "webpackConfig": "webpack.renderer.js",
-      "template": "src/renderer/template.html"
-    }
+    ],
+    "afterSign": "scripts/after-sign.js"
   },
   "private": true
 }

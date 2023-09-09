@@ -9,7 +9,7 @@ const compress = promisify(zlib.brotliCompress);
 const writeFile = promisify(fs.writeFile);
 const {fetch} = require('./lib');
 
-const libraryFiles = pathUtil.join(__dirname, '..', 'static', 'library-files');
+const libraryFiles = pathUtil.join(__dirname, '../dist-library-files');
 if (!fs.existsSync(libraryFiles)) {
   console.log('Making library files folder');
   fs.mkdirSync(libraryFiles, {
@@ -17,7 +17,7 @@ if (!fs.existsSync(libraryFiles)) {
   });
 }
 
-const guiLibraryFolder = pathUtil.join(__dirname, '..', 'node_modules', 'scratch-gui', 'src', 'lib', 'libraries');
+const guiLibraryFolder = pathUtil.join(__dirname, '../node_modules/scratch-gui/src/lib/libraries');
 const costumesManifest = pathUtil.join(guiLibraryFolder, 'costumes.json');
 const backdropManifest = pathUtil.join(guiLibraryFolder, 'backdrops.json');
 const spriteManifest = pathUtil.join(guiLibraryFolder, 'sprites.json');

@@ -12,17 +12,19 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
     - name: Install Node.js
       uses: actions/setup-node@v3
       with:
         node-version: 14.x
         cache: npm
-    - name: Install Dependencies
+    - name: Install dependencies
       run: npm ci
-    - name: Download Library Files
+    - name: Fetch
       run: npm run fetch
-    - name: Compile and package
+    - name: Compile
+      run: npm run webpack:compile
+    - name: Package
       run: npm run dist -- --publish never
-      env:
-        NODE_OPTIONS: --max-old-space-size=4096

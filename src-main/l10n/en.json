@@ -1,0 +1,330 @@
+{
+  "unload.stay": {
+    "string": "Stay",
+    "developer_comment": "Part of confirmation prompt that appears when closing with unsaved changes in desktop app"
+  },
+  "unload.leave": {
+    "string": "Leave",
+    "developer_comment": "Part of confirmation prompt that appears when closing with unsaved changes in desktop app"
+  },
+  "unload.message": {
+    "string": "Are you sure you want to quit?",
+    "developer_comment": "Part of confirmation prompt that appears when closing with unsaved changes in desktop app"
+  },
+  "unload.detail": {
+    "string": "Any unsaved changes will be lost.",
+    "developer_comment": "Part of confirmation prompt that appears when closing with unsaved changes in desktop app"
+  },
+  "addon-settings": {
+    "string": "Addon Settings",
+    "developer_comment": "Title of addon settings window"
+  },
+  "privacy-policy": {
+    "string": "Privacy Policy",
+    "developer_comment": "Title of privacy policy window"
+  },
+  "about": {
+    "string": "About {APP_NAME}",
+    "developer_comment": "Title of about window"
+  },
+  "menu.about": {
+    "string": "About {APP_NAME}",
+    "developer_comment": "macOS menu bar item to open about window"
+  },
+  "menu.new-window": {
+    "string": "New Window",
+    "developer_comment": "macOS menu bar item to open a new editor window"
+  },
+  "menu.settings": {
+    "string": "Settings",
+    "developer_comment": "macOS menu bar item to open desktop settings window"
+  },
+  "menu.learn-more": {
+    "string": "Learn more",
+    "developer_comment": "macOS menu bar item to learn more"
+  },
+  "context.add-to-dictionary": {
+    "string": "Add to Dictionary",
+    "developer_comment": "Context menu item that appears when right clicking on a misspelled word"
+  },
+  "context.open-link": {
+    "string": "Open Link",
+    "developer_comment": "Context menu item to open link"
+  },
+  "context.cut": {
+    "string": "Cut",
+    "developer_comment": "Context menu item to cut"
+  },
+  "context.copy": {
+    "string": "Copy",
+    "developer_comment": "Context menu item to copy"
+  },
+  "context.paste": {
+    "string": "Paste",
+    "developer_comment": "Context menu item to paste"
+  },
+  "permission.audio-denied": {
+    "string": "Microphone Permission Denied",
+    "developer_comment": "Appears when someone doesn't give the app access to their microphone."
+  },
+  "permission.audio-denied-description": {
+    "string": "The app will not be able to record sounds or detect loudness.",
+    "developer_comment": "Appears when someone doesn't give the app access to their microphone."
+  },
+  "permission.video-denied": {
+    "string": "Camera Permission Denied",
+    "developer_comment": "Appears when someone doesn't give the app access to their camera."
+  },
+  "permission.video-denied-description": {
+    "string": "The app will not be able to take photos or use video sensing.",
+    "developer_comment": "Appears when someone doesn't give the app access to their camera."
+  },
+  "permission.macos-instructions": {
+    "string": "To change permissions, open System Preferences > Security & Privacy > Privacy > Camera or Microphone.",
+    "developer_comment": "Appears on macOS when someone doesn't give the app access to their camera or microphone"
+  },
+  "crash.title": {
+    "string": "Crashed",
+    "developer_comment": "Appears when a process crashes"
+  },
+  "crash.description": {
+    "string": "Process crashed: {type}: {reason} ({code})",
+    "developer_comment": "Appears when a process crashes"
+  },
+  "prompt.ok": {
+    "string": "OK",
+    "developer_comment": "Appears in alert boxes, confirmation messages, and text prompts"
+  },
+  "prompt.cancel": {
+    "string": "Cancel",
+    "developer_comment": "Appears in confirmation messages and text prompts"
+  },
+  "packager.loading-preview": {
+    "string": "Loading...",
+    "developer_comment": "Loading message for packager preview windows"
+  },
+  "arm-translation.title": {
+    "string": "Please download the ARM version instead",
+    "developer_comment": "Appears when running the app in an environment like Rosetta"
+  },
+  "arm-translation.detail": {
+    "string": "You're using {APP_NAME} in a translation layer such as Apple Rosetta. Please install the native ARM version instead as it will perform better and use less battery.",
+    "developer_comment": "Appears when running the app in an environment like Rosetta"
+  },
+  "in-app-about.desktop-settings": {
+    "string": "Desktop Settings",
+    "developer_comment": "Part of the in-app (?) button's menu. Opens desktop settings window."
+  },
+  "in-app-about.privacy": {
+    "string": "Privacy Policy",
+    "developer_comment": "Part of the in-app (?) button's menu. Opens privacy policy window."
+  },
+  "in-app-about.about": {
+    "string": "About",
+    "developer_comment": "Part of the in-app (?) button's menu. Opens about window."
+  },
+  "in-app-about.source-code": {
+    "string": "Source Code",
+    "developer_comment": "Part of the in-app (?) button's menu. Opens link to source code."
+  },
+  "in-app-about.donate": {
+    "string": "Donate",
+    "developer_comment": "Part of the in-app (?) button's menu. Opens link to donation page."
+  },
+  "desktop-settings.title": {
+    "string": "Desktop Settings",
+    "developer_comment": "Title of desktop settings window"
+  },
+  "desktop-settings.update-checker-not-allowed": {
+    "string": "Updates are managed by store you installed the app from.",
+    "developer_comment": "Appears in desktop settings when updates are handled by the store the app was installed from such as the Microsoft Store."
+  },
+  "desktop-settings.update-checker": {
+    "string": "Update Checker",
+    "developer_comment": "Label of dropdown to configure the update checker"
+  },
+  "desktop-settings.notify-unstable": {
+    "string": "Notify me about unstable updates",
+    "developer_comment": "Update checker configuration option"
+  },
+  "desktop-settings.notify-stable": {
+    "string": "Notify me about stable updates",
+    "developer_comment": "Update checker configuration option"
+  },
+  "desktop-settings.notify-security": {
+    "string": "Notify me about security updates",
+    "developer_comment": "Update checker configuration option"
+  },
+  "desktop-settings.notify-never": {
+    "string": "Never notify me about updates",
+    "developer_comment": "Update checker configuration option"
+  },
+  "desktop-settings.disabled-updates": {
+    "string": "Disabling the update checker is not recommended as you will not be notified about security updates.",
+    "developer_comment": "Warning that appears in desktop settings when the update checker is disabled"
+  },
+  "desktop-settings.microphone": {
+    "string": "Selected Microphone",
+    "developer_comment": "Label of dropdown to select active microphone"
+  },
+  "desktop-settings.camera": {
+    "string": "Selected Camera",
+    "developer_comment": "Label of dropdown to select active camera"
+  },
+  "desktop-settings.loading": {
+    "string": "Loading...",
+    "developer_comment": "Placeholder item in dropdown while data is being fetched"
+  },
+  "desktop-settings.no-devices": {
+    "string": "No devices",
+    "developer_comment": "Appears in dropdown to select camera or microphone if none were found"
+  },
+  "desktop-settings.error": {
+    "string": "Error: {error}",
+    "developer_comment": "Appears in dropdown to select camera or microphone if there was an error"
+  },
+  "desktop-settings.editor-must-be-open": {
+    "string": "Error: Open editor to configure devices",
+    "developer_comment": "Appears in dropdown to select camera or microphone if the editor is not open"
+  },
+  "desktop-settings.media-devices-changed": {
+    "string": "You may have to restart the application for microphone or camera changes to apply.",
+    "developer_comment": "Warning that appears in desktop settings after changing the selected camera or microphone"
+  },
+  "desktop-settings.hardware-acceleration": {
+    "string": "Use hardware acceleration (requires restart)",
+    "developer_comment": "Desktop settings option to toggle hardware acceleration"
+  },
+  "desktop-settings.hardware-acceleration-disabled": {
+    "string": "Disabling hardware acceleration is not recommended as hardware acceleration almost always improves performance.",
+    "developer_comment": "Warning that appears in desktop settings when hardware acceleration is disabled"
+  },
+  "desktop-settings.background-throttling": {
+    "string": "Sleep hidden windows",
+    "developer_comment": "Desktop settings option to disable background window throttling"
+  },
+  "desktop-settings.background-throttling-disabled": {
+    "string": "Allowing hidden windows to remain active will result in higher CPU usage and lower battery life.",
+    "developer_comment": "Warning that appears in desktop settings when background throttling is disabled"
+  },
+  "desktop-settings.bypass-cors": {
+    "string": "Allow extensions to access any website",
+    "developer_comment": "Desktop settings option to let extensions bypass normal security stuff"
+  },
+  "desktop-settings.bypass-cors-enabled": {
+    "string": "This disables several web security features designed to protect you. Malicious projects or extensions will be able to access any website or device on your network.",
+    "developer_comment": "Warning that appears in desktop settings when bypass CORS is enabled"
+  },
+  "desktop-settings.spellchecker": {
+    "string": "Enable spell checker",
+    "developer_comment": "Option in desktop settings to disable spell checking"
+  },
+  "desktop-settings.open-user-data": {
+    "string": "Open User Data",
+    "developer_comment": "Button in desktop settings to open the user data folder"
+  },
+  "migrate.title": {
+    "string": "Finishing update...",
+    "developer_comment": "Title of window that does various things to finish an update"
+  },
+  "migrate.description": {
+    "string": "This is a one-time process that may take a few moments.",
+    "developer_comment": "More information about process to finish an update"
+  },
+  "migrate.error": {
+    "string": "Some of your data could not be transferred. Please send a screenshot of this window to:",
+    "developer_comment": "Appears when there was an error finishing an update."
+  },
+  "migrate.timed-out": {
+    "string": "This process is taking an unusually long time. Please send a screenshot of this window to:",
+    "developer_comment": "Appears when finishing an update is taking longer than it should."
+  },
+  "migrate.continue-anyways": {
+    "string": "Continue Anyways",
+    "developer_comment": "Appears when there was an error finishing an update."
+  },
+  "migrate.preparing": {
+    "string": "Preparing...",
+    "developer_comment": "Status message that appears while finishing an update."
+  },
+  "migrate.transfer-editor": {
+    "string": "Transfering backpack and addon settings...",
+    "developer_comment": "Status message that appears while finishing an update."
+  },
+  "migrate.transfer-packager": {
+    "string": "Transfering packager settings...",
+    "developer_comment": "Status message that appears while finishing an update."
+  },
+  "migrate.finalizing": {
+    "string": "Finalizing...",
+    "developer_comment": "Status message that appears while finishing an update."
+  },
+  "update.window-title": {
+    "string": "Update Available",
+    "developer_comment": "Title of update available window"
+  },
+  "update.normal-title": {
+    "string": "An update is available",
+    "developer_comment": "Header of update available window for normal update"
+  },
+  "update.security-title": {
+    "string": "A security update is available",
+    "developer_comment": "Header of update available window for security updates"
+  },
+  "update.normal-description": {
+    "string": "{appNameVersion} is now available.",
+    "developer_comment": "Description of update available window for normal update. {appNameVersion} will be replaced with something like 'TurboWarp Desktop v1.2.3'."
+  },
+  "update.security-description": {
+    "string": "{appNameVersion} is now available. This release contains security fixes. Updating is highly recommended.",
+    "developer_comment": "Description of update available window for security update. {appNameVersion} will be replaced with something like 'TurboWarp Desktop v1.2.3'."
+  },
+  "update.loading": {
+    "string": "Loading...",
+    "developer_comment": "Appears in update available window while the changelog is still loading"
+  },
+  "update.download-button": {
+    "string": "Download Update",
+    "developer_comment": "Appears in update available window. Button to download the update."
+  },
+  "update.ignore-button": {
+    "string": "Remind me later",
+    "developer_comment": "Appears in update available window. Button to ignore this update temporarily."
+  },
+  "update.permanently-ignore": {
+    "string": "Ignore this update",
+    "developer_comment": "Appears in update available window. Checkbox to ignore this update permanently."
+  },
+  "files.svg": {
+    "string": "SVG Image",
+    "context": "Appears in file saving dialog when exporting a vector costume"
+  },
+  "files.png": {
+    "string": "PNG Image",
+    "context": "Appears in file saving dialog when exporting a bitmap costume"
+  },
+  "files.wav": {
+    "string": "WAV Sound",
+    "context": "Appears in file saving dialog when exporting a sound"
+  },
+  "files.sprite3": {
+    "string": "Scratch 3 Sprite",
+    "context": "Appears in file saving dialog when exporting a sprite"
+  },
+  "files.txt": {
+    "string": "Text Document",
+    "context": "Appears in file saving dialog when exporting a list"
+  },
+  "files.webm": {
+    "string": "WebM Video",
+    "context": "Appears in file saving dialog when exporting a video with an addon"
+  },
+  "files.html": {
+    "stirng": "HTML File",
+    "context": "Appears in file saving dialog when saving some types of packaged projects"
+  },
+  "files.zip": {
+    "string": "Zip File",
+    "context": "Appears in file saving dialog when saving some types of packaged projects"
+  }
+}

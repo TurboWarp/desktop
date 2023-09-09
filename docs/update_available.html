@@ -15,6 +15,25 @@
     </style>
   </head>
   <body>
-    <script>location.pathname='/';</script>
+    <script>
+      function redirectRelease () {
+        location.replace('/' + location.search);
+      }
+
+      function redirectBeta () {
+        location.replace('https://github.com/TurboWarp/desktop/releases');
+      }
+
+      try {
+        var params = new URLSearchParams(location.search);
+        if (params.has('to') && params.get('to').includes('-')) {
+          redirectBeta();
+        } else {
+          redirectRelease();
+        }
+      } catch (e) {
+        redirectRelease();
+      }
+    </script>
   </body>
 </html>

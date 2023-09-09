@@ -38,7 +38,7 @@ The signing script will automatically parse that file to determine which key to 
 
 ## Configure rclone
 
-Our upload script relies on an rclone remote called `turbowarp-pkgs`. See https://rclone.org/ for guidance on setting this up.
+By default, our upload script uploads to an [rclone](https://rclone.org/) remote called `r2` and bucket `turbowarp-pkgs`.
 
 ## Updating the repository
 
