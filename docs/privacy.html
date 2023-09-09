@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>TurboWarp Desktop Privacy Policy</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TurboWarp Desktop Privacy Policy</title>
     <style>
       :root {
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -11,17 +11,6 @@
       body {
         margin: 0;
         padding: 0;
-      }
-      header {
-        background-color: #ff4c4c;
-        color: white;
-        text-align: center;
-        padding: 20px 0;
-      }
-      main {
-        max-width: 600px;
-        padding: 0 8px;
-        margin: auto;
       }
       @media (prefers-color-scheme: dark) {
         :root {
@@ -33,32 +22,83 @@
           color: #4af;
         }
       }
+
+      nav {
+        background-color: #ff4c4c;
+        color: white;
+        font-weight: bold;
+        font-size: 1.1em;
+      }
+      nav > * {
+        display: flex;
+        align-items: center;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 0.5rem 0.25rem;
+        gap: 0.5rem;
+        text-decoration: none;
+        color: inherit !important;
+      }
+      nav > *:hover {
+        text-decoration: underline;
+      }
+      nav svg, nav img {
+        width: 2rem;
+        height: 2rem;
+        flex-shrink: 0;
+      }
+      @media (prefers-color-scheme: dark) {
+        nav {
+          background-color: #333;
+        }
+      }
+
+      main {
+        max-width: 600px;
+        padding: 0 8px;
+        margin: auto;
+      }
     </style>
   </head>
   <body>
-    <header>
-      <h1>TurboWarp Desktop Privacy Policy</h1>
-    </header>
+    <nav role="navigation">
+      <a href="/">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" viewBox="0 0 1024 1024"><path fill="none" stroke="#fff" stroke-width="344.49949240200004" d="M764.92444591 263.98275252c-4.8487634 21.2135338-8.48538176 44.24537679-10.909794 69.09551674-.60582824 6.66710922 0 15.15252763 1.81827864 25.456243 1.81827864 12.12201845 2.7274485 20.60743685 2.7274485 25.45624301 0 15.75862459-10.30372148 23.63793993-30.91110336 23.63793993-13.33426732 0-22.12271588-3.93965462-26.36542508-11.81896996-.6061336-13.33422457-.30303626-31.51725528.90916986-54.54909216 1.2121878-27.27454608 1.81827864-45.4575768 1.81827864-54.54909216-.60607252 0-1.51522406-.60607252-2.7274485-1.81830307-56.36738912 2.42440613-109.40122058 6.06101228-159.10148826 10.90981843-1.21222444 7.87931535-1.21222444 17.57692766 0 29.09284915l3.63655729 32.7294553c-2.42436949 18.78913378-3.63655729 46.66978291-3.63655729 83.64194741 1.81829697 15.75862459 2.7274485 83.33889894 2.7274485 202.74081084v66.3681354c0 10.30372149 1.51524239 17.5769582 4.54572715 21.81964909h56.36743187c23.03181245-3.03054584 34.54772172 6.66710312 34.54772172 29.09282472 0 13.33426731-6.36404853 22.72881893-19.0921395 28.18371593-7.879352 3.03054584-21.81969183 3.63661836-41.82101951 1.81833972-12.12201845-1.21220612-26.36539455-1.51530345-42.7301283-.90916986-22.42573992 3.03048476-49.700286 5.454897-81.82363823 7.27317565-32.72942476 1.81833971-52.73074634-2.72738743-60.00397695-13.6372425-4.84880615-7.27317565-4.84880615-14.84944863 0-22.72881894 8.4854123-13.33420624 30.60809764-20.00130936 66.3680438-20.00130936 18.789146 0 28.18371594-5.15186074 28.18371594-15.45558222 0-5.454897-.30303626-10.60675774-.90916986-15.45558222 0-15.15260703.30303626-28.48687434.90916986-40.00275919 1.81829696-32.7294614 1.81829696-78.79314126 0-138.19103346-2.42441224-86.06634744-1.5152607-163.3442341 2.7274485-231.83364778l-2.7274485-2.7274546c-18.789146 1.2122-53.94300131.90915153-105.46157817-.90915154-2.42440613 0-20.91048533 1.21220001-55.4582437 3.63660614 8.4854123 58.1856983 13.33422457 99.70362048 14.54642458 124.55376043l-1.81830307 24.54709758c-.60607252 9.09151535-8.18236382 13.63727303-22.7287945 13.63727303-11.5159215 0-21.2135338-21.81963686-29.09284916-65.4589167-3.63660614-26.06234606-7.27321228-52.4277406-10.90981843-79.09618362 0-4.2427092-2.12135154-11.51592149-6.36406075-21.81963686-3.63660614-10.90981843-11.6565506-29.01481212-11.6565506-34.46972134 0-19.18359392 17.71756288-14.6244616 40.74939975-18.26106775 1.81830307 0 4.84880616.30303627 9.09151536.90915154 4.2427092.60607252 7.27321229.90915154 9.09151536.90915154h225.46960534c55.76127996-2.42440614 109.70425684-7.2732123 161.82893676-14.54642458 3.63663668-1.81830307 9.09156422-3.63660614 16.36473986-5.45490921 12.72813372-1.21220612 23.63792772 1.81829696 32.72944308 9.09151535 9.09151536 6.66710923 12.1220612 16.36472765 9.09151536 29.09284915z"/><path fill="none" stroke="#ff4c4c" stroke-width="172.249729275" d="M764.31359576 264.0858151q-7.27317029 31.82030653-10.90978348 69.09551604-.90916732 10.00066664 1.81827855 25.45624186 2.72744587 18.18303231 2.72744587 25.45624187 0 23.63794088-30.911128 23.63794088-20.00134452 0-26.36539797-11.81897324-.90916732-20.0013333.90916732-54.54908571 1.81827855-40.9118227 1.81827855-54.54909132-.90911123 0-2.72744587-1.8183066-84.55108005 3.63660759-159.10147661 10.90982275-1.81834026 11.81896764 0 29.09284385l3.6365571 32.72945703q-3.6365571 28.18369335-3.6365571 83.64194638 2.72744587 23.63793527 2.72744587 202.74080127v66.36805335q0 15.455564 4.54572442 21.81962306h56.36743157q34.54772437-4.54578051 34.54772437 29.09284945 0 20.00134452-19.09214354 28.18373823-11.81902373 4.54578051-41.82101807 1.81833464-18.1830267-1.81833464-42.73012368-.90916732-33.63861314 4.54572442-81.82363417 7.2731703-49.09413788 2.72750196-60.00397745-13.63722937-7.27320956-10.90983958 0-22.72884648 12.72811812-20.00128842 66.36804212-20.00128842 28.18371579 0 28.18371579-15.4556201 0-8.1823376-.90917293-15.455564 0-22.72881843.90917293-40.0026778 2.72744587-49.09419397 0-138.19102648-3.6366188-129.09952155 2.72744587-231.83364512l-2.72744587-2.72745148q-28.18371579 1.81830099-105.46157506-.9091505-3.63660758 0-55.4582418 3.63660198 12.72811812 87.27854836 14.54642472 124.55375786l-1.8183066 24.54709698q-.9091505 13.63727423-22.72879039 13.63727423-17.27388181 0-29.09284945-65.45891407-5.45490857-39.0935161-10.90981714-79.09618269 0-6.36405906-6.36406467-21.81963428-5.45490857-16.36473132-5.45490857-24.54709138 0-22.72879038 34.54775802-28.18369895 2.72745709 0 9.09151615.90915049 6.36405907.9091561 9.09151616.9091561h225.46959727q83.64191272-3.63660758 161.82891687-14.54642472 5.45494784-2.7274571 16.36473132-5.45490857 19.0922333-1.81831221 32.72946265 9.09151054 13.63728545 10.00066665 9.09150493 29.09284945z"/><path fill="#fff" d="M763.64009591 264.19124266q-7.27317564 31.82030375-10.909794 69.09551673-.90916986 10.0006669 1.81827864 25.456243 2.7274485 18.18303072 2.7274485 25.45624301 0 23.63793994-30.91110336 23.63793994-20.00135822 0-26.36542508-11.81896997-.90916986-20.0013338.90916986-54.54909216 1.81827864-40.91181912 1.81827864-54.54909215-.90910879 0-2.7274485-1.81830308-84.55108674 3.63660615-159.10148826 10.90981843-1.81833971 11.81896997 0 29.09284915l3.63655729 32.7294553q-3.63655729 28.18369761-3.63655729 83.64194741 2.7274485 23.63793994 2.7274485 202.74081084v66.36805602q0 15.45558222 4.54572715 21.81964907h56.36743187q34.54772172-4.54578821 34.54772172 29.09282473 0 20.00137043-19.0921395 28.18371593-11.81902493 4.54578822-41.82101951 1.81833972-18.18303072-1.81833972-42.7301283-.90916986-33.63861294 4.54572714-81.82363823 7.27317564-49.09413409 2.72750958-60.00397695-13.6372425-7.27321229-10.909794 0-22.72881893 12.7281215-20.00130937 66.3680438-20.00130937 28.18371594 0 28.18371594-15.45558221 0-8.1823455-.90916986-15.45558222 0-22.72881894.90916986-40.0026798 2.7274485-49.09419515 0-138.19103346-3.63661836-129.09952421 2.7274485-231.83364778l-2.7274485-2.7274546q-28.18371594 1.81830307-105.46157817-.90915154-3.63660614 0-55.4582437 3.63660614 12.72812151 87.27854746 14.54642458 124.55376043l-1.81830307 24.54709758q-.90915154 13.63727304-22.7287945 13.63727304-17.27387919 0-29.09284916-65.4589167-5.45490921-39.09351605-10.90981843-79.09618363 0-6.36406075-6.36406075-21.81963686-5.45490921-16.36472765-5.45490921-24.54709147 0-22.7287884 34.54775836-28.18369761 2.72745461 0 9.09151536.90915153 6.36406075.90915154 9.09151536.90915154h225.46960535q83.64191687-3.63660615 161.82893675-14.54642458 5.45495807-2.7274546 16.36473986-5.45490921 19.09220058-1.81830918 32.72944308 9.09151536 13.63730358 10.0006669 9.09151536 29.09284915z"/></svg>
+        <span>TurboWarp Desktop</span>
+      </a>
+    </nav>
+
     <main>
-      <!-- Please make sure privacy.jsx is always the same as this -->
-      <p><i>Updated December 8th, 2021</i></p>
-      <h2>The website (https://desktop.turbowarp.org/)</h2>
-      <p>The website does not log anything when you visit it.</p>
-      <p>Download links on the website are stored on GitHub releases. GitHub maintains a public download count for these files.</p>
+      <h1>Privacy Policy</h1>
 
-      <h2>The app</h2>
-      <p>The app may make requests to check for updates. These requests are not logged. These requests can be disabled.</p>
-      <p>Scratch extensions that require Wi-Fi (such as Translate, Text to Speech, LEGO, micro:bit, etc.) may connect to the Scratch API to implement these features. <a href="https://scratch.mit.edu/privacy_policy/">Refer to the Scratch privacy policy for more information</a>. The Translate extension may instead make requests to a TurboWarp API, which may then forward your request to the Scratch API and log the message being translated and the result for caching and performance.</p>
+      <p><i>Updated September 8, 2023 (v1.9.0)</i></p>
 
-      <h3>Packager</h3>
-      <p>The app contains an integrated version of the <a href="https://packager.turbowarp.org/">TurboWarp Packager</a>. This feature does not make any requests unless it's used.</p>
-      <p>The packager may contact the Scratch API to download projects. See the <a href="https://scratch.mit.edu/privacy_policy/">Scratch privacy policy</a> for more information. If you configure the packager to package a project from a remote URL, you are subject to the privacy practices of that particular website. The packager may download large files such as Electron binaries from a remote server; these requests are not logged.</p>
+      <p>A comprehensive privacy policy for all of TurboWarp can be found at <a href="">https://turbowarp.org/privacy.html</a>. Here, we have simplified it down to just the parts relevant to the desktop app.</p>
 
-      <h3>Output of packager ("packaged projects")</h3>
-      <p>If the packaged project uses extensions that require Wi-Fi such as Translate, Text to Speech, LEGO, and micro:bit, then the project may connect to the Scratch API to implement these features. <a href="https://scratch.mit.edu/privacy_policy/">Refer to the Scratch privacy policy for more information</a>.</p>
-      <p>If the packaged project uses the Translate extension or is configured to "Connect to cloud variable server", then the project may connect to servers controlled by TurboWarp. The project ID and username may be logged. <a href="https://turbowarp.org/privacy.html">Refer to the primary TurboWarp privacy policy for more information</a>.</p>
-      <p>If the packaged project uses custom extensions, custom JS, or custom cloud host, contact the relevant maintainer for their privacy practices.</p>
-      <p>You are responsible for informing end users about the privacy practices of the files you distribute. Do not link to this document as your project's privacy policy as it may change in the future; you should write your own using this section as a reference.</p>
+      <h2>This website</h2>
+      <p>Some download links on the website are stored on GitHub. GitHub maintains a public download count for these files.</p>
+
+      <h2 class="if-update-checker">Update Checker</h2>
+      <p class="if-update-checker">Some version of the desktop app contain an update checker which can be disabled in desktop settings.</p>
+
+      <h2>Loading projects</h2>
+      <p>When you load a project from another website, you are subject to the privacy practices of that website. For example, when loading projects from Scratch, you are subject to the <a href="https://scratch.mit.edu/privacy_policy">Scratch privacy policy</a>. When loading projects from Scratch specifically, the project ID will also be shared with TurboWarp as part of Scratch's API does not allow direct access. We may briefly log the project ID for caching.</p>
+
+      <h2>Running projects</h2>
+      <p>When connecting to our cloud variable servers (in the desktop app, this will only happen in packaged projects, not in the editor), the project ID and username may be logged for 14 days. Data in cloud variables is sent to anyone else connected at the same time. Custom cloud variable servers are outside of our control.</p>
+      <p>Some extensions must communicate with external APIs to function. For example, the translate and text-to-speech extensions rely on the Scratch API, which is covered by the <a href="https://scratch.mit.edu/privacy_policy">Scratch privacy policy</a>. To improve performance, some extensions access TurboWarp's APIs instead where both the request (for example, the text being translated) and the result after forwarding to Scratch (for example, the translated version of the text) may be cached.</p>
+      <p>Most extensions on the <a href="https://extensions.turbowarp.org/">official extension gallery</a> will ask for permission when the project attempts to use the extension to access an untrusted website, however we cannot guarantee this is 100% reliable.</p>
+      <p>When loading a custom extension from a place other than the official gallery such as a URL or file on your computer, the editor will ask for permission to load the extension. If you approve this dialog, the extension can bypass the permission dialogs that official extensions show.</p>
+
+      <h2>TurboWarp Packager</h2>
+      <p>The integrated copy of the TurboWarp Packager may download files such as Electron binaries from a server controlled by TurboWarp. These downloads will be cached after being downloaded.</p>
+      <p>When packaging a project using custom extensions, the packager may access those websites to download the extensions.</p>
+
+      <h2>Projects generated by the TurboWarp Packager</h2>
+      <p>Packaged projects include all scripts, costumes, and sounds to run the project. The packager tries to include all custom extensions too, but in some cases, the packaged project may need to download certain extensions each time it runs.</p>
+      <p>Advanced features such as third-party custom extensions, custom cloud host, custom JS, and custom CSS are outside of our control.</p>
+      <p>Note that, unlike the TurboWarp editor, custom extensions in packaged projects will not ask for permission before contacting websites.</p>
+      <p>You are responsible for informing end users about the privacy practices of the files you distribute. Do not link to this document as your project's privacy policy as it may change in the future. You must write your own.</p>
 
       <h2>Contact</h2>
       <p>Any concerns related to privacy or any other matter should be sent to: <a href="mailto:contact@turbowarp.org">contact@turbowarp.org</a></p>
