@@ -13,14 +13,12 @@ echo " - flatpak update"
 echo " - snap refresh"
 echo "THINGS TO CHECK FOR EACH BUILD:"
 echo " - (?) > About > Is the version right?"
-echo
 
 cd "$(dirname "$0")"
 src="$(pwd)/.."
 cd "$src"
-version="$(jq -r .version package.json)"
-commit="$(git rev-parse HEAD)"
-echo "src $src, version $version, commit $commit"
+echo "src: $src"
+
 await_confirmation
 
 # Set up an agent so we only need to enter any SSH passwords once
@@ -37,6 +35,12 @@ update_source() {
 	npm ci
 	npm run fetch
 }
+
+update_source
+version="$(jq -r .version package.json)"
+commit="$(git rev-parse HEAD)"
+echo "version $version, commit $commit"
+await_confirmation
 
 update_flatpak() {
 	echo "Updating flatpak"
@@ -97,7 +101,6 @@ update_debian() {
 	./everything.sh
 }
 
-update_source
 update_flatpak
 update_aur
 update_snap
