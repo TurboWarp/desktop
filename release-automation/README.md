@@ -17,10 +17,12 @@ Due to the variety of package managers that this script relies on, this script o
  - gzip
  - python
  - python-aiohttp
+ - python-pipx
  - pacman
  - pacman-contrib
  - flatpak
  - flatpak-builder
+ - [flatpak-node-generator](https://github.com/flatpak/flatpak-builder-tools/tree/master/node)
  - snapd (currently AUR only)
 
 For rclone configuration, see [Debian scripts README](../debian/README.md)

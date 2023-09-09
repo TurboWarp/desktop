@@ -46,6 +46,8 @@ update_flatpak() {
 	git branch -D "$version" || true
 	git branch "$version"
 	git checkout "$version"
+	# Copy changes from beta branch for when the build process changes
+	git rebase "$version-beta" || true
 	sed -E -i "s/commit: [a-f0-9]{40}/commit: $commit/" org.turbowarp.TurboWarp.yaml
 	python3 update-library.py
 	python3 update-packager.py
