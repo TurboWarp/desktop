@@ -84,54 +84,6 @@
         </ul>
       </description>
     </release>
-    <release version="1.9.0-rc2" date="2023-9-7">
-      <description>
-        <ul>
-          <li>Fixed opening files on Windows hopefully</li>
-          <li>Errors that happen in the "background" will now show error dialogs</li>
-          <li>Iframe and color picker extensions should work in packager</li>
-        </ul>
-      </description>
-    </release>
-    <release version="1.9.0-rc" date="2023-9-5">
-      <description>
-        <ul>
-          <li>The last beta update! Hopefully!</li>
-          <li>You can now disable the spellchecker in desktop settings</li>
-          <li>You can now add unrecognized words to the dictionary</li>
-          <li>Extension sample projects now open in-app</li>
-          <li>Fixed "Allow extensions to access any website" not working for some websites</li>
-          <li>Slightly improve macOS menu bar</li>
-          <li>Preparations for a possible Mac App Store release</li>
-        </ul>
-      </description>
-    </release>
-    <release version="1.9.0-beta.6" date="2023-8-25">
-      <description>
-        <ul>
-          <li>Fixed mouse inputs.</li>
-        </ul>
-      </description>
-    </release>
-    <release version="1.9.0-beta.4" date="2023-8-25">
-      <description>
-        <ul>
-          <li>Desktop app was rewritten for improved security</li>
-          <li>Added custom reporters</li>
-          <li>Added custom fonts</li>
-          <li>New extensions: HTTP, Cast, NFCWarp, Clipboard, Zip, More Motion, LZ String, Longman Dictionary, Skins, All Menus, Custom Styles, Deltatime, Wake Lock</li>
-          <li>Brand new restore point system that is much more reliable than the old one. Now stores multiple restore points and the interval can be customized</li>
-          <li>The builtin costume, sound, sprite, and extension libraries now let you mark items as favorites so they show up first</li>
-          <li>Extension gallery is no longer a separate window, rather it is built in to the editor</li>
-          <li>Improved file saving error handling</li>
-          <li>Fixed backpacking scripts and sprites that contain custom extensions</li>
-          <li>Allow importing .ogg, .flac, and .aac audio files</li>
-          <li>Updated prompt modal</li>
-          <li>Removed "for each" block from the palette because it causes various issues</li>
-          <li>Fixed a lot of bugs</li>
-        </ul>
-      </description>
-    </release>
     <release version="1.8.1" date="2023-6-20">
       <description>
         <ul>

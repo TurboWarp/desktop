@@ -20,54 +20,6 @@
     ]
   },
   {
-    "version": "1.9.0-rc2",
-    "date": "2023-9-7",
-    "notes": [
-      "Fixed opening files on Windows hopefully",
-      "Errors that happen in the \"background\" will now show error dialogs",
-      "Iframe and color picker extensions should work in packager"
-    ]
-  },
-  {
-    "version": "1.9.0-rc",
-    "date": "2023-9-5",
-    "notes": [
-      "The last beta update! Hopefully!",
-      "You can now disable the spellchecker in desktop settings",
-      "You can now add unrecognized words to the dictionary",
-      "Extension sample projects now open in-app",
-      "Fixed \"Allow extensions to access any website\" not working for some websites",
-      "Slightly improve macOS menu bar",
-      "Preparations for a possible Mac App Store release"
-    ]
-  },
-  {
-    "version": "1.9.0-beta.6",
-    "date": "2023-8-25",
-    "notes": [
-      "Fixed mouse inputs."
-    ]
-  },
-  {
-    "version": "1.9.0-beta.4",
-    "date": "2023-8-25",
-    "notes": [
-      "Desktop app was rewritten for improved security",
-      "Added custom reporters",
-      "Added custom fonts",
-      "New extensions: HTTP, Cast, NFCWarp, Clipboard, Zip, More Motion, LZ String, Longman Dictionary, Skins, All Menus, Custom Styles, Deltatime, Wake Lock",
-      "Brand new restore point system that is much more reliable than the old one. Now stores multiple restore points and the interval can be customized",
-      "The builtin costume, sound, sprite, and extension libraries now let you mark items as favorites so they show up first",
-      "Extension gallery is no longer a separate window, rather it is built in to the editor",
-      "Improved file saving error handling",
-      "Fixed backpacking scripts and sprites that contain custom extensions",
-      "Allow importing .ogg, .flac, and .aac audio files",
-      "Updated prompt modal",
-      "Removed \"for each\" block from the palette because it causes various issues",
-      "Fixed a lot of bugs"
-    ]
-  },
-  {
     "version": "1.8.1",
     "date": "2023-6-20",
     "notes": [
