@@ -1,3 +1,2 @@
-data-from-microsoft.csv
-output.csv
-imported.json
+from-microsoft.csv
+import-to-microsoft.csv

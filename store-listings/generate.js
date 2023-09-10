@@ -78,74 +78,68 @@ const generateCSV = (rows) => {
 };
 
 const generateStoreListings = (rows) => {
-  // Field, ID, Type, default, en-us, ...
-  const header = rows[0];
+  // CSV header: Field, ID, Type (Type), default, en-us, de, nl, fr, ...
 
-  for (let columnIndex = 5; columnIndex < header.length; columnIndex++) {
-    const languageName = header[columnIndex];
-    const languageTranslations = translations[languageName];
-    if (!languageTranslations) {
-      console.warn(`No translations for ${languageName}`);
-      continue;
-    }
+  // Remove everything after English
+  rows = rows.map(i => i.slice(0, 5));
 
-    const getTranslation = (key) => {
-      if (languageTranslations[key]) {
-        return languageTranslations[key]
+  const STRING_ID_MAP = {
+    Description: 'microsoft-store-description',
+    ReleaseNotes: 'microsoft-store-generic-release-notes',
+    DesktopScreenshotCaption1: 'microsoft-store-screenshot-caption',
+    DesktopScreenshotCaption2: 'microsoft-store-screenshot-caption',
+    DesktopScreenshotCaption3: 'microsoft-store-screenshot-addons',
+    DesktopScreenshotCaption4: 'microsoft-store-screenshot-packager',
+  };
+
+  const USE_DEFAULT_ROWS = [
+    'Title',
+    'CopyrightTrademarkInformation',
+    'DesktopScreenshot1',
+    'DesktopScreenshot2',
+    'DesktopScreenshot3',
+    'DesktopScreenshot4',
+    'DesktopScreenshot5',
+    'DesktopScreenshot6',
+    'DesktopScreenshot7',
+    'DesktopScreenshot8',
+    'DesktopScreenshot9',
+    'DesktopScreenshot10',
+    'SearchTerm1',
+    'SearchTerm2',
+    'SearchTerm3',
+    'SearchTerm4',
+    'SearchTerm5',
+    'SearchTerm6',
+    'SearchTerm7',
+  ];
+
+  for (const [localeName, localeValues] of Object.entries(translations)) {
+    const getString = (key) => {
+      if (localeValues[key]) {
+        return localeValues[key]
           .replace('{number_of_addons}', NUMBER_OF_ADDONS)
           .replace('{changelog_link}', CHANGELOG_LINK)
           .replace('{screenshot_project_link}', SCREENSHOT_PROJECT_LINK)
       }
-      console.warn(`Missing translation ${key} for ${languageName}`);
+
+      console.warn(`Missing translation ${key} for ${localeName}`);
       return null;
     };
 
+    rows[0].push(localeName);
+
     for (let rowIndex = 1; rowIndex < rows.length; rowIndex++) {
       const row = rows[rowIndex];
-      const rowName = row[0];
-      const defaultValue = row[3];
+      const rowId = row[0];
       const englishValue = row[4];
-      const rowValue = row[columnIndex];
 
-      const rowMap = {
-        Description: 'microsoft-store-description',
-        ReleaseNotes: 'microsoft-store-generic-release-notes',
-        DesktopScreenshotCaption1: 'microsoft-store-screenshot-caption',
-        DesktopScreenshotCaption2: 'microsoft-store-screenshot-caption',
-        DesktopScreenshotCaption3: 'microsoft-store-screenshot-addons',
-        DesktopScreenshotCaption4: 'microsoft-store-screenshot-packager',
-      };
-
-      const useDefaultRows = [
-        'Title',
-        'CopyrightTrademarkInformation',
-        'DesktopScreenshot1',
-        'DesktopScreenshot2',
-        'DesktopScreenshot3',
-        'DesktopScreenshot4',
-        'DesktopScreenshot5',
-        'DesktopScreenshot6',
-        'DesktopScreenshot7',
-        'DesktopScreenshot8',
-        'DesktopScreenshot9',
-        'DesktopScreenshot10',
-        'SearchTerm1',
-        'SearchTerm2',
-        'SearchTerm3',
-        'SearchTerm4',
-        'SearchTerm5',
-        'SearchTerm6',
-        'SearchTerm7',
-      ];
-
-      const translationName = rowMap[rowName];
-      if (translationName) {
-        const translation = getTranslation(translationName);
-        if (translation) {
-          row[columnIndex] = translation;
-        }
-      } else if (useDefaultRows.includes(rowName)) {
-        row[columnIndex] = englishValue;
+      if (USE_DEFAULT_ROWS.includes(rowId)) {
+        row.push(englishValue);
+      } else if (Object.prototype.hasOwnProperty.call(STRING_ID_MAP, rowId)) {
+        const translation = getString(STRING_ID_MAP[rowId]);
+        // The way the translations are imported, the string should always be defined
+        row.push(translation || englishValue);
       }
     }
   }
@@ -153,6 +147,6 @@ const generateStoreListings = (rows) => {
   return rows;
 };
 
-const csvRows = parseCSV(fs.readFileSync(path.join(__dirname, 'data-from-microsoft.csv'), 'utf8'));
+const csvRows = parseCSV(fs.readFileSync(path.join(__dirname, 'from-microsoft.csv'), 'utf8'));
 const parsedStoreListings = generateStoreListings(csvRows);
-fs.writeFileSync('output.csv', generateCSV(parsedStoreListings));
+fs.writeFileSync('import-to-microsoft.csv', generateCSV(parsedStoreListings));

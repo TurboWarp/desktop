@@ -1,3 +1,9 @@
-# Store listings scripts
+# Store listing scripts
 
-Go to the Microsoft Store and "Export listings". Save this output as "data-from-microsoft.csv". Run the scratch-l10n script to create "imported.json". Run generate-csv.js. Upload "output.csv" to the Microsoft store.
+## Microsoft Store
+
+1. Go to top submission on https://partner.microsoft.com/en-us/dashboard/products/9P4DPZGV5ZKL/overview
+2. Press "Export listings" and save as "from-microsoft.csv"
+3. Run scratch-l10n `npm run tw:pull`
+4. Run `node generate-csv.js`
+5. Press "Import listings" then select "import-to-microsoft.csv"
