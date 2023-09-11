@@ -277,13 +277,21 @@ class BaseWindow {
   }
 
   /**
-   *
    * @param {Electron.OnHeadersReceivedListenerDetails} details
    * @param {(response: Electron.HeadersReceivedResponse) => void} callback
    */
   onHeadersReceived (details, callback) {
     // to be overridden
     callback({});
+  }
+
+  /**
+   * @param {Electron.RenderProcessGoneDetails} details
+   * @returns {boolean} Return true to cancel default warning message.
+   */
+  handleRendererProcessGone (details) {
+    // to be overridden
+    return false;
   }
 
   applySettings () {

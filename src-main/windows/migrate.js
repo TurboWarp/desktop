@@ -1,8 +1,9 @@
 const path = require('path');
-const {app} = require('electron');
+const {app, dialog} = require('electron');
 const BaseWindow = require('./base');
 const {translate, getStrings, getLocale} = require('../l10n');
 const settings = require('../settings');
+const {APP_NAME} = require('../brand');
 
 class MigrateWindow extends BaseWindow {
   static LATEST_VERSION = 2;
@@ -24,12 +25,7 @@ class MigrateWindow extends BaseWindow {
     });
 
     ipc.handle('done', async () => {
-      settings.dataVersion = MigrateWindow.LATEST_VERSION;
-      await settings.save();
-      this.resolveCallback();
-
-      // destroy() to skip close event listener
-      this.window.destroy();
+      await this.done();
     });
 
     this.window.on('close', () => {
@@ -41,6 +37,15 @@ class MigrateWindow extends BaseWindow {
     this.window.webContents.setBackgroundThrottling(false);
     this.window.loadFile(path.join(__dirname, '../../src-renderer/migrate/migrate.html'));
     this.show();
+  }
+
+  async done () {
+    settings.dataVersion = MigrateWindow.LATEST_VERSION;
+    await settings.save();
+    this.resolveCallback();
+
+    // destroy() to skip close event listener
+    this.window.destroy();
   }
 
   getDimensions () {
@@ -56,6 +61,32 @@ class MigrateWindow extends BaseWindow {
 
   getBackgroundColor () {
     return '#333333';
+  }
+
+  handleRendererProcessGone (details) {
+    const EMAIL = 'contact@turbowarp.org';
+    const button = dialog.showMessageBoxSync(this.window, {
+      type: 'error',
+      title: APP_NAME,
+      message: `${translate('migrate.renderer-gone')} ${EMAIL}`
+        .replace('{code}', details.exitCode)
+        .replace('{reason}', details.reason),
+      buttons: [
+        translate('migrate.continue-anyways'),
+        translate('migrate.exit')
+      ],
+      cancelId: 1,
+      defaultId: 0
+    });
+
+    if (button === 0) {
+      this.done();
+    } else {
+      app.exit(1);
+    }
+
+    // We dealt with the crash, no need to show another message
+    return true;
   }
 
   static run () {

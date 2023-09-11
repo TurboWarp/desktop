@@ -239,9 +239,17 @@
     "string": "This process is taking an unusually long time. Please send a screenshot of this window to:",
     "developer_comment": "Appears when finishing an update is taking longer than it should."
   },
+  "migrate.renderer-gone": {
+    "string": "Process crashed (reason: {reason}, code: {code}). Some of your data could not be transfered. Please send a screenshot of this window to:",
+    "developer_comment": "Appears when an important process crashes while finishing an update."
+  },
   "migrate.continue-anyways": {
     "string": "Continue Anyways",
-    "developer_comment": "Appears when there was an error finishing an update."
+    "developer_comment": "Appears when there was an error finishing an update. This button ignores the error and continues anyways."
+  },
+  "migrate.exit": {
+    "string": "Exit",
+    "developer_comment": "Appears when there was an error finishing an update. This button closes the app and does not continue."
   },
   "migrate.preparing": {
     "string": "Preparing...",
