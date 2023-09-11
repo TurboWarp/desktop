@@ -1,72 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
   </head>
   <body>
     <script>
-      const importData = async (data) => {
-        if (data.storage) {
-          for (const [key, value] of Object.entries(data.storage)) {
-            localStorage[key] = value;
-          }
-        }
+      const DATABASE_NAME = 'TW_Backpack';
+      const DATABASE_VERSION = 1;
+      const STORE_NAME = 'backpack';
 
-        if (data.backpack && data.backpack.length) {
-          const items = data.backpack;
-          const DATABASE_NAME = 'TW_Backpack';
-          const DATABASE_VERSION = 1;
-          const STORE_NAME = 'backpack';
+      let backpackItemsToImport = [];
+      let backpackDatabase = null;
 
-          await new Promise((resolve, reject) => {
-            const openRequest = indexedDB.open(DATABASE_NAME, DATABASE_VERSION);
-            openRequest.onerror = () => {
-              reject(new Error(`Error opening DB: ${openRequest.error}`));
-            };
-
-            openRequest.onupgradeneeded = (e) => {
-              const db = e.target.result;
-              db.createObjectStore(STORE_NAME, {
-                keyPath: 'id',
-                autoIncrement: true
-              });
-            };
-
-            openRequest.onsuccess = () => {
-              const db = openRequest.result;
-              const transaction = db.transaction([STORE_NAME], 'readwrite');
-              transaction.onerror = () => {
-                reject(new Error(`Transaction error: ${transaction.error}`));
-              };
-
-              const store = transaction.objectStore(STORE_NAME);
-              const putNext = () => {
-                const request = store.put(items.shift());
-                request.onsuccess = () => {
-                  if (items.length) {
-                    putNext();
-                  } else {
-                    resolve();
-                  }
-                };
-              };
-              putNext();
-            };
+      const openBackpackDatabase = () => new Promise((resolve, reject) => {
+        const request = indexedDB.open(DATABASE_NAME, DATABASE_VERSION);
+        request.onerror = () => {
+          reject(new Error(`Failed to open: ${request.error}`));
+        };
+        request.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          db.createObjectStore(STORE_NAME, {
+            keyPath: 'id',
+            autoIncrement: true
           });
-        }
-      };
+        };
+        request.onsuccess = () => {
+          resolve(request.result);
+        };
+      });
+
+      const putInDatabase = (database, data) => new Promise((resolve, reject) => {
+        const transaction = database.transaction(STORE_NAME, 'readwrite');
+        transaction.onerror = () => {
+          reject(new Error(`Transaction error: ${transaction.error}`));
+        };
+
+        const objectStore = transaction.objectStore(STORE_NAME);
+        const request = objectStore.put(data);
+        request.onsuccess = () => {
+          resolve();
+        };
+      });
 
       const PARENT_ORIGIN = 'file://';
 
       window.addEventListener('message', async (e) => {
-        if (e.origin !== PARENT_ORIGIN) {
-          return;
-        }
-
         try {
-          await importData(e.data);
-          e.source.postMessage({ type: 'done' }, PARENT_ORIGIN);
+          if (e.origin !== PARENT_ORIGIN) {
+            return;
+          }
+
+          const data = e.data;
+
+          if (data.storage) {
+            for (const [key, value] of Object.entries(data.storage)) {
+              localStorage[key] = value;
+            }
+          }
+
+          if (data.backpackKeys) {
+            if (data.backpackKeys.length > 0) {
+              backpackItemsToImport = data.backpackKeys;
+              backpackDatabase = await openBackpackDatabase();
+            }
+          }
+
+          if (data.backpackData) {
+            await putInDatabase(backpackDatabase, data.backpackData);
+          }
+
+          // We've gathered all the data from the request, so see if we need to ask
+          // for anything more.
+          if (backpackItemsToImport.length > 0) {
+            const key = backpackItemsToImport.shift();
+            e.source.postMessage({
+              type: 'backpack',
+              key: key
+            }, PARENT_ORIGIN);
+          } else {
+            // We're done
+            e.source.postMessage({
+              type: 'done'
+            }, PARENT_ORIGIN);
+          }
         } catch (error) {
           console.error(error);
           e.source.postMessage({
@@ -76,7 +93,9 @@
         }
       });
 
-      window.parent.postMessage({ type: 'start' }, PARENT_ORIGIN);
+      window.parent.postMessage({
+        type: 'start'
+      }, PARENT_ORIGIN);
     </script>
   </body>
 </html>

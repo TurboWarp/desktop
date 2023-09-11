@@ -177,68 +177,74 @@
         databases = await indexedDB.databases();
       };
 
-      const exportDatabase = (databaseName, databaseVersion, storeName) => new Promise((resolve, reject) => {
+      const openDatabase = (databaseName, databaseVersion) => new Promise((resolve, reject) => {
         if (!databases.find((i) => i.name === databaseName && i.version === databaseVersion)) {
           return resolve(null);
         }
 
-        const openRequest = indexedDB.open(databaseName, databaseVersion);
-        openRequest.onerror = () => {
-          reject(new Error(`Failed to open: ${openRequest.error}`));
+        const request = indexedDB.open(databaseName, databaseVersion);
+        request.onerror = () => {
+          reject(new Error(`Failed to open: ${request.error}`));
+        };
+        request.onsuccess = () => {
+          resolve(request.result);
+        };
+      });
+
+      const getAllKeys = (database, storeName) => new Promise((resolve, reject) => {
+        const transaction = database.transaction(storeName, 'readonly');
+        transaction.onerror = () => {
+          reject(new Error(`Transaction error: ${transaction.error}`));
         };
 
-        openRequest.onsuccess = () => {
-          const db = openRequest.result;
+        const objectStore = transaction.objectStore(storeName);
+        const request = objectStore.getAllKeys();
+        request.onsuccess = async () => {
+          resolve(request.result);
+        };
+      });
 
-          const transaction = db.transaction(storeName, 'readonly');
-          transaction.onerror = (e) => {
-            reject(new Error(`Transaction error: ${transaction.error}`));
-          };
+      const readAsArrayBuffer = (blob) => new Promise((resolve, reject) => {
+        const fr = new FileReader();
+        fr.onload = () => resolve(fr.result);
+        fr.onerror = () => reject(new Error(`Failed to read blob: ${fr.error}`));
+        fr.readAsArrayBuffer(blob);
+      });
 
-          const items = [];
-          const transfer = [];
+      const readByKey = (database, storeName, key) => new Promise((resolve, reject) => {
+        const transaction = database.transaction(storeName, 'readonly');
+        transaction.onerror = () => {
+          reject(new Error(`Transaction error: ${transaction.error}`));
+        };
 
-          const readAsArrayBuffer = (blob) => new Promise((resolve, reject) => {
-            const fr = new FileReader();
-            fr.onload = () => resolve(fr.result);
-            fr.onerror = () => reject(new Error(`Failed to read blob: ${fr.error}`));
-            fr.readAsArrayBuffer(blob);
-          });
+        const objectStore = transaction.objectStore(storeName);
+        const request = objectStore.get(key);
+        request.onsuccess = async () => {
+          try {
+            const result = request.result;
+            const transfer = [];
 
-          const blobsToBuffers = async () => {
-            for (const item of items) {
-              for (const [key, value] of Object.entries(item)) {
-                if (value instanceof Blob) {
-                  const buffer = await readAsArrayBuffer(value);
-                  item[key] = buffer;
-                  transfer.push(buffer);
-                }
-              }
-            }
-          };
-
-          const store = transaction.objectStore(storeName);
-          const request = store.openCursor();
-          request.onsuccess = (e) => {
-            const cursor = e.target.result;
-            if (cursor) {
-              items.push(cursor.value);
-
-              for (const i of Object.values(cursor.value)) {
-                if (i instanceof ArrayBuffer || ArrayBuffer.isView(i)) {
-                  transfer.push(i);
-                }
+            for (const [key, value] of Object.entries(result)) {
+              // Attempt zero-copy transfer for binary data
+              if (value instanceof ArrayBuffer || ArrayBuffer.isView(value)) {
+                transfer.push(value);
               }
 
-              cursor.continue();
-            } else {
-              blobsToBuffers();
-              resolve({
-                items,
-                transfer
-              });
+              // We can't send Blobs over postMessage, so read them out as buffers
+              if (value instanceof Blob) {
+                const buffer = await readAsArrayBuffer(value);
+                result[key] = buffer;
+                transfer.push(buffer);
+              }
             }
-          };
+
+            resolve({
+              result,
+              transfer
+            });
+          } catch (e) {
+            reject(e);
+          }
         };
       });
 
@@ -250,25 +256,36 @@
           }
         }
 
-        const backpack = await exportDatabase('TW_Backpack', 1, 'backpack');
-        const transfer = backpack ? backpack.transfer : [];
+        const backpackDB = await openDatabase('TW_Backpack', 1);
+        const backpackKeys = backpackDB ? await getAllKeys(backpackDB, 'backpack') : [];
 
         return new Promise((resolve, reject) => {
-          window.onmessage = async (e) => {
-            if (e.origin !== 'tw-editor://.') {
-              return;
-            }
+          const CHILD_ORIGIN = 'tw-editor://.';
 
-            const type = e.data.type;
-            if (type === 'start') {
-              e.source.postMessage({
-                storage,
-                backpack: backpack ? backpack.items : []
-              }, 'tw-editor://.', transfer);
-            } else if (type === 'error') {
-              reject(e.data.error);
-            } else if (type === 'done') {
-              resolve();
+          window.onmessage = async (e) => {
+            try {
+              if (e.origin !== CHILD_ORIGIN) {
+                return;
+              }
+
+              const type = e.data.type;
+              if (type === 'start') {
+                e.source.postMessage({
+                  storage,
+                  backpackKeys
+                }, CHILD_ORIGIN);
+              } else if (type === 'backpack') {
+                const read = await readByKey(backpackDB, 'backpack', e.data.key);
+                e.source.postMessage({
+                  backpackData: read.result
+                }, CHILD_ORIGIN, read.transfer);
+              } else if (type === 'error') {
+                reject(e.data.error);
+              } else if (type === 'done') {
+                resolve();
+              }
+            } catch (e) {
+              reject(e);
             }
           };
 
@@ -286,25 +303,36 @@
           }
         }
 
-        const assets = await exportDatabase('p4-local-settings', 1, 'blobs');
-        const transfer = assets ? assets.transfer : [];
+        const blobDB = await openDatabase('p4-local-settings', 1);
+        const blobKeys = blobDB ? await getAllKeys(blobDB, 'blobs') : [];
 
         return new Promise((resolve, reject) => {
-          window.onmessage = (e) => {
-            if (e.origin !== 'tw-packager://.') {
-              return;
-            }
+          const CHILD_ORIGIN = 'tw-packager://.';
 
-            const type = e.data.type;
-            if (type === 'start') {
-              e.source.postMessage({
-                storage,
-                assets: assets ? assets.items : []
-              }, 'tw-packager://.', transfer);
-            } else if (type === 'error') {
-              reject(e.data.error);
-            } else if (type === 'done') {
-              resolve();
+          window.onmessage = async (e) => {
+            try {
+              if (e.origin !== CHILD_ORIGIN) {
+                return;
+              }
+
+              const type = e.data.type;
+              if (type === 'start') {
+                e.source.postMessage({
+                  storage,
+                  blobKeys
+                }, CHILD_ORIGIN);
+              } else if (type === 'blob') {
+                const read = await readByKey(blobDB, 'blobs', e.data.key);
+                e.source.postMessage({
+                  blobData: read.result
+                }, CHILD_ORIGIN, read.transfer);
+              } else if (type === 'error') {
+                reject(e.data.error);
+              } else if (type === 'done') {
+                resolve();
+              }
+            } catch (e) {
+              reject(e);
             }
           };
 
