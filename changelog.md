@@ -2,6 +2,11 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.9.1-beta (2023-09-11)
+
+ - Fixed option to create cloud variables
+ - Fixed some bugs in the one-time data migration process
+
 # 1.9.0 (2023-09-08)
 
  - Desktop app was rewritten for improved security
