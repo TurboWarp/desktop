@@ -19,7 +19,7 @@
     "semver": "^7.5.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.11",
+    "@babel/core": "^7.22.17",
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.13.13",
     "@electron/notarize": "^2.1.0",
