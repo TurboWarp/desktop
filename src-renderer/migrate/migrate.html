@@ -222,6 +222,10 @@
         request.onsuccess = async () => {
           try {
             const result = request.result;
+            if (result === null || typeof result !== 'object') {
+              throw new Error(`IDB ${key} returned non-object: ${result}`);
+            }
+
             const transfer = [];
 
             for (const [key, value] of Object.entries(result)) {
