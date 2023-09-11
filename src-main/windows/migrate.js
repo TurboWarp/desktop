@@ -30,7 +30,7 @@ class MigrateWindow extends BaseWindow {
 
     this.window.on('close', () => {
       // If migration is closed mid-process, don't let the app continue
-      app.quit();
+      app.exit(1);
     });
 
     this.window.setTitle(translate('migrate.title'));
