@@ -39,7 +39,7 @@
     "scratch-gui": "git+https://github.com/TurboWarp/scratch-gui.git#develop",
     "style-loader": "^0.23.0",
     "url-loader": "^4.1.1",
-    "webpack": "^4.46.0",
+    "webpack": "^4.47.0",
     "webpack-cli": "^4.10.0"
   },
   "homepage": "https://desktop.turbowarp.org/",
