@@ -20,6 +20,11 @@
         document.body.setAttribute('splash-theme', theme);
       })();
     </script>
-    <script src="index.js"></script>
+    <script>
+      function webpackScriptError(event) {
+        alert(`Error loading webpack script: ${event.target.src}`);
+      }
+    </script>
+    <script src="index.js" onerror="webpackScriptError(event)"></script>
   </body>
 </html>
