@@ -5,6 +5,7 @@ const {APP_NAME} = require('./brand');
 const BaseWindow = require('./windows/base');
 const AboutWindow = require('./windows/about');
 const DesktopSettingsWindow = require('./windows/desktop-settings');
+const AddonsWindow = require('./windows/addons');
 
 const rebuildMenuBar = () => {
   if (process.platform === 'darwin') {
@@ -26,6 +27,12 @@ const rebuildMenuBar = () => {
             accelerator: 'Cmd+,',
             click: () => {
               DesktopSettingsWindow.show()
+            }
+          },
+          {
+            label: translate('menu.addons'),
+            click: () => {
+              AddonsWindow.show();
             }
           },
           {
