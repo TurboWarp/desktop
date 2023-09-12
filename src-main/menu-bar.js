@@ -6,6 +6,8 @@ const BaseWindow = require('./windows/base');
 const AboutWindow = require('./windows/about');
 const DesktopSettingsWindow = require('./windows/desktop-settings');
 const AddonsWindow = require('./windows/addons');
+const EditorWindow = require('./windows/editor');
+const PackagerWindow = require('./windows/packager');
 
 const rebuildMenuBar = () => {
   if (process.platform === 'darwin') {
@@ -68,9 +70,16 @@ const rebuildMenuBar = () => {
             label: translate('menu.new-window'),
             accelerator: 'Cmd+N',
             click: () => {
-              // Imported late due to circular dependency
-              const EditorWindow = require('./windows/editor');
               EditorWindow.newWindow();
+            }
+          },
+          {
+            label: translate('menu.package'),
+            click: (menuItem, browserWindow) => {
+              const window = BaseWindow.getWindowByBrowserWindow(browserWindow);
+              if (window instanceof EditorWindow) {
+                PackagerWindow.forEditor(window);
+              }
             }
           }
         ]

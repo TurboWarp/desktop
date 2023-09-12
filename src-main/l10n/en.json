@@ -43,6 +43,10 @@
     "string": "Addons",
     "developer_comment": "macOS menu bar item to open addon settings window"
   },
+  "menu.package": {
+    "string": "Package Project",
+    "developer_comment": "macOS menu bar item to package the project opened in the editor"
+  },
   "menu.reload": {
     "string": "Reload",
     "developer_comment": "macOS menu bar item to reload window, like a browser"

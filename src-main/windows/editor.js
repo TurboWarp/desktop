@@ -14,7 +14,6 @@ const {APP_NAME} = require('../brand');
 const prompts = require('../prompts');
 const settings = require('../settings');
 const privilegedFetchAsBuffer = require('../fetch');
-const rebuildMenuBar = require('../menu-bar');
 
 const readFile = promisify(fs.readFile);
 
@@ -191,7 +190,11 @@ class EditorWindow extends ProjectRunningWindow {
       if (settings.locale !== locale) {
         settings.locale = locale;
         updateLocale(locale);
+
+        // Imported late due to circular dependency
+        const rebuildMenuBar = require('../menu-bar');
         rebuildMenuBar();
+
         // Let the save happen in the background, not important
         Promise.resolve().then(() => settings.save());
       }
