@@ -5,6 +5,8 @@ const {translate, getStrings, getLocale} = require('../l10n');
 const settings = require('../settings');
 const {APP_NAME} = require('../brand');
 
+const EMAIL = 'contact@turbowarp.org';
+
 class MigrateWindow extends BaseWindow {
   static LATEST_VERSION = 2;
 
@@ -44,7 +46,14 @@ class MigrateWindow extends BaseWindow {
   }
 
   async done (success) {
-    // TODO: show an alert when unsuccessful about how to re-run
+    if (!success) {
+      dialog.showMessageBoxSync(this.window, {
+        title: APP_NAME,
+        type: 'warning',
+        message: translate('migrate.continue-anyways-afterword')
+          .replace('{email}', EMAIL)
+      });
+    }
 
     settings.dataVersion = MigrateWindow.LATEST_VERSION;
     await settings.save();
@@ -70,7 +79,6 @@ class MigrateWindow extends BaseWindow {
   }
 
   handleRendererProcessGone (details) {
-    const EMAIL = 'contact@turbowarp.org';
     const button = dialog.showMessageBoxSync(this.window, {
       type: 'error',
       title: APP_NAME,
