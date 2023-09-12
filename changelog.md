@@ -2,10 +2,13 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.9.1-beta (2023-09-11)
+# 1.9.1 (2023-09-12)
 
- - Fixed option to create cloud variables
- - Fixed some bugs in the one-time data migration process
+ - Optimized startup time
+ - Fixed option to create cloud variables missing
+ - Fixed custom username not saving
+ - Fixed bugs in the one-time data migration process
+ - macOS: Update menu bar
 
 # 1.9.0 (2023-09-08)
 
