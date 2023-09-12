@@ -39,6 +39,10 @@
     "string": "Settings",
     "developer_comment": "macOS menu bar item to open desktop settings window"
   },
+  "menu.reload": {
+    "string": "Reload",
+    "developer_comment": "macOS menu bar item to reload window, like a browser"
+  },
   "menu.learn-more": {
     "string": "Learn more",
     "developer_comment": "macOS menu bar item to learn more"

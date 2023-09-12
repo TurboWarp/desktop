@@ -48,6 +48,17 @@ class BaseWindow {
     }
   }
 
+  static getWindowByBrowserWindow (browserWindow) {
+    for (const windows of windowsByClass.values()) {
+      for (const window of windows) {
+        if (window.window === browserWindow) {
+          return window;
+        }
+      }
+    }
+    return null;
+  }
+
   static getWindowByWebContents (webContents) {
     for (const windows of windowsByClass.values()) {
       for (const window of windows) {
@@ -238,10 +249,18 @@ class BaseWindow {
       }
 
       // Ctrl+R to reload
-      if (input.control && input.key.toLowerCase() === 'r' && this.initialURL !== null) {
+      if (input.control && input.key.toLowerCase() === 'r') {
         event.preventDefault();
-        webContents.loadURL(this.initialURL);
+        this.reload();
       }
+    }
+  }
+
+  reload () {
+    // Don't use webContents.reload() because it allows the page to navigate by using
+    // history.pushState() then location.reload()
+    if (this.initialURL !== null) {
+      this.window.webContents.loadURL(this.initialURL);
     }
   }
 

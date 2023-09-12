@@ -2,6 +2,7 @@ const {Menu} = require('electron');
 const {translate} = require('./l10n');
 const openExternal = require('./open-external');
 const {APP_NAME} = require('./brand');
+const BaseWindow = require('./windows/base');
 const AboutWindow = require('./windows/about');
 const DesktopSettingsWindow = require('./windows/desktop-settings');
 
@@ -71,7 +72,43 @@ const rebuildMenuBar = () => {
         role: 'editMenu'
       },
       {
-        role: 'viewMenu'
+        role: 'viewMenu',
+        submenu: [
+          {
+            // The default view menu contains both Reload and Force reload; we only need one
+            // The default reload also lets windows navigate using pushState(), while this one
+            // is a bit more secure.
+            label: translate('menu.reload'),
+            accelerator: 'Cmd+R',
+            click: (menuItem, browserWindow) => {
+              const window = BaseWindow.getWindowByBrowserWindow(browserWindow);
+              if (window) {
+                window.reload();
+              }
+            }
+          },
+          {
+            role: 'toggleDevTools'
+          },
+          {
+            type: 'separator'
+          },
+          {
+            role: 'resetZoom'
+          },
+          {
+            role: 'zoomIn'
+          },
+          {
+            role: 'zoomOut'
+          },
+          {
+            type: 'separator'
+          },
+          {
+            role: 'togglefullscreen'
+          }
+        ]
       },
       {
         role: 'windowMenu'
