@@ -10,7 +10,7 @@ import {
   onLoadedProject,
   requestNewProject
 } from 'scratch-gui/src/reducers/project-state';
-import {setFileHandle} from 'scratch-gui/src/reducers/tw';
+import {setFileHandle, setUsername} from 'scratch-gui/src/reducers/tw';
 import {WrappedFileHandle} from './filesystem-api-impl';
 import {setStrings} from '../prompt/prompt.js';
 
@@ -58,6 +58,9 @@ const handleClickDonate = () => {
   window.open('https://github.com/sponsors/GarboMuffin');
 };
 
+const USERNAME_KEY = 'tw:username';
+const DEFAULT_USERNAME = 'player';
+
 const DesktopHOC = function (WrappedComponent) {
   class DesktopComponent extends React.Component {
     constructor (props) {
@@ -75,6 +78,13 @@ const DesktopHOC = function (WrappedComponent) {
         ok: this.messages['prompt.ok'],
         cancel: this.messages['prompt.cancel']
       });
+
+      const storedUsername = localStorage.getItem(USERNAME_KEY);
+      if (typeof storedUsername === 'string') {
+        this.props.onSetReduxUsername(storedUsername);
+      } else {
+        this.props.onSetReduxUsername(DEFAULT_USERNAME);
+      }
     }
     componentDidMount () {
       EditorPreload.setExportForPackager(() => this.props.vm.saveProjectSb3('arraybuffer')
@@ -143,6 +153,10 @@ const DesktopHOC = function (WrappedComponent) {
           EditorPreload.closedFile();
         }
       }
+
+      if (this.props.reduxUsername !== prevProps.reduxUsername) {
+        localStorage.setItem(USERNAME_KEY, this.props.reduxUsername);
+      }
     }
     handleUpdateProjectTitle (newTitle) {
       this.setState({
@@ -155,6 +169,7 @@ const DesktopHOC = function (WrappedComponent) {
         loadingState,
         projectChanged,
         fileHandle,
+        reduxUsername,
         onFetchedInitialProjectData,
         onHasInitialProject,
         onLoadedProject,
@@ -162,6 +177,7 @@ const DesktopHOC = function (WrappedComponent) {
         onLoadingStarted,
         onRequestNewProject,
         onSetFileHandle,
+        onSetReduxUsername,
         vm,
         ...props
       } = this.props;
@@ -210,6 +226,7 @@ const DesktopHOC = function (WrappedComponent) {
     fileHandle: PropTypes.shape({
       id: PropTypes.number.isRequired
     }),
+    reduxUsername: PropTypes.string.isRequired,
     onFetchedInitialProjectData: PropTypes.func.isRequired,
     onHasInitialProject: PropTypes.func.isRequired,
     onLoadedProject: PropTypes.func.isRequired,
@@ -217,6 +234,7 @@ const DesktopHOC = function (WrappedComponent) {
     onLoadingStarted: PropTypes.func.isRequired,
     onRequestNewProject: PropTypes.func.isRequired,
     onSetFileHandle: PropTypes.func.isRequired,
+    onSetReduxUsername: PropTypes.func.isRequired,
     vm: PropTypes.shape({
       loadProject: PropTypes.func.isRequired
     }).isRequired
@@ -227,6 +245,7 @@ const DesktopHOC = function (WrappedComponent) {
     loadingState: state.scratchGui.projectState.loadingState,
     projectChanged: state.scratchGui.projectChanged,
     fileHandle: state.scratchGui.tw.fileHandle,
+    reduxUsername: state.scratchGui.tw.username,
     vm: state.scratchGui.vm
   });
 
@@ -244,7 +263,8 @@ const DesktopHOC = function (WrappedComponent) {
       return dispatch(onLoadedProject(loadingState, /* canSave */ false, loadSuccess));
     },
     onRequestNewProject: () => dispatch(requestNewProject(false)),
-    onSetFileHandle: fileHandle => dispatch(setFileHandle(fileHandle))
+    onSetFileHandle: fileHandle => dispatch(setFileHandle(fileHandle)),
+    onSetReduxUsername: (username) => dispatch(setUsername(username))
   });
 
   return connect(
