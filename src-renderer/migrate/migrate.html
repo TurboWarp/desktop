@@ -263,6 +263,9 @@
         const backpackDB = await openDatabase('TW_Backpack', 1);
         const backpackKeys = backpackDB ? await getAllKeys(backpackDB, 'backpack') : [];
 
+        let transferredBackpackItems = 0;
+        setStepProgress(0, backpackKeys.length);
+
         return new Promise((resolve, reject) => {
           const CHILD_ORIGIN = 'tw-editor://.';
 
@@ -283,6 +286,7 @@
                 e.source.postMessage({
                   backpackData: read.result
                 }, CHILD_ORIGIN, read.transfer);
+                setStepProgress(++transferredBackpackItems, backpackKeys.length);
               } else if (type === 'error') {
                 reject(e.data.error);
               } else if (type === 'done') {
@@ -310,6 +314,9 @@
         const blobDB = await openDatabase('p4-local-settings', 1);
         const blobKeys = blobDB ? await getAllKeys(blobDB, 'blobs') : [];
 
+        let transferredBlobs = 0;
+        setStepProgress(0, blobKeys.length);
+
         return new Promise((resolve, reject) => {
           const CHILD_ORIGIN = 'tw-packager://.';
 
@@ -330,6 +337,7 @@
                 e.source.postMessage({
                   blobData: read.result
                 }, CHILD_ORIGIN, read.transfer);
+                setStepProgress(++transferredBlobs, blobKeys.length);
               } else if (type === 'error') {
                 reject(e.data.error);
               } else if (type === 'done') {
@@ -355,6 +363,14 @@
       };
 
       let anyError = false;
+      let progressTarget = null;
+
+      const setStepProgress = async (completed, total) => {
+        if (progressTarget && total > 0) {
+          progressTarget.textContent = ` (${completed}/${total})`;
+        }
+      };
+
       const runStep = async (name, callback) => {
         const stepElement = document.createElement('div');
         stepElement.className = 'step';
@@ -367,6 +383,10 @@
         const textElement = document.createElement('div');
         textElement.textContent = name;
         stepElement.appendChild(textElement);
+
+        const progressElement = document.createElement('div');
+        stepElement.appendChild(progressElement);
+        progressTarget = progressElement;
 
         stepsElement.appendChild(stepElement);
 
@@ -386,6 +406,8 @@
           errorElement.textContent = error;
           stepsElement.appendChild(errorElement);
         }
+
+        progressTarget = null;
       };
 
       const migrate = async () => {
