@@ -25,7 +25,11 @@ class MigrateWindow extends BaseWindow {
     });
 
     ipc.handle('done', async () => {
-      await this.done();
+      await this.done(true);
+    });
+
+    ipc.handle('continue-anyways', async () => {
+      await this.done(false);
     });
 
     this.window.on('close', () => {
@@ -39,7 +43,9 @@ class MigrateWindow extends BaseWindow {
     this.show();
   }
 
-  async done () {
+  async done (success) {
+    // TODO: show an alert when unsuccessful about how to re-run
+
     settings.dataVersion = MigrateWindow.LATEST_VERSION;
     await settings.save();
     this.resolveCallback();
@@ -80,7 +86,7 @@ class MigrateWindow extends BaseWindow {
     });
 
     if (button === 0) {
-      this.done();
+      this.done(false);
     } else {
       app.exit(1);
     }

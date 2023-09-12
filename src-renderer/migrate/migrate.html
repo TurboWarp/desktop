@@ -168,7 +168,7 @@
         button.textContent = strings['migrate.continue-anyways'];
         button.addEventListener('click', (e) => {
           e.target.disabled = true;
-          finish();
+          continueAnyways();
         });
       }
 
@@ -350,6 +350,10 @@
         await MigratePreload.done();
       };
 
+      const continueAnyways = async () => {
+        await MigratePreload.continueAnyways();
+      };
+
       let anyError = false;
       const runStep = async (name, callback) => {
         const stepElement = document.createElement('div');
@@ -398,12 +402,14 @@
           await runStep(strings['migrate.transfer-packager'], migratePackager);
         }
 
+        if (!anyError) {
+          await runStep(strings['migrate.finalizing'], finish);
+        }
+
         if (anyError) {
           clearTimeout(timeoutId);
           timedOutNextStepsElement.hidden = true;
           errorNextStepsElement.hidden = false;
-        } else {
-          await runStep(strings['migrate.finalizing'], finish);
         }
       };
 
