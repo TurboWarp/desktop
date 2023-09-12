@@ -1,7 +1,5 @@
 // The version of Electron we use does not yet support fetch()
 
-const http = require('http');
-const https = require('https');
 const {version} = require('../package.json');
 
 /**
@@ -10,7 +8,8 @@ const {version} = require('../package.json');
  */
 const privilegedFetchAsBuffer = (url) => new Promise((resolve, reject) => {
   const parsedURL = new URL(url);
-  const mod = parsedURL.protocol === 'http:' ? http : https;
+  // Import http and https lazily as they take about 17ms to import
+  const mod = parsedURL.protocol === 'http:' ? require('http') : require('https');
   const request = mod.get(url, {
     headers: {
       'user-agent': `turbowarp-desktop/${version}`
