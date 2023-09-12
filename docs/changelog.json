@@ -4,7 +4,7 @@
     "date": "2023-9-12",
     "notes": [
       "Optimized startup time",
-      "Fixed option to create cloud variables",
+      "Fixed option to create cloud variables missing",
       "Fixed custom username not saving",
       "Fixed bugs in the one-time data migration process",
       "macOS: Update menu bar"

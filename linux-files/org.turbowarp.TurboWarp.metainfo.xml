@@ -68,7 +68,7 @@
       <description>
         <ul>
           <li>Optimized startup time</li>
-          <li>Fixed option to create cloud variables</li>
+          <li>Fixed option to create cloud variables missing</li>
           <li>Fixed custom username not saving</li>
           <li>Fixed bugs in the one-time data migration process</li>
         </ul>
