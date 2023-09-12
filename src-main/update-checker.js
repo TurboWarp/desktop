@@ -1,4 +1,3 @@
-const semverLt = require('semver/functions/lt');
 const settings = require('./settings');
 const UpdateWindow = require('./windows/update');
 const packageJSON = require('../package.json');
@@ -19,6 +18,9 @@ const checkForUpdates = async () => {
   const latestStable = json.latest;
   const latestUnstable = json.latest_unstable;
   const oldestSafe = json.oldest_safe;
+
+  // Imported lazily as it takes about 10ms to import
+  const semverLt = require('semver/functions/lt');
 
   // Security updates can not be ignored.
   if (semverLt(currentVersion, oldestSafe)) {
