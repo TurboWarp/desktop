@@ -206,7 +206,7 @@
             } else {
               const p = document.createElement('p');
               p.className = 'empty';
-              p.textContent = 'Changelog not available yet.';
+              p.textContent = strings['update.not-available'];
               changelog.appendChild(p);
             }
           })
@@ -216,7 +216,8 @@
             removeChildren(changelog);
             const p = document.createElement('p');
             p.className = 'error';
-            p.textContent = `Error loading changelog: ${error}`;
+            p.textContent = strings['update.changelog-error']
+              .replace('{error}', `${error}`);
             changelog.appendChild(p);
           });
       </script>

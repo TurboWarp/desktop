@@ -319,6 +319,14 @@
     "string": "Ignore this update",
     "developer_comment": "Appears in update available window. Checkbox to ignore this update permanently."
   },
+  "update.not-available": {
+    "string": "Changelog not available yet.",
+    "developer_comment": "Appears in update available window when, for some reason, no detailed release notes are available."
+  },
+  "update.changelog-error": {
+    "string": "Error loading changelog: {error}",
+    "developer_comment": "Appears in update available window when changelog could not be loaded, for example because the website is down."
+  },
   "files.svg": {
     "string": "SVG Image",
     "context": "Appears in file saving dialog when exporting a vector costume"
