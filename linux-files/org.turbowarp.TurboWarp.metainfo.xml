@@ -67,10 +67,10 @@
     <release version="1.9.1" date="2023-9-13">
       <description>
         <ul>
-          <li>Optimized startup time</li>
           <li>Fixed option to create cloud variables missing</li>
           <li>Fixed custom username not saving</li>
           <li>Fixed bugs in the one-time data migration process</li>
+          <li>Slightly optimized startup time</li>
         </ul>
       </description>
     </release>

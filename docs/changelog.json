@@ -3,10 +3,11 @@
     "version": "1.9.1",
     "date": "2023-9-13",
     "notes": [
-      "Optimized startup time",
       "Fixed option to create cloud variables missing",
       "Fixed custom username not saving",
       "Fixed bugs in the one-time data migration process",
+      "Slightly optimized startup time",
+      "Windows: Support for Windows 7, 8, and 8.1 will be ending in October",
       "macOS: Update menu bar"
     ]
   },

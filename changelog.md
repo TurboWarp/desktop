@@ -4,10 +4,11 @@ Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **form
 
 # 1.9.1 (2023-09-13)
 
- - Optimized startup time
  - Fixed option to create cloud variables missing
  - Fixed custom username not saving
  - Fixed bugs in the one-time data migration process
+ - Slightly optimized startup time
+ - Windows: Support for Windows 7, 8, and 8.1 will be ending in October
  - macOS: Update menu bar
 
 # 1.9.0 (2023-09-08)
