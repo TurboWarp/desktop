@@ -30,7 +30,7 @@
     "copy-webpack-plugin": "^6.4.1",
     "cross-env": "^7.0.3",
     "css-loader": "^1.0.1",
-    "electron": "^22.3.23",
+    "electron": "^22.3.24",
     "electron-builder": "^24.6.4",
     "postcss": "^8.4.13",
     "postcss-import": "^14.0.0",
