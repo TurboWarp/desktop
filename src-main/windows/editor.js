@@ -13,7 +13,7 @@ const {translate, updateLocale, getStrings} = require('../l10n');
 const {APP_NAME} = require('../brand');
 const prompts = require('../prompts');
 const settings = require('../settings');
-const privilegedFetchAsBuffer = require('../fetch');
+const privilegedFetch = require('../fetch');
 
 const readFile = promisify(fs.readFile);
 
@@ -43,21 +43,23 @@ class OpenedFile {
     }
 
     if (this.type === TYPE_URL) {
+      const response = await privilegedFetch(this.path);
       return {
         name: decodeURIComponent(path.basename(this.path)),
-        data: await privilegedFetchAsBuffer(this.path)
+        data: await response.arrayBuffer()
       };
     }
 
     if (this.type === TYPE_SCRATCH) {
-      const metadataBuffer = await privilegedFetchAsBuffer(`https://api.scratch.mit.edu/projects/${this.path}`);
-      const metadata = JSON.parse(metadataBuffer.toString());
+      const metadataResponse = await privilegedFetch(`https://api.scratch.mit.edu/projects/${this.path}`);
+      const metadata = await metadataResponse.json();
       const token = metadata.project_token;
       const title = metadata.title;
-      const projectBuffer = await privilegedFetchAsBuffer(`https://projects.scratch.mit.edu/${this.path}?token=${token}`);
+
+      const projectResponse = await privilegedFetch(`https://projects.scratch.mit.edu/${this.path}?token=${token}`);
       return {
         name: title,
-        data: projectBuffer
+        data: await projectResponse.arrayBuffer()
       };
     }
 

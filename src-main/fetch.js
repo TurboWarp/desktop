@@ -1,41 +1,24 @@
-// The version of Electron we use does not yet support fetch()
-
-const {version} = require('../package.json');
+const {name, version} = require('../package.json');
 
 /**
+ * Fetch any URL without care for CORS.
  * @param {string} url
- * @returns {Promise<Buffer>}
+ * @returns {Promise<Response>} Rejects if status was not okay
  */
-const privilegedFetchAsBuffer = (url) => new Promise((resolve, reject) => {
-  const parsedURL = new URL(url);
-  // Import http and https lazily as they take about 17ms to import
-  const mod = parsedURL.protocol === 'http:' ? require('http') : require('https');
-  const request = mod.get(url, {
+const privilegedFetch = (url) => {
+  // Don't use Electron's net.fetch because we don't want to be affected by the
+  // networking stack which would include our request filtering, and we have no
+  // reason for this to be able to fetch file:// URLs.
+  return fetch(url, {
     headers: {
-      'user-agent': `turbowarp-desktop/${version}`
+      'User-Agent': `${name}/${version}`
     }
-  });
-
-  request.on('response', (response) => {
-    const statusCode = response.statusCode;
-    if (statusCode !== 200) {
-      reject(new Error(`HTTP status ${statusCode}`))
-      return;
+  }).then((res) => {
+    if (!res.ok) {
+      throw new Error(`HTTP Error while fetching ${url}: ${res.status}`);
     }
-  
-    let chunks = [];
-    response.on('data', (chunk) => {
-      chunks.push(chunk);
-    });
-  
-    response.on('end', () => {
-      resolve(Buffer.concat(chunks));
-    });
+    return res;
   });
+};
 
-  request.on('error', (e) => {
-    reject(e);
-  });
-});
-
-module.exports = privilegedFetchAsBuffer;
+module.exports = privilegedFetch;
