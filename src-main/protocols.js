@@ -1,11 +1,7 @@
 const path = require('path');
-const fs = require('fs');
 const zlib = require('zlib');
-const {promisify} = require('util');
-const {app, protocol} = require('electron');
-
-const readFile = promisify(fs.readFile);
-const brotliDecompress = promisify(zlib.brotliDecompress);
+const nodeURL = require('url');
+const {app, protocol, net} = require('electron');
 
 const FILE_SCHEMES = {
   'tw-editor': {
@@ -58,50 +54,51 @@ protocol.registerSchemesAsPrivileged(Object.entries(FILE_SCHEMES).map(([scheme, 
 
 app.whenReady().then(() => {
   for (const [scheme, metadata] of Object.entries(FILE_SCHEMES)) {
-    // Forcing a trailing / slightly improves security
+    // Forcing a trailing / slightly improves security of the path traversal check later
     const root = path.join(metadata.root, '/');
 
-    if (metadata.brotli) {
-      protocol.registerBufferProtocol(scheme, (request, callback) => {
-        const url = new URL(request.url);
-        const resolved = path.join(root, `${url.pathname}.br`);
+    protocol.handle(scheme, async (request) => {
+      const url = new URL(request.url);
+      const resolved = path.join(root, url.pathname);
+      if (!resolved.startsWith(root)) {
+        return new Response('not found', {
+          status: 404
+        });
+      }
+
+      if (metadata.brotli) {
         const fileExtension = path.extname(url.pathname);
-
-        if (!resolved.startsWith(root) || !MIME_TYPES.has(fileExtension)) {
-          callback({
-            statusCode: 404
-          });
-          return;
-        }
-
-        readFile(resolved)
-          .then((compressed) => brotliDecompress(compressed))
-          .then((decompressed) => {
-            callback({
-              data: decompressed,
-              mimeType: MIME_TYPES.get(fileExtension)
-            });
-          })
-          .catch((error) => {
-            console.error(error);
-            callback({
-              statusCode: 404
-            });
-          });
-      });
-    } else {
-      protocol.registerFileProtocol(scheme, (request, callback) => {
-        // Don't need to check mime types ourselves as Electron will do it for us.
-        const url = new URL(request.url);
-        const resolved = path.join(root, url.pathname);
-        if (resolved.startsWith(root)) {
-          callback(resolved);
-        } else {
-          callback({
-            statusCode: 404
+        const mimeType = MIME_TYPES.get(fileExtension);
+        if (!mimeType) {
+          return new Response('not found', {
+            status: 404
           });
         }
-      });
-    }
+
+        const response = await net.fetch(nodeURL.pathToFileURL(`${resolved}.br`));
+        const data = await response.arrayBuffer();
+
+        // TODO: would be ideal if we could give the compressed data directly to
+        // the renderer since it does know how to interpret brotli already with
+        // Content-Encoding: br, but that doesn't seem to work?
+        const decompressed = await new Promise((resolve, reject) => {
+          zlib.brotliDecompress(data, (error, result) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(result);
+            }
+          });
+        });
+
+        return new Response(decompressed, {
+          headers: {
+            'Content-Type': mimeType
+          }
+        });
+      }
+
+      return net.fetch(nodeURL.pathToFileURL(resolved));
+    });
   }
 });
