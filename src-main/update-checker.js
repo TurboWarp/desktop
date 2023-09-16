@@ -1,7 +1,7 @@
 const settings = require('./settings');
 const UpdateWindow = require('./windows/update');
 const packageJSON = require('../package.json');
-const privilegedFetchAsBuffer = require('./fetch');
+const privilegedFetch = require('./fetch');
 
 const currentVersion = packageJSON.version;
 const URL = 'https://desktop.turbowarp.org/version.json';
@@ -13,8 +13,8 @@ const checkForUpdates = async () => {
     return;
   }
 
-  const jsonBuffer = await privilegedFetchAsBuffer(URL);
-  const json = JSON.parse(jsonBuffer.toString());
+  const jsonResponse = await privilegedFetch(URL);
+  const json = await jsonResponse.json();
   const latestStable = json.latest;
   const latestUnstable = json.latest_unstable;
   const oldestSafe = json.oldest_safe;
