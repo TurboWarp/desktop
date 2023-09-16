@@ -1,6 +1,6 @@
 const path = require('path');
 const zlib = require('zlib');
-const nodeURL = require('url');
+const fs = require('fs');
 const {app, protocol, net} = require('electron');
 
 const FILE_SCHEMES = {
@@ -75,14 +75,21 @@ app.whenReady().then(() => {
           });
         }
 
-        const response = await net.fetch(nodeURL.pathToFileURL(`${resolved}.br`));
-        const data = await response.arrayBuffer();
+        // Would be best if we could somehow stream this (ideally using
+        // Content-Encoding: br), but that doesn't seem to work very easily
+        // right now.
+        const compressed = await new Promise((resolve, reject) => {
+          fs.readFile(`${resolved}.br`, (error, data) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(data);
+            }
+          });
+        });
 
-        // TODO: would be ideal if we could give the compressed data directly to
-        // the renderer since it does know how to interpret brotli already with
-        // Content-Encoding: br, but that doesn't seem to work?
         const decompressed = await new Promise((resolve, reject) => {
-          zlib.brotliDecompress(data, (error, result) => {
+          zlib.brotliDecompress(compressed, (error, result) => {
             if (error) {
               reject(error);
             } else {
@@ -98,7 +105,9 @@ app.whenReady().then(() => {
         });
       }
 
-      return net.fetch(nodeURL.pathToFileURL(resolved));
+      // net.fetch is probably more efficient than reading the entire file
+      // into memory at once.
+      return net.fetch(`file://${resolved}`);
     });
   }
 });
