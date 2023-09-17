@@ -1,9 +1,9 @@
 [
   {
     "version": "1.9.2",
-    "date": "2023-9-16",
+    "date": "2023-9-17",
     "notes": [
-      "Fixed a couple more bugs in the one-time data migration process"
+      "Fixed some edge cases in file saving and the one-time data migration process"
     ]
   },
   {
