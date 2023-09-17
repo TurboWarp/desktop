@@ -186,13 +186,22 @@ const createAtomicWriteStream = async (path) => {
 };
 
 const writeFileAtomic = async (path, data) => {
-  const stream = await createAtomicWriteStream(path);
-  return new Promise((resolve, reject) => {
-    stream.on('atomic-finish', resolve);
-    stream.on('atomic-error', reject);
-    stream.write(data);
-    stream.end();
-  });
+  try {
+    const stream = await createAtomicWriteStream(path);
+    await new Promise((resolve, reject) => {
+      stream.on('atomic-finish', resolve);
+      stream.on('atomic-error', reject);
+      stream.write(data);
+      stream.end();
+    });
+  } catch (atomicError) {
+    // Try to write it non-atomically. This isn't "safe", but it should improve reliability on some weird systems.
+    try {
+      await fsPromises.writeFile(path, data);
+    } catch (simpleError) {
+      throw atomicError;
+    }
+  }
 };
 
 module.exports = {
