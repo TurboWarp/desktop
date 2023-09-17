@@ -56,7 +56,14 @@ class MigrateWindow extends BaseWindow {
     }
 
     settings.dataVersion = MigrateWindow.LATEST_VERSION;
-    await settings.save();
+    try {
+      await settings.save();
+    } catch (error) {
+      // If someone clicked "Continue Anyways", ignore this error
+      if (success) {
+        throw error;
+      }
+    }
     this.resolveCallback();
 
     // destroy() to skip close event listener
