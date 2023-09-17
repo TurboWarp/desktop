@@ -39,7 +39,13 @@ const acquireFileLock = async (path) => {
     fileLockQueues.set(path, []);
   }
 
+  let released = false;
   const releaseFileLock = () => {
+    if (released) {
+      return;
+    }
+    released = true;
+
     const nextCallback = fileLockQueues.get(path).shift();
     if (nextCallback) {
       nextCallback();
