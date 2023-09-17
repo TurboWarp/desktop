@@ -1,5 +1,12 @@
 [
   {
+    "version": "1.9.2",
+    "date": "2023-9-16",
+    "notes": [
+      "Fixed a couple more bugs in the one-time data migration process"
+    ]
+  },
+  {
     "version": "1.9.1",
     "date": "2023-9-13",
     "notes": [
