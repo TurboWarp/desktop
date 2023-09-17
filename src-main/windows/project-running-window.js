@@ -1,14 +1,11 @@
-const fs = require('fs');
+const fsPromises = require('fs/promises');
 const path = require('path')
-const {promisify} = require('util');
 const BaseWindow = require('./base');
 const settings = require('../settings');
 const askForMediaAccess = require('../media-permissions');
 
-const readdir = promisify(fs.readdir);
-
 const listLocalFiles = async () => {
-  const files = await readdir(path.join(__dirname, '../../dist-library-files/'));
+  const files = await fsPromises.readdir(path.join(__dirname, '../../dist-library-files/'));
   return files.map(filename => filename.replace('.br', ''));
 };
 
