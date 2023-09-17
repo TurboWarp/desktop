@@ -100,8 +100,18 @@ const createAtomicWriteStream = async (path) => {
   writeStream.on('finish', async () => {
     try {
       await promisify(fs.fsync)(fd);
-      await promisify(fs.close)(fd);
-      fd = null;
+
+      // Received a bug report that this can fail with EBADF. I'm not sure why
+      // that happens, but I think we can ignore it as it effectively means our
+      // descriptor is already closed.
+      // At least at this point fsync has succeeded and the rename still has to
+      // succeed. Should be safe.
+      try {
+        await promisify(fs.close)(fd);
+        fd = null;
+      } catch (e) {
+        console.error('Error closing fd', fd, e);
+      }
 
       if (atomicSupported) {
         await promisify(fs.rename)(tempPath, path);
