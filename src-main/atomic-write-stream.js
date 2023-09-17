@@ -1,5 +1,4 @@
-const fs = require('fs');
-const {promisify} = require('util');
+const fsPromises = require('fs/promises');
 
 // This file was initially based on:
 // https://github.com/npm/write-file-atomic/blob/a37fdc843f4d391cf1cff85c8e69c3d80e05b049/lib/index.js
@@ -16,7 +15,7 @@ const getTemporaryPath = (originalPath) => {
 
 const getOriginalMode = async (path) => {
   try {
-    const stat = await promisify(fs.stat)(path);
+    const stat = await fsPromises.stat(path);
     return stat.mode;
   } catch (e) {
     // TODO: we do this because write-file-atomic did it but that seems kinda not great??
@@ -63,9 +62,8 @@ const createAtomicWriteStream = async (path) => {
   const atomicSupported = !process.mas;
 
   const tempPath = atomicSupported ? getTemporaryPath(path) : path;
-  let fd = await promisify(fs.open)(tempPath, 'w', originalMode);
-  const writeStream = fs.createWriteStream(null, {
-    fd,
+  const fileHandle = await fsPromises.open(tempPath, 'w', originalMode);
+  const writeStream = fileHandle.createWriteStream({
     autoClose: false,
     // Increase high water mark from default value of 16384.
     // Increasing this results in less time spent waiting for disk IO to complete, which would pause
@@ -73,44 +71,55 @@ const createAtomicWriteStream = async (path) => {
     highWaterMark: 1024 * 1024 * 5
   });
 
-  writeStream.on('error', async (error) => {
-    if (fd !== null) {
-      try {
-        await promisify(fs.close)(fd);
-        fd = null;
-      } catch (e) {
-        // ignore; file might already be closed
-      }
-    }
+  const handleError = async (error) => {
+    await new Promise((resolve) => {
+      writeStream.destroy(null, () => {
+        resolve();
+      });
+    });
 
     if (atomicSupported) {
       try {
-        // TODO: it might make sense to leave the broken file on the disk so that there is a chance
-        // of recovery?
-        await promisify(fs.unlink)(tempPath);
+        // TODO: it might make sense to leave the broken file on the disk so that
+        // there is a chance of recovery?
+        await fsPromises.unlink(tempPath);
       } catch (e) {
-        // ignore; file might have been removed already
+        // ignore; file might have been removed already or was never successfully
+        // created
       }
     }
 
     writeStream.emit('atomic-error', error);
     releaseFileLock();
+  };
+
+  writeStream.on('error', (error) => {
+    handleError(error);
   });
 
   writeStream.on('finish', async () => {
     try {
-      await promisify(fs.fsync)(fd);
-      await promisify(fs.close)(fd);
-      fd = null;
+      await fileHandle.sync();
+
+      // destroy() will close the file handle
+      await new Promise((resolve, reject) => {
+        writeStream.destroy(null, (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
+      });
 
       if (atomicSupported) {
-        await promisify(fs.rename)(tempPath, path);
+        await fsPromises.rename(tempPath, path);
       }
 
       writeStream.emit('atomic-finish');
       releaseFileLock();
     } catch (error) {
-      writeStream.destroy(error);
+      handleError(error);
     }
   });
 
