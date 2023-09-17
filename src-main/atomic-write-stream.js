@@ -1,4 +1,6 @@
+const fs = require('fs');
 const fsPromises = require('fs/promises');
+const nodeCrypto = require('crypto');
 
 // This file was initially based on:
 // https://github.com/npm/write-file-atomic/blob/a37fdc843f4d391cf1cff85c8e69c3d80e05b049/lib/index.js
@@ -55,6 +57,41 @@ const acquireFileLock = async (path) => {
   };
 
   return releaseFileLock;
+};
+
+/**
+ * @param {string} file path
+ * @returns {Promise<string>} hex digest
+ */
+const sha512 = (file) => new Promise((resolve, reject) => {
+  const hash = nodeCrypto.createHash('sha512');
+  const stream = fs.createReadStream(file);
+  stream.on('data', (data) => {
+    hash.update(data);
+  });
+  stream.on('error', (error) => {
+    reject(error);
+  });
+  stream.on('end', () => {
+    resolve(hash.digest('hex'));
+  });
+});
+
+/**
+ * @param {string} a Path 1
+ * @param {string} b Path 2
+ * @returns {Promise<boolean>} true if the data in the files is identical
+ */
+const areSameFile = async (a, b) => {
+  try {
+    const [hashA, hashB] = await Promise.all([
+      sha512(a),
+      sha512(b)
+    ]);
+    return hashA === hashB;
+  } catch (e) {
+    return false;
+  }
 };
 
 const createAtomicWriteStream = async (path) => {
@@ -119,7 +156,23 @@ const createAtomicWriteStream = async (path) => {
       });
 
       if (atomicSupported) {
-        await fsPromises.rename(tempPath, path);
+        try {
+          await fsPromises.rename(tempPath, path);
+        } catch (err) {
+          // On Windows, the rename can fail with EPERM even though it succeeded.
+          // https://github.com/npm/fs-write-stream-atomic/commit/2f51136f24aaefebd446455a45fa108909b18ca9
+          if (
+            process.platform === 'win32' &&
+            err.syscall === 'rename' &&
+            err.code === 'EPERM' &&
+            await areSameFile(path, tempPath)
+          ) {
+            // The rename did actually succeed, so we can remove the temporary file
+            await fsPromises.unlink(tempPath);
+          } else {
+            throw err;
+          }
+        }
       }
 
       writeStream.emit('atomic-finish');
