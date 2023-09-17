@@ -63,7 +63,7 @@ const createAtomicWriteStream = async (path) => {
   const atomicSupported = !process.mas;
 
   const tempPath = atomicSupported ? getTemporaryPath(path) : path;
-  const fd = await promisify(fs.open)(tempPath, 'w', originalMode);
+  let fd = await promisify(fs.open)(tempPath, 'w', originalMode);
   const writeStream = fs.createWriteStream(null, {
     fd,
     autoClose: false,
@@ -74,10 +74,13 @@ const createAtomicWriteStream = async (path) => {
   });
 
   writeStream.on('error', async (error) => {
-    try {
-      await promisify(fs.close)(fd);
-    } catch (e) {
-      // ignore; file might already be closed
+    if (fd !== null) {
+      try {
+        await promisify(fs.close)(fd);
+        fd = null;
+      } catch (e) {
+        // ignore; file might already be closed
+      }
     }
 
     if (atomicSupported) {
@@ -98,6 +101,7 @@ const createAtomicWriteStream = async (path) => {
     try {
       await promisify(fs.fsync)(fd);
       await promisify(fs.close)(fd);
+      fd = null;
 
       if (atomicSupported) {
         await promisify(fs.rename)(tempPath, path);
