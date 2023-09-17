@@ -116,9 +116,9 @@ const createAtomicWriteStream = async (path) => {
 const writeFileAtomic = async (path, data) => {
   const stream = await createAtomicWriteStream(path);
   return new Promise((resolve, reject) => {
-    stream.write(data);
     stream.on('atomic-finish', resolve);
     stream.on('atomic-error', reject);
+    stream.write(data);
     stream.end();
   });
 };
