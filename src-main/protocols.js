@@ -1,10 +1,9 @@
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs/promises');
 const zlib = require('zlib');
 const {promisify} = require('util');
 const {app, protocol} = require('electron');
 
-const readFile = promisify(fs.readFile);
 const brotliDecompress = promisify(zlib.brotliDecompress);
 
 const FILE_SCHEMES = {
@@ -74,7 +73,7 @@ app.whenReady().then(() => {
           return;
         }
 
-        readFile(resolved)
+        fs.readFile(resolved)
           .then((compressed) => brotliDecompress(compressed))
           .then((decompressed) => {
             callback({
