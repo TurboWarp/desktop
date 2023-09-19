@@ -12,7 +12,7 @@ Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **form
  - Fixed custom username not saving
  - Fixed bugs in the one-time data migration process
  - Slightly optimized startup time
- - Windows: Support for Windows 7, 8, and 8.1 will be ending in October
+ - Windows: Support for Windows 7, 8, and 8.1 will be removed in v1.10.0
  - macOS: Update menu bar
 
 # 1.9.0 (2023-09-08)
