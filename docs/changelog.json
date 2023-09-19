@@ -1,5 +1,12 @@
 [
   {
+    "version": "1.9.3",
+    "date": "2023-9-18",
+    "notes": [
+      "Fixed one-time data migration process not running sometimes"
+    ]
+  },
+  {
     "version": "1.9.2",
     "date": "2023-9-17",
     "notes": [
