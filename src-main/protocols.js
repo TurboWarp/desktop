@@ -1,6 +1,6 @@
 const path = require('path');
 const zlib = require('zlib');
-const fs = require('fs');
+const fsPromises = require('fs/promises');
 const {app, protocol, net} = require('electron');
 
 const FILE_SCHEMES = {
@@ -78,15 +78,7 @@ app.whenReady().then(() => {
         // Would be best if we could somehow stream this (ideally using
         // Content-Encoding: br), but that doesn't seem to work very easily
         // right now.
-        const compressed = await new Promise((resolve, reject) => {
-          fs.readFile(`${resolved}.br`, (error, data) => {
-            if (error) {
-              reject(error);
-            } else {
-              resolve(data);
-            }
-          });
-        });
+        const compressed = await fsPromises.readFile(`${resolved}.br`);
 
         const decompressed = await new Promise((resolve, reject) => {
           zlib.brotliDecompress(compressed, (error, result) => {
