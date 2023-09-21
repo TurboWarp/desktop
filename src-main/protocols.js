@@ -87,24 +87,42 @@ app.whenReady().then(() => {
           status: 404
         });
       }
+      const headers = {
+        'Content-Type': mimeType
+      };
 
       if (metadata.brotli) {
-        const readStream = fs.createReadStream(`${resolved}.br`);
+        const fileStream = fs.createReadStream(`${resolved}.br`);
         const decompressStream = zlib.createBrotliDecompress();
-        readStream.pipe(decompressStream);
+        fileStream.pipe(decompressStream);
 
-        return new Response(Readable.toWeb(decompressStream), {
-          headers: {
-            'Content-Type': mimeType
-          }
+        return new Promise((resolve) => {
+          // TODO: this still returns 200 OK when brotli stream errors
+          fileStream.on('open', () => {
+            resolve(new Response(Readable.toWeb(decompressStream), {
+              headers
+            }));
+          });
+          fileStream.on('error', () => {
+            resolve(new Response('read error', {
+              status: 404
+            }));
+          });
         });
       }
 
       const fileStream = fs.createReadStream(resolved);
-      return new Response(Readable.toWeb(fileStream), {
-        headers: {
-          'Content-Type': mimeType
-        }
+      return new Promise((resolve) => {
+        fileStream.on('open', () => {
+          resolve(new Response(Readable.toWeb(fileStream), {
+            headers
+          }));
+        });
+        fileStream.on('error', () => {
+          resolve(new Response('read error', {
+            status: 404
+          }));
+        });
       });
     });
   }
