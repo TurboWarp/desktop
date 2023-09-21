@@ -71,7 +71,7 @@ app.whenReady().then(() => {
     // Forcing a trailing / slightly improves security of the path traversal check later
     const root = path.join(metadata.root, '/');
 
-    protocol.handle(scheme, async (request) => {
+    protocol.handle(scheme, (request) => {
       const url = new URL(request.url);
       const resolved = path.join(root, url.pathname);
       if (!resolved.startsWith(root)) {
