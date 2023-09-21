@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const stream = require('stream');
+const {Readable} = require('stream');
 const zlib = require('zlib');
-const {app, protocol, net} = require('electron');
+const {app, protocol} = require('electron');
 
 const FILE_SCHEMES = {
   'tw-editor': {
@@ -40,9 +40,22 @@ const FILE_SCHEMES = {
 };
 
 const MIME_TYPES = new Map();
+MIME_TYPES.set('.html', 'text/html');
+MIME_TYPES.set('.js', 'text/javascript');
+MIME_TYPES.set('.txt', 'text/plain');
+MIME_TYPES.set('.json', 'application/json');
 MIME_TYPES.set('.wav', 'audio/wav');
 MIME_TYPES.set('.svg', 'image/svg+xml');
 MIME_TYPES.set('.png', 'image/png');
+MIME_TYPES.set('.jpg', 'image/jpeg');
+MIME_TYPES.set('.gif', 'image/gif');
+MIME_TYPES.set('.cur', 'image/x-icon');
+MIME_TYPES.set('.ico', 'image/x-icon');
+MIME_TYPES.set('.mp3', 'audio/mpeg');
+MIME_TYPES.set('.wav', 'audio/wav');
+MIME_TYPES.set('.ogg', 'audio/ogg');
+MIME_TYPES.set('.ttf', 'font/ttf');
+MIME_TYPES.set('.otf', 'font/otf');
 
 protocol.registerSchemesAsPrivileged(Object.entries(FILE_SCHEMES).map(([scheme, metadata]) => ({
   scheme,
@@ -67,30 +80,32 @@ app.whenReady().then(() => {
         });
       }
 
-      if (metadata.brotli) {
-        const fileExtension = path.extname(url.pathname);
-        const mimeType = MIME_TYPES.get(fileExtension);
-        if (!mimeType) {
-          return new Response('not found', {
-            status: 404
-          });
-        }
+      const fileExtension = path.extname(url.pathname);
+      const mimeType = MIME_TYPES.get(fileExtension);
+      if (!mimeType) {
+        return new Response('not found', {
+          status: 404
+        });
+      }
 
-        // Stream the file so we don't unnecessarily store the entire file in memory
+      if (metadata.brotli) {
         const readStream = fs.createReadStream(`${resolved}.br`);
         const decompressStream = zlib.createBrotliDecompress();
         readStream.pipe(decompressStream);
 
-        return new Response(stream.Readable.toWeb(decompressStream), {
+        return new Response(Readable.toWeb(decompressStream), {
           headers: {
             'Content-Type': mimeType
           }
         });
       }
 
-      // net.fetch is probably more efficient than reading the entire file
-      // into memory at once.
-      return net.fetch(`file://${resolved}`);
+      const fileStream = fs.createReadStream(resolved);
+      return new Response(Readable.toWeb(fileStream), {
+        headers: {
+          'Content-Type': mimeType
+        }
+      });
     });
   }
 });
