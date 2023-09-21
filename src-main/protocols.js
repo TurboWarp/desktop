@@ -83,7 +83,7 @@ app.whenReady().then(() => {
       const fileExtension = path.extname(url.pathname);
       const mimeType = MIME_TYPES.get(fileExtension);
       if (!mimeType) {
-        return new Response('not found', {
+        return new Response('invalid file extension', {
           status: 404
         });
       }
