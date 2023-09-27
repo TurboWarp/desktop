@@ -182,7 +182,7 @@
       }
       [is-changelog] .subheader,
       [is-changelog] .alternative-download-links,
-      [is-changelog] .above-fold-download .microsoft-store,
+      [is-changelog] .above-fold-download .store-badge,
       [is-changelog] .above-fold-download .download-separator,
       [is-changelog] .picture,
       [is-changelog] .features,
@@ -222,7 +222,7 @@
         margin: 0;
       }
 
-      .microsoft-store {
+      .store-badge {
         display: inline-flex;
         align-items: center;
         padding: 8px;
@@ -232,27 +232,32 @@
         text-decoration: none !important;
         border: 1px solid black;
       }
-      .microsoft-store:active {
+      .store-badge:active {
         box-shadow: 0 0 8px rgba(255, 255, 255, 0.6) inset;
       }
       @media (prefers-color-scheme: dark) {
-        .microsoft-store {
+        .store-badge {
           border: 1px solid #aaa;
         }
       }
-      .microsoft-icon {
-        background-image: url(microsoft.svg);
+      .store-icon {
         background-size: 100%;
         background-repeat: no-repeat;
         width: 32px;
         height: 32px;
         margin-right: 8px;
       }
-      .microsoft-store > div > :first-child {
+      .microsoft-icon {
+        background-image: url(microsoft.svg);
+      }
+      .apple-icon {
+        background-image: url(apple.svg);
+      }
+      .store-badge > div > :first-child {
         text-align: left;
         font-size: 0.9em;
       }
-      .microsoft-store > div > :last-child {
+      .store-badge > div > :last-child {
         text-align: left;
         font-weight: bold;
         font-size: 1.4em;
@@ -733,8 +738,8 @@
       </noscript>
 
       <div data-if-os="windows">
-        <a class="microsoft-store" href="https://apps.microsoft.com/store/detail/turbowarp/9P4DPZGV5ZKL">
-          <div class="microsoft-icon"></div>
+        <a class="store-badge microsoft-store" href="https://apps.microsoft.com/store/detail/turbowarp/9P4DPZGV5ZKL">
+          <div class="store-icon microsoft-icon"></div>
           <div>
             <div l10n="getit" l10n-description="Used in the context 'Get it from Microsoft'. Microsoft is on a separate line.">Get it from</div>
             <div>Microsoft</div>
@@ -746,6 +751,14 @@
       </div>
 
       <div data-if-os="mac">
+        <a class="store-badge mac-app-store" href="https://apps.apple.com/us/app/turbowarp/id6444661463">
+          <div class="store-icon apple-icon"></div>
+          <div>
+            <div l10n="downloadon" l10n-description="Used in the context 'Download on the Mac App Store'. Mac App Store is on a separate line.">Download on the</div>
+            <div>Mac App Store</div>
+          </div>
+        </a>
+        <p class="download-separator" l10n="or" l10n-description="Appears between two different download buttons">or</p>
         <a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Setup-{version}.dmg" l10n="macd" l10n-description="Universal means the apps works on Intel and ARM Macs">Download for macOS (Universal)</a>
       </div>
 
@@ -1159,8 +1172,8 @@
     <div class="manual-installation section" id="windows">
       <h2 l10n="win">Install on Windows</h2>
       <p l10n="ms">Get it from the Microsoft Store to enable automatic updates.</p>
-      <a class="microsoft-store" href="https://apps.microsoft.com/store/detail/turbowarp/9P4DPZGV5ZKL">
-        <div class="microsoft-icon"></div>
+      <a class="store-badge microsoft-store" href="https://apps.microsoft.com/store/detail/turbowarp/9P4DPZGV5ZKL">
+        <div class="store-icon microsoft-icon"></div>
         <div>
           <div l10n="getit" l10n-description="Used in the context 'Get it from Microsoft'. Microsoft is on a separate line.">Get it from</div>
           <div>Microsoft</div>
@@ -1177,7 +1190,15 @@
 
     <div class="manual-installation section" id="mac">
       <h2 l10n="mac">Install on macOS</h2>
-      <p l10n="mac2">Drag TurboWarp into Applications. If it tells you that TurboWarp already exists, choose "Replace".</p>
+      <p l10n="macupd">Install from the Mac App Store for automatic updates.</p>
+      <a class="store-badge mac-app-store" href="https://apps.apple.com/us/app/turbowarp/id6444661463">
+        <div class="store-icon apple-icon"></div>
+        <div>
+          <div l10n="downloadon" l10n-description="Used in the context 'Download on the Mac App Store'. Mac App Store is on a separate line.">Download on the</div>
+          <div>Mac App Store</div>
+        </div>
+      </a>
+      <p l10n="macmanual">Or download the app manually. Open the .DMG, then drag TurboWarp into Applications. If it tells you that TurboWarp already exists, choose "Replace".</p>
       <a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Setup-{version}.dmg" l10n="macd" l10n-description="Universal means the apps works on Intel and ARM Macs">Download for macOS (Universal)</a>
     </div>
 
