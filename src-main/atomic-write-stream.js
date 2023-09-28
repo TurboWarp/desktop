@@ -111,7 +111,7 @@ const areSameFile = async (a, b) => {
 /**
  * @param {string} from
  * @param {string} to
- * @returns {Promise<void>}
+ * @returns {Promise<void>} Does not wait for file to be synced to disk
  */
 const copy = (from, to) => new Promise((resolve, reject) => {
   // fs.copyFile's error handling does more than we want.
@@ -201,11 +201,12 @@ const createAtomicWriteStream = async (path) => {
           //    (Pure IO should be faster than zipping the project)
           //  - We still avoid keeping the entire file in memory at once
           await copy(tempPath, path);
-          await fsPromises.unlink(tempPath);
 
           const destinationHandle = await fsPromises.open(path, 'r');
           await destinationHandle.sync();
           await destinationHandle.close();
+
+          await fsPromises.unlink(tempPath);
         } else if (
           // On Windows, the rename can fail with EPERM even though it succeeded.
           // https://github.com/npm/fs-write-stream-atomic/commit/2f51136f24aaefebd446455a45fa108909b18ca9
