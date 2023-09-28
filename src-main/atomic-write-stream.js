@@ -202,7 +202,9 @@ const createAtomicWriteStream = async (path) => {
           //  - We still avoid keeping the entire file in memory at once
           await copy(tempPath, path);
 
-          const destinationHandle = await fsPromises.open(path, 'r');
+          // Per man fsync(2):
+          // On some UNIX systems (but not Linux), fd must be a writable file descriptor.
+          const destinationHandle = await fsPromises.open(path, 'ax');
           await destinationHandle.sync();
           await destinationHandle.close();
 
