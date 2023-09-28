@@ -204,7 +204,8 @@ const createAtomicWriteStream = async (path) => {
 
           // Per man fsync(2):
           // On some UNIX systems (but not Linux), fd must be a writable file descriptor.
-          const destinationHandle = await fsPromises.open(path, 'ax');
+          // Ideally we would only open the destination once, but this works fine.
+          const destinationHandle = await fsPromises.open(path, 'a');
           await destinationHandle.sync();
           await destinationHandle.close();
 
