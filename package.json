@@ -12,6 +12,7 @@
     "webpack:compile": "webpack",
     "webpack:watch": "webpack --watch",
     "webpack:prod": "cross-env NODE_ENV=production webpack",
+    "electron:fuses": "node scripts/flip-fuses.js",
     "electron:start": "electron src-main/entrypoint.js",
     "electron:package:dir": "electron-builder --dir"
   },
@@ -22,6 +23,7 @@
     "@babel/core": "^7.23.0",
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.13.13",
+    "@electron/fuses": "^1.6.2",
     "@electron/notarize": "^2.1.0",
     "adm-zip": "^0.5.10",
     "async-limiter": "^2.0.0",
