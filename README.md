@@ -107,7 +107,7 @@ Find TurboWarp Desktop's data path by using the list below or by clicking "?" in
  - Windows (except Microsoft Store): `%APPDATA%/turbowarp-desktop`
  - Microsoft Store: Open `%LOCALAPPDATA%/Packages`, find the folder with the word `TurboWarpDesktop` in it, then open `LocalCache/Roaming/turbowarp-desktop`
  - macOS (except Mac App Store): `~/Library/Application Support/turbowarp-desktop`
- - Mac App Store: `~/Library/Containers/org.turbowarp.desktop/Data/Library/Application Support/turbowarp-desktop` (not that the `org.turbowarp.org` part may appear as `TurboWarp` in Finder)
+ - Mac App Store: `~/Library/Containers/org.turbowarp.desktop/Data/Library/Application Support/turbowarp-desktop` (note that the `org.turbowarp.org` part may appear as `TurboWarp` in Finder)
  - Linux (except Flatpak and Snap): `~/.config/turbowarp-desktop`
  - Linux (Flatpak): `~/.var/app/org.turbowarp.TurboWarp/config/turbowarp-desktop`
  - Linux (Snap): `~/snap/turbowarp-desktop/current/.config/turbowarp-desktop`
