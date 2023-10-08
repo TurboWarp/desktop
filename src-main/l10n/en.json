@@ -148,7 +148,7 @@
     "developer_comment": "Title of desktop settings window"
   },
   "desktop-settings.update-checker-not-allowed": {
-    "string": "Updates are managed by store you installed the app from.",
+    "string": "Updates are managed by the store you installed the app from.",
     "developer_comment": "Appears in desktop settings when updates are handled by the store the app was installed from such as the Microsoft Store."
   },
   "desktop-settings.update-checker": {
