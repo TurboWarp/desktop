@@ -12,8 +12,7 @@
     "webpack:compile": "webpack",
     "webpack:watch": "webpack --watch",
     "webpack:prod": "cross-env NODE_ENV=production webpack",
-    "electron:fuses": "node scripts/flip-fuses.js",
-    "electron:start": "electron src-main/entrypoint.js",
+    "electron:start": "node scripts/flip-fuses.js --reset && electron src-main/entrypoint.js",
     "electron:package:dir": "electron-builder --dir"
   },
   "dependencies": {
@@ -204,7 +203,8 @@
         "owner": "TurboWarp"
       }
     ],
-    "afterSign": "scripts/after-sign.js"
+    "afterPack": "./scripts/after-pack.js",
+    "afterSign": "./scripts/after-sign.js"
   },
   "private": true
 }
