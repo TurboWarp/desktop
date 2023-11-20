@@ -22,7 +22,7 @@
     "@babel/core": "^7.23.3",
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.13.13",
-    "@electron/notarize": "^2.1.0",
+    "@electron/notarize": "^2.2.0",
     "adm-zip": "^0.5.10",
     "async-limiter": "^2.0.0",
     "autoprefixer": "^9.8.8",
