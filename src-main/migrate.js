@@ -4,11 +4,13 @@ const path = require('path');
 const settings = require('./settings');
 const MigrateWindow = require('./windows/migrate');
 
-// This needs to run before the app is ready
-const userData = app.getPath('userData');
+// Avoid running migrate logic on fresh installs when we can. Not required, just helps
+// user experience. This must run before the ready event.
 const isFirstLaunch = (
   settings.dataVersion !== MigrateWindow.LATEST_VERSION &&
-  !fs.existsSync(path.join(userData, 'Cache'))
+  // Electron will always create the Cache directory in userData after the ready event,
+  // so if it doesn't exist yet, this is probably a fresh install.
+  !fs.existsSync(path.join(app.getPath('userData'), 'Cache'))
 );
 
 const migrate = async () => {
