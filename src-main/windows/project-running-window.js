@@ -3,6 +3,7 @@ const path = require('path')
 const BaseWindow = require('./base');
 const settings = require('../settings');
 const askForMediaAccess = require('../media-permissions');
+const SecurityPromptWindow = require('./security-prompt');
 
 const listLocalFiles = async () => {
   const files = await fsPromises.readdir(path.join(__dirname, '../../dist-library-files/'));
@@ -39,6 +40,7 @@ class ProjectRunningWindow extends BaseWindow {
       permission === 'window-placement' ||
 
       // Notifications extension
+      // Actually displaying notifications also requires handlePermissionRequest check
       permission === 'notifications' ||
 
       // Custom fonts menu
@@ -60,6 +62,16 @@ class ProjectRunningWindow extends BaseWindow {
       return true;
     }
 
+    // Clipboard extension
+    if (permission === 'clipboard-read') {
+      return SecurityPromptWindow.requestReadClipboard(this.window);
+    }
+
+    // Notifications extension
+    if (permission === 'notifications') {
+      return SecurityPromptWindow.requestNotifications(this.window);
+    }
+
     return (
       // Enhanced fullscreen addon
       permission === 'fullscreen' ||
@@ -67,12 +79,9 @@ class ProjectRunningWindow extends BaseWindow {
       // Pointerlock extension and experiment
       permission === 'pointerLock' ||
 
-      // Notifications extension
-      permission === 'notifications' ||
-
       // Clipboard extension
-      permission === 'clipboard-sanitized-write' ||
-      permission === 'clipboard-read'
+      // Writing is safer than reading
+      permission === 'clipboard-sanitized-write'
     );
   }
 

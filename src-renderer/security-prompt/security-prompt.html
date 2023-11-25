@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline';">
+    <style>
+      :root {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: black;
+        background-color: white;
+      }
+      body {
+        padding: 0;
+        margin: 0;
+      }
+
+      main {
+        padding: 0.75rem 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      p {
+        margin: 0;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .buttons button {
+        flex-grow: 1;
+        font: inherit;
+        font-weight: bold;
+        padding: 0.75rem 1rem;
+        border-radius: 0.25rem;
+        border: rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+      }
+      .deny {
+        background-color: rgb(255, 92, 92);
+        color: white;
+      }
+      .allow {
+        background-color: #24cd11;
+        color: black;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          background-color: #111;
+          color: #eee;
+        }
+        .buttons button {
+          border-color: rgba(255, 255, 255, 0.15);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <p data-type="read-clipboard" data-l10n="security-prompt.read-clipboard1"></p>
+      <p data-type="read-clipboard" data-l10n="security-prompt.read-clipboard2"></p>
+      <p data-type="read-clipboard" data-l10n="security-prompt.read-clipboard3"></p>
+
+      <p data-type="notifications" data-l10n="security-prompt.notifications1"></p>
+      <p data-type="notifications" data-l10n="security-prompt.notifications2"></p>
+
+      <div class="buttons">
+        <button class="deny" disabled data-l10n="security-prompt.deny"></button>
+        <button class="allow" disabled data-l10n="security-prompt.allow"></button>
+      </div>
+    </main>
+
+    <script>
+      const {APP_NAME, locale, strings, type} = SecurityPromptPreload.init();
+      document.documentElement.lang = locale;
+
+      for (const el of document.querySelectorAll('[data-l10n]')) {
+        const stringName = el.getAttribute('data-l10n');
+        el.textContent = (strings[stringName] || `Missing string: ${stringName}`).replace('{APP_NAME}', APP_NAME);
+      }
+      for (const el of document.querySelectorAll('[data-type]')) {
+        if (el.getAttribute('data-type') !== type) {
+          el.style.display = 'none';
+        }
+      }
+ 
+      const allowButton = document.querySelector('.allow');
+      allowButton.addEventListener('click', () => {
+        SecurityPromptPreload.allow();
+      });
+
+      const denyButton = document.querySelector('.deny');
+      denyButton.addEventListener('click', () => {
+        SecurityPromptPreload.deny();
+      });
+
+      // Delay to prevent clickjacking
+      setTimeout(() => {
+        denyButton.disabled = false;
+        allowButton.disabled = false;
+      }, 500);
+
+      SecurityPromptPreload.ready({
+        height: document.body.clientHeight
+      });
+    </script>
+  </body>
+</html>

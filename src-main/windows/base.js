@@ -6,10 +6,19 @@ const settings = require('../settings');
 /** @type {Map<unknown, BaseWindow[]>} */
 const windowsByClass = new Map();
 
+/**
+ * @typedef BaseWindowOptions
+ * @property {Electron.BrowserWindow} [existingWindow]
+ * @property {Electron.BrowserWindow} [parentWindow]
+ */
+
 class BaseWindow {
-  constructor (existingWindow) {
+  /** @param {BaseWindowOptions} options */
+  constructor (options = {}) {
+    this.parentWindow = options.parentWindow || null;
+
     /** @type {Electron.BrowserWindow} */
-    this.window = existingWindow || new BrowserWindow(this.getWindowOptions());
+    this.window = options.existingWindow || new BrowserWindow(this.getWindowOptions());
     this.window.webContents.setWindowOpenHandler(this.handleWindowOpen.bind(this));
     this.window.webContents.on('before-input-event', this.handleInput.bind(this));
     this.applySettings();
@@ -133,9 +142,16 @@ class BaseWindow {
     // Child classes are expected to show the window on their own
     options.show = false;
 
-    // Electron's default window placement handles multimonitor setups extremely poorly on Linux
-    const activeScreen = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
-    const bounds = BaseWindow.calculateWindowBounds(activeScreen.workArea, this.getDimensions());
+    let bounds;
+    if (this.parentWindow) {
+      options.parent = this.parentWindow;
+      bounds = BaseWindow.calculateWindowBounds(this.parentWindow.getBounds(), this.getDimensions());
+    } else {
+      // Electron's default window placement handles multimonitor setups extremely poorly on Linux
+      // This also makes the window open on whatever monitor the mouse is on, which is probably what the user wants
+      const activeScreen = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
+      bounds = BaseWindow.calculateWindowBounds(activeScreen.workArea, this.getDimensions());
+    }
     options.x = bounds.x;
     options.y = bounds.y;
     options.width = bounds.width;

@@ -35,7 +35,10 @@ const FILE_SCHEMES = {
     supportFetch: true
   },
   'tw-update': {
-    root: path.resolve(__dirname, '../src-renderer/update')
+    root: path.resolve(__dirname, '../src-renderer/update'),
+  },
+  'tw-security-prompt': {
+    root: path.resolve(__dirname, '../src-renderer/security-prompt'),
   }
 };
 
