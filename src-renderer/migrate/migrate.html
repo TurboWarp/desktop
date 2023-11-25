@@ -290,6 +290,9 @@
               } else if (type === 'error') {
                 reject(e.data.error);
               } else if (type === 'done') {
+                if (backpackDB) {
+                  backpackDB.close();
+                }
                 resolve();
               }
             } catch (e) {
@@ -341,6 +344,9 @@
               } else if (type === 'error') {
                 reject(e.data.error);
               } else if (type === 'done') {
+                if (blobDB) {
+                  blobDB.close();
+                }
                 resolve();
               }
             } catch (e) {
