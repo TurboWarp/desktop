@@ -13,14 +13,17 @@ class MigrateWindow extends BaseWindow {
   constructor () {
     super();
 
+    const oldDataVersion = settings.dataVersion;
+
     this.promise = new Promise((resolve) => {
       this.resolveCallback = resolve;
     });
 
     const ipc = this.window.webContents.ipc;
 
-    ipc.on('get-strings', (event) => {
+    ipc.on('get-info', (event) => {
       event.returnValue = {
+        oldDataVersion,
         locale: getLocale(),
         strings: getStrings()
       };

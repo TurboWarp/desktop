@@ -152,7 +152,7 @@
       TW_AutoSave -> abandon (likely to be very large)
       */
 
-      const {strings, locale} = MigratePreload.getStrings();
+      const {oldDataVersion, strings, locale} = MigratePreload.getInfo();
       document.documentElement.lang = locale;
 
       document.querySelector('.title').textContent = strings['migrate.title'];
@@ -290,6 +290,9 @@
               } else if (type === 'error') {
                 reject(e.data.error);
               } else if (type === 'done') {
+                if (backpackDB) {
+                  backpackDB.close();
+                }
                 resolve();
               }
             } catch (e) {
@@ -341,6 +344,9 @@
               } else if (type === 'error') {
                 reject(e.data.error);
               } else if (type === 'done') {
+                if (blobDB) {
+                  blobDB.close();
+                }
                 resolve();
               }
             } catch (e) {
@@ -352,6 +358,31 @@
           iframe.src = 'tw-packager://./migrate-helper.html';
           document.body.appendChild(iframe);
         });
+      };
+
+      const deleteDatabase = (databaseName) => new Promise((resolve, reject) => {
+        const request = indexedDB.deleteDatabase(databaseName);
+        request.onerror = () => {
+          reject(new Error(`Failed to delete IDB database ${databaseName}: ${request.error}`));
+        };
+        request.onsuccess = () => {
+          resolve();
+        };
+      });
+
+      const deleteLegacyData = async () => {
+        localStorage.clear();
+        sessionStorage.clear();
+
+        for (let i = 0; i < databases.length; i++) {
+          await deleteDatabase(databases[i].name);
+
+          // i starts from 0, so add 1 for the database we just deleted
+          setStepProgress(i + 1, databases.length);
+
+          // Give the browser some time to clean up; deleting large databases might be intensive
+          await new Promise((resolve) => setTimeout(resolve, 250))
+        }
       };
 
       const finish = async () => {
@@ -417,11 +448,16 @@
 
         await runStep(strings['migrate.preparing'], gatherMetadata);
 
-        if (!anyError) {
-          // Preparing must succeed for both of these, but each of these can fail
-          // independently.
+        if (!anyError && oldDataVersion < 2) {
+          // V2: Migrate data from file:// to tw-*://
+          // Preparing must succeed for both of these, but each can fail independently.
           await runStep(strings['migrate.transfer-editor'], migrateEditor);
           await runStep(strings['migrate.transfer-packager'], migratePackager);
+        }
+
+        if (!anyError && oldDataVersion < 3) {
+          // V3: Removing leftover data on file://
+          await runStep(strings['migrate.delete-legacy'], deleteLegacyData);
         }
 
         if (!anyError) {
