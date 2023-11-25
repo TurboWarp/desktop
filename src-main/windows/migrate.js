@@ -8,10 +8,12 @@ const {APP_NAME} = require('../brand');
 const EMAIL = 'contact@turbowarp.org';
 
 class MigrateWindow extends BaseWindow {
-  static LATEST_VERSION = 2;
+  static LATEST_VERSION = 3;
 
   constructor () {
     super();
+
+    const oldDataVersion = settings.dataVersion;
 
     this.promise = new Promise((resolve) => {
       this.resolveCallback = resolve;
@@ -19,8 +21,9 @@ class MigrateWindow extends BaseWindow {
 
     const ipc = this.window.webContents.ipc;
 
-    ipc.on('get-strings', (event) => {
+    ipc.on('get-info', (event) => {
       event.returnValue = {
+        oldDataVersion,
         locale: getLocale(),
         strings: getStrings()
       };

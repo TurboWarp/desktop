@@ -283,6 +283,10 @@
     "string": "Finalizing...",
     "developer_comment": "Status message that appears while finishing an update."
   },
+  "migrate.delete-legacy": {
+    "string": "Deleting old data...",
+    "developer_comment": "Status message that appears while finishing an update. Old data refers to data stored by old versions of the app that is now redundant after updates."
+  },
   "update.window-title": {
     "string": "Update Available",
     "developer_comment": "Title of update available window"
