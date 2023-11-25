@@ -358,5 +358,37 @@
   "files.zip": {
     "string": "Zip File",
     "context": "Appears in file saving dialog when saving some types of packaged projects"
+  },
+  "security-prompt.title": {
+    "string": "Extension Security",
+    "context": "Title of extension security prompt window"
+  },
+  "security-prompt.allow": {
+    "string": "Allow",
+    "context": "Title of extension security prompt window. This button allows the permission."
+  },
+  "security-prompt.deny": {
+    "string": "Deny",
+    "context": "Title of extension security prompt window. This button denies the permission."
+  },
+  "security-prompt.read-clipboard1": {
+    "string": "The project wants to read data from your clipboard.",
+    "context": "Part of the extension security prompt window"
+  },
+  "security-prompt.read-clipboard2": {
+    "string": "If your clipboard contains things like passwords, the project may be able to share those with other users or servers.",
+    "context": "Part of the extension security prompt window"
+  },
+  "security-prompt.read-clipboard3": {
+    "string": "Clipboard access may not work on some systems. If allowed, further clipboard reads will be automatically allowed.",
+    "context": "Part of the extension security prompt window"
+  },
+  "security-prompt.notifications1": {
+    "string": "The project wants to display notifications.",
+    "context": "Part of the extension security prompt window"
+  },
+  "security-prompt.notifications2": {
+    "string": "If allowed, you may be prompted to enable notifications by your operating system, and further notifications will be automatically allowed.",
+    "context": "Part of the extension security prompt window"
   }
 }

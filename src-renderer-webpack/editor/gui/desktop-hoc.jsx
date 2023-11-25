@@ -58,6 +58,17 @@ const handleClickDonate = () => {
   window.open('https://github.com/sponsors/GarboMuffin');
 };
 
+const securityManager = {
+  // Everything not specified here falls back to the scratch-gui security manager
+
+  // Managed by Electron main process:
+  canReadClipboard: () => true,
+  canNotify: () => true,
+
+  // Does not work in Electron:
+  canGeolocate: () => false
+};
+
 const USERNAME_KEY = 'tw:username';
 const DEFAULT_USERNAME = 'player';
 
@@ -212,7 +223,8 @@ const DesktopHOC = function (WrappedComponent) {
                 onClick: handleClickDonate
               }
             ])
-          ]}      
+          ]}
+          securityManager={securityManager}
           {...props}
         />
       );
