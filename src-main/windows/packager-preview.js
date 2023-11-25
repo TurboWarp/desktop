@@ -4,7 +4,9 @@ const {translate} = require('../l10n');
 
 class PackagerPreviewWindow extends ProjectRunningWindow {
   constructor (parentWindow, existingWindow) {
-    super(existingWindow);
+    super({
+      existingWindow
+    });
 
     this.window.setBounds(BaseWindow.calculateWindowBounds(parentWindow.getBounds(), this.window.getBounds()));
 
