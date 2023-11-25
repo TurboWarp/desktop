@@ -60,7 +60,7 @@ class Settings {
   }
 
   get locale () {
-    return this.data.locale || 'es';
+    return this.data.locale || 'en';
   }
   set locale (locale) {
     this.data.locale = locale;
