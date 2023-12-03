@@ -8,7 +8,7 @@ class AddCustomExtensionWindow extends BaseWindow {
       parentWindow
     });
 
-    /** @type {Promise<string|null>} */
+    /** @type {Promise<{url: string; forceUnsandboxed: boolean;}|null>} */
     this.promise = new Promise((resolve) => {
       this.promiseResolve = resolve;
     });
@@ -24,7 +24,10 @@ class AddCustomExtensionWindow extends BaseWindow {
     });
 
     ipc.handle('done', (e, url, forceUnsandboxed) => {
-      this.promiseResolve(url);
+      this.promiseResolve({
+        url,
+        forceUnsandboxed
+      });
       this.window.destroy();
     });
 

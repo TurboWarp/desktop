@@ -18,6 +18,7 @@ contextBridge.exposeInMainWorld('EditorPreload', {
   getPreferredMediaDevices: () => ipcRenderer.invoke('get-preferred-media-devices'),
   getAdvancedCustomizations: () => ipcRenderer.invoke('get-advanced-customizations'),
   openAddCustomExtensionWindow: () => ipcRenderer.invoke('open-add-custom-extension-window'),
+  getExtensionSandboxMode: (url) => ipcRenderer.invoke('get-extension-sandbox-mode', url),
   setExportForPackager: (callback) => {
     exportForPackager = callback;
   }

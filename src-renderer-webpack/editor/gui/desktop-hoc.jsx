@@ -61,9 +61,12 @@ const handleClickDonate = () => {
 const securityManager = {
   // Everything not specified here falls back to the scratch-gui security manager
 
-  // Managed by Electron main process:
+  // Strictly managed by Electron main process:
   canReadClipboard: () => true,
   canNotify: () => true,
+
+  // Loosely managed by Electron main process:
+  getSandboxMode: (url) => EditorPreload.getExtensionSandboxMode(url),
 
   // Does not work in Electron:
   canGeolocate: () => false

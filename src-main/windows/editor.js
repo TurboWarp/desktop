@@ -400,9 +400,24 @@ class EditorWindow extends ProjectRunningWindow {
       };
     });
 
-    ipc.handle('open-add-custom-extension-window', () => {
+    /** @type {Set<string>} */
+    const manuallyTrustedExtensions = new Set();
+
+    ipc.handle('open-add-custom-extension-window', async () => {
       const window = new AddCustomExtensionWindow(this.window);
-      return window.done();
+      const result = await window.done();
+      if (!result) {
+        return null;
+      }
+      manuallyTrustedExtensions.add(result.url);
+      return result.url;
+    });
+
+    ipc.handle('get-extension-sandbox-mode', async (e, url) => {
+      if (ProjectRunningWindow.isAlwaysTrustedExtension(url)) {
+        return 'unsandboxed';
+      }
+      return manuallyTrustedExtensions.has(url) ? 'unsandboxed' : 'iframe';
     });
 
     this.loadURL('tw-editor://./gui/gui.html');

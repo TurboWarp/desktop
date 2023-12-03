@@ -174,6 +174,22 @@ class ProjectRunningWindow extends BaseWindow {
       }
     });
   }
+
+  /**
+   * @param {string} url
+   * @returns {boolean}
+   */
+  static isAlwaysTrustedExtension (url) {
+    try {
+      const parsed = new URL(url);
+      return (
+        parsed.origin === 'https://extensions.turbowarp.org' ||
+        parsed.origin === 'http://localhost:8000'
+      );
+    } catch (e) {
+      return false;
+    }
+  }
 }
 
 module.exports = ProjectRunningWindow;
