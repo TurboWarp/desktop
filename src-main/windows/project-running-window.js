@@ -67,22 +67,12 @@ class ProjectRunningWindow extends BaseWindow {
 
     // Clipboard extension
     if (permission === 'clipboard-read') {
-      if (!this.allowedReadClipboard) {
-        const releaseLock = await this.acquirePromptLock();
-        this.allowedReadClipboard = await SecurityPromptWindow.requestReadClipboard(this.window);
-        releaseLock();
-      }
-      return this.allowedReadClipboard;
+      return this.canReadClipboard();
     }
 
     // Notifications extension
     if (permission === 'notifications') {
-      if (!this.allowedNotifications) {
-        const releaseLock = await this.acquirePromptLock();
-        this.allowedNotifications = await SecurityPromptWindow.requestNotifications(this.window);
-        releaseLock();
-      }
-      return this.allowedNotifications;
+      return this.canNotify();
     }
 
     return (
@@ -99,46 +89,67 @@ class ProjectRunningWindow extends BaseWindow {
   }
 
   async onBeforeRequest (details, callback) {
+    // TODO remove this later
+    console.log(details.url, details.resourceType);
+
     const parsed = new URL(details.url);
+    const resourceType = details.resourceType;
 
-    // Redirect requests to asset library to local files.
-    if (parsed.origin === 'https://cdn.assets.scratch.mit.edu' || parsed.origin === 'https://assets.scratch.mit.edu') {
-      const match = parsed.href.match(/[0-9a-f]{32}\.\w{3}/i);
-      if (match) {
-        const md5ext = match[0];
-        return getLocalLibraryFiles().then((localLibraryFiles) => {
-          if (localLibraryFiles.includes(md5ext)) {
-            return callback({
-              redirectURL: `tw-library://./${md5ext}`
-            });
-          }
-          callback({});
-        });
-      }
-    }
-
-    // Redirect requests to extension library to lcoal files.
-    if (parsed.origin === 'https://extensions.turbowarp.org') {
-      return callback({
-        redirectURL: `tw-extensions://./${parsed.pathname}`
+    if (resourceType === 'mainFrame') {
+      callback({
+        cancel: details.url !== this.initialURL
       });
+      return;
     }
 
-    if (!this.isTrustedResource(details.url)) {
-      const releaseLock = await this.acquirePromptLock();
-      const allowed = await SecurityPromptWindow.requestFetch(this.window, details.url);
-      releaseLock();
+    if (resourceType === 'subFrame') {
+      // TODO: canEmbed support
+    }
 
-      if (allowed) {
-        this.manuallyTrustedFetchOrigins.add(parsed.origin);
-      } else {
-        return callback({
-          cancel: true
-        });
+    if (
+      resourceType === 'stylesheet' ||
+      resourceType === 'script' ||
+      resourceType === 'image' ||
+      resourceType === 'font' ||
+      resourceType === 'xhr' ||
+      resourceType === 'ping' ||
+      resourceType === 'media' ||
+      resourceType === 'webSocket'
+    ) {
+      // Redirect asset library to local files.
+      if (parsed.origin === 'https://cdn.assets.scratch.mit.edu' || parsed.origin === 'https://assets.scratch.mit.edu') {
+        const match = parsed.href.match(/[0-9a-f]{32}\.\w{3}/i);
+        if (match) {
+          const md5ext = match[0];
+          getLocalLibraryFiles().then((localLibraryFiles) => {
+            if (localLibraryFiles.includes(md5ext)) {
+              return callback({
+                redirectURL: `tw-library://./${md5ext}`
+              });
+            }
+            callback({});
+          });
+          return;
+        }
       }
+
+      // Redirect extension library to local files.
+      if (parsed.origin === 'https://extensions.turbowarp.org') {
+        callback({
+          redirectURL: `tw-extensions://./${parsed.pathname}`
+        });
+        return;
+      }
+
+      callback({
+        cancel: !await this.canFetch(details.url)
+      });
+      return;
     }
 
-    super.onBeforeRequest(details, callback);
+    callback({
+      cancel: true
+    });
   }
 
   onHeadersReceived (details, callback) {
@@ -190,24 +201,69 @@ class ProjectRunningWindow extends BaseWindow {
     });
   }
 
+  async canFetch (url) {
+    // If we would trust loading an extension from here, we can trust loading resources too.
+    if (ProjectRunningWindow.isAlwaysTrustedResource(url)) {
+      return true;
+    }
+
+    try {
+      const parsed = new URL(url);
+      const parsedInitial = new URL(this.initialURL);
+
+      // Loading the initial URL and adjacent resources must always be allowed.
+      if (parsed.origin === parsedInitial.origin) {
+        return true;
+      }
+
+      if (!this.manuallyTrustedFetchOrigins.has(parsed.origin)) {
+        const releaseLock = await this.acquirePromptLock();
+        const allowed = await SecurityPromptWindow.requestFetch(this.window, url);
+        releaseLock();
+
+        if (allowed) {
+          this.manuallyTrustedFetchOrigins.add(parsed.origin);
+        }
+      }
+
+      return this.manuallyTrustedFetchOrigins.has(parsed.origin);
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  }
+
+  async canReadClipboard () {
+    if (!this.allowedReadClipboard) {
+      const releaseLock = await this.acquirePromptLock();
+      this.allowedReadClipboard = await SecurityPromptWindow.requestReadClipboard(this.window);
+      releaseLock();
+    }
+    return this.allowedReadClipboard;
+  }
+
+  async canNotify () {
+    if (!this.allowedNotifications) {
+      const releaseLock = await this.acquirePromptLock();
+      this.allowedNotifications = await SecurityPromptWindow.requestNotifications(this.window);
+      releaseLock();
+    }
+    return this.allowedNotifications;
+  }
+
   /**
    * @param {string} url
    * @returns {boolean}
    */
-  isTrustedResource (url) {
-    // If we would trust loading an extension from here, we can trust loading resources too.
+  static isAlwaysTrustedResource (url) {
+    // If we would trust loading an extension from there, we can trust loading resources too.
     if (ProjectRunningWindow.isAlwaysTrustedExtension(url)) {
       return true;
     }
 
     try {
       const parsed = new URL(url);
-      const initialOrigin = new URL(this.initialURL).origin;
-
       return (
-        parsed.origin === initialOrigin ||
-        this.manuallyTrustedFetchOrigins.has(parsed.origin) ||
-
         // Any TurboWarp service such as trampoline
         parsed.origin === 'https://turbowarp.org' ||
         parsed.origin.endsWith('.turbowarp.org') ||
@@ -233,6 +289,7 @@ class ProjectRunningWindow extends BaseWindow {
         parsed.origin === 'https://scratchdb.lefty.one'
       );
     } catch (e) {
+      console.error(e);
       return false;
     }
   }
@@ -249,6 +306,7 @@ class ProjectRunningWindow extends BaseWindow {
         parsed.origin === 'http://localhost:8000'
       );
     } catch (e) {
+      console.error(e);
       return false;
     }
   }

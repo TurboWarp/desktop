@@ -18,10 +18,16 @@ contextBridge.exposeInMainWorld('EditorPreload', {
   getPreferredMediaDevices: () => ipcRenderer.invoke('get-preferred-media-devices'),
   getAdvancedCustomizations: () => ipcRenderer.invoke('get-advanced-customizations'),
   openAddCustomExtensionWindow: () => ipcRenderer.invoke('open-add-custom-extension-window'),
-  getExtensionSandboxMode: (url) => ipcRenderer.invoke('get-extension-sandbox-mode', url),
   setExportForPackager: (callback) => {
     exportForPackager = callback;
   }
+});
+
+contextBridge.exposeInMainWorld('SecurityManagerPreload', {
+  canFetch: (url) => ipcRenderer.invoke('security-manager/can-fetch', url),
+  canReadClipboard: (url) => ipcRenderer.invoke('security-manager/can-read-clipboard', url),
+  canNotify: (url) => ipcRenderer.invoke('security-manager/can-notify', url),
+  getSandboxMode: (url) => ipcRenderer.invoke('security-manager/get-sandbox-mode', url),
 });
 
 let exportForPackager = () => Promise.reject(new Error('exportForPackager missing'));

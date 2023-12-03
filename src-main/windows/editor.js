@@ -413,11 +413,23 @@ class EditorWindow extends ProjectRunningWindow {
       return result.url;
     });
 
-    ipc.handle('get-extension-sandbox-mode', async (e, url) => {
+    ipc.handle('security-manager/get-sandbox-mode', async (e, url) => {
       if (ProjectRunningWindow.isAlwaysTrustedExtension(url)) {
         return 'unsandboxed';
       }
       return manuallyTrustedExtensions.has(url) ? 'unsandboxed' : 'iframe';
+    });
+
+    ipc.handle('security-manager/can-fetch', async (e, url) => {
+      return this.canFetch(url);
+    });
+
+    ipc.handle('security-manager/can-read-clipboard', async (e, url) => {
+      return this.canReadClipboard();
+    });
+
+    ipc.handle('security-manager/can-notify', async (e, url) => {
+      return this.canNotify();
     });
 
     this.loadURL('tw-editor://./gui/gui.html');
