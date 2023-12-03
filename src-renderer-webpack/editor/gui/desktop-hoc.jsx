@@ -62,8 +62,14 @@ const securityManager = {
   // Everything not specified here falls back to the scratch-gui security manager
 
   // Strictly managed by Electron main process:
+  canFetch: () => true,
   canReadClipboard: () => true,
   canNotify: () => true,
+  // TODO canOpenWindow
+  // TODO canRedirect
+  // TODO canRecordAudio
+  // TODO canRecordVideo
+  // TODO canEmbed
 
   // Loosely managed by Electron main process:
   getSandboxMode: (url) => EditorPreload.getExtensionSandboxMode(url),

@@ -28,6 +28,7 @@ class ProjectRunningWindow extends BaseWindow {
 
     this.allowedReadClipboard = false;
     this.allowedNotifications = false;
+    this.manuallyTrustedFetchOrigins = new Set();
 
     this._isPromptLocked = false;
     this._queuedPromptCallbacks = [];
@@ -97,7 +98,7 @@ class ProjectRunningWindow extends BaseWindow {
     );
   }
 
-  onBeforeRequest (details, callback) {
+  async onBeforeRequest (details, callback) {
     const parsed = new URL(details.url);
 
     // Redirect requests to asset library to local files.
@@ -121,6 +122,20 @@ class ProjectRunningWindow extends BaseWindow {
       return callback({
         redirectURL: `tw-extensions://./${parsed.pathname}`
       });
+    }
+
+    if (!this.isTrustedResource(details.url)) {
+      const releaseLock = await this.acquirePromptLock();
+      const allowed = await SecurityPromptWindow.requestFetch(this.window, details.url);
+      releaseLock();
+
+      if (allowed) {
+        this.manuallyTrustedFetchOrigins.add(parsed.origin);
+      } else {
+        return callback({
+          cancel: true
+        });
+      }
     }
 
     super.onBeforeRequest(details, callback);
@@ -173,6 +188,53 @@ class ProjectRunningWindow extends BaseWindow {
         resolve(releaseLock);
       }
     });
+  }
+
+  /**
+   * @param {string} url
+   * @returns {boolean}
+   */
+  isTrustedResource (url) {
+    // If we would trust loading an extension from here, we can trust loading resources too.
+    if (ProjectRunningWindow.isAlwaysTrustedExtension(url)) {
+      return true;
+    }
+
+    try {
+      const parsed = new URL(url);
+      const initialOrigin = new URL(this.initialURL).origin;
+
+      return (
+        parsed.origin === initialOrigin ||
+        this.manuallyTrustedFetchOrigins.has(parsed.origin) ||
+
+        // Any TurboWarp service such as trampoline
+        parsed.origin === 'https://turbowarp.org' ||
+        parsed.origin.endsWith('.turbowarp.org') ||
+        parsed.origin.endsWith('.turbowarp.xyz') ||
+
+        // GitHub
+        parsed.origin === 'https://raw.githubusercontent.com' ||
+        parsed.origin === 'https://api.github.com' ||
+
+        // GitLab
+        parsed.origin === 'https://gitlab.com' ||
+
+        // Itch
+        parsed.origin.endsWith('.itch.io') ||
+
+        // GameJolt
+        parsed.origin === 'https://api.gamejolt.com' ||
+
+        // httpbin
+        parsed.origin === 'https://httpbin.org' ||
+
+        // ScratchDB
+        parsed.origin === 'https://scratchdb.lefty.one'
+      );
+    } catch (e) {
+      return false;
+    }
   }
 
   /**

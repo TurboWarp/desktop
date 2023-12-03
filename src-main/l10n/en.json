@@ -387,6 +387,18 @@
     "string": "Deny",
     "developer_comment": "Title of extension security prompt window. This button denies the permission."
   },
+  "security-prompt.fetch1": {
+    "string": "The project wants to connect to the website:",
+    "developer_comment": "Part of the extension security prompt window"
+  },
+  "security-prompt.fetch2": {
+    "string": "This could be used to download images or sounds, implement multiplayer, access an API, or for malicious purposes. This will share your IP address, general location, and possibly other data with the website.",
+    "developer_comment": "Part of the extension security prompt window"
+  },
+  "security-prompt.fetch3": {
+    "string": "If allowed, further requests to the same website will be automatically allowed.",
+    "developer_comment": "Part of the extension security prompt window"
+  },
   "security-prompt.read-clipboard1": {
     "string": "The project wants to read data from your clipboard.",
     "developer_comment": "Part of the extension security prompt window"

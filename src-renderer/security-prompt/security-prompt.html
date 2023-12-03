@@ -24,6 +24,10 @@
         margin: 0;
       }
 
+      .fetch-url {
+        font-family: monospace;
+      }
+
       .buttons {
         display: flex;
         gap: 0.5rem;
@@ -60,6 +64,11 @@
 
   <body>
     <main>
+      <p data-type="fetch" data-l10n="security-prompt.fetch1"></p>
+      <p data-type="fetch" class="fetch-url"></p>
+      <p data-type="fetch" data-l10n="security-prompt.fetch2"></p>
+      <p data-type="fetch" data-l10n="security-prompt.fetch3"></p>
+
       <p data-type="read-clipboard" data-l10n="security-prompt.read-clipboard1"></p>
       <p data-type="read-clipboard" data-l10n="security-prompt.read-clipboard2"></p>
       <p data-type="read-clipboard" data-l10n="security-prompt.read-clipboard3"></p>
@@ -74,7 +83,7 @@
     </main>
 
     <script>
-      const {APP_NAME, locale, strings, type} = SecurityPromptPreload.init();
+      const {APP_NAME, locale, strings, type, data} = SecurityPromptPreload.init();
       document.documentElement.lang = locale;
 
       for (const el of document.querySelectorAll('[data-l10n]')) {
@@ -85,6 +94,10 @@
         if (el.getAttribute('data-type') !== type) {
           el.style.display = 'none';
         }
+      }
+
+      if (type === 'fetch') {
+        document.querySelector('.fetch-url').textContent = `"${data}"`;
       }
  
       const allowButton = document.querySelector('.allow');

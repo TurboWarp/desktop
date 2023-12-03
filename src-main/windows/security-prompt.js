@@ -11,8 +11,9 @@ class SecurityPromptWindow extends BaseWindow {
   /**
    * @param {Electron.BrowserWindow} projectWindow
    * @param {string} type
+   * @param {string|null} data
    */
-  constructor (projectWindow, type) {
+  constructor (projectWindow, type, data) {
     super({
       parentWindow: projectWindow
     });
@@ -27,6 +28,7 @@ class SecurityPromptWindow extends BaseWindow {
     ipc.on('init', (event) => {
       event.returnValue = {
         type,
+        data,
         APP_NAME,
         locale: getLocale(),
         strings: getStrings()
@@ -80,11 +82,15 @@ class SecurityPromptWindow extends BaseWindow {
   }
 
   static requestReadClipboard (window) {
-    return new SecurityPromptWindow(window, 'read-clipboard').done();
+    return new SecurityPromptWindow(window, 'read-clipboard', null).done();
   }
 
-  static async requestNotifications (window) {
-    return new SecurityPromptWindow(window, 'notifications').done();
+  static requestNotifications (window) {
+    return new SecurityPromptWindow(window, 'notifications', null).done();
+  }
+
+  static requestFetch (window, url) {
+    return new SecurityPromptWindow(window, 'fetch', url).done();
   }
 }
 
