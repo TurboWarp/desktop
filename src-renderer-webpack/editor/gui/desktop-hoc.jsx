@@ -80,6 +80,7 @@ const DesktopHOC = function (WrappedComponent) {
         title: ''
       };
       this.handleUpdateProjectTitle = this.handleUpdateProjectTitle.bind(this);
+      this.handleOpenCustomExtensionModal = this.handleOpenCustomExtensionModal.bind(this);
 
       // Changing locale always re-mounts this component
       const stateFromMain = EditorPreload.setLocale(this.props.locale);
@@ -97,6 +98,7 @@ const DesktopHOC = function (WrappedComponent) {
         this.props.onSetReduxUsername(DEFAULT_USERNAME);
       }
     }
+
     componentDidMount () {
       EditorPreload.setExportForPackager(() => this.props.vm.saveProjectSb3('arraybuffer')
         .then((buffer) => ({
@@ -148,6 +150,7 @@ const DesktopHOC = function (WrappedComponent) {
         this.props.onRequestNewProject();
       });
     }
+
     componentDidUpdate (prevProps, prevState) {
       if (this.props.projectChanged !== prevProps.projectChanged) {
         EditorPreload.setChanged(this.props.projectChanged);
@@ -169,11 +172,21 @@ const DesktopHOC = function (WrappedComponent) {
         localStorage.setItem(USERNAME_KEY, this.props.reduxUsername);
       }
     }
+
     handleUpdateProjectTitle (newTitle) {
       this.setState({
         title: newTitle
       });
     }
+
+    handleOpenCustomExtensionModal () {
+      EditorPreload.openAddCustomExtensionWindow().then(extensionToLoad => {
+        if (typeof extensionToLoad === 'string') {
+          this.props.vm.extensionManager.loadExtensionURL(extensionToLoad);
+        }
+      });
+    }
+
     render() {
       const {
         locale,
@@ -225,6 +238,7 @@ const DesktopHOC = function (WrappedComponent) {
             ])
           ]}
           securityManager={securityManager}
+          onOpenCustomExtensionModal={this.handleOpenCustomExtensionModal}
           {...props}
         />
       );

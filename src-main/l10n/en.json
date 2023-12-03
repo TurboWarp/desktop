@@ -406,5 +406,57 @@
   "security-prompt.notifications2": {
     "string": "If allowed, you may be prompted to enable notifications by your operating system, and further notifications will be automatically allowed.",
     "developer_comment": "Part of the extension security prompt window"
+  },
+  "add-extension.title": {
+    "string": "Load Custom Extension",
+    "developer_comment": "Title of window when adding a custom extension. Looks very similar to the modal on the website."
+  },
+  "add-extension.url": {
+    "string": "URL",
+    "developer_comment": "Button to choose to load an extension from a remote URL. Not much space, so keep this short."
+  },
+  "add-extension.file": {
+    "string": "File",
+    "developer_comment": "Button to choose to load an extension from a local file. Not much space, so keep this short."
+  },
+  "add-extension.text": {
+    "string": "Text",
+    "developer_comment": "Button to choose to load an extension from a text input. Not much space, so keep this short."
+  },
+  "add-extension.enter-url": {
+    "string": "Enter the extension's URL:",
+    "developer_comment": "Label that appears when loading a custom extension from a URL."
+  },
+  "add-extension.load": {
+    "string": "Load",
+    "developer_comment": "Button that loads the given custom extension"
+  },
+  "add-extension.trusted": {
+    "string": "This extension will be loaded without the sandbox because it is from a trusted source.",
+    "developer_comment": "Message that appears in custom extension prompt"
+  },
+  "add-extension.untrusted": {
+    "string": "Extensions from untrusted URLs will always be loaded with the sandbox for security.",
+    "developer_comment": "Message that appears in custom extension prompt"
+  },
+  "add-extension.enter-file": {
+    "string": "Select the extension's JavaScript file:",
+    "developer_comment": "Label that appears when loading a custom extension from a file"
+  },
+  "add-extension.enter-text": {
+    "string": "Paste the extension's JavaScript source code:",
+    "developer_comment": "Label that appears when loading a custom extension from a text input"
+  },
+  "add-extension.run-unsandboxed": {
+    "string": "Run extension without sandbox",
+    "developer_comment": "Message that appears in custom extension prompt"
+  },
+  "add-extension.unsandboxed-warning-1": {
+    "string": "Loading extensions without the sandbox is dangerous and should not be enabled if you don't know what you're doing.",
+    "developer_comment": "Warning that appears when disabling extension security sandbox"
+  },
+  "add-extension.unsandboxed-warning-2": {
+    "string": "Unsandboxed extensions can corrupt your project, delete your settings, phish for passwords, and other bad things. The {APP_NAME} developers are not responsible for any resulting issues.",
+    "developer_comment": "Warning that appears when disabling extension security sandbox"
   }
 }

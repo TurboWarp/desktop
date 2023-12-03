@@ -7,6 +7,7 @@ const DesktopSettingsWindow = require('./desktop-settings');
 const PrivacyWindow = require('./privacy');
 const AboutWindow = require('./about');
 const PackagerWindow = require('./packager');
+const AddCustomExtensionWindow = require('./add-custom-extension');
 const {createAtomicWriteStream} = require('../atomic-write-stream');
 const {translate, updateLocale, getStrings} = require('../l10n');
 const {APP_NAME} = require('../brand');
@@ -397,6 +398,11 @@ class EditorWindow extends ProjectRunningWindow {
         userscript,
         userstyle
       };
+    });
+
+    ipc.handle('open-add-custom-extension-window', () => {
+      const window = new AddCustomExtensionWindow(this.window);
+      return window.done();
     });
 
     this.loadURL('tw-editor://./gui/gui.html');

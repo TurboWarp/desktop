@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
+    <style>
+      body {
+        margin: 0.5rem;
+        padding: 0;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: black;
+        background-color: white;
+        accent-color: #ff4c4c;
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .type-selector-container {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 0.5rem;
+      }
+      .type-selector-container > button {
+        font: inherit;
+        color: inherit;
+        background: none;
+        width: 100%;
+        cursor: pointer;
+        border: 0;
+        border-bottom: 0.25rem solid hsla(215, 50%, 90%, 1);
+        margin: 0 1rem;
+        padding: 0.5rem 0;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .type-selector-container > button.active {
+        border-color: #ff4c4c;
+      }
+
+      .url-section, .file-section, .text-section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .url-input, .text-code-input {
+        font: inherit;
+        box-sizing: border-box;
+        width: 100%;
+        border: 1px solid hsla(0, 0%, 0%, 0.15);
+        border-radius: 0.25rem;
+        padding: 0.5rem;
+      }
+      .text-code-input {
+        min-height: 3rem;
+        height: 8rem;
+        min-width: 100%;
+        max-width: 100%;
+        font-family: monospace;
+      }
+
+      .trusted-extension {
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        background-color: rgba(94, 255, 94, 0.25);
+        border: 1px solid green;
+      }
+
+      .file-input {
+        box-sizing: border-box;
+        display: block;
+        padding: 1rem;
+        text-align: center;
+        border: 4px dashed hsla(215, 50%, 90%, 1);
+        border-radius: 5px;
+        cursor: pointer;
+        background: none;
+        width: 100%;
+      }
+
+      .unsandboxed-warning {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        background-color: rgba(255, 81, 81, 0.25);
+        border: 1px solid red;
+      }
+      .unsandboxed-checkbox-outer {
+        display: flex;
+        gap: 0.25rem;
+      }
+
+      .load-button-outer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 0.5rem;
+      }
+      .load-button {
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
+        padding: 0.75rem 1rem;
+        border-radius: 0.25rem;
+        border: 1px solid hsla(0, 0%, 0%, 0.15);
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: white;
+        background: #ff4c4c;
+      }
+      .load-button:disabled {
+        opacity: 0.8;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script>
+      const {locale, strings, APP_NAME} = AddCustomExtensionPreload.getInfo();
+      document.documentElement.lang = locale;
+    </script>
+
+    <main>
+      <div class="type-selector-container">
+        <button data-type="url" data-l10n="add-extension.url"></button>
+        <button data-type="file" data-l10n="add-extension.file"></button>
+        <button data-type="text" data-l10n="add-extension.text"></button>
+      </div>
+  
+      <div class="url-section">
+        <div data-l10n="add-extension.enter-url">Enter the extension's URL:</div>
+        <input class="url-input" placeholder="https://extensions.turbowarp.org/..." autofocus>
+        <div class="untrusted-extension" data-l10n="add-extension.untrusted"></div>
+        <div class="trusted-extension" data-l10n="add-extension.trusted"></div>
+      </div>
+  
+      <div class="file-section">
+        <div data-l10n="add-extension.enter-file"></div>
+        <input class="file-input" type="file" accept=".js">
+      </div>
+  
+      <div class="text-section">
+        <div data-l10n="add-extension.enter-text"></div>
+        <textarea class="text-code-input" placeholder="class Extension {&#10;  // ...&#10;}&#10;Scratch.extensions.register(new Extension());" autofocus spellcheck="false"></textarea>
+      </div>
+
+      <label class="unsandboxed-checkbox-outer">
+        <input class="unsandboxed-checkbox" type="checkbox">
+        <div class="unsandboxed-label" data-l10n="add-extension.run-unsandboxed"></div>
+      </label>
+
+      <div class="unsandboxed-warning">
+        <div data-l10n="add-extension.unsandboxed-warning-1"></div>
+        <div data-l10n="add-extension.unsandboxed-warning-2"></div>
+      </div>
+  
+      <div class="load-button-outer">
+        <button class="load-button" data-l10n="add-extension.load"></button>
+      </div>
+    </main>
+
+    <script>
+      const translatable = document.querySelectorAll('[data-l10n]');
+      for (const el of translatable) {
+        el.textContent = (strings[el.dataset.l10n] || `Missing: ${el.dataset.l10n}`)
+          .replace('{APP_NAME}', APP_NAME);
+      }
+
+      const typeSelectorButtons = document.querySelectorAll('.type-selector-container > button');
+      const loadButton = document.querySelector('.load-button');
+
+      const urlSection = document.querySelector('.url-section');
+      const urlInput = document.querySelector('.url-input');
+      const trustedExtensionInfo = document.querySelector('.trusted-extension');
+      const untrustedExtensionInfo = document.querySelector('.untrusted-extension');
+
+      const fileSection = document.querySelector('.file-section');
+      const fileInput = document.querySelector('.file-input');
+
+      const textSection = document.querySelector('.text-section');
+      const textCodeInput = document.querySelector('.text-code-input');
+
+      const unsandboxedCheckboxOuter = document.querySelector('.unsandboxed-checkbox-outer');
+      const unsandboxedCheckbox = document.querySelector('.unsandboxed-checkbox');
+      const unsandboxedWarning = document.querySelector('.unsandboxed-warning');
+
+      let selectedType = 'url';
+
+      const setSelectedType = (newType) => {
+        selectedType = newType;
+        for (const button of typeSelectorButtons) {
+          button.classList.toggle('active', button.dataset.type === newType);
+        }
+
+        urlSection.hidden = newType !== 'url';
+        fileSection.hidden = newType !== 'file';
+        textSection.hidden = newType !== 'text';
+
+        unsandboxedCheckboxOuter.hidden = newType === 'url';
+        unsandboxedWarning.hidden = newType === 'url';
+
+        inputChanged();
+      };
+
+      const getExtensionURL = () => {
+        if (selectedType === 'url') {
+          return urlInput.value;
+        }
+
+        if (selectedType === 'file') {
+          const file = fileInput.files[0];
+          if (!file) {
+            throw new Error('No file selected');
+          }
+
+          return new Promise((resolve, reject) => {
+            const fr = new FileReader();
+            fr.onload = () => resolve(fr.result);
+            fr.onerror = () => reject(new Error(`Failed to read as URL: ${fr.error}`));
+            fr.readAsDataURL(file);
+          });
+        }
+
+        if (selectedType === 'text') {
+          return `data:application/javascript,${encodeURIComponent(textCodeInput.value)}`;
+        }
+
+        throw new Error(`Unknown type: ${selectedType}`);
+      };
+
+      const isExtensionFromTrustedSource = (url) => typeof url === 'string' && (
+        url.startsWith('https://extensions.turbowarp.org/') ||
+        url.startsWith('http://localhost:8000/')
+      );
+
+      const isValidExtensionURL = (url) => {
+        try {
+          const parsed = new URL(urlInput.value);
+          return (
+            parsed.protocol === 'https:' ||
+            parsed.protocol === 'http:' ||
+            parsed.protocol === 'data:'
+          );
+        } catch (e) {
+          return false;
+        }
+      };
+
+      for (const button of typeSelectorButtons) {
+        button.addEventListener('click', () => {
+          setSelectedType(button.dataset.type);
+        });
+      }
+
+      const inputChanged = () => {
+        if (selectedType === 'url') {
+          loadButton.disabled = !isValidExtensionURL(urlInput.value);
+
+          const isTrusted = isExtensionFromTrustedSource(urlInput.value);
+          trustedExtensionInfo.hidden = !isTrusted;
+          untrustedExtensionInfo.hidden = isTrusted;
+        }
+
+        if (selectedType === 'file' || selectedType === 'text') {
+          unsandboxedWarning.hidden = !unsandboxedCheckbox.checked;
+        }
+
+        if (selectedType === 'file') {
+          loadButton.disabled = fileInput.files.length === 0;
+        }
+
+        if (selectedType === 'text') {
+          loadButton.disabled = textCodeInput.value.length === 0;
+        }
+      };
+
+      const isForceUnsandboxed = () => {
+        if (selectedType === 'url') {
+          return false;
+        }
+
+        if (selectedType === 'file' || selectedType === 'text') {
+          return unsandboxedCheckbox.checked;
+        }
+
+        throw new Error(`Unknown type: ${selectedType}`);
+      }
+
+      loadButton.addEventListener('click', async () => {
+        const unsandboxed = isForceUnsandboxed();
+        AddCustomExtensionPreload.done(await getExtensionURL(), unsandboxed);
+      });
+
+      urlInput.addEventListener('input', () => {
+        inputChanged();
+      });
+
+      urlInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          loadButton.click();
+        };
+      });
+
+      fileInput.addEventListener('change', () => {
+        inputChanged();
+      });
+
+      textCodeInput.addEventListener('input', () => {
+        inputChanged();
+      });
+
+      textCodeInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && e.ctrlKey) {
+          loadButton.click();
+        }
+      });
+
+      unsandboxedCheckbox.addEventListener('change', () => {
+        inputChanged();
+      });
+
+      setSelectedType(selectedType);
+    </script>
+  </body>
+</html>
