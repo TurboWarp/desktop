@@ -30,10 +30,6 @@ class ProjectRunningWindow extends BaseWindow {
   constructor (...args) {
     super(...args);
 
-    this.window.webContents.on('did-create-window', (newWindow) => {
-      new DataWindow(this.window, newWindow);
-    });
-
     this.allowedReadClipboard = false;
     this.allowedNotifications = false;
 
