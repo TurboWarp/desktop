@@ -9,21 +9,17 @@ const SecurityPromptWindow = require('./security-prompt');
  * @fileoverview Common logic shared between windows that run possibly untrusted projects.
  */
 
-const listLocalFiles = async () => {
-  const files = await fsPromises.readdir(path.join(__dirname, '../../dist-library-files/'));
-  return files.map(filename => filename.replace('.br', ''));
-};
-
-let cached = null;
-const listLocalFilesCached = () => {
-  if (!cached) {
-    cached = listLocalFiles()
+let _cachedLocalLibraryFiles = null;
+const getLocalLibraryFiles = () => {
+  if (!_cachedLocalLibraryFiles) {
+    _cachedLocalLibraryFiles = fsPromises.readdir(path.join(__dirname, '../../dist-library-files/'))
+      .then((files) => files.map(filename => filename.replace('.br', '')))
       .catch((error) => {
         console.error(error);
         return [];
       });
   }
-  return cached;
+  return _cachedLocalLibraryFiles;
 };
 
 class ProjectRunningWindow extends BaseWindow {
@@ -104,11 +100,12 @@ class ProjectRunningWindow extends BaseWindow {
   onBeforeRequest (details, callback) {
     const parsed = new URL(details.url);
 
+    // Redirect requests to asset library to local files.
     if (parsed.origin === 'https://cdn.assets.scratch.mit.edu' || parsed.origin === 'https://assets.scratch.mit.edu') {
       const match = parsed.href.match(/[0-9a-f]{32}\.\w{3}/i);
       if (match) {
         const md5ext = match[0];
-        return listLocalFilesCached().then((localLibraryFiles) => {
+        return getLocalLibraryFiles().then((localLibraryFiles) => {
           if (localLibraryFiles.includes(md5ext)) {
             return callback({
               redirectURL: `tw-library://./${md5ext}`
@@ -119,6 +116,7 @@ class ProjectRunningWindow extends BaseWindow {
       }
     }
 
+    // Redirect requests to extension library to lcoal files.
     if (parsed.origin === 'https://extensions.turbowarp.org') {
       return callback({
         redirectURL: `tw-extensions://./${parsed.pathname}`
@@ -134,8 +132,7 @@ class ProjectRunningWindow extends BaseWindow {
         'access-control-allow-origin': '*',
       };
       for (const key of Object.keys(details.responseHeaders)) {
-        // Headers from Electron are not normalized, so we have to make sure to remove uppercased
-        // variations on our own.
+        // Headers from Electron could be in any capitalization
         const normalized = key.toLowerCase();
         if (normalized !== 'access-control-allow-origin' && normalized !== 'x-frame-options') {
           newHeaders[key] = details.responseHeaders[key];
@@ -154,8 +151,8 @@ class ProjectRunningWindow extends BaseWindow {
     let released = false;
 
     const releaseLock = () => {
-      // Don't let this get into a bad state.
       if (released) {
+        // Should never happen, but it's important we don't let this get into a bad state.
         throw new Error('releaseLock() called twice');
       }
       released = true;
