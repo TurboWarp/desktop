@@ -2,63 +2,10 @@ const BaseWindow = require('./base');
 const {APP_NAME} = require('../brand');
 const {translate, getLocale, getStrings} = require('../l10n');
 
-class SecurityState {
-  constructor () {
-    this.allowedReadClipboard = false;
-    this.allowedNotifications = false;
-
-    this._isPromptLocked = false;
-    this._queuedPromptCallbacks = [];
-  }
-
-  acquirePromptLock () {
-    let released = false;
-
-    const lock = {
-      releaseLock: () => {
-        // This should only be called once per lock, but since this is security sensitive, we'll still try to avoid
-        // letting this get into a bad state.
-        if (released) {
-          throw new Error('releaseLock() called twice');
-        }
-        released = true;
-
-        if (this._queuedPromptCallbacks.length === 0) {
-          this._isPromptLocked = false;
-        } else {
-          const nextCallback = this._queuedPromptCallbacks.shift();
-          nextCallback();
-        }
-      }
-    };
-
-    return new Promise((resolve) => {
-      if (this._isPromptLocked) {
-        this._queuedPromptCallbacks.push(() => resolve(lock));
-      } else {
-        this._isPromptLocked = true;
-        resolve(lock);
-      }
-    });
-  }
-
-  /**
-   * @private
-   * @type {WeakMap<Electron.BrowserWindow, SecurityState>}
-   */
-  static _windowMap = new WeakMap();
-
-  /**
-   * @param {Electron.BrowserWindow} window
-   * @returns {SecurityState}
-   */
-  static forWindow (window) {
-    if (!SecurityState._windowMap.has(window)) {
-      SecurityState._windowMap.set(window, new SecurityState());
-    }
-    return SecurityState._windowMap.get(window);
-  }
-}
+/**
+ * @fileoverview This file just has the logic for the window that asks the user to
+ * allow/deny permissions from the project, it doesn't do the actual enforcing.
+ */
 
 class SecurityPromptWindow extends BaseWindow {
   /**
@@ -132,24 +79,12 @@ class SecurityPromptWindow extends BaseWindow {
     return this.promptPromise;
   }
 
-  static async requestReadClipboard (window) {
-    const state = SecurityState.forWindow(window);
-    if (!state.allowedReadClipboard) {
-      const {releaseLock} = await state.acquirePromptLock();
-      state.allowedReadClipboard = await new SecurityPromptWindow(window, 'read-clipboard').done();
-      releaseLock();
-    }
-    return state.allowedReadClipboard;  
+  static requestReadClipboard (window) {
+    return new SecurityPromptWindow(window, 'read-clipboard').done();
   }
 
   static async requestNotifications (window) {
-    const state = SecurityState.forWindow(window);
-    if (!state.allowedNotifications) {
-      const {releaseLock} = await state.acquirePromptLock();
-      state.allowedNotifications = await new SecurityPromptWindow(window, 'notifications').done();
-      releaseLock();
-    }
-    return state.allowedNotifications;  
+    return new SecurityPromptWindow(window, 'notifications').done();
   }
 }
 

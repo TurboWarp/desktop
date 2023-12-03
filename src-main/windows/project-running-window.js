@@ -5,6 +5,10 @@ const settings = require('../settings');
 const askForMediaAccess = require('../media-permissions');
 const SecurityPromptWindow = require('./security-prompt');
 
+/**
+ * @fileoverview Common logic shared between windows that run possibly untrusted projects.
+ */
+
 const listLocalFiles = async () => {
   const files = await fsPromises.readdir(path.join(__dirname, '../../dist-library-files/'));
   return files.map(filename => filename.replace('.br', ''));
@@ -29,6 +33,12 @@ class ProjectRunningWindow extends BaseWindow {
     this.window.webContents.on('did-create-window', (newWindow) => {
       new DataWindow(this.window, newWindow);
     });
+
+    this.allowedReadClipboard = false;
+    this.allowedNotifications = false;
+
+    this._isPromptLocked = false;
+    this._queuedPromptCallbacks = [];
   }
 
   handlePermissionCheck (permission, details) {
@@ -64,12 +74,22 @@ class ProjectRunningWindow extends BaseWindow {
 
     // Clipboard extension
     if (permission === 'clipboard-read') {
-      return SecurityPromptWindow.requestReadClipboard(this.window);
+      if (!this.allowedReadClipboard) {
+        const releaseLock = await this.acquirePromptLock();
+        this.allowedReadClipboard = await SecurityPromptWindow.requestReadClipboard(this.window);
+        releaseLock();
+      }
+      return this.allowedReadClipboard;
     }
 
     // Notifications extension
     if (permission === 'notifications') {
-      return SecurityPromptWindow.requestNotifications(this.window);
+      if (!this.allowedNotifications) {
+        const releaseLock = await this.acquirePromptLock();
+        this.allowedNotifications = await SecurityPromptWindow.requestNotifications(this.window);
+        releaseLock();
+      }
+      return this.allowedNotifications;
     }
 
     return (
@@ -132,6 +152,34 @@ class ProjectRunningWindow extends BaseWindow {
     }
 
     super.onHeadersReceived(details, callback);
+  }
+
+  acquirePromptLock () {
+    let released = false;
+
+    const releaseLock = () => {
+      // Don't let this get into a bad state.
+      if (released) {
+        throw new Error('releaseLock() called twice');
+      }
+      released = true;
+
+      if (this._queuedPromptCallbacks.length === 0) {
+        this._isPromptLocked = false;
+      } else {
+        const nextCallback = this._queuedPromptCallbacks.shift();
+        nextCallback();
+      }
+    };
+
+    return new Promise((resolve) => {
+      if (this._isPromptLocked) {
+        this._queuedPromptCallbacks.push(() => resolve(releaseLock));
+      } else {
+        this._isPromptLocked = true;
+        resolve(releaseLock);
+      }
+    });
   }
 }
 
