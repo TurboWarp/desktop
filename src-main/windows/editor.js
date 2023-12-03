@@ -478,7 +478,9 @@ class EditorWindow extends ProjectRunningWindow {
       EditorWindow.openFiles([
         match[1]
       ]);
+      return;
     }
+
     return super.handleWindowOpen(details);
   }
 
