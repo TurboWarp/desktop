@@ -59,19 +59,22 @@ const handleClickDonate = () => {
 };
 
 const securityManager = {
-  // Everything not specified here falls back to the scratch-gui security manager
+  // Everything not specified here falls back to the TW/scratch-gui security manager and it's
+  // trust-based prompts.
 
-  // Strictly managed by Electron main process:
+  // Strictly enforced by Electron main process with support for can() prompts:
   canFetch: (url) => SecurityManagerPreload.canFetch(url),
   canReadClipboard: () => SecurityManagerPreload.canReadClipboard(),
   canNotify: () => SecurityManagerPreload.canNotify(),
-  // TODO canOpenWindow
-  // TODO canRedirect
-  // TODO canRecordAudio
-  // TODO canRecordVideo
-  // TODO canEmbed
 
-  // Loosely managed by Electron main process:
+  // Strictly enforced by Electron main process when the permission is actually used:
+  // (it asks for permission each time instead of remembering, so the can() system
+  // wouldn't work very well)
+  canOpenWindow: () => true,
+  canRedirect: () => true,
+  canEmbed: () => true,
+
+  // Loosely managed by Electron main process: (not strictly enforced)
   getSandboxMode: (url) => SecurityManagerPreload.getSandboxMode(url),
 
   // Does not work in Electron:

@@ -173,34 +173,58 @@ class ProjectRunningWindow extends BaseWindow {
     super.onHeadersReceived(details, callback);
   }
 
-  acquirePromptLock () {
-    let released = false;
+  /**
+   * @param {() => boolean} isAllowed May be called repeatedly.
+   * @param {() => Promise<void>} callback Should have side effects that change isAllowed()'s result if allowed.
+   * @returns {Promise<boolean>}
+   */
+  async conditionalPromptLock (isAllowed, callback) {
+    // If already allowed, don't wait for previous prompts to close.
+    if (isAllowed()) {
+      return true;
+    }
 
-    const releaseLock = () => {
-      if (released) {
-        // Should never happen, but it's important we don't let this get into a bad state.
-        throw new Error('releaseLock() called twice');
+    return this.withPromptLock(async () => {
+      // In the time between withPromptLock() being called and us getting the lock, permission
+      // could've been granted by a previous prompt.
+      if (!isAllowed()) {
+        await callback();
       }
-      released = true;
 
-      if (this._queuedPromptCallbacks.length === 0) {
-        this._isPromptLocked = false;
-      } else {
-        const nextCallback = this._queuedPromptCallbacks.shift();
-        nextCallback();
-      }
-    };
-
-    return new Promise((resolve) => {
-      if (this._isPromptLocked) {
-        this._queuedPromptCallbacks.push(() => resolve(releaseLock));
-      } else {
-        this._isPromptLocked = true;
-        resolve(releaseLock);
-      }
+      return isAllowed();
     });
   }
 
+  /**
+   * @template T
+   * @param {() => Promise<T>} callback
+   * @returns {Promise<T>}
+   */
+  async withPromptLock (callback) {
+    // Wait for any previous prompt to finish.
+    await new Promise((resolve) => {
+      if (this._isPromptLocked) {
+        this._queuedPromptCallbacks.push(resolve);
+      } else {
+        this._isPromptLocked = true;
+        resolve();
+      }
+    });
+    
+    const result = await callback();
+
+    // Run the next prompt, if any.
+    if (this._queuedPromptCallbacks.length === 0) {
+      this._isPromptLocked = false;
+    } else {
+      // The callbacks are promise resolve()s, so it won't actually run until the next microtask.
+      const nextPromptCallback = this._queuedPromptCallbacks.shift();
+      nextPromptCallback();
+    }
+
+    return result;
+  }
+  
   async canFetch (url) {
     // If we would trust loading an extension from here, we can trust loading resources too.
     if (ProjectRunningWindow.isAlwaysTrustedResource(url)) {
@@ -216,39 +240,48 @@ class ProjectRunningWindow extends BaseWindow {
         return true;
       }
 
-      if (!this.manuallyTrustedFetchOrigins.has(parsed.origin)) {
-        const releaseLock = await this.acquirePromptLock();
-        const allowed = await SecurityPromptWindow.requestFetch(this.window, url);
-        releaseLock();
-
-        if (allowed) {
-          this.manuallyTrustedFetchOrigins.add(parsed.origin);
+      return this.conditionalPromptLock(
+        () => this.manuallyTrustedFetchOrigins.has(parsed.origin),
+        async () => {
+          if (await SecurityPromptWindow.requestFetch(this.window, url)) {
+            this.manuallyTrustedFetchOrigins.add(parsed.origin);
+          }
         }
-      }
-
-      return this.manuallyTrustedFetchOrigins.has(parsed.origin);
+      );
     } catch (e) {
       console.error(e);
       return false;
     }
   }
 
+  async canOpenWindow (url) {
+    // TODO
+  }
+
+  async canRedirect (url) {
+    // TODO
+  }
+
+  async canEmbed (url) {
+    // TODO
+  }
+
   async canReadClipboard () {
-    if (!this.allowedReadClipboard) {
-      const releaseLock = await this.acquirePromptLock();
-      this.allowedReadClipboard = await SecurityPromptWindow.requestReadClipboard(this.window);
-      releaseLock();
-    }
-    return this.allowedReadClipboard;
+    return this.conditionalPromptLock(
+      () => this.allowedReadClipboard,
+      async () => {
+        this.allowedReadClipboard = await SecurityPromptWindow.requestReadClipboard(this.window);
+      }
+    );
   }
 
   async canNotify () {
-    if (!this.allowedNotifications) {
-      const releaseLock = await this.acquirePromptLock();
-      this.allowedNotifications = await SecurityPromptWindow.requestNotifications(this.window);
-      releaseLock();
-    }
-    return this.allowedNotifications;
+    return this.conditionalPromptLock(
+      () => this.allowedNotifications,
+      async () => {
+        this.allowedNotifications = await SecurityPromptWindow.requestNotifications(this.window);
+      }
+    );
   }
 
   /**
