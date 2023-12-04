@@ -4,6 +4,7 @@ const BaseWindow = require('./base');
 const settings = require('../settings');
 const askForMediaAccess = require('../media-permissions');
 const SecurityPromptWindow = require('./security-prompt');
+const safelyOpenExternal = require('../open-external');
 
 /**
  * @fileoverview Common logic shared between windows that run possibly untrusted projects.
@@ -97,6 +98,8 @@ class ProjectRunningWindow extends BaseWindow {
     this.manuallyTrustedFetchOrigins = new Set();
     /** @type {Set<string>} */
     this.manuallyTrustedEmbedOrigins = new Set();
+    /** @type {TemporaryPermission<string>} */
+    this.temporaryOpenWindowPermission = new TemporaryPermission();
     /** @type {TemporaryPermission<string>} */
     this.temporaryEmbedHTMLPermission = new TemporaryPermission();
 
@@ -243,6 +246,19 @@ class ProjectRunningWindow extends BaseWindow {
     super.onHeadersReceived(details, callback);
   }
 
+  handleWindowOpen (details) {
+    // This function itself can't be async
+    this.canOpenWindow(details.url).then(allowed => {
+      if (allowed) {
+        safelyOpenExternal(details.url);
+      }
+    });
+
+    return {
+      action: 'deny'
+    };
+  }
+
   /**
    * @param {() => boolean} isAllowed May be called repeatedly. Should check each time -- don't compute once and cache.
    * @param {() => Promise<void>} callback Should have side effects that change isAllowed()'s result if allowed.
@@ -324,9 +340,24 @@ class ProjectRunningWindow extends BaseWindow {
     }
   }
 
-  async canOpenWindow (url) {
-    // TODO
-    return this.withPromptLock(() => SecurityPromptWindow.canOpenWindow(this.window, url));
+  async canOpenWindow (url, checkOnly) {
+    try {
+      // Just check if it's a valid URL.
+      const _ = new URL(url);
+
+      if (!checkOnly && this.temporaryOpenWindowPermission.check(url)) {
+        return true;
+      }
+
+      const allowed = await this.withPromptLock(() => SecurityPromptWindow.canOpenWindow(this.window, url));
+      if (checkOnly && allowed) {
+        this.temporaryOpenWindowPermission.grant(url);
+      }
+      return allowed;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
   }
 
   async canEmbed (url, checkOnly) {

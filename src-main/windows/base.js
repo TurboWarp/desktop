@@ -21,6 +21,7 @@ class BaseWindow {
     this.window = options.existingWindow || new BrowserWindow(this.getWindowOptions());
     this.window.webContents.setWindowOpenHandler(this.handleWindowOpen.bind(this));
     this.window.webContents.on('before-input-event', this.handleInput.bind(this));
+    this.window.webContents.on('will-navigate', this.handleWillNavigate.bind(this));
     this.applySettings();
 
     this.initialURL = null;
@@ -199,6 +200,14 @@ class BaseWindow {
     return {
       action: 'deny'
     };
+  }
+
+  /**
+   * @param {Event<Electron.WebContentsWillNavigateEventParams>} e
+   * @param {string} url
+   */
+  handleWillNavigate (e, url) {
+    openExternal(details)
   }
 
   /**

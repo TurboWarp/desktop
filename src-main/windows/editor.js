@@ -425,7 +425,7 @@ class EditorWindow extends ProjectRunningWindow {
     });
 
     ipc.handle('security-manager/can-open-window', (e, url) => {
-      return this.canOpenWindow(url);
+      return this.canOpenWindow(url, true);
     });
 
     ipc.handle('security-manager/can-embed', (e, url) => {
@@ -486,7 +486,9 @@ class EditorWindow extends ProjectRunningWindow {
       EditorWindow.openFiles([
         match[1]
       ]);
-      return;
+      return {
+        action: 'deny'
+      };
     }
 
     return super.handleWindowOpen(details);
