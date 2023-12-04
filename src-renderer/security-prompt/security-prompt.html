@@ -24,7 +24,36 @@
         margin: 0;
       }
 
-      .fetch-url {
+      .section {
+        /* will be shown by JS */
+        display: none;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .section[data-visible="true"] {
+        display: flex;
+      }
+
+      .url {
+        font-family: monospace;
+      }
+      .url::before {
+        content: '"';
+      }
+      .url::after {
+        content: '"';
+      }
+
+      .code {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        min-width: 100%;
+        height: 5rem;
+        min-height: 3rem;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        border-radius: 0.25rem;
+        font-size: 0.875rem;
         font-family: monospace;
       }
 
@@ -40,6 +69,9 @@
         border-radius: 0.25rem;
         border: rgba(0, 0, 0, 0.15);
         cursor: pointer;
+      }
+      .buttons button:disabled {
+        opacity: 0.8;
       }
       .deny {
         background-color: rgb(255, 92, 92);
@@ -58,23 +90,53 @@
         .buttons button {
           border-color: rgba(255, 255, 255, 0.15);
         }
+        .code {
+          background: rgb(30, 30, 30);
+          color: white;
+          border-color: rgba(255, 255, 255, 0.15);
+        }
       }
     </style>
   </head>
 
   <body>
     <main>
-      <p data-type="fetch" data-l10n="security-prompt.fetch1"></p>
-      <p data-type="fetch" class="fetch-url"></p>
-      <p data-type="fetch" data-l10n="security-prompt.fetch2"></p>
-      <p data-type="fetch" data-l10n="security-prompt.fetch3"></p>
+      <div class="section" data-type="fetch">
+        <p data-l10n="security-prompt.fetch-1"></p>
+        <p class="url"></p>
+        <p data-l10n="security-prompt.fetch-2"></p>
+        <p data-l10n="security-prompt.fetch-3"></p>
+      </div>
 
-      <p data-type="read-clipboard" data-l10n="security-prompt.read-clipboard1"></p>
-      <p data-type="read-clipboard" data-l10n="security-prompt.read-clipboard2"></p>
-      <p data-type="read-clipboard" data-l10n="security-prompt.read-clipboard3"></p>
+      <div class="section" data-type="open-window">
+        <p data-l10n="security-prompt.open-window-1"></p>
+        <p class="url"></p>
+        <p data-l10n="security-prompt.open-window-2"></p>
+      </div>
 
-      <p data-type="notifications" data-l10n="security-prompt.notifications1"></p>
-      <p data-type="notifications" data-l10n="security-prompt.notifications2"></p>
+      <div class="section" data-type="embed-html">
+        <p data-l10n="security-prompt.embed-html"></p>
+        <textarea class="code" readonly></textarea>
+        <p data-l10n="security-prompt.embed-risk"></p>
+      </div>
+
+      <div class="section" data-type="embed-url">
+        <p data-l10n="security-prompt.embed-url"></p>
+        <p class="url"></code>
+        <p data-l10n="security-prompt.embed-risk"></p>
+        <p data-l10n="security-prompt.embed-persistent"></p>
+      </div>
+
+      <div class="section" data-type="read-clipboard">
+        <p data-l10n="security-prompt.read-clipboard-1"></p>
+        <p data-l10n="security-prompt.read-clipboard-2"></p>
+        <p data-l10n="security-prompt.read-clipboard-3"></p>
+      </div>
+
+      <div class="section" data-type="notify">
+        <p data-l10n="security-prompt.notify-1"></p>
+        <p data-l10n="security-prompt.notify-2"></p>
+      </div>
 
       <div class="buttons">
         <button class="deny" disabled data-l10n="security-prompt.deny"></button>
@@ -90,14 +152,51 @@
         const stringName = el.getAttribute('data-l10n');
         el.textContent = (strings[stringName] || `Missing string: ${stringName}`).replace('{APP_NAME}', APP_NAME);
       }
+
       for (const el of document.querySelectorAll('[data-type]')) {
-        if (el.getAttribute('data-type') !== type) {
-          el.style.display = 'none';
+        if (el.dataset.type === type) {
+          el.dataset.visible = true;
         }
       }
 
+      const decodeDataURI = (dataURI) => {
+        const delimeter = dataURI.indexOf(',');
+        if (delimeter === -1) {
+          return dataURI;
+        }
+        const contentType = dataURI.substring(0, delimeter);
+        const data = dataURI.substring(delimeter + 1);
+        if (contentType.endsWith(';base64')) {
+          try {
+            return atob(data);
+          } catch (e) {
+            return dataURI;
+          }
+        }
+        try {
+          return decodeURIComponent(data);
+        } catch (e) {
+          return dataURI;
+        }
+      };
+
+      const trimURL = (url) => {
+        const MAX_URL_LENGTH = 100;
+        if (url.length > MAX_URL_LENGTH) {
+          return `${url.substring(0, MAX_URL_LENGTH)}...`;
+        } else {
+          return url;
+        }
+      };
+
       if (type === 'fetch') {
-        document.querySelector('.fetch-url').textContent = `"${data}"`;
+        document.querySelector('[data-type="fetch"] .url').textContent = trimURL(data);
+      } else if (type === 'open-window') {
+        document.querySelector('[data-type="open-window"] .url').textContent = trimURL(data);
+      } else if (type === 'embed-url') {
+        document.querySelector('[data-type="embed-url"] .url').textContent = trimURL(data);
+      } else if (type === 'embed-html') {
+        document.querySelector('[data-type="embed-html"] .code').value = decodeDataURI(data);
       }
  
       const allowButton = document.querySelector('.allow');

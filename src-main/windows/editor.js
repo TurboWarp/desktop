@@ -420,15 +420,23 @@ class EditorWindow extends ProjectRunningWindow {
       return manuallyTrustedExtensions.has(url) ? 'unsandboxed' : 'iframe';
     });
 
-    ipc.handle('security-manager/can-fetch', async (e, url) => {
+    ipc.handle('security-manager/can-fetch', (e, url) => {
       return this.canFetch(url);
     });
 
-    ipc.handle('security-manager/can-read-clipboard', async (e, url) => {
+    ipc.handle('security-manager/can-open-window', (e, url) => {
+      return this.canOpenWindow(url);
+    });
+
+    ipc.handle('security-manager/can-embed', (e, url) => {
+      return this.canEmbed(url, true);
+    });
+
+    ipc.handle('security-manager/can-read-clipboard', (e, url) => {
       return this.canReadClipboard();
     });
 
-    ipc.handle('security-manager/can-notify', async (e, url) => {
+    ipc.handle('security-manager/can-notify', (e, url) => {
       return this.canNotify();
     });
 

@@ -25,6 +25,8 @@ contextBridge.exposeInMainWorld('EditorPreload', {
 
 contextBridge.exposeInMainWorld('SecurityManagerPreload', {
   canFetch: (url) => ipcRenderer.invoke('security-manager/can-fetch', url),
+  canOpenWindow: (url) => ipcRenderer.invoke('security-manager/can-open-window', url),
+  canEmbed: (url) => ipcRenderer.invoke('security-manager/can-embed', url),
   canReadClipboard: (url) => ipcRenderer.invoke('security-manager/can-read-clipboard', url),
   canNotify: (url) => ipcRenderer.invoke('security-manager/can-notify', url),
   getSandboxMode: (url) => ipcRenderer.invoke('security-manager/get-sandbox-mode', url),

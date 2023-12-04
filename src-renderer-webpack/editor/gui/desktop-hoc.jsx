@@ -62,19 +62,15 @@ const securityManager = {
   // Everything not specified here falls back to the TW/scratch-gui security manager and it's
   // trust-based prompts.
 
-  // Strictly enforced by Electron main process with support for can() prompts:
+  // Strictly enforced by Electron main process:
   canFetch: (url) => SecurityManagerPreload.canFetch(url),
   canReadClipboard: () => SecurityManagerPreload.canReadClipboard(),
   canNotify: () => SecurityManagerPreload.canNotify(),
+  canOpenWindow: (url) => SecurityManagerPreload.canOpenWindow(url),
+  canRedirect: (url) => SecurityManagerPreload.canOpenWindow(url), // redirect() is equivalent to openWindow() in desktop app
+  canEmbed: (url) => SecurityManagerPreload.canEmbed(url),
 
-  // Strictly enforced by Electron main process when the permission is actually used:
-  // (it asks for permission each time instead of remembering, so the can() system
-  // wouldn't work very well)
-  canOpenWindow: () => true,
-  canRedirect: () => true,
-  canEmbed: () => true,
-
-  // Loosely managed by Electron main process: (not strictly enforced)
+  // Loosely managed by Electron main process, but not strictly enforced:
   getSandboxMode: (url) => SecurityManagerPreload.getSandboxMode(url),
 
   // Does not work in Electron:

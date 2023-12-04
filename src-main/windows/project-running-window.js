@@ -22,13 +22,83 @@ const getLocalLibraryFiles = () => {
   return _cachedLocalLibraryFiles;
 };
 
+/**
+ * When an extension has code like:
+ * 
+ * if (await Scratch.canOpenWindow(url)) {
+ *   Scratch.openWindow(url);
+ * }
+ * 
+ * The permission check and the actual window opening don't happen at the same time. To ensure we
+ * only show one permission prompt for this common pattern, this class will track when permission
+ * was granted and remember to not ask for permission again if the same permission is requested twice
+ * in short succession.
+ * 
+ * @template T
+ */
+class TemporaryPermission {
+  constructor () {
+    /** @type {T|null} Most recently granted data (eg. a URL). null means no permission granted. */
+    this.data = null;
+
+    /** @type {number|null} ID of timeout to clear permission. */
+    this.timeoutId = null;
+  }
+
+  /**
+   * Remember that permission was granted for the given data.
+   * @param {T} data
+   */
+  grant (data) {
+    if (data === null) {
+      throw new Error('grant() called with null');
+    }
+
+    this.data = data;
+    this.timeoutId = setTimeout(() => {
+      this.data = null;
+    }, 3000);
+  }
+
+  /**
+   * Discard any granted permission.
+   */
+  clear () {
+    this.data = null;
+    clearTimeout(this.timeoutId);
+  }
+
+  /**
+   * Check if the given data matches the unexpired granted data.
+   * @param {T} data
+   * @returns {boolean}
+   */
+  check (data) {
+    if (data === null) {
+      throw new Error('check() called with null');
+    }
+
+    if (data === this.data) {
+      this.clear();
+      return true;
+    }
+
+    return false;
+  }
+}
+
 class ProjectRunningWindow extends BaseWindow {
   constructor (...args) {
     super(...args);
 
     this.allowedReadClipboard = false;
     this.allowedNotifications = false;
+    /** @type {Set<string>} */
     this.manuallyTrustedFetchOrigins = new Set();
+    /** @type {Set<string>} */
+    this.manuallyTrustedEmbedOrigins = new Set();
+    /** @type {TemporaryPermission<string>} */
+    this.temporaryEmbedHTMLPermission = new TemporaryPermission();
 
     this._isPromptLocked = false;
     this._queuedPromptCallbacks = [];
@@ -89,9 +159,6 @@ class ProjectRunningWindow extends BaseWindow {
   }
 
   async onBeforeRequest (details, callback) {
-    // TODO remove this later
-    console.log(details.url, details.resourceType);
-
     const parsed = new URL(details.url);
     const resourceType = details.resourceType;
 
@@ -103,7 +170,10 @@ class ProjectRunningWindow extends BaseWindow {
     }
 
     if (resourceType === 'subFrame') {
-      // TODO: canEmbed support
+      callback({
+        cancel: !await this.canEmbed(details.url, false)
+      });
+      return;
     }
 
     if (
@@ -174,7 +244,7 @@ class ProjectRunningWindow extends BaseWindow {
   }
 
   /**
-   * @param {() => boolean} isAllowed May be called repeatedly.
+   * @param {() => boolean} isAllowed May be called repeatedly. Should check each time -- don't compute once and cache.
    * @param {() => Promise<void>} callback Should have side effects that change isAllowed()'s result if allowed.
    * @returns {Promise<boolean>}
    */
@@ -243,7 +313,7 @@ class ProjectRunningWindow extends BaseWindow {
       return this.conditionalPromptLock(
         () => this.manuallyTrustedFetchOrigins.has(parsed.origin),
         async () => {
-          if (await SecurityPromptWindow.requestFetch(this.window, url)) {
+          if (await SecurityPromptWindow.canFetch(this.window, url)) {
             this.manuallyTrustedFetchOrigins.add(parsed.origin);
           }
         }
@@ -256,21 +326,50 @@ class ProjectRunningWindow extends BaseWindow {
 
   async canOpenWindow (url) {
     // TODO
+    return this.withPromptLock(() => SecurityPromptWindow.canOpenWindow(this.window, url));
   }
 
-  async canRedirect (url) {
-    // TODO
-  }
+  async canEmbed (url, checkOnly) {
+    try {
+      const parsed = new URL(url);
 
-  async canEmbed (url) {
-    // TODO
+      // data: must be allowed each time
+      if (parsed.protocol === 'data:') {
+        if (!checkOnly && this.temporaryEmbedHTMLPermission.check(url)) {
+          return true;
+        }
+
+        const allowed = await this.withPromptLock(() => SecurityPromptWindow.canEmbedHTML(this.window, url));
+        if (checkOnly && allowed) {
+          this.temporaryEmbedHTMLPermission.grant(url);
+        }
+        return allowed;
+      }
+
+      // Remote websites are allowed per-origin
+      if (parsed.protocol === 'https:' || parsed.protocol === 'http:') {
+        return this.conditionalPromptLock(
+          () => this.manuallyTrustedEmbedOrigins.has(parsed.origin),
+          async () => {
+            if (await SecurityPromptWindow.canEmbedURL(this.window, url)) {
+              this.manuallyTrustedEmbedOrigins.add(parsed.origin);
+            }
+          }
+        )
+      }
+
+      return false;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
   }
 
   async canReadClipboard () {
     return this.conditionalPromptLock(
       () => this.allowedReadClipboard,
       async () => {
-        this.allowedReadClipboard = await SecurityPromptWindow.requestReadClipboard(this.window);
+        this.allowedReadClipboard = await SecurityPromptWindow.canReadClipboard(this.window);
       }
     );
   }
@@ -279,7 +378,7 @@ class ProjectRunningWindow extends BaseWindow {
     return this.conditionalPromptLock(
       () => this.allowedNotifications,
       async () => {
-        this.allowedNotifications = await SecurityPromptWindow.requestNotifications(this.window);
+        this.allowedNotifications = await SecurityPromptWindow.canNotify(this.window);
       }
     );
   }

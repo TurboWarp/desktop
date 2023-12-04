@@ -81,16 +81,28 @@ class SecurityPromptWindow extends BaseWindow {
     return this.promptPromise;
   }
 
-  static requestReadClipboard (window) {
+  static canFetch (window, url) {
+    return new SecurityPromptWindow(window, 'fetch', url).done();
+  }
+
+  static canOpenWindow (window, url) {
+    return new SecurityPromptWindow(window, 'open-window', url).done();
+  }
+
+  static canEmbedURL (window, url) {
+    return new SecurityPromptWindow(window, 'embed-url', url).done();
+  }
+
+  static canEmbedHTML (window, url) {
+    return new SecurityPromptWindow(window, 'embed-html', url).done();
+  }
+
+  static canReadClipboard (window) {
     return new SecurityPromptWindow(window, 'read-clipboard', null).done();
   }
 
-  static requestNotifications (window) {
-    return new SecurityPromptWindow(window, 'notifications', null).done();
-  }
-
-  static requestFetch (window, url) {
-    return new SecurityPromptWindow(window, 'fetch', url).done();
+  static canNotify (window) {
+    return new SecurityPromptWindow(window, 'notify', null).done();
   }
 }
 

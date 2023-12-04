@@ -387,35 +387,59 @@
     "string": "Deny",
     "developer_comment": "Title of extension security prompt window. This button denies the permission."
   },
-  "security-prompt.fetch1": {
+  "security-prompt.fetch-1": {
     "string": "The project wants to connect to the website:",
     "developer_comment": "Part of the extension security prompt window"
   },
-  "security-prompt.fetch2": {
+  "security-prompt.fetch-2": {
     "string": "This could be used to download images or sounds, implement multiplayer, access an API, or for malicious purposes. This will share your IP address, general location, and possibly other data with the website.",
     "developer_comment": "Part of the extension security prompt window"
   },
-  "security-prompt.fetch3": {
+  "security-prompt.fetch-3": {
     "string": "If allowed, further requests to the same website will be automatically allowed.",
     "developer_comment": "Part of the extension security prompt window"
   },
-  "security-prompt.read-clipboard1": {
+  "security-prompt.open-window-1": {
+    "string": "The project wants to open a new window or tab with the URL:",
+    "developer_comment": "Part of modal when a project attempts to open a window using an extension"
+  },
+  "security-prompt.open-window-2": {
+    "string": "This website has not been reviewed by the {APP_NAME} developers. It may contain dangerous or malicious code.",
+    "developer_comment": "Part of modal when a project attempts to open a window using an extension"
+  },
+  "security-prompt.embed-html": {
+    "string": "The project wants to embed HTML content over the stage:",
+    "developer_comment": "Part of modal when a project attempts to embed another page over the stage"
+  },
+  "security-prompt.embed-url": {
+    "string": "The project wants to embed remote content over the stage:",
+    "developer_comment": "Part of modal when a project attempts to embed another page over the stage"
+  },
+  "security-prompt.embed-risk": {
+    "string": "While the embed will be sandboxed, it will still have access to information about your device such as your IP and general location.",
+    "developer_comment": "Part of modal when a project attempts to embed another page over the stage"
+  },
+  "security-prompt.embed-persistent": {
+    "string": "If allowed, further embeds to the same site will be automatically allowed.",
+    "developer_comment": "Part of modal when a project attempts to embed another page over the stage"
+  },
+  "security-prompt.read-clipboard-1": {
     "string": "The project wants to read data from your clipboard.",
     "developer_comment": "Part of the extension security prompt window"
   },
-  "security-prompt.read-clipboard2": {
+  "security-prompt.read-clipboard-2": {
     "string": "If your clipboard contains things like passwords, the project may be able to share those with other users or servers.",
     "developer_comment": "Part of the extension security prompt window"
   },
-  "security-prompt.read-clipboard3": {
+  "security-prompt.read-clipboard-3": {
     "string": "Clipboard access may not work on some systems. If allowed, further clipboard reads will be automatically allowed.",
     "developer_comment": "Part of the extension security prompt window"
   },
-  "security-prompt.notifications1": {
+  "security-prompt.notify-1": {
     "string": "The project wants to display notifications.",
     "developer_comment": "Part of the extension security prompt window"
   },
-  "security-prompt.notifications2": {
+  "security-prompt.notify-2": {
     "string": "If allowed, you may be prompted to enable notifications by your operating system, and further notifications will be automatically allowed.",
     "developer_comment": "Part of the extension security prompt window"
   },
