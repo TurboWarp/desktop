@@ -81,6 +81,13 @@ const rebuildMenuBar = () => {
                 PackagerWindow.forEditor(window);
               }
             }
+          },
+          {
+            label: translate('menu.close-window'),
+            accelerator: 'Cmd+W',
+            click: (menuItem, browserWindow) => {
+              browserWindow.close();
+            }
           }
         ]
       },

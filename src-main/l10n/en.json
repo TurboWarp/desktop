@@ -35,6 +35,10 @@
     "string": "New Window",
     "developer_comment": "macOS menu bar item to open a new editor window"
   },
+  "menu.close-window": {
+    "string": "Close Window",
+    "developer_comment": "macOS menu bar item to close the current window"
+  },
   "menu.settings": {
     "string": "Settings",
     "developer_comment": "macOS menu bar item to open desktop settings window"
