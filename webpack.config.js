@@ -16,7 +16,7 @@ const base = {
                 }
             },
             {
-                test: /\.(svg|png|wav|gif|jpg|mp3|ttf|otf)$/,
+                test: /\.(svg|png|wav|gif|jpg|mp3|ttf|otf|hex)$/,
                 loader: 'file-loader',
                 options: {
                     outputPath: 'static/assets/',
@@ -72,7 +72,16 @@ module.exports = [
                 patterns: [
                     {
                         from: 'node_modules/scratch-blocks/media',
-                        to: 'static/blocks-media'
+                        to: 'static/blocks-media/default'
+                    },
+                    {
+                        from: 'node_modules/scratch-blocks/media',
+                        to: 'static/blocks-media/high-contrast'
+                    },
+                    {
+                        from: 'node_modules/scratch-gui/src/lib/themes/blocks/high-contrast-media/blocks-media',
+                        to: 'static/blocks-media/high-contrast',
+                        force: true
                     },
                     {
                         context: 'src-renderer-webpack/editor/gui/',
