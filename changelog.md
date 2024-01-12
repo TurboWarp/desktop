@@ -2,6 +2,21 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.10.0-beta.1 (2024-01-12)
+
+ - Merged over a year of updates to Scratch and Scratch Addons
+ - Support for high contrast mode and dark blocks
+ - Support for changing the accent color from red to purple or blue (more customization to come later)
+ - Six new addons: Skewing in costume editor, Square block text inputs, Compact editor, Copy reporter values, Move sprite to front layer, Arrow key incrementation in editor
+ - Insert blocks by name addon was rewritten and works so much better
+ - Dropping code from the backpack places it in the right spot now
+ - Loading bar now works for files on your computer
+ - A lot of other bug fixes and new features
+ - Windows 7, 8, and 8.1 support has been removed
+ - macOS 10.13 and 10.14 support will be removed in 1.11
+ - For people that used TurboWarp Desktop before v1.9.0, v1.10.0-beta.1 will remove some and now-unused data to reclaim disk space
+ - Extension permission requests for notifications and reading clipboard are enforced by the desktop app
+
 # 1.9.3 (2023-09-18)
 
  - Fixed one-time data migration process not running sometimes
