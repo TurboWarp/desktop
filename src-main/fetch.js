@@ -1,24 +1,50 @@
+// Can't use fetch() because we still need to support Electron 22
+
 const {name, version} = require('../package.json');
 
 /**
- * Fetch any URL without care for CORS.
  * @param {string} url
- * @returns {Promise<Response>} Rejects if status was not okay
+ * @returns {Promise<Buffer>}
  */
-const privilegedFetch = (url) => {
-  // Don't use Electron's net.fetch because we don't want to be affected by the
-  // networking stack which would include our request filtering, and we have no
-  // reason for this to be able to fetch file:// URLs.
-  return fetch(url, {
+const privilegedFetch = (url) => new Promise((resolve, reject) => {
+  const parsedURL = new URL(url);
+  // Import http and https lazily as they take about 17ms to import the first time
+  const mod = parsedURL.protocol === 'http:' ? require('http') : require('https');
+  const request = mod.get(url, {
     headers: {
-      'User-Agent': `${name}/${version}`
+      'user-agent': `${name}/${version}`
     }
-  }).then((res) => {
-    if (!res.ok) {
-      throw new Error(`HTTP Error while fetching ${url}: ${res.status}`);
-    }
-    return res;
   });
+
+  request.on('response', (response) => {
+    const statusCode = response.statusCode;
+    if (statusCode !== 200) {
+      reject(new Error(`HTTP error ${statusCode} while fetching ${url}`))
+      return;
+    }
+  
+    let chunks = [];
+    response.on('data', (chunk) => {
+      chunks.push(chunk);
+    });
+  
+    response.on('end', () => {
+      resolve(Buffer.concat(chunks));
+    });
+  });
+
+  request.on('error', (e) => {
+    reject(e);
+  });
+});
+
+/**
+ * @param {string} url
+ * @returns {unknown} parsed JSON object
+ */
+privilegedFetch.json = async (url) => {
+  const buffer = await privilegedFetch(url);
+  return JSON.parse(buffer.toString('utf-8'));
 };
 
 module.exports = privilegedFetch;

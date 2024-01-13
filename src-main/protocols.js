@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const {Readable} = require('stream');
+const {PassThrough, Readable} = require('stream');
 const zlib = require('zlib');
 const {app, protocol} = require('electron');
 
@@ -69,64 +69,116 @@ protocol.registerSchemesAsPrivileged(Object.entries(FILE_SCHEMES).map(([scheme, 
   }
 })));
 
-app.whenReady().then(() => {
-  for (const [scheme, metadata] of Object.entries(FILE_SCHEMES)) {
-    // Forcing a trailing / slightly improves security of the path traversal check later
-    const root = path.join(metadata.root, '/');
+const createStream = (text) => {
+  const stream = new PassThrough();
+  stream.end(text);
+  return stream;
+};
 
-    protocol.handle(scheme, (request) => {
-      const url = new URL(request.url);
-      const resolved = path.join(root, url.pathname);
-      if (!resolved.startsWith(root)) {
-        return new Response('not found', {
-          status: 404
-        });
-      }
+const createSchemeHandler = (metadata) => {
+  // Forcing a trailing / slightly improves security of the path traversal check later
+  const root = path.join(metadata.root, '/');
 
-      const fileExtension = path.extname(url.pathname);
-      const mimeType = MIME_TYPES.get(fileExtension);
-      if (!mimeType) {
-        return new Response('invalid file extension', {
-          status: 404
-        });
-      }
-      const headers = {
-        'Content-Type': mimeType
+  /**
+   * @param {Electron.ProtocolRequest} request
+   * @returns {Promise<{statusCode: number; data: ReadableStream; headers?: Record<string, string>}>}
+   */
+  return async (request) => {
+    const url = new URL(request.url);
+    const resolved = path.join(root, url.pathname);
+    if (!resolved.startsWith(root)) {
+      return {
+        statusCode: 404,
+        data: createStream('not found')
       };
+    }
 
-      if (metadata.brotli) {
-        const fileStream = fs.createReadStream(`${resolved}.br`);
-        const decompressStream = zlib.createBrotliDecompress();
-        fileStream.pipe(decompressStream);
+    const fileExtension = path.extname(url.pathname);
+    const mimeType = MIME_TYPES.get(fileExtension);
+    if (!mimeType) {
+      return {
+        statusCode: 404,
+        data: createStream('invalid file extension')
+      };
+    }
 
-        return new Promise((resolve) => {
-          // TODO: this still returns 200 OK when brotli stream errors
-          fileStream.on('open', () => {
-            resolve(new Response(Readable.toWeb(decompressStream), {
-              headers
-            }));
-          });
-          fileStream.on('error', () => {
-            resolve(new Response('read error', {
-              status: 404
-            }));
-          });
-        });
-      }
+    const headers = {
+      'content-type': mimeType
+    };
 
-      const fileStream = fs.createReadStream(resolved);
+    if (metadata.brotli) {
+      const fileStream = fs.createReadStream(`${resolved}.br`);
+      const decompressStream = zlib.createBrotliDecompress();
+      fileStream.pipe(decompressStream);
+
       return new Promise((resolve) => {
+        // TODO: this still returns 200 OK when brotli stream errors
         fileStream.on('open', () => {
-          resolve(new Response(Readable.toWeb(fileStream), {
+          resolve({
+            data: decompressStream,
             headers
-          }));
+          });
         });
         fileStream.on('error', () => {
-          resolve(new Response('read error', {
-            status: 404
-          }));
+          resolve({
+            statusCode: 404,
+            data: createStream('read error')
+          });
+        });
+      });
+    }
+
+    const fileStream = fs.createReadStream(resolved);
+    return new Promise((resolve) => {
+      fileStream.on('open', () => {
+        resolve({
+          data: fileStream,
+          headers
+        });
+      });
+      fileStream.on('error', () => {
+        resolve({
+          statusCode: 404,
+          data: createStream('read error')
         });
       });
     });
+  };
+};
+
+app.whenReady().then(() => {
+  for (const [scheme, metadata] of Object.entries(FILE_SCHEMES)) {
+    const handle = createSchemeHandler(metadata);
+
+    // Electron 22 does not support protocol.handle() or new Response()
+    if (protocol.handle) {
+      protocol.handle(scheme, (request) => {
+        return handle(request)
+          .then((response) => {
+            return new Response(Readable.toWeb(response.data), {
+              status: response.statusCode,
+              headers: response.headers
+            });
+          })
+          .catch((error) => {
+            console.error(error);
+            return new Response('protocol handler error', {
+              status: 500
+            })
+          });
+      });
+    } else {
+      protocol.registerStreamProtocol(scheme, (request, callback) => {
+        handle(request)
+          .then(callback)
+          .catch((error) => {
+            console.error(error);
+            callback({
+              statusCode: 500,
+              data: createStream('protocol handler error')
+            });
+          });
+      });
+    }
   }
 });

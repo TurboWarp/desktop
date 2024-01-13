@@ -40,23 +40,22 @@ class OpenedFile {
     }
 
     if (this.type === TYPE_URL) {
-      const response = await privilegedFetch(this.path);
+      const buffer = await privilegedFetch(this.path);
       return {
         name: decodeURIComponent(path.basename(this.path)),
-        data: await response.arrayBuffer()
+        data: buffer
       };
     }
 
     if (this.type === TYPE_SCRATCH) {
-      const metadataResponse = await privilegedFetch(`https://api.scratch.mit.edu/projects/${this.path}`);
-      const metadata = await metadataResponse.json();
+      const metadata = await privilegedFetch.json(`https://api.scratch.mit.edu/projects/${this.path}`);
       const token = metadata.project_token;
       const title = metadata.title;
 
-      const projectResponse = await privilegedFetch(`https://projects.scratch.mit.edu/${this.path}?token=${token}`);
+      const projectBuffer = await privilegedFetch(`https://projects.scratch.mit.edu/${this.path}?token=${token}`);
       return {
         name: title,
-        data: await projectResponse.arrayBuffer()
+        data: projectBuffer
       };
     }
 

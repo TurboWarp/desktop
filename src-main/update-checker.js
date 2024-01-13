@@ -13,8 +13,7 @@ const checkForUpdates = async () => {
     return;
   }
 
-  const jsonResponse = await privilegedFetch(URL);
-  const json = await jsonResponse.json();
+  const json = await privilegedFetch.json(URL);
   const latestStable = json.latest;
   const latestUnstable = json.latest_unstable;
   const oldestSafe = json.oldest_safe;
