@@ -5,154 +5,20 @@ const packageJSON = require('../package.json');
 
 const {Platform, Arch} = builder;
 
-const getConfig = (distributionName) => ({
-  appId: 'org.turbowarp.desktop',
-  productName: 'TurboWarp',
-  files: [
-    'node_modules/**/*',
-    'src-main/**/*',
-    'src-preload/**/*',
-    'src-renderer/**/*',
-    'dist-renderer-webpack/**/*',
-    'dist-library-files/**/*',
-    'dist-extensions/**/*'
-  ],
-  extraResources: [
-    {
-      from: 'art/icon.png',
-      to: 'icon.png'
-    }
-  ],
-  fileAssociations: [
-    {
-      ext: 'sb3',
-      name: 'Scratch 3 Project',
-      role: 'Editor',
-      mimeType: 'application/x.scratch.sb3'
-    },
-    {
-      ext: 'sb2',
-      name: 'Scratch 2 Project',
-      role: 'Editor',
-      mimeType: 'application/x.scratch.sb2'
-    },
-    {
-      ext: 'sb',
-      name: 'Scratch 1 Project',
-      role: 'Editor',
-      mimeType: 'application/x.scratch.sb'
-    }
-  ],
-  extraMetadata: {
-    tw_update: 'yes',
+/**
+ * @param {string} distributionName
+ * @param {boolean} enableUpdates
+ */
+const getConfig = (distributionName, enableUpdates) => {
+  const config = JSON.parse(JSON.stringify(packageJSON.build));
+  config.extraMetadata = {
     tw_dist: distributionName
-  },
-  win: {
-    artifactName: '${productName} Portable ${version} ${arch}.${ext}',
-    icon: 'build/icon.ico',
-    target: [
-      {
-        target: 'nsis',
-        arch: 'x64'
-      },
-      {
-        target: 'portable',
-        arch: 'x64'
-      }
-    ]
-  },
-  appx: {
-    artifactName: '${productName} MS Store ${version} ${arch}.${ext}',
-    applicationId: 'TurboWarp',
-    displayName: 'TurboWarp',
-    identityName: '45747ThomasWeber.TurboWarpDesktop',
-    publisher: 'CN=18FA7D4F-01BF-49F2-BF56-782DCEA49C69',
-    publisherDisplayName: 'Thomas Weber',
-    backgroundColor: '#4c97ff',
-    showNameOnTiles: true,
-    languages: [
-      'en-US',
-      'nl',
-      'de',
-      'it',
-      'ko'
-    ]
-  },
-  nsis: {
-    artifactName: '${productName} Setup ${version} ${arch}.${ext}',
-    oneClick: false,
-    deleteAppDataOnUninstall: true,
-    allowToChangeInstallationDirectory: true
-  },
-  mac: {
-    artifactName: '${productName} Setup ${version}.${ext}',
-    icon: 'build/icon.icns',
-    category: 'public.app-category.education',
-    darkModeSupport: true,
-    gatekeeperAssess: false,
-    hardenedRuntime: true,
-    entitlements: 'build/entitlements.mac.plist',
-    entitlementsInherit: 'build/entitlements.mac.plist',
-    extendInfo: {
-      ITSAppUsesNonExemptEncryption: false,
-      LSMultipleInstancesProhibited: true,
-      NSCameraUsageDescription: 'This app requires camera access when using the video sensing blocks.',
-      NSMicrophoneUsageDescription: 'This app requires microphone access when recording sounds or detecting loudness.'
-    },
-    target: [
-      {
-        arch: 'universal',
-        target: 'dmg'
-      }
-    ]
-  },
-  mas: {
-    hardenedRuntime: false,
-    entitlements: 'build/entitlements.mas.plist',
-    entitlementsInherit: 'build/entitlements.mas.inherit.plist',
-    provisioningProfile: 'build/distribution.provisionprofile'
-  },
-  masDev: {
-    type: 'development',
-    provisioningProfile: 'build/development.provisionprofile'
-  },
-  linux: {
-    artifactName: '${productName}-${os}-${arch}-${version}.${ext}',
-    icon: './build/',
-    synopsis: 'Mod of Scratch with a compiler and more features.',
-    description: 'TurboWarp is a Scratch mod with a compiler to run projects faster, dark mode for your eyes, a bunch of addons to improve the editor, and more.',
-    category: 'Development',
-    extraFiles: [
-      'linux-files'
-    ],
-    target: [
-      {
-        target: 'deb'
-      },
-      {
-        target: 'appimage'
-      },
-      {
-        target: 'tar.gz'
-      }
-    ]
-  },
-  snap: {
-    summary: 'Scratch mod with a compiler, dark mode, a bunch of addons, and more.',
-    allowNativeWayland: true,
-    plugs: [
-      'default',
-      'camera',
-      'audio-playback',
-      'audio-record',
-      'joystick',
-      'removable-media'
-    ]
-  },
-  appImage: {
-    license: null
-  },
-});
+  };
+  if (enableUpdates) {
+    config.extraMetadata.tw_update = 'yes';
+  }
+  return config;
+};
 
 const getPublish = () => process.env.GH_TOKEN ? ({
   provider: 'github',
@@ -163,23 +29,23 @@ const getPublish = () => process.env.GH_TOKEN ? ({
 const buildWindows = async () => {
   await builder.build({
     targets: Platform.WINDOWS.createTarget('nsis', Arch.x64),
-    config: getConfig('prod-win-nsis-x64'),
+    config: getConfig('prod-win-nsis-x64', true),
     publish: getPublish()
   });
   await builder.build({
     targets: Platform.WINDOWS.createTarget('nsis', Arch.ia32),
-    config: getConfig('prod-win-nsis-ia32'),
+    config: getConfig('prod-win-nsis-ia32', true),
     publish: getPublish()
   });
   await builder.build({
     targets: Platform.WINDOWS.createTarget('nsis', Arch.arm64),
-    config: getConfig('prod-win-nsis-arm64'),
+    config: getConfig('prod-win-nsis-arm64', true),
     publish: getPublish()
   });
 
   await builder.build({
     targets: Platform.WINDOWS.createTarget('portable', Arch.x64),
-    config: getConfig('prod-win-portable-x64'),
+    config: getConfig('prod-win-portable-x64', true),
     publish: getPublish()
   });
 };
@@ -203,25 +69,27 @@ const buildWindowsLegacy = async () => {
   });
 
   const newNSIS = {
-    ...getConfig('').nsis,
+    ...packageJSON.build,
     artifactName: '${productName} Legacy Setup ${version} ${arch}.${ext}'
   };
 
   await builder.build({
     targets: Platform.WINDOWS.createTarget('nsis', Arch.x64),
     config: {
-      ...getConfig('prod-win-legacy-nsis-x64'),
+      ...getConfig('prod-win-legacy-nsis-x64', true),
       ...newNSIS,
       electronDist: x64Dist
-    }
+    },
+    publish: getPublish()
   });
   await builder.build({
     targets: Platform.WINDOWS.createTarget('nsis', Arch.ia32),
     config: {
-      ...getConfig('prod-win-legacy-nsis-ia32'),
+      ...getConfig('prod-win-legacy-nsis-ia32', true),
       ...newNSIS,
       electronDist: ia32Dist
-    }
+    },
+    publish: getPublish()
   });
 };
 
@@ -229,15 +97,15 @@ const buildMicrosoftStore = async () => {
   // Updates are managed by Microsoft Store
   await builder.build({
     targets: Platform.WINDOWS.createTarget('appx', Arch.x64),
-    config: getConfig('prod-appx-x64')
+    config: getConfig('prod-appx-x64', false)
   });
   await builder.build({
     targets: Platform.WINDOWS.createTarget('appx', Arch.ia32),
-    config: getConfig('prod-appx-ia32')
+    config: getConfig('prod-appx-ia32', false)
   });
   await builder.build({
     targets: Platform.WINDOWS.createTarget('appx', Arch.arm64),
-    config: getConfig('prod-appx-arm64')
+    config: getConfig('prod-appx-arm64', false)
   });
 };
 
@@ -253,15 +121,15 @@ const buildMac = async () => {
     const appleIdPassword = process.env.APPLE_ID_PASSWORD;
     const teamId = process.env.APPLE_TEAM_ID;
     if (!appleId) {
-      console.log('Not notarzing: no APPLE_ID_USERNAME');
+      console.log('Not notarizing: no APPLE_ID_USERNAME');
       return;
     }
     if (!appleIdPassword) {
-      console.log('Not notarzing: no APPLE_ID_PASSWORD');
+      console.log('Not notarizing: no APPLE_ID_PASSWORD');
       return;
     }
     if (!teamId) {
-      console.log('Not notarzing: no APPLE_TEAM_ID');
+      console.log('Not notarizing: no APPLE_TEAM_ID');
       return;
     }
 
@@ -282,7 +150,7 @@ const buildMac = async () => {
   await builder.build({
     targets: Platform.MAC.createTarget('dmg', Arch.universal),
     config: {
-      ...getConfig('prod-mac'),
+      ...getConfig('prod-mac', true),
       afterSign
     },
     publish: getPublish()
@@ -294,17 +162,17 @@ const buildMac = async () => {
 const buildDebian = async () => {
   await builder.build({
     targets: Platform.LINUX.createTarget('deb', Arch.x64),
-    config: getConfig('prod-linux-deb-x64'),
+    config: getConfig('prod-linux-deb-x64', true),
     publish: getPublish()
   });
   await builder.build({
     targets: Platform.LINUX.createTarget('deb', Arch.arm64),
-    config: getConfig('prod-linux-deb-x64'),
+    config: getConfig('prod-linux-deb-arm64', true),
     publish: getPublish()
   });
   await builder.build({
     targets: Platform.LINUX.createTarget('deb', Arch.armv7l),
-    config: getConfig('prod-linux-deb-x64'),
+    config: getConfig('prod-linux-deb-armv7l', true),
     publish: getPublish()
   });
 };
@@ -312,17 +180,17 @@ const buildDebian = async () => {
 const buildTarball = async () => {
   await builder.build({
     targets: Platform.LINUX.createTarget('tar.gz', Arch.x64),
-    config: getConfig('prod-linux-tar-x64'),
+    config: getConfig('prod-linux-tar-x64', true),
     publish: getPublish()
   });
   await builder.build({
     targets: Platform.LINUX.createTarget('tar.gz', Arch.arm64),
-    config: getConfig('prod-linux-tar-x64'),
+    config: getConfig('prod-linux-tar-arm64', true),
     publish: getPublish()
   });
   await builder.build({
     targets: Platform.LINUX.createTarget('tar.gz', Arch.armv7l),
-    config: getConfig('prod-linux-tar-x64'),
+    config: getConfig('prod-linux-tar-armv7l', true),
     publish: getPublish()
   });
 };
@@ -330,17 +198,17 @@ const buildTarball = async () => {
 const buildAppimage = async () => {
   await builder.build({
     targets: Platform.LINUX.createTarget('appimage', Arch.x64),
-    config: getConfig('prod-linux-appimage-x64'),
+    config: getConfig('prod-linux-appimage-x64', true),
     publish: getPublish()
   });
   await builder.build({
     targets: Platform.LINUX.createTarget('appimage', Arch.arm64),
-    config: getConfig('prod-linux-appimage-x64'),
+    config: getConfig('prod-linux-appimage-arm64', true),
     publish: getPublish()
   });
   await builder.build({
     targets: Platform.LINUX.createTarget('appimage', Arch.armv7l),
-    config: getConfig('prod-linux-appimage-x64'),
+    config: getConfig('prod-linux-appimage-armv7l', true),
     publish: getPublish()
   });
 };

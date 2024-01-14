@@ -201,15 +201,7 @@
         "role": "Editor",
         "mimeType": "application/x.scratch.sb"
       }
-    ],
-    "publish": [
-      {
-        "provider": "github",
-        "repo": "desktop",
-        "owner": "TurboWarp"
-      }
-    ],
-    "afterSign": "scripts/after-sign.js"
+    ]
   },
   "private": true
 }
