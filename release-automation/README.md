@@ -4,6 +4,10 @@ These are the bespoke scripts that we use to semi-automatically publish our app 
 
 We publish these scripts because it's easier for us, and we hope they may be useful as a starting place for other mods. Expect to make changes.
 
+## CI
+
+Our GitHub Actions release workflows run ci.js.
+
 ## Linux
 
 Due to the variety of package managers that this script relies on, this script only strives to support Arch Linux. If you modify it, it's probably not hard to make it work elsewhere. In addition to everything required to build turbowarp-desktop from source, you also need the following Arch packages:
