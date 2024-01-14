@@ -75,8 +75,6 @@
           <li>Dropping code from the backpack places it in the right spot now</li>
           <li>Loading bar now works for files on your computer</li>
           <li>A lot of other bug fixes and new features</li>
-          <li>Windows 7, 8, and 8.1 support has been removed</li>
-          <li>macOS 10.13 and 10.14 support will be removed in 1.11</li>
           <li>For people that used TurboWarp Desktop before v1.9.0, v1.10.0-beta.1 will remove some and now-unused data to reclaim disk space</li>
           <li>Extension permission requests for notifications and reading clipboard are enforced by the desktop app</li>
         </ul>
