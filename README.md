@@ -81,22 +81,29 @@ Build an optimized version of the webpack portions with:
 npm run webpack:prod
 ```
 
-Then to package up the final Electron binaries, use the [electron-builder CLI](https://www.electron.build/cli). They will be saved in the `dist` folder. Some examples:
+Then to package up the final Electron binaries, use the [electron-builder CLI](https://www.electron.build/cli) or our build script `release-automation/build.js`. Either way the final builds are saved in the `dist` folder. Some examples:
 
 ```bash
+# These generate the same downloads that we publish on our website and GitHub
+# Add --production to also enable the update checker
+node release-automation/build.js --windows
+node release-automation/build.js --windows-legacy
+node release-automation/build.js --microsoft-store
+node release-automation/build.js --mac
+node release-automation/build.js --debian
+node release-automation/build.js --tarball
+node release-automation/build.js --appimage
+
+# You can also do manual builds with electron-builder's CLI, for example:
 # Windows installer
 npx electron-builder --windows nsis --x64
-
 # macOS DMG
 npx electron-builder --mac dmg --universal
-
 # Linux Debian
 npx electron-builder --linux deb
 ```
 
-More examples in [our release script](.github/workflows/release.yml). You can typically only package for a certain operating system while on that operating system.
-
-It is possible to give each packaged version of the app a unique *distribution ID* to help uniquely identify them -- it appears in the "About" window. Add `--config.extraMetadata.tw_dist=your-dist-id-here` to electron-builder's arguments to set the distribution ID. Additionally, to enable the in-app update checker, also add `--config.extraMetadata.tw_update=yes`.
+You can typically only package for a certain operating system while on that operating system.
 
 ## Advanced customizations
 
