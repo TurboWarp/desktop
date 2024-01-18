@@ -13,6 +13,7 @@ import {
 import {setFileHandle, setUsername} from 'scratch-gui/src/reducers/tw';
 import {WrappedFileHandle} from './filesystem-api-impl';
 import {setStrings} from '../prompt/prompt.js';
+import {appElement} from './gui.jsx';
 
 let mountedOnce = false;
 
@@ -72,6 +73,14 @@ const securityManager = {
 const USERNAME_KEY = 'tw:username';
 const DEFAULT_USERNAME = 'player';
 
+/**
+ * @param {{width: number; height: number;}} customStageSize
+ */
+const updatePageDimensions = customStageSize => {
+  appElement.style.minWidth = `${1024 + Math.max(0, customStageSize.width - 480)}px`;
+  appElement.style.minHeight = `${640 + Math.max(0, customStageSize.height - 360)}px`;
+};
+
 const DesktopHOC = function (WrappedComponent) {
   class DesktopComponent extends React.Component {
     constructor (props) {
@@ -96,6 +105,8 @@ const DesktopHOC = function (WrappedComponent) {
       } else {
         this.props.onSetReduxUsername(DEFAULT_USERNAME);
       }
+
+      updatePageDimensions(this.props.customStageSize);
     }
     componentDidMount () {
       EditorPreload.setExportForPackager(() => this.props.vm.saveProjectSb3('arraybuffer')
@@ -168,6 +179,10 @@ const DesktopHOC = function (WrappedComponent) {
       if (this.props.reduxUsername !== prevProps.reduxUsername) {
         localStorage.setItem(USERNAME_KEY, this.props.reduxUsername);
       }
+
+      if (this.props.customStageSize !== prevProps.customStageSize) {
+        updatePageDimensions(this.props.customStageSize);
+      }
     }
     handleUpdateProjectTitle (newTitle) {
       this.setState({
@@ -176,6 +191,7 @@ const DesktopHOC = function (WrappedComponent) {
     }
     render() {
       const {
+        customStageSize,
         locale,
         loadingState,
         projectChanged,
@@ -232,6 +248,10 @@ const DesktopHOC = function (WrappedComponent) {
   }
 
   DesktopComponent.propTypes = {
+    customStageSize: PropTypes.shape({
+      width: PropTypes.number.isRequired,
+      height: PropTypes.number.isRequired
+    }).isRequired,
     locale: PropTypes.string.isRequired,
     loadingState: PropTypes.string.isRequired,
     projectChanged: PropTypes.bool.isRequired,
@@ -253,6 +273,7 @@ const DesktopHOC = function (WrappedComponent) {
   };
 
   const mapStateToProps = state => ({
+    customStageSize: state.scratchGui.customStageSize,
     locale: state.locales.locale,
     loadingState: state.scratchGui.projectState.loadingState,
     projectChanged: state.scratchGui.projectChanged,
