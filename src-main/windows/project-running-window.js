@@ -81,7 +81,10 @@ class ProjectRunningWindow extends BaseWindow {
 
       // Clipboard extension
       // Writing is safer than reading
-      permission === 'clipboard-sanitized-write'
+      permission === 'clipboard-sanitized-write' ||
+
+      // Wake Lock extension
+      permission === 'screen-wake-lock'
     );
   }
 
