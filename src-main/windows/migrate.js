@@ -10,10 +10,15 @@ const EMAIL = 'contact@turbowarp.org';
 class MigrateWindow extends BaseWindow {
   static LATEST_VERSION = 3;
 
-  constructor () {
+  /**
+   * @param {() => Promise<void>} saveCallback
+   */
+  constructor (saveCallback) {
     super();
 
     const oldDataVersion = settings.dataVersion;
+
+    this.saveCallback = saveCallback;
 
     this.promise = new Promise((resolve) => {
       this.resolveCallback = resolve;
@@ -56,6 +61,15 @@ class MigrateWindow extends BaseWindow {
         message: translate('migrate.continue-anyways-afterword')
           .replace('{email}', EMAIL)
       });
+    }
+
+    try {
+      await this.saveCallback();
+    } catch (error) {
+      // If success === false, we are continuing anyways, so ignore this error.
+      if (!success) {
+        throw error;
+      }
     }
 
     this.resolveCallback();
@@ -104,8 +118,8 @@ class MigrateWindow extends BaseWindow {
     return true;
   }
 
-  static run () {
-    const window = new MigrateWindow();
+  static run (saveCallback) {
+    const window = new MigrateWindow(saveCallback);
     return window.promise;
   }
 }

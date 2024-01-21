@@ -85,10 +85,10 @@ const migrate = async () => {
   }
 
   if (settings.dataVersion < MigrateWindow.LATEST_VERSION) {
-    await MigrateWindow.run();
+    await MigrateWindow.run(writeCurrentVersion);
+  } else {
+    await writeCurrentVersion();
   }
-
-  await writeCurrentVersion();
 };
 
 module.exports = migrate;
