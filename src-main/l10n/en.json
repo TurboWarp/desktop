@@ -291,17 +291,17 @@
     "string": "Deleting old data...",
     "developer_comment": "Status message that appears while finishing an update. Old data refers to data stored by old versions of the app that is now redundant after updates."
   },
-  "migrate-future.message": {
-    "string": "It looks like you installed an older version of {APP_NAME} after using a later version. Downgrading is not guaranteed to be safe; you may lose data such as your settings and backpack. Please exit and download the latest version from {website}. (Debug info: {debugInfo})",
-    "developer_comment": "May appear when someone installs the latest version of the dekstop app, runs it, then installs and runs an older version. {APP_NAME} becomes 'TurboWarp Desktop'. {website} becomes a URL like 'desktop.turbowarp.org'. {debugInfo} becomes something like '2 < 3' (internal version numbers) to aid with debugging."
+  "downgrade-warning.message": {
+    "string": "You are using an older version of {APP_NAME} after using a later version. Please exit and download the latest version from {website}.\n\nIf you continue, it is VERY LIKELY that you will PERMANENTLY lose all of your settings and backpack. We WILL NOT be able to recover your data back.\n\n(Debug info: {debugInfo})",
+    "developer_comment": "Appears when someone installs the latest version of the dekstop app, runs it, then installs and runs an older version. {APP_NAME} becomes 'TurboWarp Desktop'. {website} becomes a URL like 'desktop.turbowarp.org'. {debugInfo} becomes some internal stuff that shouldn't matter. This is supposed to be a very scary warning."
   },
-  "migrate-future.exit": {
+  "downgrade-warning.exit": {
     "string": "Exit and Update",
-    "developer_comment": "May appear when someone installs the latest version of the dekstop app, runs it, then installs and runs an older version. This button exits the app and opens the website for someone to download the latest version."
+    "developer_comment": "Appears when someone installs the latest version of the dekstop app, runs it, then installs and runs an older version. This button exits the app and opens the website for someone to download the latest version."
   },
-  "migrate-future.continue-anyways": {
-    "string": "Continue Anyways (Unsafe)",
-    "developer_comment": "May appear when someone installs the latest version of the dekstop app, runs it, then installs and runs an older version. This button accepts the warning and will just continue anyways, hoping for the best."
+  "downgrade-warning.continue-anyways": {
+    "string": "Continue Anyways (UNSAFE)",
+    "developer_comment": "Appears when someone installs the latest version of the dekstop app, runs it, then installs and runs an older version. This button ignores the warning and will just continue anyways, possibly deleting user data, and thus is very dangerous."
   },
   "update.window-title": {
     "string": "Update Available",

@@ -5,6 +5,11 @@ const {writeFileAtomic} = require('./atomic-write-stream');
 
 const PATH = path.resolve(app.getPath('userData'), 'tw_config.json');
 
+/**
+ * Migrates settings from before v1.9.0.
+ * @param {unknown} legacyData
+ * @returns {object}
+ */
 const migrateLegacyData = (legacyData) => {
   const options = {};
   if (typeof legacyData.locale === 'string') {
@@ -52,11 +57,34 @@ class Settings {
     await writeFileAtomic(PATH, JSON.stringify(serialized, null, 2));
   }
 
+  /**
+   * Tracks which manual data migration was most recently have been performed.
+   */
   get dataVersion () {
     return this.data.dataVersion || 0;
   }
   set dataVersion (dataVersion) {
     this.data.dataVersion = dataVersion;
+  }
+
+  /**
+   * Contains the version of the desktop app that was run previously.
+   */
+  get desktopVersion() {
+    return this.data.desktopVersion || '0.0.0';
+  }
+  set desktopVersion (desktopVersion) {
+    this.data.desktopVersion = desktopVersion;
+  }
+
+  /**
+   * Contains the Electron version used by the version of the desktop app that was run previously.
+   */
+  get electronVersion() {
+    return this.data.electronVersion || '0.0.0';
+  }
+  set electronVersion(electronVersion) {
+    this.data.electronVersion = electronVersion;
   }
 
   get locale () {
