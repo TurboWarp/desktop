@@ -8,7 +8,7 @@ const {APP_NAME} = require('../brand');
 const EMAIL = 'contact@turbowarp.org';
 
 class MigrateWindow extends BaseWindow {
-  static LATEST_VERSION = 2;
+  static LATEST_VERSION = 3;
 
   constructor () {
     super();
