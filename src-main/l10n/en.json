@@ -248,7 +248,7 @@
     "developer_comment": "More information about process to finish an update"
   },
   "migrate.error": {
-    "string": "Some of your data could not be transferred, but it can still be recovered. Send a screenshot of this window to:",
+    "string": "There was an error finishing this update. Some data may not have transferred correctly. Send a screenshot of this window to:",
     "developer_comment": "Appears when there was an error finishing an update. Followed by an email."
   },
   "migrate.timed-out": {
@@ -256,7 +256,7 @@
     "developer_comment": "Appears when finishing an update is taking longer than it usually does. There are some other pieces of text on the screen that may indicate progress is still being made, albiet slowly. Followed by an email."
   },
   "migrate.renderer-gone": {
-    "string": "Process crashed (reason: {reason}, code: {code}). Some of your data could not be transferred, but it can still be recovered. Please send a screenshot of this window to:",
+    "string": "Updating process crashed (reason: {reason}, code: {code}). Some data may not have transferred correctly. Please send a screenshot of this window to:",
     "developer_comment": "Appears when an important process crashes while finishing an update."
   },
   "migrate.continue-anyways": {
@@ -264,7 +264,7 @@
     "developer_comment": "Appears when there was an error finishing an update. This button ignores the error and continues anyways."
   },
   "migrate.continue-anyways-afterword": {
-    "string": "If any of your data is missing, please contact us at {email}. Your data is safe and can still be recovered.",
+    "string": "If any of your data is missing, please contact us at {email}.",
     "developer_comment": "Appears after there was an error finishing an update and someone clicks the Continue Anyways button to ignore the error."
   },
   "migrate.exit": {
