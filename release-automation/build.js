@@ -11,9 +11,19 @@ const {Platform, Arch} = builder;
 const isProduction = process.argv.includes('--production');
 
 /**
+ * @returns {string} a string that indexes into Arch[...]
+ */
+const getDefaultArch = (platformName) => {
+  if (platformName === 'WINDOWS') return 'x64';
+  if (platformName === 'MAC') return 'universal';
+  if (platformName === 'LINUX') return 'x64';
+  throw new Error('unknown platform');
+};
+
+/**
  * @returns {string} a string that indexes into Arch[...] or null if the default should be used
  */
-const getArch = () => {
+const getUserSpecifiedArch = () => {
   if (process.argv.includes('--x64')) return 'x64';
   if (process.argv.includes('--ia32')) return 'ia32';
   if (process.argv.includes('--armv7l')) return 'armv7l';
@@ -31,6 +41,7 @@ const getPublish = () => process.env.GH_TOKEN ? ({
 
 /**
  * Recursively copy properties from newValues to resultInPlace, in place.
+ * Properties in resultInPlcae but not in newValues are left unchanged.
  * @param {object} resultInPlace 
  * @param {object} newValues
  */
@@ -45,13 +56,12 @@ const applyExtraProperties = (resultInPlace, newValues) => {
 };
 
 const build = ({
-  platformName,
-  platformType,
-  defaultArchName = 'x64',
+  platformName, // String that indexes into Platform[...]
+  platformType, // Passed as first argument into platform.createTarget(...)
   manageUpdates = false,
   extraConfig = {}
 }) => {
-  const archName = getArch() ?? defaultArchName;
+  const archName = getUserSpecifiedArch() ?? getDefaultArch(platformName);
   const arch = Arch[archName];
   if (!arch) {
     throw new Error('unknown arch');
@@ -80,8 +90,6 @@ const build = ({
 
   applyExtraProperties(config, extraConfig);
 
-  console.log(config);
-
   return builder.build({
     targets: target,
     config,
@@ -89,13 +97,13 @@ const build = ({
   });
 };
 
-const buildWindowsInstaller = () => build({
+const buildWindows = () => build({
   platformName: 'WINDOWS',
   platformType: 'nsis',
   manageUpdates: true
 });
 
-const buildWindowsLegacyInstaller = async () => {
+const buildWindowsLegacy = async () => {
   // This is the last release of Electron 22, which no longer receives updates.
   const LEGACY_ELECTRON_VERSION = '22.3.27';
 
@@ -129,13 +137,12 @@ const buildWindowsLegacyInstaller = async () => {
     version: LEGACY_ELECTRON_VERSION,
     platform: 'win32',
     artifactName: 'electron',
-    arch: getArch() ?? 'x64'
+    arch: getArch() ?? getDefaultArch('WINDOWS')
   });
 
   return build({
     platformName: 'WINDOWS',
     platformType: 'nsis',
-    defaultArchName: 'x64', // see above downloadAndExtract() call
     manageUpdates: true,
     extraConfig: {
       electronDist,
@@ -155,16 +162,13 @@ const buildWindowsPortable = () => build({
 const buildMicrosoftStore = () => build({
   platformName: 'WINDOWS',
   platformType: 'appx',
-  canPublish: false,
-  updateChecker: false
+  manageUpdates: false
 });
 
 const buildMac = () => build({
   platformName: 'MAC',
   platformType: 'dmg',
-  defaultArchName: 'universal',
-  updateChecker: true,
-  canPublish: true,
+  manageUpdates: true,
   extraConfig: {
     // TODO: electron-builder got native notarization support; switch to that at some point
     afterSign: async (context) => {
@@ -214,29 +218,26 @@ const buildMac = () => build({
 const buildDebian = () => build({
   platformName: 'LINUX',
   platformType: 'deb',
-  updateChecker: true,
-  canPublish: true
+  manageUpdates: true
 });
 
 const buildTarball = () => build({
   platformName: 'LINUX',
   platformType: 'tar.gz',
-  updateChecker: true,
-  canPublish: true
+  manageUpdates: true
 });
 
 const buildAppImage = () => build({
   platformName: 'LINUX',
   platformType: 'appimage',
-  updateChecker: true,
-  canPublish: true
+  manageUpdates: true
 });
 
 const run = () => {
   if (process.argv.includes('--windows')) {
-    return buildWindowsInstaller();
+    return buildWindows();
   } else if (process.argv.includes('--windows-legacy')) {
-    return buildWindowsLegacyInstaller();
+    return buildWindowsLegacy();
   } else if (process.argv.includes('--windows-portable')) {
     return buildWindowsPortable();
   } else if (process.argv.includes('--microsoft-store')) {
@@ -250,7 +251,7 @@ const run = () => {
   } else if (process.argv.includes('--appimage')) {
     return buildAppImage();
   } else {
-    console.log('see README.md');
+    console.log('missing platform argument; see release-automation/README.md');
     process.exit(1);
   }
 };

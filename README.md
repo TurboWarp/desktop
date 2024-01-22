@@ -93,8 +93,6 @@ npx electron-builder --mac dmg --universal
 npx electron-builder --linux deb
 ```
 
-You can typically only package for a certain operating system while on that operating system.
-
 ## Advanced customizations
 
 TurboWarp Desktop lets you configure custom JS and CSS without rebuilding the app.
