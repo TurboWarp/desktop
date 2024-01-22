@@ -60,7 +60,7 @@ class AddonsWindow extends BaseWindow {
   }
 
   getBackgroundColor () {
-    return '#222222';
+    return '#111111';
   }
 
   static show () {
