@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
     - uses: actions/checkout@v4
@@ -25,11 +25,6 @@ jobs:
       run: npm run fetch
     - name: Compile
       run: npm run webpack:compile
-    - name: debug
-      run: |
-        ls
-        ls dist
-        ls dist/linux-unpacked
     - name: Package Windows
       if: runner.os == 'Windows'
       run: node release-automation/build.js --windows --windows-legacy --microsoft-store
