@@ -14,7 +14,8 @@ try {
       dialog.showMessageBoxSync({
         type: 'error',
         title: APP_NAME,
-        message: `Error in promise: ${stringifyError(error)}`
+        message: `Error in promise: ${stringifyError(error)}`,
+        noLink: true
       });
     });
   });
@@ -26,7 +27,8 @@ try {
     dialog.showMessageBoxSync({
       type: 'error',
       title: APP_NAME,
-      message: `Error starting main process: ${stringifyError(error)}`
+      message: `Error starting main process: ${stringifyError(error)}`,
+      noLink: true
     });
     app.exit(1);
   });

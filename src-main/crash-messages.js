@@ -11,7 +11,8 @@ const showCrashMessage = (window, type, code, reason) => {
     detail: translate('crash.description')
       .replace('{type}', type)
       .replace('{code}', code)
-      .replace('{reason}', reason)
+      .replace('{reason}', reason),
+    noLink: true
   });
 };
 

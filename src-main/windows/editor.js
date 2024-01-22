@@ -148,7 +148,8 @@ class EditorWindow extends ProjectRunningWindow {
         cancelId: 0,
         defaultId: 0,
         message: translate('unload.message'),
-        detail: translate('unload.detail')
+        detail: translate('unload.detail'),
+        noLink: true
       });
       if (choice === 1) {
         event.preventDefault();

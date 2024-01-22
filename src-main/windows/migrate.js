@@ -105,7 +105,8 @@ class MigrateWindow extends BaseWindow {
         translate('migrate.exit')
       ],
       cancelId: 1,
-      defaultId: 0
+      defaultId: 0,
+      noLink: true
     });
 
     if (button === 0) {

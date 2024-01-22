@@ -11,7 +11,8 @@ const showPermissionDeniedWarning = (window, mediaType) => {
     title: APP_NAME,
     type: 'warning',
     message: title,
-    detail: `${description}\n\n${instructions}`
+    detail: `${description}\n\n${instructions}`,
+    noLink: true
   });
 };
 
