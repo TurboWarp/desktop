@@ -13,12 +13,12 @@ const isProduction = process.argv.includes('--production');
  */
 const getConfig = (distributionName, enableUpdates) => {
   const config = JSON.parse(JSON.stringify(packageJSON.build));
-  const channel = isProduction ? 'prod' : 'dev';
   config.extraMetadata = {
-    tw_dist: isProduction ? `prod-${distributionName}` : distributionName
+    tw_dist: isProduction ? `prod-${distributionName}` : distributionName,
+    tw_warn_legacy: isProduction
   };
   if (isProduction && enableUpdates) {
-    config.extraMetadata.tw_update = 'yes';
+    config.extraMetadata.tw_update = true;
   }
   return config;
 };

@@ -1,4 +1,4 @@
-const {app, dialog} = require('electron');
+const {app} = require('electron');
 
 // requestSingleInstanceLock() crashes the app in signed MAS builds
 // https://github.com/electron/electron/issues/15958
@@ -11,9 +11,8 @@ const openExternal = require('./open-external');
 const BaseWindow = require('./windows/base');
 const EditorWindow = require('./windows/editor');
 const {checkForUpdates} = require('./update-checker');
-const {translate, tranlateOrNull} = require('./l10n');
+const {tranlateOrNull} = require('./l10n');
 const migrate = require('./migrate');
-const {APP_NAME} = require('./brand');
 require('./protocols');
 require('./context-menu');
 require('./menu-bar');
@@ -175,15 +174,6 @@ app.whenReady().then(() => {
 
   migratePromise = migrate().then(() => {
     isMigrating = false;
-
-    if (app.runningUnderARM64Translation) {
-      dialog.showMessageBox({
-        title: APP_NAME,
-        type: 'warning',
-        message: translate('arm-translation.title'),
-        detail: translate('arm-translation.detail').replace('{APP_NAME}', APP_NAME)
-      });
-    }
 
     EditorWindow.openFiles([
       ...filesQueuedToOpen,

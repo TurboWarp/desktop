@@ -6,7 +6,7 @@ const privilegedFetch = require('./fetch');
 const currentVersion = packageJSON.version;
 const URL = 'https://desktop.turbowarp.org/version.json';
 
-const isEnabledAtBuildTime = () => packageJSON.tw_update === 'yes';
+const isEnabledAtBuildTime = () => !!packageJSON.tw_update;
 
 const checkForUpdates = async () => {
   if (!isEnabledAtBuildTime() || settings.updateChecker === 'never') {

@@ -121,11 +121,35 @@
   },
   "arm-translation.title": {
     "string": "Please download the ARM version instead",
-    "developer_comment": "Appears when running the app in an environment like Rosetta"
+    "developer_comment": "Appears when running the app in an ARM translator such as Apple's Rosetta"
   },
-  "arm-translation.detail": {
+  "arm-translation.message": {
     "string": "You're using {APP_NAME} in a translation layer such as Apple Rosetta. Please install the native ARM version instead as it will perform better and use less battery.",
-    "developer_comment": "Appears when running the app in an environment like Rosetta"
+    "developer_comment": "Appears when running the app in an ARM translator such as Apple's Rosetta"
+  },
+  "arm-translation.ok": {
+    "string": "Exit and Update",
+    "developer_comment": "Appears when running the app in an ARM translator such as Apple's Rosetta. This button will open a browser to install the correct version."
+  },
+  "arm-translation.ignore": {
+    "string": "Ignore Warning",
+    "developer_comment": "Appears when running the app in an ARM translator such as Apple's Rosetta. This button will ignore the warning and continue anyways."
+  },
+  "unnecessary-legacy.title": {
+    "string": "Please don't use the legacy version",
+    "developer_comment": "Appears when running the legacy version of the app on a device that does not need to"
+  },
+  "unnecessary-legacy.message": {
+    "string": "You are using the 'Legacy' version of {APP_NAME} on a device that doesn't need to. This is insecure, slower, and may PERMANENTLY delete your settings and backpack. Please install the normal version instead.",
+    "developer_comment": "Appears when running the legacy version of the app on a device that does not need to"
+  },
+  "unnecessary-legacy.ok": {
+    "string": "Exit and Update",
+    "developer_comment": "Appears when running the legacy version of the app on a device that does not need to. This button will open a browser to install the correct version."
+  },
+  "unnecessary-legacy.ignore": {
+    "string": "Ignore Warning",
+    "developer_comment": "Appears when running the legacy version of the app on a device that does not need to. This button will ignore the warning and continue anyways."
   },
   "in-app-about.desktop-settings": {
     "string": "Desktop Settings",

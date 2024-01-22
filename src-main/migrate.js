@@ -27,7 +27,57 @@ const writeCurrentVersion = async () => {
   await settings.save();
 };
 
+/**
+ * @returns {never}
+ */
+const openUpdatePageAndExit = () => {
+  safelyOpenExternal('https://desktop.turbowarp.org/');
+  app.exit(1);
+};
+
 const migrate = async () => {
+  // We have native ARM builds so people shouldn't use x86 to ARM translators
+  if (app.runningUnderARM64Translation && dialog.showMessageBoxSync({
+    title: APP_NAME,
+    type: 'warning',
+    message: translate('arm-translation.title'),
+    detail: translate('arm-translation.message').replace('{APP_NAME}', APP_NAME),
+    buttons: [
+      translate('arm-translation.ok'),
+      translate('arm-translation.ignore')
+    ],
+    cancelId: 0,
+    defaultId: 0,
+    noLink: true
+  }) === 0) {
+    openUpdatePageAndExit();
+  }
+
+  // Legacy version (Electron 22) should only be used on Windows 7, 8, and 8.1
+  if (packageJSON.tw_warn_legacy && process.platform === 'win32') {
+    const electronMajorVersion = +process.versions.electron.split('.')[0];
+    if (electronMajorVersion === 22) {
+      // Note that the real version number before 10 is actually 6.x
+      const os = require('os');
+      const windowsMajorVersion = +os.release().split('.')[0];
+      if (windowsMajorVersion >= 10 && dialog.showMessageBoxSync({
+        title: APP_NAME,
+        type: 'warning',
+        message: translate('unnecessary-legacy.title'),
+        detail: translate('unnecessary-legacy.message').replace('{APP_NAME}', APP_NAME),
+        buttons: [
+          translate('unnecessary-legacy.ok'),
+          translate('unnecessary-legacy.ignore'),
+        ],
+        cancelId: 0,
+        defaultId: 0,
+        noLink: true
+      }) === 0) {
+        openUpdatePageAndExit();
+      }
+    }
+  }
+  
   // On first launch, just mark migrations as done, we don't need to do anything else.
   if (isFirstLaunch) {
     await writeCurrentVersion();
@@ -63,7 +113,7 @@ const migrate = async () => {
       changes.push(`E ${settings.electronVersion} -> ${electronVersion}`);
     }
 
-    const result = dialog.showMessageBoxSync({
+    if (dialog.showMessageBoxSync({
       type: 'error',
       title: APP_NAME,
       message: translate('downgrade-warning.title'),
@@ -76,12 +126,10 @@ const migrate = async () => {
         translate('downgrade-warning.continue-anyways')
       ],
       cancelId: 0,
-      defaultId: 0
-    });
-
-    if (result === 0) {
-      safelyOpenExternal('https://desktop.turbowarp.org/');
-      app.exit(1);
+      defaultId: 0,
+      noLink: true
+    }) === 0) {
+      openUpdatePageAndExit();
     }
   }
 
