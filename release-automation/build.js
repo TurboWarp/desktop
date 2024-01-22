@@ -141,7 +141,13 @@ const buildMicrosoftStore = async () => {
 };
 
 const buildMac = async () => {
+  // TODO: electron-builder got native notarization support; switch to that at some point
   const afterSign = async (context) => {
+    if (!isProduction) {
+      console.log('Not notarizing: not --production');
+      return;
+    }
+
     const {electronPlatformName, appOutDir} = context;
     if (electronPlatformName !== 'darwin') {
       console.log('Not notarizing: not macOS');

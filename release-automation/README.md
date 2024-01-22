@@ -11,12 +11,13 @@ This is what creates most of the downloads that are up on our website and on Git
     Enables update checker
     Adds "prod-" to the start of the distribution name
     Enables some extra warnings for people who install the wrong version of the app
+    Allows notarization on macOS
 
 --windows
-    Create Windows installers (Windows 10 or later)
+    Create Windows installers for Windows 10 or later
 
 --windows-legacy
-    Create Windows installers (Windows 7 or later)
+    Create Windows installers for Windows 7 or later (less secure)
 
 --microsoft-store
     Create appx files for uploading to Microsoft Store
