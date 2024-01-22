@@ -34,3 +34,5 @@ jobs:
     - name: Package Linux
       if: runner.os == 'Linux'
       run: node release-automation/build.js --debian --tarball --appimage
+      env:
+        USE_HARD_LINKS: false
