@@ -28,14 +28,21 @@ jobs:
       run: npm run webpack:compile
     - name: Package Windows
       if: runner.os == 'Windows'
-      run: node release-automation/build.js --windows --windows-legacy --microsoft-store
+      run: |
+        node release-automation/build.js --windows
+        node release-automation/build.js --windows-legacy
+        node release-automation/build.js --microsoft-store
     - name: Package macOS
       if: runner.os == 'macOS'
-      run: node release-automation/build.js --mac
+      run: |
+        node release-automation/build.js --mac
       env:
         USE_HARD_LINKS: "false"
     - name: Package Linux
       if: runner.os == 'Linux'
-      run: node release-automation/build.js --debian --tarball --appimage
+      run: |
+        node release-automation/build.js --debian
+        node release-automation/build.js --tarball
+        node release-automation/build.js --appimage
       env:
         USE_HARD_LINKS: "false"
