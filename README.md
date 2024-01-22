@@ -84,8 +84,8 @@ npm run webpack:prod
 Then to package up the final Electron binaries, use the [electron-builder CLI](https://www.electron.build/cli) or our build script `release-automation/build.js`. Either way the final builds are saved in the `dist` folder. Some examples:
 
 ```bash
-# These generate the same downloads that we publish on our website and GitHub
-# Add --production to also enable the update checker
+# These generate almost the same downloads that we publish on our website and GitHub
+# We also add --production which enables the update checker and some more checks for people installing the wrong version
 node release-automation/build.js --windows
 node release-automation/build.js --windows-legacy
 node release-automation/build.js --microsoft-store
