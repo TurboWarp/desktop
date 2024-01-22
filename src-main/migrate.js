@@ -66,7 +66,8 @@ const migrate = async () => {
     const result = dialog.showMessageBoxSync({
       type: 'error',
       title: APP_NAME,
-      message: translate('downgrade-warning.message')
+      message: translate('downgrade-warning.title'),
+      detail: translate('downgrade-warning.message')
         .replace('{APP_NAME}', APP_NAME)
         .replace('{website}', 'desktop.turbowarp.org')
         .replace('{debugInfo}', changes.join(', ')),
