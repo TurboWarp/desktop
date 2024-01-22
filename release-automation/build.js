@@ -4,7 +4,6 @@ const builder = require('electron-builder');
 const electronNotarize = require('@electron/notarize');
 const electronGet = require('@electron/get');
 const AdmZip = require('adm-zip');
-const packageJSON = require('../package.json');
 
 const {Platform, Arch} = builder;
 
@@ -79,17 +78,15 @@ const build = ({
   }
   console.log(`Building distribution: ${distributionName}`);
 
-  const config = JSON.parse(JSON.stringify(packageJSON.build));
-  config.extraMetadata = {
-    tw_dist: distributionName,
-    tw_warn_legacy: isProduction
+  // electron-builder automatically reads settings from package.json
+  const config = {
+    extraMetadata: {
+      tw_dist: distributionName,
+      tw_warn_legacy: isProduction,
+      tw_update: isProduction && manageUpdates
+    }
   };
-  if (isProduction && manageUpdates) {
-    config.extraMetadata.tw_update = true;
-  }
-
   applyExtraProperties(config, extraConfig);
-  console.log(config);
 
   return builder.build({
     targets: target,

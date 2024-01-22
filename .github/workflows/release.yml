@@ -58,7 +58,6 @@ jobs:
         node release-automation/build.js --mac --universal --production
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        USE_HARD_LINKS: "false"
         APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
         APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
@@ -78,4 +77,3 @@ jobs:
         node release-automation/build.js --appimage --arm64 --production
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        USE_HARD_LINKS: "false"
