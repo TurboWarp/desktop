@@ -1,19 +1,5 @@
 const pathUtil = require('path');
 const fs = require('fs');
-
-const originalCopy = fs.copyFile.bind(fs);
-fs.copyFile = (src, dest, mode, callback) => {
-  console.trace(`Copying ${src} to ${dest} - ${mode}`);
-  const destDir = pathUtil.dirname(dest);
-  try {
-    const files = fs.readdirSync(destDir);
-    console.trace('Destination files: ' + files.join(', '));
-  } catch (e) {
-    console.trace('could not read', e.message);
-  }
-  return originalCopy(src, dest, mode, callback);
-};
-
 const builder = require('electron-builder');
 const electronNotarize = require('@electron/notarize');
 const electronGet = require('@electron/get');
@@ -25,55 +11,93 @@ const {Platform, Arch} = builder;
 const isProduction = process.argv.includes('--production');
 
 /**
- * @param {string} distributionName
- * @param {boolean} enableUpdates
+ * @returns {string} a string that indexes into Arch[...] or null if the default should be used
  */
-const getConfig = (distributionName, enableUpdates) => {
-  const config = JSON.parse(JSON.stringify(packageJSON.build));
-  config.extraMetadata = {
-    tw_dist: isProduction ? `prod-${distributionName}` : distributionName,
-    tw_warn_legacy: isProduction
-  };
-  if (isProduction && enableUpdates) {
-    config.extraMetadata.tw_update = true;
-  }
-  return config;
+const getArch = () => {
+  if (process.argv.includes('--x64')) return 'x64';
+  if (process.argv.includes('--ia32')) return 'ia32';
+  if (process.argv.includes('--armv7l')) return 'armv7l';
+  if (process.argv.includes('--arm64')) return 'arm64';
+  if (process.argv.includes('--universal')) return 'universal';
+  return null;
 };
 
 const getPublish = () => process.env.GH_TOKEN ? ({
-  publishAutoUpdate: false,
   provider: 'github',
   owner: 'TurboWarp',
-  repo: 'desktop'
+  repo: 'desktop',
+  publishAutoUpdate: false
 }) : null;
 
-const buildWindows = async () => {
-  await builder.build({
-    targets: Platform.WINDOWS.createTarget('nsis', Arch.x64),
-    config: getConfig('win-nsis-x64', true),
-    publish: getPublish()
-  });
-  await builder.build({
-    targets: Platform.WINDOWS.createTarget('nsis', Arch.ia32),
-    config: getConfig('win-nsis-ia32', true),
-    publish: getPublish()
-  });
-  await builder.build({
-    targets: Platform.WINDOWS.createTarget('nsis', Arch.arm64),
-    config: getConfig('win-nsis-arm64', true),
-    publish: getPublish()
-  });
+/**
+ * Recursively copy properties from newValues to resultInPlace, in place.
+ * @param {object} resultInPlace 
+ * @param {object} newValues
+ */
+const applyExtraProperties = (resultInPlace, newValues) => {
+  for (const key of Object.keys(newValues)) {
+    if (resultInPlace[key] !== null && typeof resultInPlace[key] === 'object') {
+      applyExtraProperties(resultInPlace[key], newValues[key]);
+    } else {
+      resultInPlace[key] = newValues[key];
+    }
+  }
+};
 
-  await builder.build({
-    targets: Platform.WINDOWS.createTarget('portable', Arch.x64),
-    config: getConfig('win-portable-x64', true),
-    publish: getPublish()
+const build = ({
+  platformName,
+  platformType,
+  defaultArchName = 'x64',
+  manageUpdates = false,
+  extraConfig = {}
+}) => {
+  const archName = getArch() ?? defaultArchName;
+  const arch = Arch[archName];
+  if (!arch) {
+    throw new Error('unknown arch');
+  }
+
+  const platform = Platform[platformName];
+  if (!platform) {
+    throw new Error('unknown platform');
+  }
+  const target = platform.createTarget(platformType, arch);
+
+  let distributionName = `${platformName}-${platformType}-${archName}`.toLowerCase();
+  if (isProduction) {
+    distributionName = `release-${distributionName}`;
+  }
+  console.log(`Building distribution: ${distributionName}`);
+
+  const config = JSON.parse(JSON.stringify(packageJSON.build));
+  config.extraMetadata = {
+    tw_dist: distributionName,
+    tw_warn_legacy: isProduction
+  };
+  if (isProduction && manageUpdates) {
+    config.extraMetadata.tw_update = true;
+  }
+
+  applyExtraProperties(config, extraConfig);
+
+  console.log(config);
+
+  return builder.build({
+    targets: target,
+    config,
+    publish: manageUpdates ? getPublish() : null
   });
 };
 
-const buildWindowsLegacy = async () => {
-  // This is the last release of Electron 22
-  const VERSION = '22.3.27';
+const buildWindowsInstaller = () => build({
+  platformName: 'WINDOWS',
+  platformType: 'nsis',
+  manageUpdates: true
+});
+
+const buildWindowsLegacyInstaller = async () => {
+  // This is the last release of Electron 22, which no longer receives updates.
+  const LEGACY_ELECTRON_VERSION = '22.3.27';
 
   const downloadAndExtract = async ({version, platform, artifactName, arch}) => {
     const name = `${artifactName}-v${version}-${platform}-${arch}`;
@@ -101,191 +125,133 @@ const buildWindowsLegacy = async () => {
     return extractPath;
   };
 
-  const x64Dist = await downloadAndExtract({
-    version: VERSION,
+  const electronDist = await downloadAndExtract({
+    version: LEGACY_ELECTRON_VERSION,
     platform: 'win32',
     artifactName: 'electron',
-    arch: 'x64'
-  });
-  const ia32Dist = await downloadAndExtract({
-    version: VERSION,
-    platform: 'win32',
-    artifactName: 'electron',
-    arch: 'ia32'
+    arch: getArch() ?? 'x64'
   });
 
-  const newNSIS = {
-    ...packageJSON.build.nsis,
-    artifactName: '${productName} Legacy Setup ${version} ${arch}.${ext}'
-  };
-
-  await builder.build({
-    targets: Platform.WINDOWS.createTarget('nsis', Arch.x64),
-    config: {
-      ...getConfig('win-legacy-nsis-x64', true),
-      nsis: newNSIS,
-      electronDist: x64Dist
-    },
-    publish: getPublish()
-  });
-  await builder.build({
-    targets: Platform.WINDOWS.createTarget('nsis', Arch.ia32),
-    config: {
-      ...getConfig('win-legacy-nsis-ia32', true),
-      nsis: newNSIS,
-      electronDist: ia32Dist
-    },
-    publish: getPublish()
-  });
-};
-
-const buildMicrosoftStore = async () => {
-  // Updates are managed by Microsoft Store
-  await builder.build({
-    targets: Platform.WINDOWS.createTarget('appx', Arch.x64),
-    config: getConfig('appx-x64', false)
-  });
-  await builder.build({
-    targets: Platform.WINDOWS.createTarget('appx', Arch.ia32),
-    config: getConfig('appx-ia32', false)
-  });
-  await builder.build({
-    targets: Platform.WINDOWS.createTarget('appx', Arch.arm64),
-    config: getConfig('appx-arm64', false)
-  });
-};
-
-const buildMac = async () => {
-  // TODO: electron-builder got native notarization support; switch to that at some point
-  const afterSign = async (context) => {
-    if (!isProduction) {
-      console.log('Not notarizing: not --production');
-      return;
+  return build({
+    platformName: 'WINDOWS',
+    platformType: 'nsis',
+    defaultArchName: 'x64', // see above downloadAndExtract() call
+    manageUpdates: true,
+    extraConfig: {
+      electronDist,
+      nsis: {
+        artifactName: '${productName} Legacy Setup ${version} ${arch}.${ext}'
+      }
     }
-
-    const {electronPlatformName, appOutDir} = context;
-    if (electronPlatformName !== 'darwin') {
-      console.log('Not notarizing: not macOS');
-      return;
-    }
-
-    const appleId = process.env.APPLE_ID_USERNAME
-    const appleIdPassword = process.env.APPLE_ID_PASSWORD;
-    const teamId = process.env.APPLE_TEAM_ID;
-    if (!appleId) {
-      console.log('Not notarizing: no APPLE_ID_USERNAME');
-      return;
-    }
-    if (!appleIdPassword) {
-      console.log('Not notarizing: no APPLE_ID_PASSWORD');
-      return;
-    }
-    if (!teamId) {
-      console.log('Not notarizing: no APPLE_TEAM_ID');
-      return;
-    }
-
-    console.log('Sending app to Apple for notarization, this will take a while...');
-    const appId = packageJSON.build.appId;
-    const appPath = `${appOutDir}/${context.packager.appInfo.productFilename}.app`;
-
-    return await electronNotarize.notarize({
-      tool: 'notarytool',
-      appBundleId: appId,
-      appPath,
-      appleId,
-      appleIdPassword,
-      teamId
-    });
-  };
-
-  await builder.build({
-    targets: Platform.MAC.createTarget('dmg', Arch.universal),
-    config: {
-      ...getConfig('mac', true),
-      afterSign
-    },
-    publish: getPublish()
-  });
-
-  console.log('Mac App Store builds still need to be done manually...');
-};
-
-const buildDebian = async () => {
-  await builder.build({
-    targets: Platform.LINUX.createTarget('deb', Arch.x64),
-    config: getConfig('linux-deb-x64', true),
-    publish: getPublish()
-  });
-  await builder.build({
-    targets: Platform.LINUX.createTarget('deb', Arch.arm64),
-    config: getConfig('linux-deb-arm64', true),
-    publish: getPublish()
-  });
-  await builder.build({
-    targets: Platform.LINUX.createTarget('deb', Arch.armv7l),
-    config: getConfig('linux-deb-armv7l', true),
-    publish: getPublish()
   });
 };
 
-const buildTarball = async () => {
-  await builder.build({
-    targets: Platform.LINUX.createTarget('tar.gz', Arch.x64),
-    config: getConfig('linux-tar-x64', true),
-    publish: getPublish()
-  });
-  await builder.build({
-    targets: Platform.LINUX.createTarget('tar.gz', Arch.arm64),
-    config: getConfig('linux-tar-arm64', true),
-    publish: getPublish()
-  });
-  await builder.build({
-    targets: Platform.LINUX.createTarget('tar.gz', Arch.armv7l),
-    config: getConfig('linux-tar-armv7l', true),
-    publish: getPublish()
-  });
-};
+const buildWindowsPortable = () => build({
+  platformName: 'WINDOWS',
+  platformType: 'portable',
+  manageUpdates: true
+});
 
-const buildAppimage = async () => {
-  await builder.build({
-    targets: Platform.LINUX.createTarget('appimage', Arch.x64),
-    config: getConfig('linux-appimage-x64', true),
-    publish: getPublish()
-  });
-  await builder.build({
-    targets: Platform.LINUX.createTarget('appimage', Arch.arm64),
-    config: getConfig('linux-appimage-arm64', true),
-    publish: getPublish()
-  });
-  await builder.build({
-    targets: Platform.LINUX.createTarget('appimage', Arch.armv7l),
-    config: getConfig('linux-appimage-armv7l', true),
-    publish: getPublish()
-  });
-};
+const buildMicrosoftStore = () => build({
+  platformName: 'WINDOWS',
+  platformType: 'appx',
+  canPublish: false,
+  updateChecker: false
+});
 
-const run = async () => {
+const buildMac = () => build({
+  platformName: 'MAC',
+  platformType: 'dmg',
+  defaultArchName: 'universal',
+  updateChecker: true,
+  canPublish: true,
+  extraConfig: {
+    // TODO: electron-builder got native notarization support; switch to that at some point
+    afterSign: async (context) => {
+      if (!isProduction) {
+        console.log('Not notarizing: not --production');
+        return;
+      }
+  
+      const {electronPlatformName, appOutDir} = context;
+      if (electronPlatformName !== 'darwin') {
+        console.log('Not notarizing: not macOS');
+        return;
+      }
+  
+      const appleId = process.env.APPLE_ID_USERNAME
+      const appleIdPassword = process.env.APPLE_ID_PASSWORD;
+      const teamId = process.env.APPLE_TEAM_ID;
+      if (!appleId) {
+        console.log('Not notarizing: no APPLE_ID_USERNAME');
+        return;
+      }
+      if (!appleIdPassword) {
+        console.log('Not notarizing: no APPLE_ID_PASSWORD');
+        return;
+      }
+      if (!teamId) {
+        console.log('Not notarizing: no APPLE_TEAM_ID');
+        return;
+      }
+  
+      console.log('Sending app to Apple for notarization, this will take a while...');
+      const appId = packageJSON.build.appId;
+      const appPath = `${appOutDir}/${context.packager.appInfo.productFilename}.app`;
+  
+      return await electronNotarize.notarize({
+        tool: 'notarytool',
+        appBundleId: appId,
+        appPath,
+        appleId,
+        appleIdPassword,
+        teamId
+      });
+    }
+  }
+});
+
+const buildDebian = () => build({
+  platformName: 'LINUX',
+  platformType: 'deb',
+  updateChecker: true,
+  canPublish: true
+});
+
+const buildTarball = () => build({
+  platformName: 'LINUX',
+  platformType: 'tar.gz',
+  updateChecker: true,
+  canPublish: true
+});
+
+const buildAppImage = () => build({
+  platformName: 'LINUX',
+  platformType: 'appimage',
+  updateChecker: true,
+  canPublish: true
+});
+
+const run = () => {
   if (process.argv.includes('--windows')) {
-    await buildWindows();
-  }
-  if (process.argv.includes('--windows-legacy')) {
-    await buildWindowsLegacy();
-  }
-  if (process.argv.includes('--microsoft-store')) {
-    await buildMicrosoftStore();
-  }
-  if (process.argv.includes('--mac')) {
-    await buildMac();
-  }
-  if (process.argv.includes('--debian')) {
-    await buildDebian();
-  }
-  if (process.argv.includes('--tarball')) {
-    await buildTarball();
-  }
-  if (process.argv.includes('--appimage')) {
-    await buildAppimage();
+    return buildWindowsInstaller();
+  } else if (process.argv.includes('--windows-legacy')) {
+    return buildWindowsLegacyInstaller();
+  } else if (process.argv.includes('--windows-portable')) {
+    return buildWindowsPortable();
+  } else if (process.argv.includes('--microsoft-store')) {
+    return buildMicrosoftStore();
+  } else if (process.argv.includes('--mac')) {
+    return buildMac();
+  } else if (process.argv.includes('--debian')) {
+    return buildDebian();
+  } else if (process.argv.includes('--tarball')) {
+    return buildTarball();
+  } else if (process.argv.includes('--appimage')) {
+    return buildAppImage();
+  } else {
+    console.log('see README.md');
+    process.exit(1);
   }
 };
 

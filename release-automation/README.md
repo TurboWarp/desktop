@@ -4,15 +4,11 @@ These are the bespoke scripts that we use to automate various aspects of releasi
 
 ## build.js
 
-This is what creates most of the downloads that are up on our website and on GitHub. It takes these arguments:
+This is what creates most of the downloads that are up on our website and on GitHub.
+
+You must specify which type of file you want to build:
 
 ```
---production
-    Enables update checker
-    Adds "prod-" to the start of the distribution name
-    Enables some extra warnings for people who install the wrong version of the app
-    Allows notarization on macOS
-
 --windows
     Create Windows installers for Windows 10 or later
 
@@ -34,6 +30,26 @@ This is what creates most of the downloads that are up on our website and on Git
 
 --appimage
     Create AppImages for Linux
+```
+
+Optionally you also specify which architecture you're building for:
+
+```
+--x64           64-bit x86 (default on Windows, Linux)
+--ia32          32-bit x86
+--arm64         64-bit ARM
+--armv7l        32-bit ARM
+--universal     Apple Silicon and Intel in one file (macOS only, default on macOS)
+```
+
+Optionally you may also apply:
+
+```
+--production
+    Enables update checker
+    Adds "prod-" to the start of the distribution name
+    Enables some extra warnings for people who install the wrong version of the app
+    Allows notarization on macOS
 ```
 
 ## Linux
