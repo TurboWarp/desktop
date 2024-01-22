@@ -29,13 +29,8 @@ jobs:
     - name: Package Windows
       if: runner.os == 'Windows'
       run: |
-        node release-automation/build.js --windows --x64
-        node release-automation/build.js --windows --ia32
-        node release-automation/build.js --windows --arm64
+        node release-automation/build.js --windows --microsoft-store --x64 --ia32 --arm64
         node release-automation/build.js --windows-legacy --x64
-        node release-automation/build.js --microsoft-store --x64
-        node release-automation/build.js --microsoft-store --ia32
-        node release-automation/build.js --microsoft-store --arm64
     - name: Package macOS
       if: runner.os == 'macOS'
       run: |
@@ -43,12 +38,4 @@ jobs:
     - name: Package Linux
       if: runner.os == 'Linux'
       run: |
-        node release-automation/build.js --debian --x64
-        node release-automation/build.js --debian --armv7l
-        node release-automation/build.js --debian --arm64
-        node release-automation/build.js --tarball --x64
-        node release-automation/build.js --tarball --armv7l
-        node release-automation/build.js --tarball --arm64
-        node release-automation/build.js --appimage --x64
-        node release-automation/build.js --appimage --armv7l
-        node release-automation/build.js --appimage --arm64
+        node release-automation/build.js --debian --tarball --appimage --x64 --armv7l --arm64

@@ -10,25 +10,33 @@ const {Platform, Arch} = builder;
 const isProduction = process.argv.includes('--production');
 
 /**
+ * @param {string} platformName
  * @returns {string} a string that indexes into Arch[...]
  */
 const getDefaultArch = (platformName) => {
   if (platformName === 'WINDOWS') return 'x64';
   if (platformName === 'MAC') return 'universal';
   if (platformName === 'LINUX') return 'x64';
-  throw new Error('unknown platform');
+  throw new Error(`Unknown platform: ${platformName}`);
 };
 
 /**
- * @returns {string} a string that indexes into Arch[...] or null if the default should be used
+ * @param {string} platformName
+ * @returns {string[]} a string that indexes into Arch[...] or null if the default should be used
  */
-const getUserSpecifiedArch = () => {
-  if (process.argv.includes('--x64')) return 'x64';
-  if (process.argv.includes('--ia32')) return 'ia32';
-  if (process.argv.includes('--armv7l')) return 'armv7l';
-  if (process.argv.includes('--arm64')) return 'arm64';
-  if (process.argv.includes('--universal')) return 'universal';
-  return null;
+const getArchesToBuild = (platformName) => {
+  const arches = [];
+  for (const arg of process.argv) {
+    if (arg === '--x64') arches.push('x64');
+    if (arg === '--ia32') arches.push('ia32');
+    if (arg === '--armv7l') arches.push('armv7l');
+    if (arg === '--arm64') arches.push('arm64');
+    if (arg === '--universal') arches.push('universal');
+  }
+  if (arches.length === 0) {
+    arches.push(getDefaultArch(platformName));
+  }
+  return arches;
 };
 
 const getPublish = () => process.env.GH_TOKEN ? ({
@@ -38,45 +46,51 @@ const getPublish = () => process.env.GH_TOKEN ? ({
   publishAutoUpdate: false
 }) : null;
 
-const build = ({
+const build = async ({
   platformName, // String that indexes into Platform[...]
   platformType, // Passed as first argument into platform.createTarget(...)
   manageUpdates = false,
   extraConfig = {}
 }) => {
-  const archName = getUserSpecifiedArch() ?? getDefaultArch(platformName);
-  const arch = Arch[archName];
-  if (!arch) {
-    throw new Error('unknown arch');
-  }
+  const buildForArch = (archName) => {
+    const arch = Arch[archName];
+    if (!arch) {
+      throw new Error(`Unknown arch: ${archName}`);
+    }
 
-  const platform = Platform[platformName];
-  if (!platform) {
-    throw new Error('unknown platform');
-  }
-  const target = platform.createTarget(platformType, arch);
+    const platform = Platform[platformName];
+    if (!platform) {
+      throw new Error(`Unknown platform: ${platformName}`);
+    }
 
-  let distributionName = `${platformName}-${platformType}-${archName}`.toLowerCase();
-  if (isProduction) {
-    distributionName = `release-${distributionName}`;
-  }
-  console.log(`Building distribution: ${distributionName}`);
+    const target = platform.createTarget(platformType, arch);
 
-  // electron-builder will automatically merge this with the settings in package.json
-  const config = {
-    extraMetadata: {
-      tw_dist: distributionName,
-      tw_warn_legacy: isProduction,
-      tw_update: isProduction && manageUpdates
-    },
-    ...extraConfig
+    let distributionName = `${platformName}-${platformType}-${archName}`.toLowerCase();
+    if (isProduction) {
+      distributionName = `release-${distributionName}`;
+    }
+    console.log(`Building distribution: ${distributionName}`);
+
+    // electron-builder will automatically merge this with the settings in package.json
+    const config = {
+      extraMetadata: {
+        tw_dist: distributionName,
+        tw_warn_legacy: isProduction,
+        tw_update: isProduction && manageUpdates
+      },
+      ...extraConfig
+    };
+
+    return builder.build({
+      targets: target,
+      config,
+      publish: manageUpdates ? getPublish() : null
+    });
   };
 
-  return builder.build({
-    targets: target,
-    config,
-    publish: manageUpdates ? getPublish() : null
-  });
+  for (const archName of getArchesToBuild(platformName)) {
+    await buildForArch(archName);
+  }
 };
 
 const buildWindows = () => build({
@@ -215,25 +229,28 @@ const buildAppImage = () => build({
   manageUpdates: true
 });
 
-const run = () => {
-  if (process.argv.includes('--windows')) {
-    return buildWindows();
-  } else if (process.argv.includes('--windows-legacy')) {
-    return buildWindowsLegacy();
-  } else if (process.argv.includes('--windows-portable')) {
-    return buildWindowsPortable();
-  } else if (process.argv.includes('--microsoft-store')) {
-    return buildMicrosoftStore();
-  } else if (process.argv.includes('--mac')) {
-    return buildMac();
-  } else if (process.argv.includes('--debian')) {
-    return buildDebian();
-  } else if (process.argv.includes('--tarball')) {
-    return buildTarball();
-  } else if (process.argv.includes('--appimage')) {
-    return buildAppImage();
-  } else {
-    console.log('missing platform argument; see release-automation/README.md');
+const run = async () => {
+  const options = {
+    '--windows': buildWindows,
+    '--windows-legacy': buildWindowsLegacy,
+    '--windows-portable': buildWindowsPortable,
+    '--microsoft-store': buildMicrosoftStore,
+    '--mac': buildMac,
+    '--debian': buildDebian,
+    '--tarball': buildTarball,
+    '--appimage': buildAppImage,
+  };
+
+  let built = 0;
+  for (const arg of process.argv) {
+    if (Object.prototype.hasOwnProperty.call(options, arg)) {
+      built++;
+      await options[arg]();
+    }
+  }
+
+  if (built === 0) {
+    console.log('Need to specify platforms; see release-automation/README.md');
     process.exit(1);
   }
 };

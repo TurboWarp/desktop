@@ -4,7 +4,7 @@ These are the bespoke scripts that we use to automate various aspects of releasi
 
 ## Build script
 
-This is what creates most of the downloads that are up on our website and on GitHub. Each run of the build script will generate one file, so if you want to package as multiple things, you'll have to run it multiple times. Doing multiple builds concurrently won't work; just run one at a time.
+This is what creates most of the downloads that are up on our website and on GitHub.
 
 You must specify which platform to build for:
 
@@ -55,6 +55,13 @@ You can also specify which architecture you're building for:
     Combines --x64 (Intel Silicon) and --arm64 (Apple Silicon) into one file. macOS only.
     Default on macOS.
 ```
+
+The script builds the full "matrix" of all options you give. For example, `--windows --windows-portable --x64 --arm64` will create four builds:
+
+ - Windows installer for x64
+ - Windows installer for ARM64
+ - Windows portable for x64
+ - Windows portable for ARM64
 
 Optionally you may also apply:
 

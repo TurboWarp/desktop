@@ -36,13 +36,8 @@ jobs:
     - name: Package Windows
       if: runner.os == 'Windows'
       run: |
-        node release-automation/build.js --windows --x64 --production
-        node release-automation/build.js --windows --ia32 --production
-        node release-automation/build.js --windows --arm64 --production
+        node release-automation/build.js --windows --microsoft-store --x64 --ia32 --arm64 --production
         node release-automation/build.js --windows-legacy --x64 --production
-        node release-automation/build.js --microsoft-store --x64 --production
-        node release-automation/build.js --microsoft-store --ia32 --production
-        node release-automation/build.js --microsoft-store --arm64 --production
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Upload Microsoft Store Artifact
@@ -66,14 +61,6 @@ jobs:
     - name: Package Linux
       if: runner.os == 'Linux'
       run: |
-        node release-automation/build.js --debian --x64 --production
-        node release-automation/build.js --debian --armv7l --production
-        node release-automation/build.js --debian --arm64 --production
-        node release-automation/build.js --tarball --x64 --production
-        node release-automation/build.js --tarball --armv7l --production
-        node release-automation/build.js --tarball --arm64 --production
-        node release-automation/build.js --appimage --x64 --production
-        node release-automation/build.js --appimage --armv7l --production
-        node release-automation/build.js --appimage --arm64 --production
+        node release-automation/build.js --debian --tarball --appimage --x64 --armv7l --arm64 --production
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
