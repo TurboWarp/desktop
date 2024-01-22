@@ -85,7 +85,7 @@ Then to package up the final Electron binaries, use the [electron-builder CLI](h
 
 ```bash
 # These generate almost the same downloads that we publish on our website and GitHub
-# We also add --production which enables the update checker and some more checks for people installing the wrong version
+# We also add --production (see release-automation/README.md for what that does)
 node release-automation/build.js --windows
 node release-automation/build.js --windows-legacy
 node release-automation/build.js --microsoft-store

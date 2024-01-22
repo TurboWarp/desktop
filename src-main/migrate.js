@@ -27,14 +27,13 @@ const writeCurrentVersion = async () => {
   await settings.save();
 };
 
-/**
- * @returns {never}
- */
-const openUpdatePageAndExit = () => {
+const openUpdatePage = () => {
   safelyOpenExternal('https://desktop.turbowarp.org/');
-  app.exit(1);
 };
 
+/**
+ * @returns {boolean} true if the app should continue to launch
+ */
 const migrate = async () => {
   // We have native ARM builds so people shouldn't use x86 to ARM translators
   if (app.runningUnderARM64Translation && dialog.showMessageBoxSync({
@@ -50,7 +49,8 @@ const migrate = async () => {
     defaultId: 0,
     noLink: true
   }) === 0) {
-    openUpdatePageAndExit();
+    openUpdatePage();
+    return false;
   }
 
   // Legacy version (Electron 22) should only be used on Windows 7, 8, and 8.1
@@ -73,15 +73,16 @@ const migrate = async () => {
         defaultId: 0,
         noLink: true
       }) === 0) {
-        openUpdatePageAndExit();
+        openUpdatePage();
+        return false;
       }
     }
   }
   
-  // On first launch, just mark migrations as done, we don't need to do anything else.
+  // On first launch, there is no data to migrate, so just save the current versions.
   if (isFirstLaunch) {
     await writeCurrentVersion();
-    return;
+    return true;
   }
 
   // If we are using the same version as before, we don't need to do anything.
@@ -90,7 +91,7 @@ const migrate = async () => {
     settings.desktopVersion === desktopVersion &&
     settings.electronVersion === electronVersion
   ) {
-    return;
+    return true;
   }
 
   // Imported lazily as it takes about 10ms to import
@@ -129,7 +130,8 @@ const migrate = async () => {
       defaultId: 0,
       noLink: true
     }) === 0) {
-      openUpdatePageAndExit();
+      openUpdatePage();
+      return false;
     }
   }
 
@@ -138,6 +140,8 @@ const migrate = async () => {
   } else {
     await writeCurrentVersion();
   }
+
+  return true;
 };
 
 module.exports = migrate;

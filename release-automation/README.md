@@ -8,7 +8,9 @@ This is what creates most of the downloads that are up on our website and on Git
 
 ```
 --production
-    Enables update checker and sets the distribution names to "prod-" instead of "dev-"
+    Enables update checker
+    Adds "prod-" to the start of the distribution name
+    Enables some extra warnings for people who install the wrong version of the app
 
 --windows
     Create Windows installers (Windows 10 or later)

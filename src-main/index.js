@@ -172,7 +172,14 @@ app.on('second-instance', (event, argv, workingDirectory) => {
 app.whenReady().then(() => {
   BaseWindow.settingsChanged();
 
-  migratePromise = migrate().then(() => {
+  migratePromise = migrate().then((shouldContinue) => {
+    if (!shouldContinue) {
+      // If we use exit() instead of quit() then openExternal() calls made before the app quits
+      // won't work on Windows.
+      app.quit();
+      return;
+    }
+
     isMigrating = false;
 
     EditorWindow.openFiles([

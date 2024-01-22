@@ -1,6 +1,9 @@
+const pathUtil = require('path');
+const fs = require('fs');
 const builder = require('electron-builder');
-const {notarize} = require('@electron/notarize');
-const {downloadArtifact} = require('@electron/get');
+const electronNotarize = require('@electron/notarize');
+const electronGet = require('@electron/get');
+const AdmZip = require('adm-zip');
 const packageJSON = require('../package.json');
 
 const {Platform, Arch} = builder;
@@ -57,14 +60,39 @@ const buildWindowsLegacy = async () => {
   // This is the last release of Electron 22
   const VERSION = '22.3.27';
 
-  console.log('Downloading legacy versions of Electron; might take a bit.');
-  const x64Dist = await downloadArtifact({
+  const downloadAndExtract = async ({version, platform, artifactName, arch}) => {
+    const name = `${artifactName}-v${version}-${platform}-${arch}`;
+    const extractPath = pathUtil.join(__dirname, '.cache', name);
+
+    if (!fs.existsSync(extractPath)) {
+      console.log(`Downloading ${name}, this may take a while...`);
+
+      const zipPath = await electronGet.downloadArtifact({
+        version,
+        platform,
+        artifactName,
+        arch
+      });
+
+      // in case the process dies mid way, extract to temporary path and then rename so we have some level of atomicity
+      const zip = new AdmZip(zipPath);
+      const tempExtractPath = `${extractPath}.temp`;
+      zip.extractAllTo(`${extractPath}.temp`, true);
+      fs.renameSync(tempExtractPath, extractPath);
+    } else {
+      console.log(`Already downloaded ${name}`);
+    }
+
+    return extractPath;
+  };
+
+  const x64Dist = await downloadAndExtract({
     version: VERSION,
     platform: 'win32',
     artifactName: 'electron',
     arch: 'x64'
   });
-  const ia32Dist = await downloadArtifact({
+  const ia32Dist = await downloadAndExtract({
     version: VERSION,
     platform: 'win32',
     artifactName: 'electron',
@@ -72,7 +100,7 @@ const buildWindowsLegacy = async () => {
   });
 
   const newNSIS = {
-    ...packageJSON.build,
+    ...packageJSON.build.nsis,
     artifactName: '${productName} Legacy Setup ${version} ${arch}.${ext}'
   };
 
@@ -80,7 +108,7 @@ const buildWindowsLegacy = async () => {
     targets: Platform.WINDOWS.createTarget('nsis', Arch.x64),
     config: {
       ...getConfig('win-legacy-nsis-x64', true),
-      ...newNSIS,
+      nsis: newNSIS,
       electronDist: x64Dist
     },
     publish: getPublish()
@@ -89,7 +117,7 @@ const buildWindowsLegacy = async () => {
     targets: Platform.WINDOWS.createTarget('nsis', Arch.ia32),
     config: {
       ...getConfig('win-legacy-nsis-ia32', true),
-      ...newNSIS,
+      nsis: newNSIS,
       electronDist: ia32Dist
     },
     publish: getPublish()
@@ -140,7 +168,7 @@ const buildMac = async () => {
     const appId = packageJSON.build.appId;
     const appPath = `${appOutDir}/${context.packager.appInfo.productFilename}.app`;
 
-    return await notarize({
+    return await electronNotarize.notarize({
       tool: 'notarytool',
       appBundleId: appId,
       appPath,
