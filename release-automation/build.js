@@ -38,22 +38,6 @@ const getPublish = () => process.env.GH_TOKEN ? ({
   publishAutoUpdate: false
 }) : null;
 
-/**
- * Recursively copy properties from newValues to resultInPlace, in place.
- * Properties in resultInPlcae but not in newValues are left unchanged.
- * @param {object} resultInPlace
- * @param {object} newValues
- */
-const applyExtraProperties = (resultInPlace, newValues) => {
-  for (const key of Object.keys(newValues)) {
-    if (resultInPlace[key] !== null && typeof resultInPlace[key] === 'object') {
-      applyExtraProperties(resultInPlace[key], newValues[key]);
-    } else {
-      resultInPlace[key] = newValues[key];
-    }
-  }
-};
-
 const build = ({
   platformName, // String that indexes into Platform[...]
   platformType, // Passed as first argument into platform.createTarget(...)
@@ -78,15 +62,15 @@ const build = ({
   }
   console.log(`Building distribution: ${distributionName}`);
 
-  // electron-builder automatically reads settings from package.json
+  // electron-builder will automatically merge this with the settings in package.json
   const config = {
     extraMetadata: {
       tw_dist: distributionName,
       tw_warn_legacy: isProduction,
       tw_update: isProduction && manageUpdates
-    }
+    },
+    ...extraConfig
   };
-  applyExtraProperties(config, extraConfig);
 
   return builder.build({
     targets: target,
