@@ -3,13 +3,13 @@ const fs = require('fs');
 
 const originalCopy = fs.copyFile.bind(fs);
 fs.copyFile = (src, dest, mode, callback) => {
-  console.log(`Copying ${src} to ${dest} - ${mode}`);
+  console.trace(`Copying ${src} to ${dest} - ${mode}`);
   const destDir = pathUtil.dirname(dest);
   try {
     const files = fs.readdirSync(destDir);
-    console.log('Destination files: ' + files.join(', '));
+    console.trace('Destination files: ' + files.join(', '));
   } catch (e) {
-    console.log('could not read', e.message);
+    console.trace('could not read', e.message);
   }
   return originalCopy(src, dest, mode, callback);
 };
