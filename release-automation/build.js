@@ -27,6 +27,7 @@ const getConfig = (distributionName, enableUpdates) => {
 };
 
 const getPublish = () => process.env.GH_TOKEN ? ({
+  publishAutoUpdate: false,
   provider: 'github',
   owner: 'TurboWarp',
   repo: 'desktop'
