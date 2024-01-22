@@ -40,6 +40,8 @@ jobs:
       if: runner.os == 'macOS'
       run: |
         node release-automation/build.js --mac --universal
+      env:
+        USE_HARD_LINKS: "false"
     - name: Package Linux
       if: runner.os == 'Linux'
       run: |
@@ -52,3 +54,5 @@ jobs:
         node release-automation/build.js --appimage --x64
         node release-automation/build.js --appimage --armv7l
         node release-automation/build.js --appimage --arm64
+      env:
+        USE_HARD_LINKS: "false"

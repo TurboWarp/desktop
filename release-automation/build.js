@@ -42,7 +42,7 @@ const getPublish = () => process.env.GH_TOKEN ? ({
 /**
  * Recursively copy properties from newValues to resultInPlace, in place.
  * Properties in resultInPlcae but not in newValues are left unchanged.
- * @param {object} resultInPlace 
+ * @param {object} resultInPlace
  * @param {object} newValues
  */
 const applyExtraProperties = (resultInPlace, newValues) => {
@@ -89,6 +89,7 @@ const build = ({
   }
 
   applyExtraProperties(config, extraConfig);
+  console.log(config);
 
   return builder.build({
     targets: target,
@@ -176,13 +177,13 @@ const buildMac = () => build({
         console.log('Not notarizing: not --production');
         return;
       }
-  
+
       const {electronPlatformName, appOutDir} = context;
       if (electronPlatformName !== 'darwin') {
         console.log('Not notarizing: not macOS');
         return;
       }
-  
+
       const appleId = process.env.APPLE_ID_USERNAME
       const appleIdPassword = process.env.APPLE_ID_PASSWORD;
       const teamId = process.env.APPLE_TEAM_ID;
@@ -198,11 +199,11 @@ const buildMac = () => build({
         console.log('Not notarizing: no APPLE_TEAM_ID');
         return;
       }
-  
+
       console.log('Sending app to Apple for notarization, this will take a while...');
       const appId = packageJSON.build.appId;
       const appPath = `${appOutDir}/${context.packager.appInfo.productFilename}.app`;
-  
+
       return await electronNotarize.notarize({
         tool: 'notarytool',
         appBundleId: appId,

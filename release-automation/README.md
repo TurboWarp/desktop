@@ -4,7 +4,7 @@ These are the bespoke scripts that we use to automate various aspects of releasi
 
 ## build.js
 
-This is what creates most of the downloads that are up on our website and on GitHub.
+This is what creates most of the downloads that are up on our website and on GitHub. Each run of the build script will generate one file, so if you want to package as multiple things, you'll have to run it multiple times. Doing multiple builds concurrently won't work; just run one at a time.
 
 You must specify which type of file you want to build:
 
