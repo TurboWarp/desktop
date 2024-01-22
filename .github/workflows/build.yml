@@ -30,7 +30,7 @@ jobs:
       if: runner.os == 'Windows'
       run: |
         node release-automation/build.js --windows --microsoft-store --x64 --ia32 --arm64
-        node release-automation/build.js --windows-legacy --x64
+        node release-automation/build.js --windows-portable --windows-legacy --x64
     - name: Package macOS
       if: runner.os == 'macOS'
       run: |

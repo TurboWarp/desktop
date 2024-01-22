@@ -37,7 +37,7 @@ jobs:
       if: runner.os == 'Windows'
       run: |
         node release-automation/build.js --windows --microsoft-store --x64 --ia32 --arm64 --production
-        node release-automation/build.js --windows-legacy --x64 --production
+        node release-automation/build.js --windows-portable --windows-legacy --x64 --production
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Upload Microsoft Store Artifact
