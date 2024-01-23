@@ -50,9 +50,10 @@ const build = async ({
   platformName, // String that indexes into Platform[...]
   platformType, // Passed as first argument into platform.createTarget(...)
   manageUpdates = false,
-  extraConfig = {}
+  extraConfig = {},
+  prepare = (archName) => Promise.resolve({})
 }) => {
-  const buildForArch = (archName) => {
+  const buildForArch = async (archName) => {
     if (!Object.prototype.hasOwnProperty.call(Arch, archName)) {
       throw new Error(`Unknown arch: ${archName}`);
     }
@@ -77,7 +78,8 @@ const build = async ({
         tw_warn_legacy: isProduction,
         tw_update: isProduction && manageUpdates
       },
-      ...extraConfig
+      ...extraConfig,
+      ...await prepare(archName)
     };
 
     return builder.build({
@@ -115,12 +117,14 @@ const buildWindowsLegacy = async () => {
         artifactName,
         arch
       });
+      console.log(`Saved to ${zipPath}`);
 
       // in case the process dies mid way, extract to temporary path and then rename so we have some level of atomicity
       const zip = new AdmZip(zipPath);
       const tempExtractPath = `${extractPath}.temp`;
       zip.extractAllTo(`${extractPath}.temp`, true);
       fs.renameSync(tempExtractPath, extractPath);
+      console.log(`Extracted to ${extractPath}`);
     } else {
       console.log(`Already downloaded ${name}`);
     }
@@ -128,22 +132,25 @@ const buildWindowsLegacy = async () => {
     return extractPath;
   };
 
-  const electronDist = await downloadAndExtract({
-    version: LEGACY_ELECTRON_VERSION,
-    platform: 'win32',
-    artifactName: 'electron',
-    arch: getArch() ?? getDefaultArch('WINDOWS')
-  });
-
   return build({
     platformName: 'WINDOWS',
     platformType: 'nsis',
     manageUpdates: true,
     extraConfig: {
-      electronDist,
       nsis: {
         artifactName: '${productName} Legacy Setup ${version} ${arch}.${ext}'
       }
+    },
+    prepare: async (archName) => {
+      const electronDist = await downloadAndExtract({
+        version: LEGACY_ELECTRON_VERSION,
+        platform: 'win32',
+        artifactName: 'electron',
+        arch: archName
+      });
+      return {
+        electronDist
+      };
     }
   });
 };
