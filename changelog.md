@@ -2,16 +2,18 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.10.0-beta.2 (2024-01-21)
+# 1.10.0-beta.2 (2024-01-22)
 
  - Support for Windows 7, 8, and 8.1 has been re-added. We now offer two builds for Windows: one for Windows 10 and later, and one 'Legacy' build for Windows 7 and later. We'll keep the legacy build around as long as it is not an unreasonable maintenance burden
  - A similar approach will be used to maintain support for macOS 10.13 and macOS 10.14 in 1.11
+ - We will try to keep support for old operating system for as long as it is not an unreasonable burden
  - Added Rearrangeable custom block inputs addon
+ - Fixed custom stage size in Costume editor snapping and Gamepad support addons
+ - Fixed Wake Lock extension in desktop app
  - Fixed deleting data from old versions of the app (mentioned in 1.10.0-beta.1 but did not actually work)
  - Fixed scroll bar behavior for custom stage size
  - Fixed various dark mode bugs
  - Fixed menus opening when mouse is released over them instead of only when actually clicked
- - Fixed Wake Lock extension
  - Various other bug fixes
 
 # 1.10.0-beta.1 (2024-01-12)
