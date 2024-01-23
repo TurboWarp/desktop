@@ -43,8 +43,7 @@ const getArchesToBuild = (platformName) => {
 const getPublish = () => process.env.GH_TOKEN ? ({
   provider: 'github',
   owner: 'TurboWarp',
-  repo: 'desktop',
-  publishAutoUpdate: false
+  repo: 'desktop'
 }) : null;
 
 const build = async ({
