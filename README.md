@@ -81,19 +81,9 @@ Build an optimized version of the webpack portions with:
 npm run webpack:prod
 ```
 
-Then to package up the final Electron binaries, use the [electron-builder CLI](https://www.electron.build/cli) or our build script `release-automation/build.js`. Either way the final builds are saved in the `dist` folder. Some examples:
+Then to package up the final Electron binaries, use either our build script `release-automation/build.js` (see [release-automation/README.md](release-automation/README.md)) or the [electron-builder CLI](https://www.electron.build/cli). Either way the final builds are saved in the `dist` folder. Here are some examples using the electron-builder CLI directly:
 
 ```bash
-# These generate almost the same downloads that we publish on our website and GitHub
-# We also add --production (see release-automation/README.md for what that does)
-node release-automation/build.js --windows
-node release-automation/build.js --windows-legacy
-node release-automation/build.js --microsoft-store
-node release-automation/build.js --mac
-node release-automation/build.js --debian
-node release-automation/build.js --tarball
-node release-automation/build.js --appimage
-
 # You can also do manual builds with electron-builder's CLI, for example:
 # Windows installer
 npx electron-builder --windows nsis --x64

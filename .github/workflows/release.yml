@@ -36,9 +36,8 @@ jobs:
     - name: Package Windows
       if: runner.os == 'Windows'
       run: |
-        node release-automation/build.js --production --windows
-        node release-automation/build.js --production --windows-legacy
-        node release-automation/build.js --production --microsoft-store
+        node release-automation/build.js --windows --microsoft-store --x64 --ia32 --arm64 --production
+        node release-automation/build.js --windows-portable --windows-legacy --x64 --production
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Upload Microsoft Store Artifact
@@ -51,10 +50,9 @@ jobs:
     - name: Package macOS
       if: runner.os == 'macOS'
       run: |
-        node release-automation/build.js --production --mac
+        node release-automation/build.js --mac --universal --production
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        USE_HARD_LINKS: "false"
         APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
         APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
@@ -63,9 +61,6 @@ jobs:
     - name: Package Linux
       if: runner.os == 'Linux'
       run: |
-        node release-automation/build.js --production --debian
-        node release-automation/build.js --production --tarball
-        node release-automation/build.js --production --appimage
+        node release-automation/build.js --debian --tarball --appimage --x64 --armv7l --arm64 --production
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        USE_HARD_LINKS: "false"
