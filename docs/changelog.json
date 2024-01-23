@@ -1,6 +1,6 @@
 [
   {
-    "version": "1.10.0-beta.2",
+    "version": "1.10.0-beta.3",
     "date": "2024-1-22",
     "notes": [
       "Support for Windows 7, 8, and 8.1 has been re-added. We now offer two builds for Windows: one for Windows 10 and later, and one 'Legacy' build for Windows 7 and later. We'll keep the legacy build around as long as it is not an unreasonable maintenance burden",

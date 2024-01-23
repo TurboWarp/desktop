@@ -4,6 +4,7 @@ const builder = require('electron-builder');
 const electronNotarize = require('@electron/notarize');
 const electronGet = require('@electron/get');
 const AdmZip = require('adm-zip');
+const packageJSON = require('../package.json');
 
 const {Platform, Arch} = builder;
 
