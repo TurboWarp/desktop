@@ -53,7 +53,7 @@ const build = async ({
   extraConfig = {}
 }) => {
   const buildForArch = (archName) => {
-    if (!Object.prototype.hasOwnProperty.call(Arch, arch)) {
+    if (!Object.prototype.hasOwnProperty.call(Arch, archName)) {
       throw new Error(`Unknown arch: ${archName}`);
     }
     const arch = Arch[archName];
