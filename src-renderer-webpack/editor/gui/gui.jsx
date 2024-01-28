@@ -26,11 +26,6 @@ const GUIWithProps = () => (
   />
 );
 
-export let appElement = null;
-
-GUIWithProps.setAppElement = newAppElement => {
-  appElement = newAppElement;
-  GUI.setAppElement(newAppElement);
-};
+GUIWithProps.setAppElement = GUI.setAppElement;
 
 export default GUIWithProps;
