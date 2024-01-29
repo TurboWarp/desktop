@@ -41,6 +41,13 @@
         "microsoft-store-screenshot-caption": "프로젝트 사진 출처 : {screenshot_project_link}",
         "microsoft-store-screenshot-packager": "프로젝트를 HTML 또는 윈도우, macOS, 리눅스 앱으로 변환하기 위한 내장 패키징 프로그램"
     },
+    "nb": {
+        "microsoft-store-description": "TurboWarp er en mod av programmeringsspråket Scratch med en kompilator for å kjøre prosjekter raskere, mørk modus, en haug med tillegg og mer.\n - Kjører prosjekter opptil 20 ganger raskere enn Scratch\n - Bruker betydelig mindre minne og energi når inaktiv\n - Mørk modus\n - Utviklerverktøy, søkbare rullegardinmenyer, løkskinning \n - Mange flere tillegg og tilpassbarhetsalternativer\n - Fortsatt nesten 100% kompatibel med Scratch\n - Native filsystem og filutforsker integrasjon\n - Mindre etterslep når du redigerer store prosjekter\n - Valgfri støtte for interpolering, 60 FPS, penn av høy kvalitet, uendelige kloner\n - Sekk\n - Og mer\n\nUtviklerne av TurboWarp har ingen tilknytning til Scratch Team. Dette er en samfunnsutviklet mod.\n\nProsjektet som vises på skjermbilder er\n{screenshot_project_link}\n",
+        "microsoft-store-generic-release-notes": "Du finner de nyeste produktmerknadene i {changelog_link}",
+        "microsoft-store-screenshot-addons": "Mer enn {number_of_addons} tillegg for å tilpasse og forbedre opplevelsen din.",
+        "microsoft-store-screenshot-caption": "Prosjekt avbildet: {screenshot_project_link}",
+        "microsoft-store-screenshot-packager": "Innebygd pakker for å konvertere prosjekter til HTML-filer eller applikasjoner for Windows, macOS eller Linux."
+    },
     "nl": {
         "microsoft-store-description": "TurboWarp is een modificatie van de Scratch-programmeertaal met een compiler om projecten sneller uit te voeren. Het komt met een donkere modus, een heleboel addons, en nog meer.\n\n  - Voer projecten tot 20x sneller uit dan Scratch\n  - Gebruikt veel minder geheugen en energie wanneer niet gefocust\n  - Donkere modus\n  - Ontwikkelaarstools, doorzoekbare dropdowns, onion skinning\n  - Nog veel meer addons en aanpasbare opties\n  - Nog steeds bijna 100% compatibel met Scratch\n  - Eigen bestandssysteem en bestandsverkenner-integratie\n  - Betere prestaties bij het editen van grote projecten\n  - Optionele ondersteuning voor interpolatie, 60 FPS, pen van hoge kwaliteit, oneindig veel klonen\n  - Rugzak\n  - en nog meer\n\nDe ontwikkelaars van TurboWarp zijn niet in samenwerking met het Scratch Team. Dit is een modificatie ontwikkeld door de gemeenschap.\n\nProject weergegeven in screenshots is {screenshot_project_link}\n",
         "microsoft-store-generic-release-notes": "Kijk hier voor de recente release-opmerkingen: {changelog_link}",
