@@ -262,6 +262,13 @@
         font-weight: bold;
         font-size: 1.4em;
       }
+      .store-badge-text {
+        display: flex;
+        flex-direction: column;
+      }
+      [lang="ja"] .store-badge-text {
+        flex-direction: column-reverse;
+      }
 
       .download-button {
         display: inline-flex;
@@ -741,8 +748,8 @@
       <div data-if-os="windows">
         <a class="store-badge microsoft-store" href="https://apps.microsoft.com/store/detail/turbowarp/9P4DPZGV5ZKL">
           <div class="store-icon microsoft-icon"></div>
-          <div>
-            <div l10n="getit" l10n-description="Used in the context 'Get it from Microsoft'. Microsoft is on a separate line.">Get it from</div>
+          <div class="store-badge-text">
+            <div l10n="getit" l10n-description="Used in the context 'Get it from Microsoft'. Microsoft is on a separate line (above in Japanese, below in others)">Get it from</div>
             <div>Microsoft</div>
           </div>
         </a>
@@ -754,8 +761,8 @@
       <div data-if-os="mac">
         <a class="store-badge mac-app-store" href="https://apps.apple.com/us/app/turbowarp/id6444661463">
           <div class="store-icon apple-icon"></div>
-          <div>
-            <div l10n="downloadon" l10n-description="Used in the context 'Download on the Mac App Store'. Mac App Store is on a separate line.">Download on the</div>
+          <div class="store-badge-text">
+            <div l10n="downloadon" l10n-description="Used in the context 'Download on the Mac App Store'. Mac App Store is on a separate line (above in Japanese, below in others)">Download on the</div>
             <div>Mac App Store</div>
           </div>
         </a>
@@ -1174,8 +1181,8 @@
       <p l10n="ms">Get it from the Microsoft Store to enable automatic updates.</p>
       <a class="store-badge microsoft-store" href="https://apps.microsoft.com/store/detail/turbowarp/9P4DPZGV5ZKL">
         <div class="store-icon microsoft-icon"></div>
-        <div>
-          <div l10n="getit" l10n-description="Used in the context 'Get it from Microsoft'. Microsoft is on a separate line.">Get it from</div>
+        <div class="store-badge-text">
+          <div l10n="getit" l10n-description="Used in the context 'Get it from Microsoft'. Microsoft is on a separate line (above in Japanese, below in others)">Get it from</div>
           <div>Microsoft</div>
         </div>
       </a>
@@ -1193,8 +1200,8 @@
       <p l10n="macupd">Install from the Mac App Store for automatic updates.</p>
       <a class="store-badge mac-app-store" href="https://apps.apple.com/us/app/turbowarp/id6444661463">
         <div class="store-icon apple-icon"></div>
-        <div>
-          <div l10n="downloadon" l10n-description="Used in the context 'Download on the Mac App Store'. Mac App Store is on a separate line.">Download on the</div>
+        <div class="store-badge-text">
+          <div l10n="downloadon" l10n-description="Used in the context 'Download on the Mac App Store'. Mac App Store is on a separate line (above in Japanese, below in others)">Download on the</div>
           <div>Mac App Store</div>
         </div>
       </a>
