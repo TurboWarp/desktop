@@ -28,11 +28,11 @@
         "microsoft-store-screenshot-packager": "Packager integrato per convertire i progetti in file HTML o in applicazioni per Windows, macOS o Linux."
     },
     "ja": {
-        "microsoft-store-description": "TurboWarp は、Scratch プログラミング言語の mod であり、プロジェクトをより高速に実行するためのコンパイラ、ダーク モード、多数のアドオンなどを備えています。\n\n- プロジェクトを Scratch の最大 20 倍高速実行する\n- アイドル時のメモリとエネルギーの使用量が大幅に削減されます\n- ダークモード\n- 開発者ツール、検索可能なドロップダウン、オニオン スキニング\n- さらに多くのアドオンとカスタマイズオプション\n- Scratchとの互換性はほぼ100%\n- ネイティブ ファイルシステムとファイル エクスプローラーの統合\n- 大規模なプロジェクトを編集する際のラグが少ない\n- 補間、60 FPS、高品質ペン、無限クローンのオプション サポート\n- バックパック\n- その他\n\nTurboWarp の開発者は、Scratch チームとは何の関係もありません。 これはコミュニティが開発した mod です。\n\nスクリーンショットに表示されているプロジェクトは {screenshot_project_link} です。\n",
+        "microsoft-store-description": "TurboWarp は、Scratch プログラミング言語の mod であり、プロジェクトをより高速に実行するためのコンパイラ、ダーク モード、多数のアドオンなどを兼ね備えています。\n\n- プロジェクトを Scratch の最大 20 倍高速に実行する\n- アイドル時のメモリとエネルギーの使用量を大幅に削減\n- ダークモード\n- 開発者ツール、検索可能なドロップダウン、オニオン スキニング\n- さらに多くのアドオンとカスタマイズオプション\n- Scratchとの互換性はほぼ100%\n- ネイティブ ファイルシステムとファイル エクスプローラーの統合\n- 大規模なプロジェクトを編集する際のラグを改善\n- 補間、60 FPS、高品質ペン、無限クローンのオプション サポート\n- バックパック\n- そのほかにもいろいろ\n\nTurboWarp の開発者は、Scratch チームとは何の関係もありません。 これはコミュニティが開発した mod です。\n\nスクリーンショットに表示されているプロジェクトは {screenshot_project_link} です。\n",
         "microsoft-store-generic-release-notes": "最新のリリース ノートについては、次の Web サイトをご覧ください。{changelog_link}",
-        "microsoft-store-screenshot-addons": "{number_of_addons} 個を超えるアドオンがあり、経験をカスタマイズすることで強化できます。",
+        "microsoft-store-screenshot-addons": "体験をカスタマイズし、向上させる拡張機能が、{number_of_addons}個以上あります。",
         "microsoft-store-screenshot-caption": "プロジェクトの写真:{screenshot_project_link}",
-        "microsoft-store-screenshot-packager": "プロジェクトをWindows、macOS、またはLinux用のアプリケーションファイルまたはHTMLテキストファイルに変換します。"
+        "microsoft-store-screenshot-packager": "プロジェクトをWindows、macOS、またはLinux用のアプリケーションファイルまたはHTMLファイルに変換します。"
     },
     "ko": {
         "microsoft-store-description": "터보워프는 프로그래밍 언어인 스크래치 프로젝트를 더 빠르게 작동시키기 위한 모드입니다.\n프로젝트를 컴파일하거나, 에디터에서 다크 모드를 사용하거나, 여러 가지 애드온을 지원하는 등 많은 기능을 제공합니다.\n\n# 스크래치 프로젝트를 최대 20배 더 빠르게 작동 가능\n# 유후 상태에서 스크래치보다 확연히 적은 양의 메모리와 에너지 사용\n# 다크 모드 지원\n# 개발자 도구, 블록 검색 기능, 어니언 스키닝 지원\n# 어마어마하게 많은 애드온과 커스터마이징  가능한 옵션 지원\n# 거의 100% 완벽하게 스크래치 프로젝트와 호환 가능\n# 기존의 파일 시스템과 파일 탐색기 통합\n# 대규모 프로젝트를 수정할 때 보다 나은 사용자 경험 제공\n# 프레임 보간, 60프레임, 고품질 펜, 무제한 복제본 지원\n# 개인 저장소 기능 지원\n# 위에 나열한 것들을 제외한 많은 기능 지원\n\n터보워프의 개발자들은 스크래치 팀과 아무런 관련이 없으며, 터보워프는 커뮤니티에서 개발된 모드입니다.\n\n스크린샷의 프로젝트 출처 :{screenshot_project_link}\n",
