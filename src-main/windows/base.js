@@ -79,10 +79,20 @@ class BaseWindow {
     return null;
   }
 
+  /**
+   * @template T
+   * @param {{new(): T}} cls 
+   * @returns {T[]}
+   */
   static getWindowsByClass (cls) {
     return windowsByClass.get(cls) || [];
   }
 
+  /**
+   * @template T
+   * @param {{new(): T}} cls
+   * @returns {T}
+   */
   static singleton (cls) {
     const windows = BaseWindow.getWindowsByClass(cls);
     if (windows.length) {

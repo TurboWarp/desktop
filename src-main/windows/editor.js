@@ -368,8 +368,8 @@ class EditorWindow extends ProjectRunningWindow {
       EditorWindow.newWindow();
     });
 
-    ipc.handle('open-addon-settings', () => {
-      AddonsWindow.show();
+    ipc.handle('open-addon-settings', (event, search) => {
+      AddonsWindow.show(search);
     });
 
     ipc.handle('open-desktop-settings', () => {

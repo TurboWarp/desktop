@@ -7,7 +7,10 @@ const prompts = require('../prompts');
 const {writeFileAtomic} = require('../atomic-write-stream');
 
 class AddonsWindow extends BaseWindow {
-  constructor () {
+  /**
+   * @param {string|null} search
+   */
+  constructor (search) {
     super();
 
     this.window.on('page-title-updated', event => {
@@ -41,7 +44,7 @@ class AddonsWindow extends BaseWindow {
       await writeFileAtomic(result.filePath, settings);
     });
 
-    this.loadURL(`tw-editor://./addons/addons.html`);
+    this.loadURL(`tw-editor://./addons/addons.html${search ? `#${search}` : ''}`);
   }
 
   getDimensions () {
@@ -63,8 +66,18 @@ class AddonsWindow extends BaseWindow {
     return '#111111';
   }
 
-  static show () {
-    const window = BaseWindow.singleton(AddonsWindow);
+  static show (search) {
+    // If we were asked to show a specific search query, always open a new window
+    // Even if the search was the same as an existing window, we don't have a way to
+    // know if the user changed the search.
+    let window;
+    if (search) {
+      const windows = BaseWindow.getWindowsByClass(AddonsWindow);
+      windows.forEach(i => i.window.destroy());
+      window = new AddonsWindow(search);
+    } else {
+      window = BaseWindow.singleton(AddonsWindow);
+    }
     window.show();
   }
 }

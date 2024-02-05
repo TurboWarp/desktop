@@ -2,21 +2,25 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.10.0 (2024-02-04)
+# 1.10.1 (2024-02-05)
 
- - Windows: Support for Windows 7, 8, and 8.1 has not been removed, however you will need to make sure to download the "Legacy" version of the app for it to work. This is slower and less secure, but we will support it as long as it's not an unreasonable burden.
+ - Windows: Support for Windows 7, 8, and 8.1 has not been removed, however you will have to download a special version of the app that uses old versions of libraries. This is slower and less secure, but we will support it as long as it's not an unreasonable burden.
  - New addons: Rearrangeable custom block inputs, Skewing in costume editor, Square block text inputs, Compact editor, Customizable menu bar, Copy reporter values, Move sprite to front layer, Arrow key incrementation in editor
  - New extensions: WebSocket, Pen+ V6, Asset Manager, HTML encoding
  - Insert blocks by name addon was rewritten and works so much better
- - Added high contrast mode and dark blocks mode
+ - Added high contrast mode
+ - Added dark blocks mode
  - Added option to change accent color from red to blue or purple
  - Added progress bar when loading projects from your computer
- - When using large stage sizes, you now have more size options in the editor
+ - Added more stage size controls when using large custom stage sizes
+ - Added support for generating Electron apps for ARM Linux computers
+ - Added many new APIs for extensions
  - Fixed scripts imported from the backpack dropping in the wrong spot
  - Fixed gamepad support and costume editor snapping addons when using custom stage sizes
  - Fixed scroll bars when using custom stage sizes
  - Fixed wake lock extension
- - A LOT more bug fixes
+ - Fixed too many bugs to list here
+ - Removed hidden "Scratch" font due to license ambiguities (Custom fonts can be used as a workaround)
 
 # 1.9.3 (2023-09-18)
 
