@@ -71,14 +71,17 @@
           <li>New extensions: WebSocket, Pen+ V6, Asset Manager, HTML encoding</li>
           <li>Insert blocks by name addon was rewritten and works so much better</li>
           <li>Added high contrast mode</li>
+          <li>Added dark blocks mode</li>
           <li>Added option to change accent color from red to blue or purple</li>
           <li>Added progress bar when loading projects from your computer</li>
-          <li>When using large stage sizes, you now have more size options in the editor</li>
+          <li>Added more stage size controls when using large custom stage sizes</li>
+          <li>Added support for generating Electron apps for ARM Linux computers</li>
+          <li>Added many new APIs for extensions</li>
           <li>Fixed scripts imported from the backpack dropping in the wrong spot</li>
           <li>Fixed gamepad support and costume editor snapping addons when using custom stage sizes</li>
           <li>Fixed scroll bars when using custom stage sizes</li>
           <li>Fixed wake lock extension</li>
-          <li>A LOT more bug fixes</li>
+          <li>Fixed too many bugs to list here</li>
         </ul>
       </description>
     </release>
