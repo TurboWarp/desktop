@@ -2,32 +2,21 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.10.0-beta.3 (2024-01-22)
+# 1.10.0 (2024-02-04)
 
- - Support for Windows 7, 8, and 8.1 has been re-added. We now offer two builds for Windows: one for Windows 10 and later, and one 'Legacy' build for Windows 7 and later. We'll keep the legacy build around as long as it is not an unreasonable maintenance burden
- - A similar approach will be used to maintain support for macOS 10.13 and macOS 10.14 in 1.11
- - We will try to keep support for old operating system for as long as it is not an unreasonable burden
- - Added Rearrangeable custom block inputs addon
- - Fixed custom stage size in Costume editor snapping and Gamepad support addons
- - Fixed Wake Lock extension in desktop app
- - Fixed deleting data from old versions of the app (mentioned in 1.10.0-beta.1 but did not actually work)
- - Fixed scroll bar behavior for custom stage size
- - Fixed various dark mode bugs
- - Fixed menus opening when mouse is released over them instead of only when actually clicked
- - Various other bug fixes
-
-# 1.10.0-beta.1 (2024-01-12)
-
- - Merged over a year of updates to Scratch and Scratch Addons
- - Support for high contrast mode and dark blocks
- - Support for changing the accent color from red to purple or blue (more customization to come later)
- - Six new addons: Skewing in costume editor, Square block text inputs, Compact editor, Copy reporter values, Move sprite to front layer, Arrow key incrementation in editor
+ - Windows: Support for Windows 7, 8, and 8.1 has not been removed, however you will need to make sure to download the "Legacy" version of the app for it to work. This is slower and less secure, but we will support it as long as it's not an unreasonable burden.
+ - New addons: Rearrangeable custom block inputs, Skewing in costume editor, Square block text inputs, Compact editor, Customizable menu bar, Copy reporter values, Move sprite to front layer, Arrow key incrementation in editor
+ - New extensions: WebSocket, Pen+ V6, Asset Manager, HTML encoding
  - Insert blocks by name addon was rewritten and works so much better
- - Dropping code from the backpack places it in the right spot now
- - Loading bar now works for files on your computer
- - A lot of other bug fixes and new features
- - For people that used TurboWarp Desktop before v1.9.0, v1.10.0-beta.1 will remove some and now-unused data to reclaim disk space
- - Extension permission requests for notifications and reading clipboard are enforced by the desktop app
+ - Added high contrast mode and dark blocks mode
+ - Added option to change accent color from red to blue or purple
+ - Added progress bar when loading projects from your computer
+ - When using large stage sizes, you now have more size options in the editor
+ - Fixed scripts imported from the backpack dropping in the wrong spot
+ - Fixed gamepad support and costume editor snapping addons when using custom stage sizes
+ - Fixed scroll bars when using custom stage sizes
+ - Fixed wake lock extension
+ - A LOT more bug fixes
 
 # 1.9.3 (2023-09-18)
 
