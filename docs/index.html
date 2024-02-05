@@ -544,7 +544,7 @@
     <script type="generated-locale-names">{"en":"English","ca":"Català","de":"Deutsch","es":"Español (España)","it":"Italiano","ja":"日本語","ko":"한국어","nb":"Norsk Bokmål","nl":"Nederlands","pt-br":"Português Brasileiro","sv":"Svenska","tr":"Türkçe","zh-cn":"简体中文"}</script>
 
     <script>
-      const VERSION = '1.9.2';
+      const VERSION = '1.10.1';
 
       // OS-specific styles
       const getOS = () => {
@@ -915,6 +915,34 @@
       <h2 l10n="changelog">Changelog</h2>
       <div lang="en">
         <!-- CHANGELOG_START -->
+        <div data-version="1.10.1">
+          <h3>v1.10.1 (February 5 2024)</h3>
+          <ul>
+            <li>Windows: Support for Windows 7, 8, and 8.1 has not been removed, however you will have to download a special version of the app that uses old versions of libraries. This is slower and less secure, but we will support it as long as it's not an unreasonable burden.</li>
+            <li>New addons: Rearrangeable custom block inputs, Skewing in costume editor, Square block text inputs, Compact editor, Customizable menu bar, Copy reporter values, Move sprite to front layer, Arrow key incrementation in editor</li>
+            <li>New extensions: WebSocket, Pen+ V6, Asset Manager, HTML encoding</li>
+            <li>Insert blocks by name addon was rewritten and works so much better</li>
+            <li>Added high contrast mode</li>
+            <li>Added dark blocks mode</li>
+            <li>Added option to change accent color from red to blue or purple</li>
+            <li>Added progress bar when loading projects from your computer</li>
+            <li>Added more stage size controls when using large custom stage sizes</li>
+            <li>Added support for generating Electron apps for ARM Linux computers</li>
+            <li>Added many new APIs for extensions</li>
+            <li>Fixed scripts imported from the backpack dropping in the wrong spot</li>
+            <li>Fixed gamepad support and costume editor snapping addons when using custom stage sizes</li>
+            <li>Fixed scroll bars when using custom stage sizes</li>
+            <li>Fixed wake lock extension</li>
+            <li>Fixed too many bugs to list here</li>
+            <li>Removed hidden "Scratch" font due to license ambiguities (Custom fonts can be used as a workaround)</li>
+          </ul>
+        </div>
+        <div data-version="1.9.3">
+          <h3>v1.9.3 (September 18 2023)</h3>
+          <ul>
+            <li>Fixed one-time data migration process not running sometimes</li>
+          </ul>
+        </div>
         <div data-version="1.9.2">
           <h3>v1.9.2 (September 17 2023)</h3>
           <ul>
