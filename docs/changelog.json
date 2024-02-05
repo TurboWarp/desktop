@@ -1,7 +1,7 @@
 [
   {
-    "version": "1.10.0",
-    "date": "2024-2-4",
+    "version": "1.10.1",
+    "date": "2024-2-5",
     "notes": [
       "Windows: Support for Windows 7, 8, and 8.1 has not been removed, however you will have to download a special version of the app that uses old versions of libraries. This is slower and less secure, but we will support it as long as it's not an unreasonable burden.",
       "New addons: Rearrangeable custom block inputs, Skewing in costume editor, Square block text inputs, Compact editor, Customizable menu bar, Copy reporter values, Move sprite to front layer, Arrow key incrementation in editor",
@@ -18,7 +18,8 @@
       "Fixed gamepad support and costume editor snapping addons when using custom stage sizes",
       "Fixed scroll bars when using custom stage sizes",
       "Fixed wake lock extension",
-      "Fixed too many bugs to list here"
+      "Fixed too many bugs to list here",
+      "Removed hidden \"Scratch\" font due to license ambiguities (Custom fonts can be used as a workaround)"
     ]
   },
   {

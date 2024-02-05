@@ -2,7 +2,7 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.10.0 (2024-02-04)
+# 1.10.1 (2024-02-05)
 
  - Windows: Support for Windows 7, 8, and 8.1 has not been removed, however you will have to download a special version of the app that uses old versions of libraries. This is slower and less secure, but we will support it as long as it's not an unreasonable burden.
  - New addons: Rearrangeable custom block inputs, Skewing in costume editor, Square block text inputs, Compact editor, Customizable menu bar, Copy reporter values, Move sprite to front layer, Arrow key incrementation in editor
@@ -20,6 +20,7 @@ Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **form
  - Fixed scroll bars when using custom stage sizes
  - Fixed wake lock extension
  - Fixed too many bugs to list here
+ - Removed hidden "Scratch" font due to license ambiguities (Custom fonts can be used as a workaround)
 
 # 1.9.3 (2023-09-18)
 
