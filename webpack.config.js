@@ -16,7 +16,7 @@ const base = {
                 }
             },
             {
-                test: /\.(svg|png|wav|gif|jpg|mp3|ttf|otf|hex)$/,
+                test: /\.(svg|png|wav|gif|jpg|mp3|woff2|hex)$/,
                 loader: 'file-loader',
                 options: {
                     outputPath: 'static/assets/',
