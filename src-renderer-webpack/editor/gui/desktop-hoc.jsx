@@ -26,8 +26,8 @@ const getDefaultProjectTitle = (filename) => {
   return match[1];
 };
 
-const handleClickAddonSettings = () => {
-  EditorPreload.openAddonSettings();
+const handleClickAddonSettings = (search) => {
+  EditorPreload.openAddonSettings(typeof search === 'string' ? search : null);
 };
 
 const handleClickNewWindow = () => {
