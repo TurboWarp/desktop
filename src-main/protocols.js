@@ -59,6 +59,8 @@ MIME_TYPES.set('.wav', 'audio/wav');
 MIME_TYPES.set('.ogg', 'audio/ogg');
 MIME_TYPES.set('.ttf', 'font/ttf');
 MIME_TYPES.set('.otf', 'font/otf');
+MIME_TYPES.set('.woff', 'font/woff');
+MIME_TYPES.set('.woff2', 'font/woff2');
 
 protocol.registerSchemesAsPrivileged(Object.entries(FILE_SCHEMES).map(([scheme, metadata]) => ({
   scheme,
