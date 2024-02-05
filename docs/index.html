@@ -162,14 +162,6 @@
         font-size: 24px;
       }
 
-      .security-advisory {
-        max-width: 700px;
-        margin: 32px auto;
-        text-align: center;
-        border: 4px solid yellow;
-        padding: 4px;
-      }
-
       .changelog {
         display: none;
       }
@@ -469,7 +461,14 @@
       [data-if-os] {
         display: none;
       }
-      [data-os="windows"] [data-if-os="windows"] {
+      [data-os="windows-modern"] [data-if-os="windows-modern"] {
+        display: initial;
+      }
+      [data-os="windows-legacy"] [data-if-os="windows-legacy"] {
+        display: initial;
+      }
+      [data-os="windows-modern"] [data-if-os="windows-any"],
+      [data-os="windows-legacy"] [data-if-os="windows-any"] {
         display: initial;
       }
       [data-os="mac"] [data-if-os="mac"] {
@@ -555,7 +554,8 @@
         if (navigator.platform.includes('Linux') || /linux/i.test(navigator.userAgent)) return 'linux';
         if (navigator.userAgent.includes('CrOS')) return 'unsupported';
         if (/mac/i.test(navigator.userAgent)) return 'mac';
-        if (/windows/i.test(navigator.userAgent)) return 'windows';
+        if (/windows nt 6/i.test(navigator.userAgent)) return 'windows-legacy';
+        if (/windows/i.test(navigator.userAgent)) return 'windows-modern';
         return 'unsupported';
       };
       document.body.setAttribute('data-os', getOS());
@@ -731,7 +731,7 @@
     <div class="subheader" l10n="about">Create games, animations, and stories with the better version of Scratch with dark mode, addons, a compiler, and a lot more. Now available as an app for any desktop computer. TurboWarp is not affiliated with the Scratch Team.</div>
 
     <div class="changelog-subheader">
-      <p data-if-os="windows" l10n="updatewin">To update, download and run the new installer.</p>
+      <p data-if-os="windows-any" l10n="updatewin">To update, download and run the new installer.</p>
       <p data-if-os="mac" l10n="updatemac">To update, download the new app and replace the old one.</p>
       <p data-if-os="linux" l10n="updatelin">If you installed TurboWarp Desktop from an app store or package manager, download the update from there. Otherwise, manually reinstall the app the same way you installed it.</p>
       <p data-if-os="unsupported" l10n="updateun">To update, reinstall the app the same way you installed it.</p>
@@ -745,7 +745,7 @@
         </div>
       </noscript>
 
-      <div data-if-os="windows">
+      <div data-if-os="windows-modern">
         <a class="store-badge microsoft-store" href="https://apps.microsoft.com/store/detail/turbowarp/9P4DPZGV5ZKL">
           <div class="store-icon microsoft-icon"></div>
           <div class="store-badge-text">
@@ -754,7 +754,12 @@
           </div>
         </a>
         <p class="download-separator" l10n="or" l10n-description="Appears between two different download buttons">or</p>
-        <a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Setup-{version}-x64.exe" l10n="w64">Download installer for Windows (64-bit)</a>
+        <a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Setup-{version}-x64.exe" l10n="win-modern-download">Download installer for Windows 10+ (64-bit)</a>
+        <p l10n="smartscreen">If a Windows SmartScreen alert appears, click "More info" then "Run anyways".</p>
+      </div>
+
+      <div data-if-os="windows-legacy">
+        <a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Legacy-Setup-{version}-x64.exe" l10n="win-legacy-download">Download installer for Windows 7, 8, 8.1 (64-bit)</a>
         <p l10n="smartscreen">If a Windows SmartScreen alert appears, click "More info" then "Run anyways".</p>
       </div>
 
@@ -792,14 +797,9 @@
       <div><b l10n="webapp" l10n-description="Followed by link to turbowarp.org/editor">Or use our web app in any browser:</b> <a href="https://turbowarp.org/editor">turbowarp.org/editor</a></div>
 
       <!-- when there is no beta update, leave this hidden so we don't lose the l10n string -->
-      <div>
+      <div hidden>
         <b class="beta-badge" l10n="beta" l10n-description="Followed by a version number eg. v1.7.2-beta.1 that is a link to learn more about the current beta release.">Beta version available:</b>
         <a href="https://github.com/TurboWarp/desktop/releases/tag/v1.10.0-beta.3">v1.10.0 beta 3</a>
-      </div>
-
-      <div>
-        <b class="security-badge" l10n="security-advisory" l10n-description="Followed by a link to learn more about a recent security-related bug">Security Advisory:</b>
-        <a href="https://github.com/TurboWarp/desktop/security/advisories/GHSA-wg4p-vj7h-q82q">CVE-2023-40168</a>
       </div>
     </div>
 
@@ -1177,7 +1177,7 @@
     </div>
 
     <div class="manual-installation section" id="windows">
-      <h2 l10n="win">Install on Windows</h2>
+      <h2 l10n="win-modern">Install on Windows 10 and later</h2>
       <p l10n="ms">Get it from the Microsoft Store to enable automatic updates.</p>
       <a class="store-badge microsoft-store" href="https://apps.microsoft.com/store/detail/turbowarp/9P4DPZGV5ZKL">
         <div class="store-icon microsoft-icon"></div>
@@ -1187,11 +1187,20 @@
         </div>
       </a>
 
-      <p l10n="win2">Or download an installer. If a Windows SmartScreen alert appears, click "More info" then "Run anyways".</p>
+      <p l10n="win-modern2">Or download an installer. If a Windows SmartScreen alert appears, click "More info" then "Run anyways".</p>
       <ul class="download-list">
         <li><a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Setup-{version}-x64.exe" l10n="w642">Download installer (64-bit, recommended)</a></li>
         <li><a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Setup-{version}-ia32.exe" l10n="w323" l10n-description="Alternative download button">32-bit</a></li>
         <li><a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Setup-{version}-arm64.exe">ARM</a></li>
+      </ul>
+    </div>
+
+    <div class="manual-installation section" id="windows-legacy">
+      <h2 l10n="win-legacy">Install on Windows 7, 8, and 8.1</h2>
+      <p l10n="win-legacy2">We will support old versions of Windows as long as it is not an unreasonable burden. Download one of the installers below. If a Windows SmartScreen alert appears, click "More info" then "Run anyways".</p>
+      <ul class="download-list">
+        <li><a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Legacy-Setup-{version}-x64.exe" l10n="w642">Download installer (64-bit, recommended)</a></li>
+        <li><a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Legacy-Setup-{version}-ia32.exe" l10n="w323" l10n-description="Alternative download button">32-bit</a></li>
       </ul>
     </div>
 
