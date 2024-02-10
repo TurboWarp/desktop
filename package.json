@@ -111,7 +111,7 @@
     "nsis": {
       "artifactName": "${productName} Setup ${version} ${arch}.${ext}",
       "oneClick": false,
-      "deleteAppDataOnUninstall": true,
+      "deleteAppDataOnUninstall": false,
       "allowToChangeInstallationDirectory": true
     },
     "mac": {
