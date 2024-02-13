@@ -38,7 +38,7 @@
     "postcss-import": "^14.0.0",
     "postcss-loader": "^4.2.0",
     "postcss-simple-vars": "^6.0.3",
-    "scratch-gui": "github:TurboWarp/scratch-gui#1330363c36103942e0554055bb5c887177738034",
+    "scratch-gui": "git+https://github.com/TurboWarp/scratch-gui.git#develop",
     "style-loader": "^0.23.0",
     "url-loader": "^4.1.1",
     "webpack": "4.47.0",
