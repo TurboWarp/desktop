@@ -19,6 +19,13 @@ const _prompt = (message, defaultValue) => new Promise((resolve) => {
   // https://stackoverflow.com/questions/58818299/css-variables-not-working-in-dialogbackdrop
   // https://issues.chromium.org/issues/40569411
 
+  const interactiveElements = Array.from(document.querySelectorAll('a, button, input, select, textarea, [tabindex]'));
+  const oldInteractiveElementState = new WeakMap();
+  for (const el of interactiveElements) {
+    oldInteractiveElementState.set(el, el.tabIndex);
+    el.tabIndex = -1;
+  }
+
   const outer = document.createElement('div');
   outer.className = styles.outer;
 
@@ -56,6 +63,9 @@ const _prompt = (message, defaultValue) => new Promise((resolve) => {
   buttonRow.append(okButton);
 
   const finish = (value) => {
+    for (const el of interactiveElements) {
+      el.tabIndex = oldInteractiveElementState.get(el);
+    }
     document.removeEventListener('keydown', globalOnKeyDown);
     outer.remove();
     resolve(value);
