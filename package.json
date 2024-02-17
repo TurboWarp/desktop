@@ -22,6 +22,7 @@
     "@babel/core": "^7.23.9",
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.13.13",
+    "@electron/fuses": "^1.7.0",
     "@electron/get": "^3.0.0",
     "@electron/notarize": "^2.2.1",
     "adm-zip": "^0.5.10",
