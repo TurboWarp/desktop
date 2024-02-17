@@ -91,7 +91,7 @@ update_snap() {
 	cd "$src"
 	rm dist/*.snap || true
 	npm run webpack:prod
-	npx electron-builder --linux snap --publish never --config.extraMetadata.tw_dist="prod-snap-$(uname -m)"
+	npx electron-builder --linux snap --publish never --config.extraMetadata.tw_dist="release-snap-$(uname -m)"
 	snap install --dangerous dist/TurboWarp-*.snap
 	snap run turbowarp-desktop
 	await_confirmation
