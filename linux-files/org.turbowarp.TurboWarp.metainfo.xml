@@ -7,7 +7,7 @@
   <project_license>GPL-3.0</project_license>
   <name>TurboWarp</name>
   <developer_name>Thomas Weber</developer_name>
-  <summary>A mod of Scratch with a compiler to run projects faster, dark mode, a bunch of addons, and more</summary>
+  <summary>Better version of Scratch 3</summary>
   <description>
     <p>A mod of Scratch with a compiler to run projects faster, dark mode for your eyes, a bunch of addons to improve the editor, and more.</p>
     <p>Features:</p>
@@ -29,19 +29,11 @@
   <screenshots>
     <screenshot type="default">
       <caption>Editor in light mode</caption>
-      <image width="1280" height="800">https://desktop.turbowarp.org/screenshot-win-light.png</image>
+      <image width="1189" height="786">https://raw.githubusercontent.com/TurboWarp/desktop-screenshots/main/1.10.1/flathub/light.png</image>
     </screenshot>
     <screenshot>
       <caption>Editor in dark mode</caption>
-      <image width="1280" height="800">https://desktop.turbowarp.org/screenshot-win-dark.png</image>
-    </screenshot>
-    <screenshot>
-      <caption>More than 50 addons to customize and enhance your experience</caption>
-      <image width="683" height="700">https://desktop.turbowarp.org/addons-win-light.png</image>
-    </screenshot>
-    <screenshot>
-      <caption>Integrated packager to convert projects to HTML files or applications for Windows, macOS, or Linux</caption>
-      <image width="683" height="700">https://desktop.turbowarp.org/packager-win-light.png</image>
+      <image width="1189" height="786">https://raw.githubusercontent.com/TurboWarp/desktop-screenshots/main/1.10.1/flathub/dark.png</image>
     </screenshot>
   </screenshots>
   <url type="homepage">https://desktop.turbowarp.org/</url>
