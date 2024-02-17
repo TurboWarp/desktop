@@ -3,6 +3,18 @@ const {translate} = require('../l10n');
 const packageJSON = require('../../package.json');
 const {APP_NAME} = require('../brand');
 
+const getPlatform = () => {
+  if (process.mas) return `${process.platform}-mas`;
+  if (process.windowsStore) return `${process.platform}-appx`;
+  return process.platform;
+};
+
+const getDist = () => {
+  if (process.env.TW_DIST_ID) return `${process.env.TW_DIST_ID}-env`;
+  if (packageJSON.tw_dist) return packageJSON.tw_dist;
+  return 'none';
+};
+
 class AboutWindow extends BaseWindow {
   constructor () {
     super();
@@ -16,9 +28,9 @@ class AboutWindow extends BaseWindow {
     ipc.on('get-info', (event) => {
       event.returnValue = {
         version: packageJSON.version,
-        dist: packageJSON.tw_dist || 'none',
+        dist: getDist(),
         electron: process.versions.electron,
-        platform: process.mas ? `${process.platform}-mas` : process.platform,
+        platform: getPlatform(),
         arch: process.arch
       };
     });
