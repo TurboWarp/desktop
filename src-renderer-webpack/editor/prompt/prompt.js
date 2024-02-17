@@ -14,15 +14,24 @@ const INPUT_ID = 'twd-prompt-input';
 let previousPrompt = Promise.resolve();
 
 const _prompt = (message, defaultValue) => new Promise((resolve) => {
-  const container = document.createElement('dialog');
-  container.className = styles.container;
+  // Can't use <dialog> because CSS variables don't work in ::backdrop in Chrome < 122,
+  // but we still support Electron 22 (Chrome 108)
+  // https://stackoverflow.com/questions/58818299/css-variables-not-working-in-dialogbackdrop
+  // https://issues.chromium.org/issues/40569411
+
+  const outer = document.createElement('div');
+  outer.className = styles.outer;
+
+  const inner = document.createElement('div');
+  inner.className = styles.inner;
+  outer.appendChild(inner);
 
   if (message) {
     const label = document.createElement('label');
     label.className = styles.label;
     label.textContent = message;
     label.htmlFor = INPUT_ID;
-    container.appendChild(label);
+    inner.appendChild(label);
   }
 
   const input = document.createElement('input');
@@ -30,11 +39,11 @@ const _prompt = (message, defaultValue) => new Promise((resolve) => {
   input.className = styles.input;
   input.value = defaultValue;
   input.autocomplete = 'off';
-  container.appendChild(input);
+  inner.appendChild(input);
 
   const buttonRow = document.createElement('div');
   buttonRow.className = styles.buttonRow;
-  container.appendChild(buttonRow);
+  inner.appendChild(buttonRow);
 
   const cancelButton = document.createElement('button');
   cancelButton.className = styles.cancelButton;
@@ -48,7 +57,7 @@ const _prompt = (message, defaultValue) => new Promise((resolve) => {
 
   const finish = (value) => {
     document.removeEventListener('keydown', globalOnKeyDown);
-    container.remove();
+    outer.remove();
     resolve(value);
   };
 
@@ -65,6 +74,12 @@ const _prompt = (message, defaultValue) => new Promise((resolve) => {
   };
   document.addEventListener('keydown', globalOnKeyDown);
 
+  outer.addEventListener('click', (e) => {
+    if (e.target === outer) {
+      finish(null);
+    }
+  });
+
   cancelButton.addEventListener('click', () => {
     finish(null);
   });
@@ -73,8 +88,7 @@ const _prompt = (message, defaultValue) => new Promise((resolve) => {
     finish(input.value);
   });
 
-  document.body.appendChild(container);
-  container.showModal();
+  document.body.appendChild(outer);
 
   input.focus();
   input.select();
