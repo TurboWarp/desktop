@@ -75,12 +75,12 @@ const addElectronFuses = async (context) => {
     [electronFuses.FuseV1Options.RunAsNode]: false,
     [electronFuses.FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false,
     [electronFuses.FuseV1Options.EnableNodeCliInspectArguments]: false,
+    [electronFuses.FuseV1Options.OnlyLoadAppFromAsar]: true,
 
     // - EnableCookieEncryption should be considered in the future once we analyze performance, backwards
     //   compatibility, make sure data doesn't get lost on uninstall, unsigned versions, etc.
     // - electron-builder does not support EnableEmbeddedAsarIntegrityValidation
     //   https://github.com/electron-userland/electron-builder/issues/6930
-    // - OnlyLoadAppFromAsar doesn't seem usable because we need to migrate pre-1.9.0 data from file://
     // - LoadBrowserProcessSpecificV8Snapshot is not useful for us.
     // - GrantFileProtocolExtraPrivileges should be considered when we update Electron.
     //   This would've prevented CVE-2023-40168.
