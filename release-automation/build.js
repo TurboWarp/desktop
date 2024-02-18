@@ -134,6 +134,7 @@ const build = async ({
   platformName, // String that indexes into Platform[...]
   platformType, // Passed as first argument into platform.createTarget(...)
   manageUpdates = false,
+  legacy = false,
   extraConfig = {},
   prepare = (archName) => Promise.resolve({})
 }) => {
@@ -152,6 +153,9 @@ const build = async ({
     let distributionName = `${platformName}-${platformType}-${archName}`.toLowerCase();
     if (isProduction) {
       distributionName = `release-${distributionName}`;
+    }
+    if (legacy) {
+      distributionName = `${distributionName}-legacy`;
     }
     console.log(`Building distribution: ${distributionName}`);
 
@@ -193,6 +197,7 @@ const buildWindowsLegacy = async () => {
     platformName: 'WINDOWS',
     platformType: 'nsis',
     manageUpdates: true,
+    legacy: true,
     extraConfig: {
       nsis: {
         artifactName: '${productName} Legacy Setup ${version} ${arch}.${ext}'
@@ -285,6 +290,7 @@ const buildMacLegacy = () => {
     platformName: 'MAC',
     platformType: 'dmg',
     manageUpdates: true,
+    legacy: true,
     extraConfig: {
       afterSign: notarizeForMacOS,
       mac: {
