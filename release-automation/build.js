@@ -1,10 +1,9 @@
 const pathUtil = require('path');
 const fs = require('fs');
 const builder = require('electron-builder');
+const builderUtil = require('builder-util');
 const electronNotarize = require('@electron/notarize');
-const electronGet = require('@electron/get');
 const electronFuses = require('@electron/fuses');
-const AdmZip = require('adm-zip');
 const packageJSON = require('../package.json');
 
 const {Platform, Arch} = builder;
@@ -47,6 +46,42 @@ const getPublish = () => process.env.GH_TOKEN ? ({
   repo: 'desktop'
 }) : null;
 
+const downloadElectronArtifact = async ({version, platform, artifactName, arch}) => {
+  const name = `${artifactName}-v${version}-${platform}-${arch}`;
+  const extractPath = pathUtil.join(__dirname, '.cache', name);
+
+  if (!fs.existsSync(extractPath)) {
+    console.log(`Downloading ${name}, this may take a while...`);
+
+    // In case the process fails mid way, extract to temporary path and then rename so we have some level of atomicity
+    const tempExtractPath = `${extractPath}.temp`;
+
+    // Download and extract Electron using the same logic that electron-builder does, otherwise signing
+    // the macOS legacy build fails for reasons I don't understand.
+    // https://github.com/electron-userland/electron-builder/blob/89656087d683dbe53240c920a684092b70d638db/packages/app-builder-lib/src/electron/ElectronFramework.ts#L195
+    await builderUtil.executeAppBuilder([
+      'unpack-electron',
+      '--configuration',
+      JSON.stringify([{
+        platform,
+        arch,
+        version
+      }]),
+      '--output',
+      tempExtractPath,
+      '--distMacOsAppName',
+      'Electron.app'
+    ]);
+
+    fs.renameSync(tempExtractPath, extractPath);
+    console.log(`Extracted to ${extractPath}`);
+  } else {
+    console.log(`Already downloaded ${name}`);
+  }
+
+  return extractPath;
+};
+
 const addElectronFuses = async (context) => {
   // Have to apply fuses manually per https://github.com/electron-userland/electron-builder/issues/6365
   // This code is based on the comments on that issue
@@ -88,8 +123,8 @@ const addElectronFuses = async (context) => {
 };
 
 const afterPack = async (context) => {
-  // For macOS, only apply the fuses at the very end of the universal build, not the individual
-  // Intel and Apple Silicon builds.
+  // For macOS we should only need to apply fuses at the very end
+  // https://github.com/electron-userland/electron-builder/issues/6365#issuecomment-1191747089
   if (context.electronPlatformName !== 'darwin' || context.arch === Arch.universal) {
     await addElectronFuses(context)
   }
@@ -154,34 +189,6 @@ const buildWindowsLegacy = async () => {
   // This is the last release of Electron 22, which no longer receives updates.
   const LEGACY_ELECTRON_VERSION = '22.3.27';
 
-  const downloadAndExtract = async ({version, platform, artifactName, arch}) => {
-    const name = `${artifactName}-v${version}-${platform}-${arch}`;
-    const extractPath = pathUtil.join(__dirname, '.cache', name);
-
-    if (!fs.existsSync(extractPath)) {
-      console.log(`Downloading ${name}, this may take a while...`);
-
-      const zipPath = await electronGet.downloadArtifact({
-        version,
-        platform,
-        artifactName,
-        arch
-      });
-      console.log(`Saved to ${zipPath}`);
-
-      // in case the process dies mid way, extract to temporary path and then rename so we have some level of atomicity
-      const zip = new AdmZip(zipPath);
-      const tempExtractPath = `${extractPath}.temp`;
-      zip.extractAllTo(`${extractPath}.temp`, true);
-      fs.renameSync(tempExtractPath, extractPath);
-      console.log(`Extracted to ${extractPath}`);
-    } else {
-      console.log(`Already downloaded ${name}`);
-    }
-
-    return extractPath;
-  };
-
   return build({
     platformName: 'WINDOWS',
     platformType: 'nsis',
@@ -192,7 +199,7 @@ const buildWindowsLegacy = async () => {
       }
     },
     prepare: async (archName) => {
-      const electronDist = await downloadAndExtract({
+      const electronDist = await downloadElectronArtifact({
         version: LEGACY_ELECTRON_VERSION,
         platform: 'win32',
         artifactName: 'electron',
@@ -217,55 +224,86 @@ const buildMicrosoftStore = () => build({
   manageUpdates: false
 });
 
+const notarizeForMacOS = async (context) => {
+  // TODO: electron-builder got native notarization support; switch to that at some point
+
+  if (!isProduction) {
+    console.log('Not notarizing: not --production');
+    return;
+  }
+
+  const {electronPlatformName, appOutDir} = context;
+  if (electronPlatformName !== 'darwin') {
+    console.log('Not notarizing: not macOS');
+    return;
+  }
+
+  const appleId = process.env.APPLE_ID_USERNAME
+  const appleIdPassword = process.env.APPLE_ID_PASSWORD;
+  const teamId = process.env.APPLE_TEAM_ID;
+  if (!appleId) {
+    console.log('Not notarizing: no APPLE_ID_USERNAME');
+    return;
+  }
+  if (!appleIdPassword) {
+    console.log('Not notarizing: no APPLE_ID_PASSWORD');
+    return;
+  }
+  if (!teamId) {
+    console.log('Not notarizing: no APPLE_TEAM_ID');
+    return;
+  }
+
+  console.log('Sending app to Apple for notarization, this will take a while...');
+  const appId = packageJSON.build.appId;
+  const appPath = `${appOutDir}/${context.packager.appInfo.productFilename}.app`;
+
+  return await electronNotarize.notarize({
+    tool: 'notarytool',
+    appBundleId: appId,
+    appPath,
+    appleId,
+    appleIdPassword,
+    teamId
+  });
+};
+
 const buildMac = () => build({
   platformName: 'MAC',
   platformType: 'dmg',
   manageUpdates: true,
   extraConfig: {
-    // TODO: electron-builder got native notarization support; switch to that at some point
-    afterSign: async (context) => {
-      if (!isProduction) {
-        console.log('Not notarizing: not --production');
-        return;
-      }
-
-      const {electronPlatformName, appOutDir} = context;
-      if (electronPlatformName !== 'darwin') {
-        console.log('Not notarizing: not macOS');
-        return;
-      }
-
-      const appleId = process.env.APPLE_ID_USERNAME
-      const appleIdPassword = process.env.APPLE_ID_PASSWORD;
-      const teamId = process.env.APPLE_TEAM_ID;
-      if (!appleId) {
-        console.log('Not notarizing: no APPLE_ID_USERNAME');
-        return;
-      }
-      if (!appleIdPassword) {
-        console.log('Not notarizing: no APPLE_ID_PASSWORD');
-        return;
-      }
-      if (!teamId) {
-        console.log('Not notarizing: no APPLE_TEAM_ID');
-        return;
-      }
-
-      console.log('Sending app to Apple for notarization, this will take a while...');
-      const appId = packageJSON.build.appId;
-      const appPath = `${appOutDir}/${context.packager.appInfo.productFilename}.app`;
-
-      return await electronNotarize.notarize({
-        tool: 'notarytool',
-        appBundleId: appId,
-        appPath,
-        appleId,
-        appleIdPassword,
-        teamId
-      });
-    }
+    afterSign: notarizeForMacOS
   }
 });
+
+const buildMacLegacy = () => {
+  // Electron 27 dropped support for macOS 10.13 and 10.14
+  const LEGACY_ELECTRON_VERSION = '26.6.9';
+
+  return build({
+    platformName: 'MAC',
+    platformType: 'dmg',
+    manageUpdates: true,
+    extraConfig: {
+      afterSign: notarizeForMacOS,
+      mac: {
+        artifactName: '${productName} Legacy Setup ${version}.${ext}'
+      }
+    },
+    prepare: async (archName) => {
+      const electronDist = await downloadElectronArtifact({
+        version: LEGACY_ELECTRON_VERSION,
+        platform: 'darwin',
+        artifactName: 'electron',
+        arch: archName
+      });
+      return {
+        electronDist
+      };
+    }
+  });
+};
 
 const buildDebian = () => build({
   platformName: 'LINUX',
@@ -292,6 +330,7 @@ const run = async () => {
     '--windows-portable': buildWindowsPortable,
     '--microsoft-store': buildMicrosoftStore,
     '--mac': buildMac,
+    '--mac-legacy': buildMacLegacy,
     '--debian': buildDebian,
     '--tarball': buildTarball,
     '--appimage': buildAppImage,

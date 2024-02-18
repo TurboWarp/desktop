@@ -52,6 +52,7 @@ jobs:
       if: runner.os == 'macOS'
       run: |
         node release-automation/build.js --mac --universal --production
+        node release-automation/build.js --mac-legacy --x64 --production
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
