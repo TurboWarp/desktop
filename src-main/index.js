@@ -64,9 +64,10 @@ app.on('session-created', (session) => {
     const webContents = details.webContents;
     const window = BaseWindow.getWindowByWebContents(webContents);
     if (!webContents || !window) {
-      return callback({
-        cancel: true
-      });
+      // Background requests for things like loading service workers in iframes
+      // are not associated with a specific webcontents, so we'll just have to
+      // allow these to avoid breakage.
+      return callback({});
     }
 
     window.onBeforeRequest(details, callback);
