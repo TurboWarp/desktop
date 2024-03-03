@@ -51,10 +51,11 @@ jobs:
     - name: Package macOS
       if: runner.os == 'macOS'
       run: |
-        echo "$APPLE_API_KEY_DATA" > "$APPLE_API_KEY"
+        # I don't trust GitHub actions to not log shell substitutions somewhere (even accidentally)
+        python3 -c "import os; open(os.getenv('APPLE_API_KEY'), 'w').write(os.getenv('APPLE_API_KEY_DATA'))" >/dev/null 2>&1
         node release-automation/build.js --mac --universal --production
         node release-automation/build.js --mac-legacy --x64 --production
-        rm "$APPLE_API_KEY"
+        python3 -c "import os; os.remove(os.getenv('APPLE_API_KEY'))" >/dev/null 2>&1
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
