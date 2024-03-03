@@ -17,3 +17,6 @@ deb
 # Mac App Store
 distribution.provisionprofile
 development.provisionprofile
+
+# Apple App Store Connect API key
+*.p8

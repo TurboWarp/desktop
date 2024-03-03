@@ -51,14 +51,18 @@ jobs:
     - name: Package macOS
       if: runner.os == 'macOS'
       run: |
+        echo "$APPLE_API_KEY_DATA" > "$APPLE_API_KEY"
         node release-automation/build.js --mac --universal --production
         node release-automation/build.js --mac-legacy --x64 --production
+        rm "$APPLE_API_KEY"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
-        APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-        APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-        CSC_LINK: ${{ secrets.CSC_LINK }}
+        APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+        APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+        APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+        APPLE_API_KEY_DATA: ${{ secrets.APPLE_API_KEY_DATA }}
+        CSC_LINK: ${{ secrets.APPLE_CSC_LINK }}
+        CSC_KEY_PASSWORD: ${{ secrets.APPLE_CSC_KEY_PASSWORD }}
 
     - name: Package Linux
       if: runner.os == 'Linux'

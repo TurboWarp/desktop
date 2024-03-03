@@ -2,7 +2,6 @@ const pathUtil = require('path');
 const fs = require('fs');
 const builder = require('electron-builder');
 const builderUtil = require('builder-util');
-const electronNotarize = require('@electron/notarize');
 const electronFuses = require('@electron/fuses');
 const packageJSON = require('../package.json');
 
@@ -230,57 +229,10 @@ const buildMicrosoftStore = () => build({
   manageUpdates: false
 });
 
-const notarizeForMacOS = async (context) => {
-  // TODO: electron-builder got native notarization support; switch to that at some point
-
-  if (!isProduction) {
-    console.log('Not notarizing: not --production');
-    return;
-  }
-
-  const {electronPlatformName, appOutDir} = context;
-  if (electronPlatformName !== 'darwin') {
-    console.log('Not notarizing: not macOS');
-    return;
-  }
-
-  const appleId = process.env.APPLE_ID_USERNAME
-  const appleIdPassword = process.env.APPLE_ID_PASSWORD;
-  const teamId = process.env.APPLE_TEAM_ID;
-  if (!appleId) {
-    console.log('Not notarizing: no APPLE_ID_USERNAME');
-    return;
-  }
-  if (!appleIdPassword) {
-    console.log('Not notarizing: no APPLE_ID_PASSWORD');
-    return;
-  }
-  if (!teamId) {
-    console.log('Not notarizing: no APPLE_TEAM_ID');
-    return;
-  }
-
-  console.log('Sending app to Apple for notarization, this will take a while...');
-  const appId = packageJSON.build.appId;
-  const appPath = `${appOutDir}/${context.packager.appInfo.productFilename}.app`;
-
-  return await electronNotarize.notarize({
-    tool: 'notarytool',
-    appBundleId: appId,
-    appPath,
-    appleId,
-    appleIdPassword,
-    teamId
-  });
-};
-
 const buildMac = () => build({
   platformName: 'MAC',
   platformType: 'dmg',
-  manageUpdates: true,
-  extraConfig: {
-    afterSign: notarizeForMacOS
-  }
+  manageUpdates: true
 });
 
 const buildMacLegacy = () => {
@@ -293,7 +245,6 @@ const buildMacLegacy = () => {
     manageUpdates: true,
     legacy: true,
     extraConfig: {
-      afterSign: notarizeForMacOS,
       mac: {
         artifactName: '${productName} Legacy Setup ${version}.${ext}'
       }
