@@ -94,7 +94,7 @@ const addElectronFuses = async (context) => {
   };
 
   const electronBinaryPath = pathUtil.join(context.appOutDir, getExecutableName());
-  console.log(`Flipping fuses in ${electronBinaryPath}`);
+  process.stdout.write(`Flipping fuses in ${electronBinaryPath}...`);
 
   await electronFuses.flipFuses(electronBinaryPath, {
     // Necessary for building on Apple Silicon
@@ -120,6 +120,8 @@ const addElectronFuses = async (context) => {
     //   https://github.com/electron-userland/electron-builder/issues/6930
     // - LoadBrowserProcessSpecificV8Snapshot is not useful for us.
   });
+
+  console.log(' done');
 };
 
 const afterPack = async (context) => {
