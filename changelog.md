@@ -2,9 +2,19 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.11.0-beta.1 (2024-03-03)
+
+ - Windows: Restored 32-bit installers for Windows 7, 8, and 8.1
+ - macOS: macOS 10.13 and 10.14 users will have to install a special "legacy" version of the app
+ - Linux: Fixed WebGL "uniformSetters" errors on some distributions (primarily those shipping the latest versions of graphics drivers) and Flatpak
+ - New addon: Multiple rows in backpack
+ - New extensions: List Tools, XML, Key Simulation
+ - Enabled Debugger addon performance tab
+ - Fixed broken prompts
+
 # 1.10.1 (2024-02-05)
 
- - Windows: Support for Windows 7, 8, and 8.1 has not been removed, however you will have to download a special version of the app that uses old versions of libraries. This is slower and less secure, but we will support it as long as it's not an unreasonable burden.
+ - Windows: Support for Windows 7, 8, and 8.1 has not been removed, however you will have to download a special version of the app that uses old versions of libraries. This is slower and less secure, but we will support it as long as it's not an unreasonable burden
  - New addons: Rearrangeable custom block inputs, Skewing in costume editor, Square block text inputs, Compact editor, Customizable menu bar, Copy reporter values, Move sprite to front layer, Arrow key incrementation in editor
  - New extensions: WebSocket, Pen+ V6, Asset Manager, HTML encoding
  - Insert blocks by name addon was rewritten and works so much better
