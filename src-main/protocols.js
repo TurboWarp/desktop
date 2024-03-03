@@ -3,6 +3,7 @@ const path = require('path');
 const {PassThrough, Readable} = require('stream');
 const zlib = require('zlib');
 const {app, protocol} = require('electron');
+const packageJSON = require('../package.json');
 
 const FILE_SCHEMES = {
   'tw-editor': {
@@ -72,10 +73,54 @@ protocol.registerSchemesAsPrivileged(Object.entries(FILE_SCHEMES).map(([scheme, 
   }
 })));
 
-const createStream = (text) => {
+/**
+ * @param {string} xml
+ * @returns {string}
+ */
+const escapeXML = (xml) => xml.replace(/[<>&'"]/g, c => {
+  switch (c) {
+    case '<': return '&lt;';
+    case '>': return '&gt;';
+    case '&': return '&amp;';
+    case '\'': return '&apos;';
+    case '"': return '&quot;';
+  }
+});
+
+/**
+ * @param {string} text
+ * @returns {NodeJS.ReadStream}
+ */
+const createStreamWithText = (text) => {
   const stream = new PassThrough();
   stream.end(text);
   return stream;
+};
+
+/**
+ * Note that custom extensions will be able to access this page and all of the information in it.
+ * @param {Request | Electron.ProtocolRequest} request
+ * @param {unknown} errorMessage
+ * @returns {string}
+ */
+const createErrorPage = (request, errorMessage) => `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf8">
+    <meta name="color-scheme" content="dark light">
+  </head>
+  <body>
+    <h1>Protocol handler error</h1>
+    <pre>${escapeXML('' + errorMessage)}</pre>
+    <pre>URL: ${escapeXML(request.url)}</pre>
+    <pre>Version ${packageJSON.version} Electron ${process.versions.electron} Platform ${process.platform}</pre>
+    <p>If you can see this page, <a href="https://github.com/TurboWarp/desktop/issues">please open a GitHub issue</a> with all the information above.</p>
+  </body>
+</html>`;
+
+const errorPageHeaders = {
+  'content-type': 'text/html',
+  'content-security-policy': 'default-src "none"'
 };
 
 const createSchemeHandler = (metadata) => {
@@ -84,25 +129,19 @@ const createSchemeHandler = (metadata) => {
 
   /**
    * @param {Electron.ProtocolRequest} request
-   * @returns {Promise<{statusCode: number; data: ReadableStream; headers?: Record<string, string>}>}
+   * @returns {Promise<{data: ReadableStream; error?: unknown; headers?: Record<string, string>}>}
    */
   return async (request) => {
     const url = new URL(request.url);
     const resolved = path.join(root, url.pathname);
     if (!resolved.startsWith(root)) {
-      return {
-        statusCode: 404,
-        data: createStream('not found')
-      };
+      throw new Error('Path traversal blocked');
     }
 
     const fileExtension = path.extname(url.pathname);
     const mimeType = MIME_TYPES.get(fileExtension);
     if (!mimeType) {
-      return {
-        statusCode: 404,
-        data: createStream('invalid file extension')
-      };
+      throw new Error(`Invalid file extension: ${fileExtension}`);
     }
 
     const headers = {
@@ -114,7 +153,7 @@ const createSchemeHandler = (metadata) => {
       const decompressStream = zlib.createBrotliDecompress();
       fileStream.pipe(decompressStream);
 
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         // TODO: this still returns 200 OK when brotli stream errors
         fileStream.on('open', () => {
           resolve({
@@ -122,28 +161,24 @@ const createSchemeHandler = (metadata) => {
             headers
           });
         });
-        fileStream.on('error', () => {
-          resolve({
-            statusCode: 404,
-            data: createStream('read error')
-          });
+        fileStream.on('error', (error) => {
+          console.error(error);
+          reject(new Error(`Brotli file stream error: ${error.code || 'unknown'}`));
         });
       });
     }
 
     const fileStream = fs.createReadStream(resolved);
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       fileStream.on('open', () => {
         resolve({
           data: fileStream,
           headers
         });
       });
-      fileStream.on('error', () => {
-        resolve({
-          statusCode: 404,
-          data: createStream('read error')
-        });
+      fileStream.on('error', (error) => {
+        console.error(error);
+        reject(new Error(`File stream error: ${error.code || 'unknown'}`));
       });
     });
   };
@@ -155,20 +190,19 @@ app.whenReady().then(() => {
 
     // Electron 22 does not support protocol.handle() or new Response()
     if (protocol.handle) {
-      protocol.handle(scheme, (request) => {
-        return handle(request)
-          .then((response) => {
-            return new Response(Readable.toWeb(response.data), {
-              status: response.statusCode,
-              headers: response.headers
-            });
-          })
-          .catch((error) => {
-            console.error(error);
-            return new Response('protocol handler error', {
-              status: 500
-            })
+      protocol.handle(scheme, async (request) => {
+        try {
+          const response = await handle(request);
+          return new Response(Readable.toWeb(response.data), {
+            status: 200,
+            headers: response.headers
           });
+        } catch (error) {
+          return new Response(createErrorPage(request, error), {
+            status: 404,
+            headers: errorPageHeaders
+          });
+        }
       });
     } else {
       protocol.registerStreamProtocol(scheme, (request, callback) => {
@@ -177,8 +211,9 @@ app.whenReady().then(() => {
           .catch((error) => {
             console.error(error);
             callback({
-              statusCode: 500,
-              data: createStream('protocol handler error')
+              statusCode: 404,
+              data: createStreamWithText(createErrorPage(request, error)),
+              headers: errorPageHeaders
             });
           });
       });
