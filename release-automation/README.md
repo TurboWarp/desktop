@@ -13,7 +13,7 @@ You must specify which platform to build for:
     Create Windows installers for Windows 10 or later.
 
 --windows-legacy
-    Create Windows installers for Windows 7 or later (less secure).
+    Create Windows installers for Windows 7 or later (less secure than --windows).
 
 --windows-portable
     Create portable Windows executables for Windows 10 or later.
@@ -22,7 +22,10 @@ You must specify which platform to build for:
     Create appx files for uploading to the Microsoft Store.
 
 --mac
-    Create dmg files for macOS.
+    Create app for macOS 10.15 and later.
+
+--mac-legacy
+    Create app for macOS 10.13 and later (less secure than --mac).
 
 --debian
     Create deb files for Debian, Ubuntu, and derivatives.
