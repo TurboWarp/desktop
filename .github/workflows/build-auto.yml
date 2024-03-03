@@ -2,9 +2,7 @@ name: Build (Auto)
 
 on:
   push:
-    branches: [ master ]
   pull_request:
-    branches: [ master ]  
 
 jobs:
   build:
@@ -17,10 +15,13 @@ jobs:
     - name: Install Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 20.x
+        node-version: 20
         cache: npm
     - name: Install dependencies
       run: npm ci
+    - name: Prepare extensions
+      # Don't need to do a full fetch, that would just cause a lot of unnecessary traffic
+      run: node scripts/prepare-extensions.js
     - name: Compile
       run: npm run webpack:compile
     - name: Package
