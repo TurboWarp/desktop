@@ -131,11 +131,7 @@ const addElectronFuses = async (context) => {
 };
 
 const afterPack = async (context) => {
-  // For macOS we should only need to apply fuses at the very end
-  // https://github.com/electron-userland/electron-builder/issues/6365#issuecomment-1191747089
-  if (context.electronPlatformName !== 'darwin' || context.arch === Arch.universal) {
-    await addElectronFuses(context)
-  }
+  await addElectronFuses(context)
 };
 
 const build = async ({
@@ -240,12 +236,22 @@ const buildMicrosoftStore = () => build({
 const buildMac = () => build({
   platformName: 'MAC',
   platformType: 'dmg',
-  manageUpdates: true
+  manageUpdates: true,
+  extraConfig: {
+    afterPack: async (context) => {
+      // For non-legacy macOS we should only need to apply fuses on the universal build at the end
+      // https://github.com/electron-userland/electron-builder/issues/6365#issuecomment-1191747089
+      if (context.arch === Arch.universal) {
+        await afterPack(context);
+      }
+    }
+  }
 });
 
 const buildMacLegacy = () => {
+  // This is the last release of Electron 26
   // Electron 27 dropped support for macOS 10.13 and 10.14
-  const LEGACY_ELECTRON_VERSION = '26.6.9';
+  const LEGACY_ELECTRON_VERSION = '26.6.10';
 
   return build({
     platformName: 'MAC',
