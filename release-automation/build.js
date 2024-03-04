@@ -96,7 +96,8 @@ const addElectronFuses = async (context) => {
   const electronBinaryPath = pathUtil.join(context.appOutDir, getExecutableName());
   process.stdout.write(`Flipping fuses in ${electronBinaryPath}...`);
 
-  await electronFuses.flipFuses(electronBinaryPath, {
+  const currentFuses = await electronFuses.getCurrentFuseWire(electronBinaryPath);
+  const newFuses = {
     // Necessary for building on Apple Silicon
     resetAdHocDarwinSignature: platformName === 'darwin',
 
@@ -110,16 +111,21 @@ const addElectronFuses = async (context) => {
     [electronFuses.FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false,
     [electronFuses.FuseV1Options.EnableNodeCliInspectArguments]: false,
     [electronFuses.FuseV1Options.OnlyLoadAppFromAsar]: true,
+  };
 
-    // This would've prevented CVE-2023-40168
-    [electronFuses.FuseV1Options.GrantFileProtocolExtraPrivileges]: false,
+  // This fuse was added in Electron 29.
+  // This would've prevented CVE-2023-40168.
+  if (Object.prototype.hasOwnProperty.call(currentFuses, electronFuses.FuseV1Options.GrantFileProtocolExtraPrivileges)) {
+    newFuses[electronFuses.FuseV1Options.GrantFileProtocolExtraPrivileges] = false;
+  }
 
-    // - EnableCookieEncryption should be considered in the future once we analyze performance, backwards
-    //   compatibility, make sure data doesn't get lost on uninstall, unsigned versions, etc.
-    // - electron-builder does not generate hashes needed for EnableEmbeddedAsarIntegrityValidation
-    //   https://github.com/electron-userland/electron-builder/issues/6930
-    // - LoadBrowserProcessSpecificV8Snapshot is not useful for us.
-  });
+  // - EnableCookieEncryption should be considered in the future once we analyze performance, backwards
+  //   compatibility, make sure data doesn't get lost on uninstall, unsigned versions, etc.
+  // - electron-builder does not generate hashes needed for EnableEmbeddedAsarIntegrityValidation
+  //   https://github.com/electron-userland/electron-builder/issues/6930
+  // - LoadBrowserProcessSpecificV8Snapshot is not useful for us.
+
+  await electronFuses.flipFuses(electronBinaryPath, newFuses);
 
   console.log(' done');
 };
