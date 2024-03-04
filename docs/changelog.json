@@ -1,15 +1,16 @@
 [
   {
-    "version": "1.11.0-beta.1",
+    "version": "1.11.0-beta.3",
     "date": "2024-3-3",
     "notes": [
       "Windows: Restored 32-bit installers for Windows 7, 8, and 8.1",
       "macOS: macOS 10.13 and 10.14 users will have to install a special \"legacy\" version of the app",
-      "Linux: Fixed WebGL \"uniformSetters\" errors on some distributions (primarily those shipping the latest versions of graphics drivers) and Flatpak",
+      "Linux: Fixed WebGL (\"uniformSetters\") errors on some distributions and Flatpak",
       "New addon: Multiple rows in backpack",
       "New extensions: List Tools, XML, Key Simulation",
       "Enabled Debugger addon performance tab",
-      "Fixed broken prompts"
+      "Fixed some broken prompt styles",
+      "Various other bug fixes"
     ]
   },
   {

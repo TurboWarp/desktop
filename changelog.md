@@ -2,7 +2,7 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.11.0-beta.2 (2024-03-03)
+# 1.11.0-beta.3 (2024-03-03)
 
  - Windows: Restored 32-bit installers for Windows 7, 8, and 8.1
  - macOS: macOS 10.13 and 10.14 users will have to install a special "legacy" version of the app
