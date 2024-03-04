@@ -2,15 +2,16 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.11.0-beta.1 (2024-03-03)
+# 1.11.0-beta.2 (2024-03-03)
 
  - Windows: Restored 32-bit installers for Windows 7, 8, and 8.1
  - macOS: macOS 10.13 and 10.14 users will have to install a special "legacy" version of the app
- - Linux: Fixed WebGL "uniformSetters" errors on some distributions (primarily those shipping the latest versions of graphics drivers) and Flatpak
+ - Linux: Fixed WebGL ("uniformSetters") errors on some distributions and Flatpak
  - New addon: Multiple rows in backpack
  - New extensions: List Tools, XML, Key Simulation
  - Enabled Debugger addon performance tab
- - Fixed broken prompts
+ - Fixed some broken prompt styles
+ - Various other bug fixes
 
 # 1.10.1 (2024-02-05)
 
