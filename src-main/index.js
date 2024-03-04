@@ -154,6 +154,10 @@ const parseFilesFromArgv = (argv) => {
   // Remove --inspect= and other flags
   argv = argv.filter((i) => !i.startsWith('--'));
 
+  // Ignore macOS process serial number argument eg. "-psn_0_98328"
+  // https://github.com/TurboWarp/desktop/issues/939
+  argv = argv.filter((i) => !i.startsWith('-psn_'));
+
   // Remove turbowarp.exe, electron.exe, etc. and the path to the app if it exists
   // defaultApp is true when the path to the app is in argv
   argv = argv.slice(process.defaultApp ? 2 : 1);
