@@ -51,18 +51,25 @@ jobs:
     - name: Package macOS
       if: runner.os == 'macOS'
       run: |
-        # I don't trust GitHub actions to not log shell substitutions somewhere (even accidentally)
-        python3 -c "import os; open(os.getenv('APPLE_API_KEY'), 'w').write(os.getenv('APPLE_API_KEY_DATA'))" >/dev/null 2>&1
+        # I don't trust GitHub Actions to not accidentally log shell substitutions somewhere, so we
+        # use Python instead of "echo $SECRET >" to write the private key to a file as needed by notarytool.
+        python3 -c "import os; open(os.getenv('APPLE_API_KEY_NAME'), 'w').write(os.getenv('APPLE_API_KEY_DATA'))" >/dev/null 2>&1
+        # @electron/notaraize documentation says key should be an absolute path
+        export APPLE_API_KEY="$(pwd)/$APPLE_API_KEY_NAME"
         node release-automation/build.js --mac --universal --production
         node release-automation/build.js --mac-legacy --x64 --production
-        python3 -c "import os; os.remove(os.getenv('APPLE_API_KEY'))" >/dev/null 2>&1
+        # for safety
+        rm "$APPLE_API_KEY_NAME"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
         APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-        APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+        APPLE_API_KEY_NAME: ${{ secrets.APPLE_API_KEY_NAME }}
         APPLE_API_KEY_DATA: ${{ secrets.APPLE_API_KEY_DATA }}
+        # base64 -i Certificates.p12
         CSC_LINK: ${{ secrets.APPLE_CSC_LINK }}
+        # electron-builder documentation says password won't be escaped, so don't use any
+        # special characters that the shell will mess with
         CSC_KEY_PASSWORD: ${{ secrets.APPLE_CSC_KEY_PASSWORD }}
 
     - name: Package Linux
