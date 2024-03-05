@@ -264,14 +264,9 @@ class BaseWindow {
       }
 
       // Escape to exit fullscreen or close popup windows
-      if (input.key === 'Escape') {
-        if (this.window.isFullScreen()) {
-          event.preventDefault();
-          this.window.setFullScreen(false);
-        } else if (this.isPopup()) {
-          event.preventDefault();
-          this.window.close();
-        }
+      if (input.key === 'Escape' && this.isPopup()) {
+        event.preventDefault();
+        this.window.close();
       }
 
       // Ctrl+R to reload
