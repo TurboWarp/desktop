@@ -3,6 +3,7 @@ const path = require('path');
 const {PassThrough, Readable} = require('stream');
 const zlib = require('zlib');
 const {app, protocol} = require('electron');
+const {getDist, getPlatform} = require('./platform');
 const packageJSON = require('../package.json');
 
 const FILE_SCHEMES = {
@@ -113,7 +114,7 @@ const createErrorPage = (request, errorMessage) => `<!DOCTYPE html>
     <h1>Protocol handler error</h1>
     <pre>${escapeXML('' + errorMessage)}</pre>
     <pre>URL: ${escapeXML(request.url)}</pre>
-    <pre>Version ${packageJSON.version} Electron ${process.versions.electron} Platform ${process.platform}</pre>
+    <pre>Version ${packageJSON.version}, Electron ${process.versions.electron}, Platform ${getPlatform()} ${process.arch}, Distribution ${getDist()}</pre>
     <p>If you can see this page, <a href="https://github.com/TurboWarp/desktop/issues">please open a GitHub issue</a> with all the information above.</p>
   </body>
 </html>`;
