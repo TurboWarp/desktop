@@ -13,6 +13,7 @@ const EditorWindow = require('./windows/editor');
 const {checkForUpdates} = require('./update-checker');
 const {tranlateOrNull} = require('./l10n');
 const migrate = require('./migrate');
+const {getPlatform} = require('./platform');
 require('./protocols');
 require('./context-menu');
 require('./menu-bar');
@@ -161,6 +162,10 @@ const parseFilesFromArgv = (argv) => {
   // Remove turbowarp.exe, electron.exe, etc. and the path to the app if it exists
   // defaultApp is true when the path to the app is in argv
   argv = argv.slice(process.defaultApp ? 2 : 1);
+
+  // If we are given a file:// URL, remove the protocol prefix.
+  // For example this happens in flatpak if we don't have access to a file.
+  argv = argv.map(i => i.replace(/^file:\/\//i, ''));
 
   return argv;
 };
