@@ -163,10 +163,6 @@ const parseFilesFromArgv = (argv) => {
   // defaultApp is true when the path to the app is in argv
   argv = argv.slice(process.defaultApp ? 2 : 1);
 
-  // If we are given a file:// URL, remove the protocol prefix.
-  // For example this happens in flatpak if we don't have access to a file.
-  argv = argv.map(i => i.replace(/^file:\/\//i, ''));
-
   return argv;
 };
 

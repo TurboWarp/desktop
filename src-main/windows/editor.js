@@ -101,6 +101,13 @@ const parseOpenedFile = (file, workingDirectory) => {
       return new OpenedFile(TYPE_URL, file);
     }
 
+    // Parse file:// URIs.
+    // Notably we receive these in the flatpak version of the app when we can only access a file through
+    // the XDG document portal instead of having direct access with eg. --filesystem=home
+    if (url.protocol === 'file:') {
+      return new OpenedFile(TYPE_FILE, path.resolve(workingDirectory, url.pathname));
+    }
+
     // Don't throw an error just because we don't recognize the URL protocol as
     // Windows paths look close enough to real URLs to be parsed successfully.
   }
