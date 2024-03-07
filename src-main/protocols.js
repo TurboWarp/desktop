@@ -121,7 +121,7 @@ const createErrorPage = (request, errorMessage) => `<!DOCTYPE html>
 
 const errorPageHeaders = {
   'content-type': 'text/html',
-  'content-security-policy': 'default-src "none"'
+  'content-security-policy': 'default-src \'none\''
 };
 
 const createSchemeHandler = (metadata) => {
