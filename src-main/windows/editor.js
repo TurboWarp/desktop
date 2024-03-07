@@ -1,5 +1,6 @@
 const fsPromises = require('fs/promises');
 const path = require('path');
+const nodeURL = require('url');
 const {app, dialog} = require('electron');
 const ProjectRunningWindow = require('./project-running-window');
 const AddonsWindow = require('./addons');
@@ -101,11 +102,20 @@ const parseOpenedFile = (file, workingDirectory) => {
       return new OpenedFile(TYPE_URL, file);
     }
 
-    // Parse file:// URIs.
+    // Parse file:// URLs.
     // Notably we receive these in the flatpak version of the app when we can only access a file through
     // the XDG document portal instead of having direct access with eg. --filesystem=home
     if (url.protocol === 'file:') {
-      return new OpenedFile(TYPE_FILE, path.resolve(workingDirectory, url.pathname));
+      let filePath;
+      try {
+        filePath = nodeURL.fileURLToPath(file);
+      } catch (e) {
+        // Very unlikely but possible
+      }
+
+      if (filePath) {
+        return new OpenedFile(TYPE_FILE, path.resolve(workingDirectory, filePath));
+      }
     }
 
     // Don't throw an error just because we don't recognize the URL protocol as
