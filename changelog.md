@@ -2,10 +2,11 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.11.0-beta.4 (2024-03-09)
+# 1.11.0-beta.5 (2024-03-09)
 
  - The escape key no longer leaves F11/Alt+Enter fullscreen
  - Various addon updates
+ - Fixed "Finishing update" window
  - Linux: Flatpak build no longer needs access to your entire home directory
 
 # 1.11.0-beta.3 (2024-03-03)

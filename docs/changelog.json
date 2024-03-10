@@ -1,10 +1,11 @@
 [
   {
-    "version": "1.11.0-beta.4",
+    "version": "1.11.0-beta.5",
     "date": "2024-3-9",
     "notes": [
       "The escape key no longer leaves F11/Alt+Enter fullscreen",
       "Various addon updates",
+      "Fixed \"Finishing update\" window",
       "Linux: Flatpak build no longer needs access to your entire home directory"
     ]
   },
