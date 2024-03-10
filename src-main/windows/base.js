@@ -23,6 +23,23 @@ class BaseWindow {
     this.window.webContents.on('before-input-event', this.handleInput.bind(this));
     this.applySettings();
 
+    if (!options.existingWindow) {
+      // getCursorScreenPoint() segfaults on Linux in Wayland if called before a BrowserWindow is created, so
+      // we can't compute this in getWindowOptions().
+      // https://github.com/electron/electron/issues/35471
+      let bounds;
+      if (this.parentWindow) {
+        options.parent = this.parentWindow;
+        bounds = BaseWindow.calculateWindowBounds(this.parentWindow.getBounds(), this.getDimensions());
+      } else {
+        // Electron's default window placement handles multimonitor setups extremely poorly on Linux
+        // This also makes the window open on whatever monitor the mouse is on, which is probably what the user wants
+        const activeScreen = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
+        bounds = BaseWindow.calculateWindowBounds(activeScreen.workArea, this.getDimensions());
+      }
+      this.window.setBounds(bounds);
+    }
+
     this.initialURL = null;
 
     const cls = this.constructor;
@@ -151,21 +168,6 @@ class BaseWindow {
 
     // Child classes are expected to show the window on their own
     options.show = false;
-
-    let bounds;
-    if (this.parentWindow) {
-      options.parent = this.parentWindow;
-      bounds = BaseWindow.calculateWindowBounds(this.parentWindow.getBounds(), this.getDimensions());
-    } else {
-      // Electron's default window placement handles multimonitor setups extremely poorly on Linux
-      // This also makes the window open on whatever monitor the mouse is on, which is probably what the user wants
-      const activeScreen = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
-      bounds = BaseWindow.calculateWindowBounds(activeScreen.workArea, this.getDimensions());
-    }
-    options.x = bounds.x;
-    options.y = bounds.y;
-    options.width = bounds.width;
-    options.height = bounds.height;
 
     // These should all be redundant already, but defense-in-depth.
     options.webPreferences = {
