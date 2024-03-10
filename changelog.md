@@ -2,6 +2,10 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.11.0-beta.6 (2024-03-10)
+
+ - Linux: Fixed segfault on Wayland
+
 # 1.11.0-beta.5 (2024-03-09)
 
  - The escape key no longer leaves F11/Alt+Enter fullscreen
