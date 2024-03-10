@@ -18,6 +18,10 @@ You must specify which platform to build for:
 --windows-portable
     Create portable Windows executables for Windows 10 or later.
 
+--windows-dir
+    Generate executables for Windows but don't package into a single executable file
+    Primarily for debugging.
+
 --microsoft-store
     Create appx files for uploading to the Microsoft Store.
 
@@ -26,6 +30,10 @@ You must specify which platform to build for:
 
 --mac-legacy
     Create app for macOS 10.13 and later (less secure than --mac).
+
+--mac-dir
+    Generate executables for macOS 10.15 and later but don't package into a complete DMG installer.
+    Primarily for debugging.
 
 --debian
     Create deb files for Debian, Ubuntu, and derivatives.
@@ -36,6 +44,10 @@ You must specify which platform to build for:
 
 --appimage
     Create AppImage executables for Linux.
+
+--linux-dir
+    Generate executables for Linux but don't package into distribution-sepecific installer or format.
+    Primarily for debugging.
 ```
 
 You can also specify which architecture you're building for:

@@ -227,6 +227,12 @@ const buildWindowsPortable = () => build({
   manageUpdates: true
 });
 
+const buildWindowsDir = () => build({
+  platformName: 'WINDOWS',
+  platformType: 'dir',
+  manageUpdates: true
+});
+
 const buildMicrosoftStore = () => build({
   platformName: 'WINDOWS',
   platformType: 'appx',
@@ -277,6 +283,12 @@ const buildMacLegacy = () => {
   });
 };
 
+const buildMacDir = () => build({
+  platformName: 'MAC',
+  platformType: 'dir',
+  manageUpdates: true
+});
+
 const buildDebian = () => build({
   platformName: 'LINUX',
   platformType: 'deb',
@@ -295,17 +307,26 @@ const buildAppImage = () => build({
   manageUpdates: true
 });
 
+const buildLinuxDir = () => build({
+  platformName: 'LINUX',
+  platformType: 'dir',
+  manageUpdates: true
+});
+
 const run = async () => {
   const options = {
     '--windows': buildWindows,
     '--windows-legacy': buildWindowsLegacy,
     '--windows-portable': buildWindowsPortable,
+    '--windows-dir': buildWindowsDir,
     '--microsoft-store': buildMicrosoftStore,
     '--mac': buildMac,
     '--mac-legacy': buildMacLegacy,
+    '--mac-dir': buildMacDir,
     '--debian': buildDebian,
     '--tarball': buildTarball,
     '--appimage': buildAppImage,
+    '--linux-dir': buildLinuxDir
   };
 
   let built = 0;
