@@ -113,17 +113,12 @@ const addElectronFuses = async (context) => {
     [electronFuses.FuseV1Options.OnlyLoadAppFromAsar]: true,
   };
 
-  // This fuse was added in Electron 29.
-  // This would've prevented CVE-2023-40168.
-  if (Object.prototype.hasOwnProperty.call(currentFuses, electronFuses.FuseV1Options.GrantFileProtocolExtraPrivileges)) {
-    newFuses[electronFuses.FuseV1Options.GrantFileProtocolExtraPrivileges] = false;
-  }
-
   // - EnableCookieEncryption should be considered in the future once we analyze performance, backwards
   //   compatibility, make sure data doesn't get lost on uninstall, unsigned versions, etc.
   // - electron-builder does not generate hashes needed for EnableEmbeddedAsarIntegrityValidation
   //   https://github.com/electron-userland/electron-builder/issues/6930
   // - LoadBrowserProcessSpecificV8Snapshot is not useful for us.
+  // - GrantFileProtocolExtraPrivileges breaks migrate.html
 
   await electronFuses.flipFuses(electronBinaryPath, newFuses);
 
