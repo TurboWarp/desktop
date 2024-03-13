@@ -31,10 +31,6 @@
       <caption>Editor in light mode</caption>
       <image width="1193" height="825">https://raw.githubusercontent.com/TurboWarp/desktop-screenshots/2d51ebf6e4b74aeb858d471d06a59b325830dde1/flathub/light.png</image>
     </screenshot>
-    <screenshot>
-      <caption>Editor in dark mode</caption>
-      <image width="1193" height="825">https://raw.githubusercontent.com/TurboWarp/desktop-screenshots/2d51ebf6e4b74aeb858d471d06a59b325830dde1/flathub/dark.png</image>
-    </screenshot>
   </screenshots>
   <url type="homepage">https://desktop.turbowarp.org/</url>
   <url type="bugtracker">https://github.com/TurboWarp/desktop/issues</url>
