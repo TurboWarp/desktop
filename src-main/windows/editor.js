@@ -416,6 +416,16 @@ class EditorWindow extends ProjectRunningWindow {
       };
     });
 
+    /**
+     * Refers to the full screen button in the editor, not the OS-level fullscreen through
+     * F11/Alt+Enter (Windows, Linux) or buttons provided by the OS (macOS).
+     */
+    this.isInEditorFullScreen = false;
+
+    ipc.handle('set-is-full-screen', (event, isFullScreen) => {
+      this.isInEditorFullScreen = !!isFullScreen;
+    });
+
     this.loadURL('tw-editor://./gui/gui.html');
     this.show();
   }
@@ -464,6 +474,10 @@ class EditorWindow extends ProjectRunningWindow {
       ]);
     }
     return super.handleWindowOpen(details);
+  }
+
+  canExitFullscreenByPressingEscape () {
+    return !this.isInEditorFullScreen;
   }
 
   /**

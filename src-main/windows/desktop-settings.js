@@ -31,7 +31,8 @@ class DesktopSettingsWindow extends BaseWindow {
         hardwareAcceleration: settings.hardwareAcceleration,
         backgroundThrottling: settings.backgroundThrottling,
         bypassCORS: settings.bypassCORS,
-        spellchecker: settings.spellchecker
+        spellchecker: settings.spellchecker,
+        exitFullscreenOnEscape: settings.exitFullscreenOnEscape
       };
     });
 
@@ -80,6 +81,11 @@ class DesktopSettingsWindow extends BaseWindow {
     ipc.handle('set-spellchecker', async (event, spellchecker) => {
       settings.spellchecker = spellchecker;
       BaseWindow.settingsChanged();
+      await settings.save();
+    });
+
+    ipc.handle('set-exit-fullscreen-on-escape', async (event, exitFullscreenOnEscape) => {
+      settings.exitFullscreenOnEscape = exitFullscreenOnEscape;
       await settings.save();
     });
 

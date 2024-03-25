@@ -168,6 +168,10 @@ const DesktopHOC = function (WrappedComponent) {
       if (this.props.reduxUsername !== prevProps.reduxUsername) {
         localStorage.setItem(USERNAME_KEY, this.props.reduxUsername);
       }
+
+      if (this.props.isFullScreen !== prevProps.isFullScreen) {
+        EditorPreload.setIsFullScreen(this.props.isFullScreen);
+      }
     }
     handleUpdateProjectTitle (newTitle) {
       this.setState({
@@ -238,6 +242,7 @@ const DesktopHOC = function (WrappedComponent) {
     fileHandle: PropTypes.shape({
       id: PropTypes.number.isRequired
     }),
+    isFullScreen: PropTypes.bool.isRequired,
     reduxUsername: PropTypes.string.isRequired,
     onFetchedInitialProjectData: PropTypes.func.isRequired,
     onHasInitialProject: PropTypes.func.isRequired,
@@ -255,6 +260,7 @@ const DesktopHOC = function (WrappedComponent) {
   const mapStateToProps = state => ({
     locale: state.locales.locale,
     loadingState: state.scratchGui.projectState.loadingState,
+    isFullScreen: state.scratchGui.mode.isFullScreen,
     projectChanged: state.scratchGui.projectChanged,
     fileHandle: state.scratchGui.tw.fileHandle,
     reduxUsername: state.scratchGui.tw.username,

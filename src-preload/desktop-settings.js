@@ -11,5 +11,6 @@ contextBridge.exposeInMainWorld('DesktopSettingsPreload', {
   setBackgroundThrottling: (backgroundThrottling) => ipcRenderer.invoke('set-background-throttling', backgroundThrottling),
   setBypassCORS: (bypassCORS) => ipcRenderer.invoke('set-bypass-cors', bypassCORS),
   setSpellchecker: (spellchecker) => ipcRenderer.invoke('set-spellchecker', spellchecker),
+  setExitFullscreenOnEscape: (exitFullscreenOnEscape) => ipcRenderer.invoke('set-exit-fullscreen-on-escape', exitFullscreenOnEscape),
   openUserData: () => ipcRenderer.invoke('open-user-data')
 });

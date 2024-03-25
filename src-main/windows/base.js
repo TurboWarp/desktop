@@ -222,6 +222,17 @@ class BaseWindow {
       return;
     }
 
+    // Escape to exit fullscreen or close popup windows
+    if (input.key === 'Escape') {
+      if (settings.exitFullscreenOnEscape && this.window.isFullScreen() && this.canExitFullscreenByPressingEscape()) {
+        event.preventDefault();
+        this.window.setFullScreen(false);
+      } else if (this.isPopup()) {
+        event.preventDefault();
+        this.window.close();  
+      }
+    }
+    
     // On macOS, these shortcuts are handled by the menu bar
     if (process.platform !== 'darwin') {
       const webContents = this.window.webContents;
@@ -263,12 +274,6 @@ class BaseWindow {
       if (input.key === 'F11' || (input.key === 'Enter' && input.alt)) {
         event.preventDefault();
         this.window.setFullScreen(!this.window.isFullScreen());
-      }
-
-      // Escape to exit fullscreen or close popup windows
-      if (input.key === 'Escape' && this.isPopup()) {
-        event.preventDefault();
-        this.window.close();
       }
 
       // Ctrl+R to reload
@@ -338,6 +343,15 @@ class BaseWindow {
 
   applySettings () {
     // to be overrridden
+  }
+
+  /**
+   * Whether or not this window allows leaving OS-level fullscreen by pressing escape.
+   * You do not need to check `settings` here. The caller will do that for you.
+   * @returns {boolean}
+   */
+  canExitFullscreenByPressingEscape () {
+    return true;
   }
 }
 

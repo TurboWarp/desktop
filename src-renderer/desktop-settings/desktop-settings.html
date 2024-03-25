@@ -283,6 +283,19 @@
         document.querySelector('.spellchecker-label').textContent = strings['desktop-settings.spellchecker'];
       </script>
 
+      <label>
+        <input type="checkbox" class="exit-fullscreen-on-escape-checkbox" autocomplete="off">
+        <span class="exit-fullscreen-on-escape-label"></span>
+      </label>
+      <script>
+        const exitFullscreenOnEscape = document.querySelector('.exit-fullscreen-on-escape-checkbox');
+        exitFullscreenOnEscape.onchange = () => {
+          DesktopSettingsPreload.setExitFullscreenOnEscape(exitFullscreenOnEscape.checked);
+        };
+        exitFullscreenOnEscape.checked = settings.exitFullscreenOnEscape;
+        document.querySelector('.exit-fullscreen-on-escape-label').textContent = strings['desktop-settings.exit-fullscreen-on-escape'];
+      </script>
+
       <button class="open-user-data"></button>
       <script>
         const openUserData = document.querySelector('.open-user-data');

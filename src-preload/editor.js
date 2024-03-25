@@ -19,7 +19,8 @@ contextBridge.exposeInMainWorld('EditorPreload', {
   getAdvancedCustomizations: () => ipcRenderer.invoke('get-advanced-customizations'),
   setExportForPackager: (callback) => {
     exportForPackager = callback;
-  }
+  },
+  setIsFullScreen: (isFullScreen) => ipcRenderer.invoke('set-is-full-screen', isFullScreen)
 });
 
 let exportForPackager = () => Promise.reject(new Error('exportForPackager missing'));

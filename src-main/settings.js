@@ -163,6 +163,13 @@ class Settings {
   set spellchecker (spellchecker) {
     this.data.spellchecker = spellchecker;
   }
+
+  get exitFullscreenOnEscape () {
+    return this.data.exitFullscreenOnEscape !== false;
+  }
+  set exitFullscreenOnEscape(exitFullscreenOnEscape) {
+    this.data.exitFullscreenOnEscape = exitFullscreenOnEscape;
+  }
 }
 
 const settings = new Settings();
