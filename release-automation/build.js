@@ -96,6 +96,7 @@ const addElectronFuses = async (context) => {
   const electronBinaryPath = pathUtil.join(context.appOutDir, getExecutableName());
   process.stdout.write(`Flipping fuses in ${electronBinaryPath}...`);
 
+  /** @type {import('@electron/fuses').FuseV1Config} */
   const newFuses = {
     // Necessary for building on Apple Silicon
     resetAdHocDarwinSignature: platformName === 'darwin',
