@@ -2,27 +2,19 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.11.0-beta.6 (2024-03-10)
+# 1.11.0 (2024-04-07)
 
- - Linux: Fixed segfault on Wayland
-
-# 1.11.0-beta.5 (2024-03-09)
-
- - The escape key no longer leaves F11/Alt+Enter fullscreen
- - Various addon updates
- - Fixed "Finishing update" window
- - Linux: Flatpak build no longer needs access to your entire home directory
-
-# 1.11.0-beta.3 (2024-03-03)
-
+ - New addon: Multiple rows in backpack
+ - New extensions: List Tools, XML, Key Simulation
+ - The dango has become a cat
+ - Enabled Debugger addon performance tab
+ - Restored Scratch font with a new font that looks similar but without legal ambiguity
+ - Fixed various fullscreen-related bugs
+ - Various other bug fixes
  - Windows: Restored 32-bit installers for Windows 7, 8, and 8.1
  - macOS: macOS 10.13 and 10.14 users will have to install a special "legacy" version of the app
  - Linux: Fixed WebGL ("uniformSetters") errors on some distributions and Flatpak
- - New addon: Multiple rows in backpack
- - New extensions: List Tools, XML, Key Simulation
- - Enabled Debugger addon performance tab
- - Fixed some broken prompt styles
- - Various other bug fixes
+ - Linux: Fixed segfault on Wayland
 
 # 1.10.1 (2024-02-05)
 
