@@ -461,7 +461,14 @@
       [data-os="windows-legacy"] [data-if-os="windows-any"] {
         display: initial;
       }
-      [data-os="mac"] [data-if-os="mac"] {
+      [data-os="mac-modern"] [data-if-os="mac-modern"] {
+        display: initial;
+      }
+      [data-os="mac-legacy"] [data-if-os="mac-legacy"] {
+        display: initial;
+      }
+      [data-os="mac-modern"] [data-if-os="mac-any"],
+      [data-os="mac-legacy"] [data-if-os="mac-any"] {
         display: initial;
       }
       [data-os="linux"] [data-if-os="linux"] {
@@ -535,7 +542,7 @@
     <script type="generated-locale-names">{"en":"English","ca":"Català","de":"Deutsch","es":"Español (España)","it":"Italiano","ja":"日本語","ko":"한국어","nb":"Norsk Bokmål","nl":"Nederlands","pt-br":"Português Brasileiro","ru":"Русский","sv":"Svenska","tr":"Türkçe","zh-cn":"简体中文"}</script>
 
     <script>
-      const VERSION = '1.10.1';
+      const VERSION = '1.11.0';
 
       // OS-specific styles
       const getOS = () => {
@@ -544,7 +551,10 @@
         // Chromium on Raspberry Pi OS reports CrOS in User-Agent but Linux in navigator.platform
         if (navigator.platform.includes('Linux') || /linux/i.test(navigator.userAgent)) return 'linux';
         if (navigator.userAgent.includes('CrOS')) return 'unsupported';
-        if (/mac/i.test(navigator.userAgent)) return 'mac';
+        // macOS 10.13 and 10.14 are legacy platforms
+        // crazy regex handles some browsers doing 10_13 and others doing 10.13, and also avoids a hypothetical 10.130 from being detected.
+        if (/mac os x 10[._]1[34][^\d]/i.test(navigator.userAgent)) return 'mac-legacy';
+        if (/mac/i.test(navigator.userAgent)) return 'mac-modern';
         if (/windows nt 6/i.test(navigator.userAgent)) return 'windows-legacy';
         if (/windows/i.test(navigator.userAgent)) return 'windows-modern';
         return 'unsupported';
@@ -723,7 +733,7 @@
 
     <div class="changelog-subheader">
       <p data-if-os="windows-any" l10n="updatewin">To update, download and run the new installer.</p>
-      <p data-if-os="mac" l10n="updatemac">To update, download the new app and replace the old one.</p>
+      <p data-if-os="mac-any" l10n="updatemac">To update, download the new app and replace the old one.</p>
       <p data-if-os="linux" l10n="updatelin">If you installed TurboWarp Desktop from an app store or package manager, download the update from there. Otherwise, manually reinstall the app the same way you installed it.</p>
       <p data-if-os="unsupported" l10n="updateun">To update, reinstall the app the same way you installed it.</p>
     </div>
@@ -754,7 +764,7 @@
         <p l10n="smartscreen">If a Windows SmartScreen alert appears, click "More info" then "Run anyways".</p>
       </div>
 
-      <div data-if-os="mac">
+      <div data-if-os="mac-modern">
         <a class="store-badge mac-app-store" href="https://apps.apple.com/us/app/turbowarp/id6444661463">
           <div class="store-icon apple-icon"></div>
           <div class="store-badge-text">
@@ -763,7 +773,11 @@
           </div>
         </a>
         <p class="download-separator" l10n="or" l10n-description="Appears between two different download buttons">or</p>
-        <a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Setup-{version}.dmg" l10n="macd" l10n-description="Universal means the apps works on Intel and ARM Macs">Download for macOS (Universal)</a>
+        <a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Setup-{version}.dmg" l10n="mac-modern-download" l10n-description="Universal is Apple's marketing term for an app that works on Intel and ARM Macs">Download for macOS 10.15 and later (Universal)</a>
+      </div>
+
+      <div data-if-os="mac-legacy">
+        <a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Legacy-Setup-{version}.dmg" l10n="mac-legacy-download">Download for macOS 10.13 or 10.14</a>
       </div>
 
       <div data-if-os="linux">
@@ -787,8 +801,8 @@
 
       <div><b l10n="webapp" l10n-description="Followed by link to turbowarp.org/editor">Or use our web app in any browser:</b> <a href="https://turbowarp.org/editor">turbowarp.org/editor</a></div>
 
-      <!-- when there is no beta update, leave this hidden so we don't lose the l10n string -->
-      <div>
+      <!-- when there is no beta update, leave this hidden instead of removing so we don't lose the l10n string -->
+      <div hidden>
         <b class="beta-badge" l10n="beta" l10n-description="Followed by a version number eg. v1.7.2-beta.1 that is a link to learn more about the current beta release.">Beta version available:</b>
         <a href="https://github.com/TurboWarp/desktop/releases/tag/v1.11.0-beta.6">v1.11.0 beta 6</a>
       </div>
@@ -906,6 +920,22 @@
       <h2 l10n="changelog">Changelog</h2>
       <div lang="en">
         <!-- CHANGELOG_START -->
+        <div data-version="1.11.0">
+          <h3>v1.11.0 (April 7 2024)</h3>
+          <ul>
+            <li>New addon: Multiple rows in backpack</li>
+            <li>New extensions: List Tools, XML, Key Simulation</li>
+            <li>The dango has become a cat</li>
+            <li>Enabled Debugger addon performance tab</li>
+            <li>Restored Scratch font with a new font that looks similar but without legal ambiguity</li>
+            <li>Fixed various fullscreen-related bugs</li>
+            <li>Various other bug fixes</li>
+            <li>Windows: Restored 32-bit installers for Windows 7, 8, and 8.1</li>
+            <li>macOS: macOS 10.13 and 10.14 users will have to install a special "legacy" version of the app</li>
+            <li>Linux: Fixed WebGL ("uniformSetters") errors on some distributions and Flatpak</li>
+            <li>Linux: Fixed segfault on Wayland</li>
+          </ul>
+        </div>
         <div data-version="1.10.1">
           <h3>v1.10.1 (February 5 2024)</h3>
           <ul>
@@ -1219,11 +1249,12 @@
       <p l10n="win-legacy2">We will support old versions of Windows as long as it is not an unreasonable burden. Download one of the installers below. If a Windows SmartScreen alert appears, click "More info" then "Run anyways".</p>
       <ul class="download-list">
         <li><a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Legacy-Setup-{version}-x64.exe" l10n="win-legacy-64">Download legacy installer (64-bit, recommended)</a></li>
+        <li><a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Legacy-Setup-{version}-ia32.exe" l10n="w323" l10n-description="Alternative download button">32-bit</a></li>
       </ul>
     </div>
 
     <div class="manual-installation section" id="mac">
-      <h2 l10n="mac">Install on macOS</h2>
+      <h2 l10n="mac">Install on macOS 10.15 and later</h2>
       <p l10n="macupd">Install from the Mac App Store for automatic updates.</p>
       <a class="store-badge mac-app-store" href="https://apps.apple.com/us/app/turbowarp/id6444661463">
         <div class="store-icon apple-icon"></div>
@@ -1233,7 +1264,13 @@
         </div>
       </a>
       <p l10n="macmanual">Or download the app manually. Open the .DMG, then drag TurboWarp into Applications. If it tells you that TurboWarp already exists, choose "Replace".</p>
-      <a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Setup-{version}.dmg" l10n="macd" l10n-description="Universal means the apps works on Intel and ARM Macs">Download for macOS (Universal)</a>
+      <a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Setup-{version}.dmg" l10n="mac-modern-download" l10n-description="Universal is Apple's marketing term for an app that works on Intel and ARM Macs">Download for macOS 10.15 and later (Universal)</a>
+    </div>
+
+    <div class="manual-installation section" id="mac">
+      <h2 l10n="mac-legacy-header">Install on macOS 10.13 or 10.14</h2>
+      <p l10n="mac-legacy-body">We will support old versions of macOS as long as it is not an unreasonable burden. Open the .DMG, then drag TurboWarp into Applications. If it tells you that TurboWarp already exists, choose "Replace".</p>
+      <a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Legacy-Setup-{version}.dmg" l10n="mac-legacy-download">Download for macOS 10.13 or 10.14</a>
     </div>
 
     <div class="manual-installation section" id="linux">
