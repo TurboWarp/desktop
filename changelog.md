@@ -2,6 +2,10 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.11.1 (2024-04-13)
+
+ - Fixed addon errors
+
 # 1.11.0 (2024-04-07)
 
  - New addon: Multiple rows in backpack
