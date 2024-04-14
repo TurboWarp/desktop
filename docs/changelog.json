@@ -1,5 +1,12 @@
 [
   {
+    "version": "1.11.1",
+    "date": "2024-4-13",
+    "notes": [
+      "Fixed addon errors"
+    ]
+  },
+  {
     "version": "1.11.0",
     "date": "2024-4-7",
     "notes": [
