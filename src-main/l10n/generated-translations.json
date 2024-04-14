@@ -1178,6 +1178,7 @@
         "desktop-settings.disabled-updates": "不建议关闭更新检查，因为这样你会无法接收安全更新。",
         "desktop-settings.editor-must-be-open": "错误：请打开编辑器配置媒体设备",
         "desktop-settings.error": "错误：{error}",
+        "desktop-settings.exit-fullscreen-on-escape": "当按下 Esc 键时，退出 F11 全屏模式（不是编辑器全屏）",
         "desktop-settings.hardware-acceleration": "使用硬件加速（重启后生效）",
         "desktop-settings.hardware-acceleration-disabled": "不建议禁用硬件加速，因为硬件加速几乎总是能提高性能。",
         "desktop-settings.loading": "加载中……",
