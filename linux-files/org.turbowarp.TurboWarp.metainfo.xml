@@ -28,8 +28,12 @@
   </description>
   <screenshots>
     <screenshot type="default">
-      <caption>Editor in light mode</caption>
-      <image width="1193" height="825">https://raw.githubusercontent.com/TurboWarp/desktop-screenshots/2d51ebf6e4b74aeb858d471d06a59b325830dde1/flathub/light.png</image>
+      <caption>Default project in light mode</caption>
+      <image width="1153" height="734">https://raw.githubusercontent.com/TurboWarp/desktop-screenshots/bb4612ebefe99d816ae7e60f70f59e18d5fef3b9/flathub/light.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <caption>Full Sphere Path Tracer by piano_miles in dark mode</caption>
+      <image width="1153" height="734">https://raw.githubusercontent.com/TurboWarp/desktop-screenshots/bb4612ebefe99d816ae7e60f70f59e18d5fef3b9/flathub/pt-dark.png</image>
     </screenshot>
   </screenshots>
   <url type="homepage">https://desktop.turbowarp.org/</url>
