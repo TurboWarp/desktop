@@ -8,7 +8,7 @@ if (!process.mas && !app.requestSingleInstanceLock()) {
 
 const path = require('path');
 const openExternal = require('./open-external');
-const BaseWindow = require('./windows/base');
+const AbstractWindow = require('./windows/abstract');
 const EditorWindow = require('./windows/editor');
 const {checkForUpdates} = require('./update-checker');
 const {tranlateOrNull} = require('./l10n');
@@ -32,7 +32,7 @@ app.on('session-created', (session) => {
     if (!details.isMainFrame) {
       return false;
     }
-    const window = BaseWindow.getWindowByWebContents(webContents);
+    const window = AbstractWindow.getWindowByWebContents(webContents);
     if (!window) {
       return false;
     }
@@ -45,7 +45,7 @@ app.on('session-created', (session) => {
       callback(false);
       return;
     }
-    const window = BaseWindow.getWindowByWebContents(webContents);
+    const window = AbstractWindow.getWindowByWebContents(webContents);
     if (!window) {
       callback(false);
       return;
@@ -63,7 +63,7 @@ app.on('session-created', (session) => {
     }
 
     const webContents = details.webContents;
-    const window = BaseWindow.getWindowByWebContents(webContents);
+    const window = AbstractWindow.getWindowByWebContents(webContents);
     if (!webContents || !window) {
       // Background requests for things like loading service workers in iframes
       // are not associated with a specific webcontents, so we'll just have to
@@ -75,7 +75,7 @@ app.on('session-created', (session) => {
   });
 
   session.webRequest.onHeadersReceived((details, callback) => {
-    const window = BaseWindow.getWindowByWebContents(details.webContents);
+    const window = AbstractWindow.getWindowByWebContents(details.webContents);
     if (!window) {
       return callback({});
     }
@@ -107,7 +107,7 @@ app.on('session-created', (session) => {
 app.on('web-contents-created', (event, webContents) => {
   webContents.on('will-navigate', (event, url) => {
     // Only allow windows to refresh, not navigate anywhere.
-    const window = BaseWindow.getWindowByWebContents(webContents);
+    const window = AbstractWindow.getWindowByWebContents(webContents);
     if (!window || url !== window.initialURL) {
       event.preventDefault();
       openExternal(url);
@@ -128,7 +128,7 @@ app.on('window-all-closed', () => {
 
 // macOS
 app.on('activate', () => {
-  if (app.isReady() && !isMigrating && BaseWindow.getWindowsByClass(EditorWindow).length === 0) {
+  if (app.isReady() && !isMigrating && AbstractWindow.getWindowsByClass(EditorWindow).length === 0) {
     EditorWindow.newWindow();
   }
 });
@@ -176,7 +176,7 @@ app.on('second-instance', (event, argv, workingDirectory) => {
 });
 
 app.whenReady().then(() => {
-  BaseWindow.settingsChanged();
+  AbstractWindow.settingsChanged();
 
   migratePromise = migrate().then((shouldContinue) => {
     if (!shouldContinue) {
@@ -193,7 +193,7 @@ app.whenReady().then(() => {
       ...parseFilesFromArgv(process.argv)
     ], process.cwd());
 
-    if (BaseWindow.getAllWindows().length === 0) {
+    if (AbstractWindow.getAllWindows().length === 0) {
       // No windows were successfully opened. Let's just quit.
       app.quit();
     }

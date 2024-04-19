@@ -1,4 +1,4 @@
-const BaseWindow = require('./base');
+const AbstractWindow = require('./abstract');
 const {APP_NAME} = require('../brand');
 const {translate, getLocale, getStrings} = require('../l10n');
 
@@ -60,7 +60,7 @@ class SecurityState {
   }
 }
 
-class SecurityPromptWindow extends BaseWindow {
+class SecurityPromptWindow extends AbstractWindow {
   /**
    * @param {Electron.BrowserWindow} projectWindow
    * @param {string} type

@@ -1,13 +1,13 @@
-const BaseWindow = require('./base');
+const AbstractWindow = require('./abstract');
 const {PACKAGER_NAME} = require('../brand');
 const PackagerPreviewWindow = require('./packager-preview');
 const prompts = require('../prompts');
 
-class PackagerWindow extends BaseWindow {
+class PackagerWindow extends AbstractWindow {
   constructor (editorWindow) {
     super();
 
-    /** @type {BaseWindow} */
+    /** @type {AbstractWindow} */
     this.editorWindow = editorWindow;
 
     this.window.setTitle(PACKAGER_NAME);

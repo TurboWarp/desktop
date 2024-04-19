@@ -1,9 +1,9 @@
-const BaseWindow = require('./base');
+const AbstractWindow = require('./abstract');
 const {translate, getLocale, getStrings} = require('../l10n');
 const {APP_NAME} = require('../brand');
 const openExternal = require('../open-external');
 
-class UpdateWindow extends BaseWindow {
+class UpdateWindow extends AbstractWindow {
   constructor (currentVersion, latestVersion, security) {
     super();
 

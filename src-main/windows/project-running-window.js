@@ -1,6 +1,6 @@
 const fsPromises = require('fs/promises');
 const path = require('path')
-const BaseWindow = require('./base');
+const AbtractWindow = require('./abstract');
 const settings = require('../settings');
 const askForMediaAccess = require('../media-permissions');
 const SecurityPromptWindow = require('./security-prompt');
@@ -22,7 +22,7 @@ const listLocalFilesCached = () => {
   return cached;
 };
 
-class ProjectRunningWindow extends BaseWindow {
+class ProjectRunningWindow extends AbtractWindow {
   constructor (...args) {
     super(...args);
 

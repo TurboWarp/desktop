@@ -1,7 +1,7 @@
 const {app, dialog, BrowserWindow} = require('electron');
 const {translate} = require('./l10n');
 const {APP_NAME} = require('./brand');
-const BaseWindow = require('./windows/base');
+const AbstractWindow = require('./windows/abstract');
 
 const showCrashMessage = (window, type, code, reason) => {
   dialog.showMessageBoxSync(window, {
@@ -17,7 +17,7 @@ const showCrashMessage = (window, type, code, reason) => {
 };
 
 app.on('render-process-gone', (event, webContents, details) => {
-  const baseWindow = BaseWindow.getWindowByWebContents(webContents);
+  const baseWindow = AbstractWindow.getWindowByWebContents(webContents);
   const handled = (
     baseWindow &&
     baseWindow.handleRendererProcessGone(details)

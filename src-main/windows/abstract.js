@@ -3,17 +3,17 @@ const path = require('path');
 const openExternal = require('../open-external');
 const settings = require('../settings');
 
-/** @type {Map<unknown, BaseWindow[]>} */
+/** @type {Map<unknown, AbstractWindow[]>} */
 const windowsByClass = new Map();
 
 /**
- * @typedef BaseWindowOptions
+ * @typedef AbstractWindowOptions
  * @property {Electron.BrowserWindow} [existingWindow]
  * @property {Electron.BrowserWindow} [parentWindow]
  */
 
-class BaseWindow {
-  /** @param {BaseWindowOptions} options */
+class AbstractWindow {
+  /** @param {AbstractWindowOptions} options */
   constructor (options = {}) {
     this.parentWindow = options.parentWindow || null;
 
@@ -30,12 +30,12 @@ class BaseWindow {
       let bounds;
       if (this.parentWindow) {
         options.parent = this.parentWindow;
-        bounds = BaseWindow.calculateWindowBounds(this.parentWindow.getBounds(), this.getDimensions());
+        bounds = AbstractWindow.calculateWindowBounds(this.parentWindow.getBounds(), this.getDimensions());
       } else {
         // Electron's default window placement handles multimonitor setups extremely poorly on Linux
         // This also makes the window open on whatever monitor the mouse is on, which is probably what the user wants
         const activeScreen = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
-        bounds = BaseWindow.calculateWindowBounds(activeScreen.workArea, this.getDimensions());
+        bounds = AbstractWindow.calculateWindowBounds(activeScreen.workArea, this.getDimensions());
       }
       this.window.setBounds(bounds);
     }
@@ -69,7 +69,7 @@ class BaseWindow {
   static settingsChanged () {
     session.defaultSession.setSpellCheckerEnabled(settings.spellchecker);
 
-    for (const window of BaseWindow.getAllWindows()) {
+    for (const window of AbstractWindow.getAllWindows()) {
       window.applySettings();
     }
   }
@@ -111,7 +111,7 @@ class BaseWindow {
    * @returns {T}
    */
   static singleton (cls) {
-    const windows = BaseWindow.getWindowsByClass(cls);
+    const windows = AbstractWindow.getWindowsByClass(cls);
     if (windows.length) {
       return windows[0];
     }
@@ -355,4 +355,4 @@ class BaseWindow {
   }
 }
 
-module.exports = BaseWindow;
+module.exports = AbstractWindow;

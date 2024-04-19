@@ -2,7 +2,7 @@ const {Menu} = require('electron');
 const {translate} = require('./l10n');
 const openExternal = require('./open-external');
 const {APP_NAME} = require('./brand');
-const BaseWindow = require('./windows/base');
+const AbstractWindow = require('./windows/abstract');
 const AboutWindow = require('./windows/about');
 const DesktopSettingsWindow = require('./windows/desktop-settings');
 const AddonsWindow = require('./windows/addons');
@@ -76,7 +76,7 @@ const rebuildMenuBar = () => {
           {
             label: translate('menu.package'),
             click: (menuItem, browserWindow) => {
-              const window = BaseWindow.getWindowByBrowserWindow(browserWindow);
+              const window = AbstractWindow.getWindowByBrowserWindow(browserWindow);
               if (window instanceof EditorWindow) {
                 PackagerWindow.forEditor(window);
               }
@@ -104,7 +104,7 @@ const rebuildMenuBar = () => {
             label: translate('menu.reload'),
             accelerator: 'Cmd+R',
             click: (menuItem, browserWindow) => {
-              const window = BaseWindow.getWindowByBrowserWindow(browserWindow);
+              const window = AbstractWindow.getWindowByBrowserWindow(browserWindow);
               if (window) {
                 window.reload();
               }

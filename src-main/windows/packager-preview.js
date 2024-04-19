@@ -1,4 +1,4 @@
-const BaseWindow = require('./base');
+const AbstractWindow = require('./abstract');
 const ProjectRunningWindow = require('./project-running-window');
 const {translate} = require('../l10n');
 
@@ -8,7 +8,7 @@ class PackagerPreviewWindow extends ProjectRunningWindow {
       existingWindow
     });
 
-    this.window.setBounds(BaseWindow.calculateWindowBounds(parentWindow.getBounds(), this.window.getBounds()));
+    this.window.setBounds(AbstractWindow.calculateWindowBounds(parentWindow.getBounds(), this.window.getBounds()));
 
     this.show();
   }

@@ -1,10 +1,10 @@
-const BaseWindow = require('./base');
+const AbstractWindow = require('./abstract');
 const DesktopSettingsWindow = require('./desktop-settings');
 const {translate} = require('../l10n');
 const {APP_NAME} = require('../brand');
 const {isEnabledAtBuildTime} = require('../update-checker');
 
-class PrivacyWindow extends BaseWindow {
+class PrivacyWindow extends AbstractWindow {
   constructor () {
     super();
 
@@ -40,7 +40,7 @@ class PrivacyWindow extends BaseWindow {
   }
 
   static show () {
-    const window = BaseWindow.singleton(PrivacyWindow);
+    const window = AbstractWindow.singleton(PrivacyWindow);
     window.show();
   }
 }

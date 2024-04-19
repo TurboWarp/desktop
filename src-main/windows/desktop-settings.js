@@ -1,11 +1,11 @@
 const {app, shell} = require('electron');
-const BaseWindow = require('./base');
+const AbstractWindow = require('./abstract');
 const {translate, getStrings, getLocale} = require('../l10n');
 const {APP_NAME} = require('../brand');
 const settings = require('../settings');
 const {isEnabledAtBuildTime} = require('../update-checker');
 
-class DesktopSettingsWindow extends BaseWindow {
+class DesktopSettingsWindow extends AbstractWindow {
   constructor () {
     super();
 
@@ -44,7 +44,7 @@ class DesktopSettingsWindow extends BaseWindow {
     ipc.handle('enumerate-media-devices', async () => {
       // Imported late due to circular dependencies
       const EditorWindow = require('./editor');
-      const anEditorWindow = BaseWindow.getWindowsByClass(EditorWindow)[0];
+      const anEditorWindow = AbstractWindow.getWindowsByClass(EditorWindow)[0];
       if (!anEditorWindow) {
         // If you change this error message, please make sure to update desktop settings' error handling
         throw new Error('Editor must be open');
@@ -69,7 +69,7 @@ class DesktopSettingsWindow extends BaseWindow {
 
     ipc.handle('set-background-throttling', async (event, backgroundThrottling) => {
       settings.backgroundThrottling = backgroundThrottling;
-      BaseWindow.settingsChanged();
+      AbstractWindow.settingsChanged();
       await settings.save();
     });
 
@@ -80,7 +80,7 @@ class DesktopSettingsWindow extends BaseWindow {
 
     ipc.handle('set-spellchecker', async (event, spellchecker) => {
       settings.spellchecker = spellchecker;
-      BaseWindow.settingsChanged();
+      AbstractWindow.settingsChanged();
       await settings.save();
     });
 
@@ -112,7 +112,7 @@ class DesktopSettingsWindow extends BaseWindow {
   }
 
   static show () {
-    const window = BaseWindow.singleton(DesktopSettingsWindow);
+    const window = AbstractWindow.singleton(DesktopSettingsWindow);
     window.show();
   }
 }

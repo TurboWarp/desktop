@@ -1,10 +1,10 @@
-const BaseWindow = require('./base');
+const AbstractWindow = require('./abstract');
 const {translate} = require('../l10n');
 const packageJSON = require('../../package.json');
 const {APP_NAME} = require('../brand');
 const {getDist, getPlatform} = require('../platform');
 
-class AboutWindow extends BaseWindow {
+class AboutWindow extends AbstractWindow {
   constructor () {
     super();
 
@@ -43,7 +43,7 @@ class AboutWindow extends BaseWindow {
   }
 
   static show () {
-    const window = BaseWindow.singleton(AboutWindow);
+    const window = AbstractWindow.singleton(AboutWindow);
     window.show();
   }
 }

@@ -1,12 +1,12 @@
 const {app, dialog} = require('electron');
 const path = require('path');
-const BaseWindow = require('./base');
+const AbstractWindow = require('./abstract');
 const {translate} = require('../l10n/index');
 const {APP_NAME} = require('../brand');
 const prompts = require('../prompts');
 const {writeFileAtomic} = require('../atomic-write-stream');
 
-class AddonsWindow extends BaseWindow {
+class AddonsWindow extends AbstractWindow {
   /**
    * @param {string|null} search
    */
@@ -72,11 +72,11 @@ class AddonsWindow extends BaseWindow {
     // know if the user changed the search.
     let window;
     if (search) {
-      const windows = BaseWindow.getWindowsByClass(AddonsWindow);
+      const windows = AbstractWindow.getWindowsByClass(AddonsWindow);
       windows.forEach(i => i.window.destroy());
       window = new AddonsWindow(search);
     } else {
-      window = BaseWindow.singleton(AddonsWindow);
+      window = AbstractWindow.singleton(AddonsWindow);
     }
     window.show();
   }

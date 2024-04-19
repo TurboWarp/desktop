@@ -1,13 +1,13 @@
 const path = require('path');
 const {app, dialog} = require('electron');
-const BaseWindow = require('./base');
+const AbstractWindow = require('./abstract');
 const {translate, getStrings, getLocale} = require('../l10n');
 const settings = require('../settings');
 const {APP_NAME} = require('../brand');
 
 const EMAIL = 'contact@turbowarp.org';
 
-class MigrateWindow extends BaseWindow {
+class MigrateWindow extends AbstractWindow {
   static LATEST_VERSION = 3;
 
   /**
