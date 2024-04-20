@@ -14,6 +14,7 @@ const WrappedGUI = compose(
 const GUIWithProps = () => (
   <WrappedGUI
     isScratchDesktop
+    isFullScreen={EditorPreload.isInitiallyFullscreen()}
     canEditTitle
 
     // Cloud variables can be created, but not used.

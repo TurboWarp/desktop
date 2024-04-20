@@ -76,6 +76,11 @@ class OpenedFile {
   }
 }
 
+/**
+ * @param {string} file
+ * @param {string|null} workingDirectory
+ * @returns {OpenedFile}
+ */
 const parseOpenedFile = (file, workingDirectory) => {
   let url;
   try {
@@ -128,8 +133,9 @@ const parseOpenedFile = (file, workingDirectory) => {
 class EditorWindow extends ProjectRunningWindow {
   /**
    * @param {OpenedFile|null} file
+   * @param {boolean} isInitiallyFullscreen
    */
-  constructor (file) {
+  constructor (file, isInitiallyFullscreen) {
     super();
 
     // This file ID system is not quite perfect. Ideally we would completely revoke permission to access
@@ -184,6 +190,10 @@ class EditorWindow extends ProjectRunningWindow {
     this.window.setTitle(APP_NAME);
 
     const ipc = this.window.webContents.ipc;
+
+    ipc.on('is-initially-fullscreen', (e) => {
+      e.returnValue = isInitiallyFullscreen;
+    });
 
     ipc.handle('get-initial-file', () => {
       if (this.activeFileIndex === -1) {
@@ -469,9 +479,7 @@ class EditorWindow extends ProjectRunningWindow {
       /^tw-editor:\/\/\.\/gui\/editor\?project_url=(https:\/\/extensions\.turbowarp\.org\/samples\/.+\.sb3)$/
     );
     if (match) {
-      EditorWindow.openFiles([
-        match[1]
-      ]);
+      EditorWindow.openFiles([match[1]], false, '');
     }
     return super.handleWindowOpen(details);
   }
@@ -482,20 +490,25 @@ class EditorWindow extends ProjectRunningWindow {
 
   /**
    * @param {string[]} files
-   * @param {string} workingDirectory
+   * @param {boolean} fullscreen
+   * @param {string|null} workingDirectory
    */
-  static openFiles (files, workingDirectory) {
+  static openFiles (files, fullscreen, workingDirectory) {
     if (files.length === 0) {
-      EditorWindow.newWindow();
+      EditorWindow.newWindow(fullscreen);
     } else {
       for (const file of files) {
-        new EditorWindow(parseOpenedFile(file, workingDirectory));
+        new EditorWindow(parseOpenedFile(file, workingDirectory), fullscreen);
       }
     }
   }
 
-  static newWindow () {
-    new EditorWindow(null);
+  /**
+   * Open a new window with the default project.
+   * @param {boolean} fullscreen
+   */
+  static newWindow (fullscreen) {
+    new EditorWindow(null, fullscreen);
   }
 }
 

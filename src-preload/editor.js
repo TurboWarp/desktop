@@ -1,6 +1,7 @@
 const {contextBridge, ipcRenderer} = require('electron');
 
 contextBridge.exposeInMainWorld('EditorPreload', {
+  isInitiallyFullscreen: () => ipcRenderer.sendSync('is-initially-fullscreen'),
   getInitialFile: () => ipcRenderer.invoke('get-initial-file'),
   getFile: (id) => ipcRenderer.invoke('get-file', id),
   openedFile: (id) => ipcRenderer.invoke('opened-file', id),

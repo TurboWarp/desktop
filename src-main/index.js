@@ -146,24 +146,32 @@ app.on('open-file', (event, path) => {
   }
 });
 
-const parseFilesFromArgv = (argv) => {
+/**
+ * @param {string[]} argv
+ * @returns {{files: string[]; fullscreen: boolean;}}
+ */
+const parseCommandLine = (argv) => {
   // argv could be any of:
   // turbowarp.exe project.sb3
   // electron.exe --inspect=sdf main.js project.sb3
   // electron.exe main.js project.sb3
 
-  // Remove --inspect= and other flags
-  argv = argv.filter((i) => !i.startsWith('--'));
+  const files = argv
+    // Remove --inspect= and other flags
+    .filter((i) => !i.startsWith('--'))
+    // Ignore macOS process serial number argument eg. "-psn_0_98328"
+    // https://github.com/TurboWarp/desktop/issues/939
+    .filter((i) => !i.startsWith('-psn_'))
+    // Remove turbowarp.exe, electron.exe, etc. and the path to the app if it exists
+    // defaultApp is true when the path to the app is in argv
+    .slice(process.defaultApp ? 2 : 1);
 
-  // Ignore macOS process serial number argument eg. "-psn_0_98328"
-  // https://github.com/TurboWarp/desktop/issues/939
-  argv = argv.filter((i) => !i.startsWith('-psn_'));
+  const fullscreen = argv.includes('--fullscreen');
 
-  // Remove turbowarp.exe, electron.exe, etc. and the path to the app if it exists
-  // defaultApp is true when the path to the app is in argv
-  argv = argv.slice(process.defaultApp ? 2 : 1);
-
-  return argv;
+  return {
+    files,
+    fullscreen
+  };
 };
 
 let isMigrating = true;
@@ -171,7 +179,8 @@ let migratePromise = null;
 
 app.on('second-instance', (event, argv, workingDirectory) => {
   migratePromise.then(() => {
-    EditorWindow.openFiles(parseFilesFromArgv(argv), workingDirectory);
+    const commandLineOptions = parseCommandLine(argv);
+    EditorWindow.openFiles(commandLineOptions.files, commandLineOptions.fullscreen, workingDirectory);
   });
 });
 
@@ -188,10 +197,11 @@ app.whenReady().then(() => {
 
     isMigrating = false;
 
+    const commandLineOptions = parseCommandLine(process.argv);
     EditorWindow.openFiles([
       ...filesQueuedToOpen,
-      ...parseFilesFromArgv(process.argv)
-    ], process.cwd());
+      ...commandLineOptions.files
+    ], commandLineOptions.fullscreen, process.cwd());
 
     if (AbstractWindow.getAllWindows().length === 0) {
       // No windows were successfully opened. Let's just quit.
