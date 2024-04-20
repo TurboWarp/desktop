@@ -120,11 +120,21 @@ class ProjectRunningWindow extends AbtractWindow {
       const newHeaders = {
         'access-control-allow-origin': '*',
       };
+
       for (const key of Object.keys(details.responseHeaders)) {
         // Headers from Electron are not normalized, so we have to make sure to remove uppercased
         // variations on our own.
         const normalized = key.toLowerCase();
-        if (normalized !== 'access-control-allow-origin' && normalized !== 'x-frame-options') {
+        if (normalized === 'access-control-allow-origin' || normalized === 'x-frame-options') {
+          // Ignore header.
+        } else if (normalized === 'content-security-policy') {
+          // Remove frame-ancestors header while preserving the rest of the CSP.
+          // frame-ancestors does not fall back to default-src so we just need to remove, not overwrite.
+          // Regex based on ABNF from https://www.w3.org/TR/CSP3/#grammardef-serialized-policy
+          newHeaders[key] = details.responseHeaders[key].map(csp => (
+            csp.replace(/(?:;[\x09\x0A\x0C\x0D\x20]*)?frame-ancestors[\x09\x0A\x0C\x0D\x20]+[^;,]+/ig, '')
+          ));
+        } else {
           newHeaders[key] = details.responseHeaders[key];
         }
       }
