@@ -17,10 +17,10 @@ const showCrashMessage = (window, type, code, reason) => {
 };
 
 app.on('render-process-gone', (event, webContents, details) => {
-  const baseWindow = AbstractWindow.getWindowByWebContents(webContents);
+  const abstractWindow = AbstractWindow.getWindowByWebContents(webContents);
   const handled = (
-    baseWindow &&
-    baseWindow.handleRendererProcessGone(details)
+    abstractWindow &&
+    abstractWindow.handleRendererProcessGone(details)
   );
   if (!handled) {
     const browserWindow = BrowserWindow.fromWebContents(webContents);

@@ -26,7 +26,7 @@ app.enableSandbox();
 app.commandLine.appendSwitch('host-resolver-rules', 'MAP device-manager.scratch.mit.edu 127.0.0.1');
 
 app.on('session-created', (session) => {
-  // Permission requests are delegated to BaseWindow
+  // Permission requests are delegated to AbstractWindow
 
   session.setPermissionCheckHandler((webContents, permission, requestingOrigin, details) => {
     if (!details.isMainFrame) {
@@ -114,7 +114,7 @@ app.on('web-contents-created', (event, webContents) => {
     }
   });
 
-  // Overwritten by BaseWindow. We just set this here as a safety measure.
+  // Overwritten by AbstractWindow. We just set this here as a safety measure.
   webContents.setWindowOpenHandler((details) => ({
     action: 'deny'
   }));
