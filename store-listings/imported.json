@@ -20,6 +20,13 @@
         "microsoft-store-screenshot-caption": "Proyecto de la foto: {screenshot_project_link}",
         "microsoft-store-screenshot-packager": "El packager para convertir proyectos en archivos HTML o aplicaciones para Windows, macOS o Linux."
     },
+    "fi": {
+        "microsoft-store-description": "TurboWarp on Scratch-ohjelmointikielen muunnelma, jossa on projekteja nopeammin suorittava kääntäjä, tumma tila, joukko lisäosia ja muuta.\n\n- Suorittaa projekteja 20 kertaa nopeammin kuin Scratch\n- Käyttää huomattavasti vähemmän muistia ja energiaa, kun se on jouten\n- Tumma tila\n- Kehittäjän työkalut, hakutyökalu lohkojen avattavissa valikoissa, sipulin kuorinta\n- Monia muita lisäosia ja mukautettavia asetuksia\n- Melkein 100 % yhteensopiva Scratchin kanssa\n- Paikallisen tiedostojärjestelmän ja tiedostonhallintaohjelman integrointi\n- Vähemmän viivettä suuria projekteja muokatessa\n- Valinnainen tuki interpolaatiolle, 60 ruutua sekunnissa, korkealaatuinen kynä, loputtomasti klooneja\n- Reppu\n- ja paljon muuta\n\nTurboWarpin kehittäjät eivät ole kytköksissä Scratch-tiimiin. Tämä on yhteisön kehittämä muunnelma.\n\nNäyttökuvissa oleva projekti on {screenshot_project_link}.\n",
+        "microsoft-store-generic-release-notes": "Uusimmat julkaisutiedot löytyvät osoitteesta {changelog_link}",
+        "microsoft-store-screenshot-addons": "Yli {number_of_addons} mukautettavaa ja käyttökokemusta parantavaa lisäosaa.",
+        "microsoft-store-screenshot-caption": "Kuvassa oleva projekti: {screenshot_project_link}",
+        "microsoft-store-screenshot-packager": "Sisäänrakennettu pakkauskone, jolla voi muuntaa projekteja HTML-tiedostoiksi tai Windowsille, macOS:lle tai Linuxille tarkoitetuiksi sovelluksiksi."
+    },
     "it": {
         "microsoft-store-description": "TurboWarp è una mod del linguaggio di programmazione Scratch con diverse aggiunge come un compilatore per eseguire i progetti più rapidamente, una modalità scura, molti addon e molto altro ancora.\n\n  - Esegue i progetti fino a 20x più velocemente di Scratch\n  - Usa significativamente meno memoria ed energia quando è in pausa\n  - Modalità scura\n  - Strumenti per sviluppatori, menu ricercabili, onion skin nell'editor di immagini\n  - Molti altri addon opzioni personalizzabili\n  - Compatibile quasi al 100% con Scratch\n  - filesystem nativo e integrazione con file explorer \n  - Meno lag quando si modificano progetti di grandi dimensioni\n  - Supporto opzionale per interpolazione, 60 FPS, penna di qualità superiore, cloni infiniti\n  - Zainetto\n  - e molto altro ancora\n\nGli sviluppatori di TurboWarp non sono affiliati con il Team di Scratch. Questa mod è sviluppata da una sua comunità.\n\nIl progetto mostrato nell'anteprima è {screenshot_project_link}\n",
         "microsoft-store-generic-release-notes": "Per le più recenti note di rilascio, vai a {changelog_link}",
@@ -98,10 +105,10 @@
         "microsoft-store-screenshot-packager": "Вбудований пакувальник для конвертування проектів в HTML файли або програми для Windows, macOS, або Linux."
     },
     "zh-cn": {
-        "microsoft-store-description": "TurboWarp 是 Scratch 的一个修改版，具有编译器，可以更快地运行项目，黑暗模式、一些扩展等。\n\n- 运行作品的速度比 Scratch 快20倍以上\n- 闲置时使用的内存明显减少\n- 黑暗模式\n- 开发者工具、可搜索的下拉菜单、勾选选项\n- 更多的扩展和自定义选项\n- 与 Scratch 100% 兼容\n- 本地文件系统和文件资源管理器集成\n- 编辑大型项目时的延迟更小\n- 可选择支持补帧、60 FPS、高清画笔、无限克隆等功能\n- 背包\n- 以及更多\n\nTurboWarp 的开发者与 Scratch 团队没有任何关系。这是一个由社区开发的修改版。\n\n截图中显示的项目是{screenshot_project_link}。\n",
+        "microsoft-store-description": "TurboWarp 是 Scratch 的一个修改版，具有编译器，可以更快地运行作品，黑暗模式、一些扩展等。\n\n- 运行作品的速度比 Scratch 快20倍以上\n- 闲置时使用的内存明显减少\n- 黑暗模式\n- 开发者工具、可搜索的下拉菜单、勾选选项\n- 更多的扩展和自定义选项\n- 与 Scratch 100% 兼容\n- 本地文件系统和文件资源管理器集成\n- 编辑大型作品时的延迟更小\n- 可选择支持补帧、60 FPS、高清画笔、无限克隆等功能\n- 背包\n- 以及更多\n\nTurboWarp 的开发者与 Scratch 团队没有任何关系。这是一个由社区开发的修改版。\n\n截图中显示的作品是{screenshot_project_link}。\n",
         "microsoft-store-generic-release-notes": "要查看最新的英语发行说明，请查看{changelog_link}",
-        "microsoft-store-screenshot-addons": "有多达 {number_of_addons} 个扩展用于自定义和增强您的体验",
+        "microsoft-store-screenshot-addons": "有多达 {number_of_addons} 个插件用于自定义和增强您的体验",
         "microsoft-store-screenshot-caption": "示范作品：{screenshot_project_link}",
-        "microsoft-store-screenshot-packager": "内置的包装器可将项目转换为 HTML 文件或适用于 Windows、macOS、Linux 的应用程序。"
+        "microsoft-store-screenshot-packager": "内置的包装器可将作品转换为 HTML 文件或适用于 Windows、macOS、Linux 的应用程序。"
     }
 }
