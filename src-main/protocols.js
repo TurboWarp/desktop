@@ -75,10 +75,10 @@ protocol.registerSchemesAsPrivileged(Object.entries(FILE_SCHEMES).map(([scheme, 
 })));
 
 /**
- * @param {string} xml
+ * @param {unknown} xml
  * @returns {string}
  */
-const escapeXML = (xml) => xml.replace(/[<>&'"]/g, c => {
+const escapeXML = (xml) => String(xml).replace(/[<>&'"]/g, c => {
   switch (c) {
     case '<': return '&lt;';
     case '>': return '&gt;';
@@ -87,16 +87,6 @@ const escapeXML = (xml) => xml.replace(/[<>&'"]/g, c => {
     case '"': return '&quot;';
   }
 });
-
-/**
- * @param {string} text
- * @returns {NodeJS.ReadStream}
- */
-const createStreamWithText = (text) => {
-  const stream = new PassThrough();
-  stream.end(text);
-  return stream;
-};
 
 /**
  * Note that custom extensions will be able to access this page and all of the information in it.
@@ -114,7 +104,7 @@ const createErrorPage = (request, errorMessage) => `<!DOCTYPE html>
     <h1>Protocol handler error</h1>
     <pre>${escapeXML('' + errorMessage)}</pre>
     <pre>URL: ${escapeXML(request.url)}</pre>
-    <pre>Version ${packageJSON.version}, Electron ${process.versions.electron}, Platform ${getPlatform()} ${process.arch}, Distribution ${getDist()}</pre>
+    <pre>Version ${escapeXML(packageJSON.version)}, Electron ${escapeXML(process.versions.electron)}, Platform ${escapeXML(getPlatform())} ${escapeXML(process.arch)}, Distribution ${escapeXML(getDist())}</pre>
     <p>If you can see this page, <a href="https://github.com/TurboWarp/desktop/issues">please open a GitHub issue</a> with all the information above.</p>
   </body>
 </html>`;
