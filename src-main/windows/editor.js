@@ -289,6 +289,23 @@ class EditorWindow extends ProjectRunningWindow {
       }
 
       const file = result.filePath;
+
+      // Refuse to let people save new projects in our installation directory as it is
+      // deleted each time the app updates.
+      const installDir = path.dirname(app.getPath('exe'));
+      const pathToInstallDir = path.relative(installDir, file);
+      if (pathToInstallDir && !pathToInstallDir.startsWith('..') && !path.isAbsolute(pathToInstallDir)) {
+        // No need to wait for the message box to close
+        dialog.showMessageBox(this.window, {
+          type: 'error',
+          title: APP_NAME,
+          message: translate('unsafe-path.title'),
+          detail: translate(`unsafe-path.details`).replace('{APP_NAME}', APP_NAME).replace('{file}', file),
+          noLink: true
+        });  
+        return null;
+      }
+
       settings.lastDirectory = path.dirname(file);
       await settings.save();
 

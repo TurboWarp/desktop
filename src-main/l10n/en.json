@@ -442,5 +442,13 @@
   "security-prompt.notifications2": {
     "string": "If allowed, you may be prompted to enable notifications by your operating system, and further notifications will be automatically allowed.",
     "developer_comment": "Part of the extension security prompt window"
+  },
+  "unsafe-path.title": {
+    "string": "Invalid file location",
+    "developer_comment": "Title of alert that appears when someone tries to save project in an 'unsafe' place where their work will be deleted."
+  },
+  "unsafe-path.details": {
+    "string": "The file you selected ({file}) is in an internal folder used by {APP_NAME}. Everything in this folder is deleted each time the app updates. You must pick a different path.",
+    "developer_comment": "Message of alert that appears when someone tries to save project in a folder used internally by the app. {file} is replaced with the path."
   }
 }
