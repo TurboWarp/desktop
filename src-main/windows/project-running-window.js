@@ -125,15 +125,36 @@ class ProjectRunningWindow extends AbtractWindow {
         // Headers from Electron are not normalized, so we have to make sure to remove uppercased
         // variations on our own.
         const normalized = key.toLowerCase();
-        if (normalized === 'access-control-allow-origin' || normalized === 'x-frame-options') {
+
+        if (
+          // Above we forced this header to be *, so ignore any other value
+          normalized === 'access-control-allow-origin' ||
+          // Remove x-frame-options so that embedding is allowed
+          normalized === 'x-frame-options'
+        ) {
           // Ignore header.
-        } else if (normalized === 'content-security-policy') {
-          // Remove frame-ancestors header while preserving the rest of the CSP.
-          // frame-ancestors does not fall back to default-src so we just need to remove, not overwrite.
-          // Regex based on ABNF from https://www.w3.org/TR/CSP3/#grammardef-serialized-policy
-          newHeaders[key] = details.responseHeaders[key].map(csp => (
-            csp.replace(/(?:;[\x09\x0A\x0C\x0D\x20]*)?frame-ancestors[\x09\x0A\x0C\x0D\x20]+[^;,]+/ig, '')
-          ));
+        } else if (
+          normalized === 'content-security-policy' ||
+          // We include the report-only header so that we send fewer useless reports
+          normalized === 'content-security-policy-report-only'
+        ) {
+          // Seems to be an Electron quirk where CSP with custom protocols can't do specific
+          // origins, only an entire protocol. We use a lot of separate protocols so that's fine.
+          // It is possible for protocol to be null, so handle that.
+          const extraSources = this.protocol ? this.protocol : null;
+
+          if (extraSources) {
+            // If the page has a frame-ancestors directive, add ourselves to it so that we can embed
+            // the page without compromising security more than absolutely necessary.
+            // frame-ancestors does not fall back to default-src so we don't need to worry about that.
+            // Regex based on ABNF from https://www.w3.org/TR/CSP3/#grammardef-serialized-policy
+            newHeaders[key] = details.responseHeaders[key].map(csp => (
+              csp.replace(
+                /((?:;[\x09\x0A\x0C\x0D\x20]*)?frame-ancestors[\x09\x0A\x0C\x0D\x20]+)([^;,]+)/ig,
+                (_, directiveName, directiveValue) => `${directiveName}${directiveValue} ${extraSources}`
+              )
+            ));
+          }
         } else {
           newHeaders[key] = details.responseHeaders[key];
         }

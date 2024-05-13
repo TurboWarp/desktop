@@ -52,7 +52,8 @@ class PackagerWindow extends AbstractWindow {
     });
 
     this.window.webContents.on('did-create-window', (newWindow) => {
-      new PackagerPreviewWindow(this.window, newWindow);
+      const childWindow = new PackagerPreviewWindow(this.window, newWindow);
+      childWindow.protocol = this.protocol;
     });
 
     this.loadURL('tw-packager://./standalone.html');

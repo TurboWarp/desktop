@@ -41,6 +41,7 @@ class AbstractWindow {
     }
 
     this.initialURL = null;
+    this.protocol = null;
 
     const cls = this.constructor;
     if (!windowsByClass.has(cls)) {
@@ -194,6 +195,7 @@ class AbstractWindow {
 
   loadURL (url) {
     this.initialURL = url;
+    this.protocol = new URL(url).protocol;
     return this.window.loadURL(url);
   }
 
