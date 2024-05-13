@@ -252,12 +252,13 @@ const createLegacyFileProtocolHandler = (metadata) => {
    * @param {(result: {path: string; statusCode?: number; headers?: Record<string, string>;}) => void} callback
    */
   return (request, callback) => {
-    const returnErrorResponse = (error) => {
-      // TODO: see if there's a better way to surface this
+    const returnErrorResponse = (error, errorPage) => {
       console.error(error);
       callback({
         status: 400,
-        path: path.join(__dirname, 'legacy-file-protocol-error-fallback.html'),
+        // All we can return is a file path, so we just have a few different ones baked in
+        // for each error that we expect.
+        path: path.join(__dirname, `../src-protocol-error/legacy-file/${errorPage}.html`),
         headers: errorPageHeaders
       });
     };
@@ -266,14 +267,14 @@ const createLegacyFileProtocolHandler = (metadata) => {
       const parsedURL = new URL(request.url);
       const resolved = path.join(root, parsedURL.pathname);
       if (!resolved.startsWith(root)) {
-        returnErrorResponse(new Error('Path traversal blocked'));
+        returnErrorResponse(new Error('Path traversal blocked'), 'path-traversal');
         return;
       }
   
       const fileExtension = path.extname(resolved);
       const mimeType = MIME_TYPES.get(fileExtension);
       if (!mimeType) {
-        returnErrorResponse(new Error(`Invalid file extension: ${fileExtension}`));
+        returnErrorResponse(new Error(`Invalid file extension: ${fileExtension}`), 'invalid-extension');
         return;
       }
 
@@ -284,7 +285,7 @@ const createLegacyFileProtocolHandler = (metadata) => {
         }
       });
     } catch (error) {
-      returnErrorResponse(error);
+      returnErrorResponse(error, 'unknown');
     }
   };
 };
