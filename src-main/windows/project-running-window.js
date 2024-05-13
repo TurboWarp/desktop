@@ -135,14 +135,21 @@ class ProjectRunningWindow extends AbtractWindow {
       // Don't give extra powers when fetching our custom protocols
       WEB_PROTOCOLS.includes(getProtocol(details.url))
     ) {
-      const newHeaders = {
-        'access-control-allow-origin': '*',
-      };
+      const newHeaders = {};
+
+      const isMainFrame = details.frame === this.window.webContents.mainFrame;
+      if (isMainFrame) {
+        newHeaders['access-control-allow-origin'] = '*';
+      }
 
       for (const [key, headers] of Object.entries(details.responseHeaders)) {
         switch (key.toLowerCase()) {
-          // Above we forced this header to be *, so ignore any other value
           case 'access-control-allow-origin':
+            if (isMainFrame) {
+              // Above we forced this header to be *, so ignore any other value
+            } else {
+              newHeaders[key] = headers;
+            }
             break;
 
           // Remove x-frame-options so that embedding is allowed
