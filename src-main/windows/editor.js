@@ -130,6 +130,60 @@ const parseOpenedFile = (file, workingDirectory) => {
   return new OpenedFile(TYPE_FILE, path.resolve(workingDirectory, file));
 };
 
+/**
+ * @returns {Array<{path: string; app: string;}>}
+ */
+const getUnsafePaths = () => {
+  if (process.platform !== 'win32') {
+    // This problem doesn't really exist on other platforms
+    return [];
+  }
+
+  const localPrograms = path.join(app.getPath('home'), 'AppData', 'Local', 'Programs');
+  const appData = app.getPath('appData');
+  return [
+    // Current app, regardless of where it is installed or how modded it is
+    {
+      path: path.dirname(app.getPath('exe')),
+      app: APP_NAME,
+    },
+    {
+      path: app.getPath('userData'),
+      app: APP_NAME,
+    },
+
+    // TurboWarp Desktop defaults
+    {
+      path: path.join(appData, 'turbowarp-desktop'),
+      app: 'TurboWarp Desktop'
+    },
+    {
+      path: path.join(localPrograms, 'TurboWarp'),
+      app: 'TurboWarp Desktop'
+    },
+
+    // Scratch Desktop defaults
+    {
+      path: path.join(appData, 'Scratch'),
+      app: 'Scratch Desktop'
+    },
+    {
+      path: path.join(localPrograms, 'Scratch 3'),
+      app: 'Scratch Desktop'
+    }
+  ];
+};
+
+/**
+ * @param {string} parent
+ * @param {string} child
+ * @returns {boolean}
+ */
+const isChildPath = (parent, child) => {
+  const relative = path.relative(parent, child);
+  return !!relative && !relative.startsWith('..') && !path.isAbsolute(relative);
+};
+
 class EditorWindow extends ProjectRunningWindow {
   /**
    * @param {OpenedFile|null} file
@@ -290,17 +344,16 @@ class EditorWindow extends ProjectRunningWindow {
 
       const file = result.filePath;
 
-      // Refuse to let people save new projects in our installation directory as it is
-      // deleted each time the app updates.
-      const installDir = path.dirname(app.getPath('exe'));
-      const pathToInstallDir = path.relative(installDir, file);
-      if (pathToInstallDir && !pathToInstallDir.startsWith('..') && !path.isAbsolute(pathToInstallDir)) {
+      const unsafePath = getUnsafePaths().find(i => isChildPath(i.path, file));
+      if (unsafePath) {
         // No need to wait for the message box to close
         dialog.showMessageBox(this.window, {
           type: 'error',
           title: APP_NAME,
           message: translate('unsafe-path.title'),
-          detail: translate(`unsafe-path.details`).replace('{APP_NAME}', APP_NAME).replace('{file}', file),
+          detail: translate(`unsafe-path.details`)
+            .replace('{APP_NAME}', unsafePath.app)
+            .replace('{file}', file),
           noLink: true
         });  
         return null;
