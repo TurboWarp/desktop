@@ -22,6 +22,20 @@ const listLocalFilesCached = () => {
   return cached;
 };
 
+/**
+ * @param {string} url
+ * @returns {string|null} eg. "https:" or null if invalid URL
+ */
+const getProtocol = url => {
+  try {
+    return new URL(url).protocol;
+  } catch (e) {
+    return null;
+  }
+};
+
+const WEB_PROTOCOLS = ['http:', 'https:'];
+
 class ProjectRunningWindow extends AbtractWindow {
   constructor (...args) {
     super(...args);
@@ -116,47 +130,47 @@ class ProjectRunningWindow extends AbtractWindow {
   }
 
   onHeadersReceived (details, callback) {
-    if (settings.bypassCORS) {
+    if (
+      settings.bypassCORS &&
+      // Don't give extra powers when fetching our custom protocols
+      WEB_PROTOCOLS.includes(getProtocol(details.url))
+    ) {
       const newHeaders = {
         'access-control-allow-origin': '*',
       };
 
-      for (const key of Object.keys(details.responseHeaders)) {
-        // Headers from Electron are not normalized, so we have to make sure to remove uppercased
-        // variations on our own.
-        const normalized = key.toLowerCase();
-
-        if (
+      for (const [key, headers] of Object.entries(details.responseHeaders)) {
+        switch (key.toLowerCase()) {
           // Above we forced this header to be *, so ignore any other value
-          normalized === 'access-control-allow-origin' ||
-          // Remove x-frame-options so that embedding is allowed
-          normalized === 'x-frame-options'
-        ) {
-          // Ignore header.
-        } else if (
-          normalized === 'content-security-policy' ||
-          // We include the report-only header so that we send fewer useless reports
-          normalized === 'content-security-policy-report-only'
-        ) {
-          // Seems to be an Electron quirk where CSP with custom protocols can't do specific
-          // origins, only an entire protocol. We use a lot of separate protocols so that's fine.
-          // It is possible for protocol to be null, so handle that.
-          const extraSources = this.protocol ? this.protocol : null;
+          case 'access-control-allow-origin':
+            break;
 
-          if (extraSources) {
-            // If the page has a frame-ancestors directive, add ourselves to it so that we can embed
-            // the page without compromising security more than absolutely necessary.
-            // frame-ancestors does not fall back to default-src so we don't need to worry about that.
-            // Regex based on ABNF from https://www.w3.org/TR/CSP3/#grammardef-serialized-policy
-            newHeaders[key] = details.responseHeaders[key].map(csp => (
-              csp.replace(
-                /((?:;[\x09\x0A\x0C\x0D\x20]*)?frame-ancestors[\x09\x0A\x0C\x0D\x20]+)([^;,]+)/ig,
-                (_, directiveName, directiveValue) => `${directiveName}${directiveValue} ${extraSources}`
-              )
-            ));
+          // Remove x-frame-options so that embedding is allowed
+          case 'x-frame-options':
+            break;
+
+          // Modify CSP frame-ancestors to allow embedding
+          // We modify the report-only header too so that we send fewer useless reports
+          case 'content-security-policy':
+          case 'content-security-policy-report-only': {
+            // We try to add allowed origins rather than completely remove/replace to reduce possible security impact.
+            const extraFrameAncestors = this.protocol ? this.protocol : null;
+            if (extraFrameAncestors) {
+              // Note that frame-ancestors does not fall back to default-src.
+              // Regex based on ABNF from https://www.w3.org/TR/CSP3/#grammardef-serialized-policy
+              newHeaders[key] = headers.map(csp => (
+                csp.replace(
+                  /((?:;[\x09\x0A\x0C\x0D\x20]*)?frame-ancestors[\x09\x0A\x0C\x0D\x20]+)([^;,]+)/ig,
+                  (_, directiveName, directiveValue) => `${directiveName}${directiveValue} ${extraFrameAncestors}`
+                )
+              ));
+            }
+            break;  
           }
-        } else {
-          newHeaders[key] = details.responseHeaders[key];
+
+          default:
+            newHeaders[key] = headers;
+            break;
         }
       }
 
