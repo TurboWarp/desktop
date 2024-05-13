@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<!--
+  This is the fallback page used in the Windows 7/8/8.1 legacy build when one of our custom
+  Electron file protocols return an error. Electron only lets us return a path, so we just
+  return this file. It's better than an empty screen at least.
+
+  This page is served with a CSP of "default-src 'none'" so no inline styles/scripts.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf8">
+    <meta name="color-scheme" content="dark light">
+  </head>
+  <body>
+    <h1>Protocol handler error</h1>
+    <pre>Unknown legacy file protocol error</pre>
+    <p>If you can see this page, <a href="https://github.com/TurboWarp/desktop/issues">please open a GitHub issue</a> with all the information above.</p>
+  </body>
+</html>
