@@ -67,9 +67,26 @@ Once you have everything compiled and fetched, you are ready to package it up fo
 npm run electron:start
 ```
 
-Linux note: The app icon won't work in the development version, but it will work in the packaged version.
+In Linux, The app icon won't work in the development version, but it will work in the packaged version.
 
 We've found that development can work pretty well if you open two terminals side-by-side and run `npm run webpack:watch` in one and `npm run electron:start` in the other. You can refresh the windows with ctrl+R or cmd+R for renderer file changes to apply, and manually restart the app for main file changes to apply.
+
+## Linux sandbox helper error
+
+On some Linux distributions, Electron will crash with the message `The SUID sandbox helper binary was found, but is not configured correctly. Rather than run without sandboxing I'm aborting now. You need to make sure that /home/.../turbowarp-desktop/node_modules/electron/dist/chrome-sandbox is owned by root and has mode 4755.`. Notably we have seen this happen on Debian 10 and earlier and Ubuntu 24.04 and later.
+
+For development, you can run these commands to enable unprivileged user namespaces until you reboot:
+
+```bash
+# Enable unprivileged user namespaces.
+sudo sysctl -w kernel.unprivileged_userns_clone=1
+
+# Stop AppArmor from preventing unprivileged user namespace creation by default.
+# If your distribution does not use AppArmor then you can ignore the error.
+sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+```
+
+There are ways to make this persist until the next reboot too but we don't think you should be making permanent kernel configuration changes just to develop this app. This error won't happen in the final .deb package, Flathub, or Snap Store releases.
 
 ## Final production-ready builds
 
