@@ -3,12 +3,14 @@ import {compose} from 'redux';
 import GUI, {AppStateHOC} from 'scratch-gui';
 
 import DesktopHOC from './desktop-hoc.jsx';
+import CloudProviderHOC from './cloud-provider-hoc.jsx';
 import './normalize.css';
 import './gui.css';
 
 const WrappedGUI = compose(
   AppStateHOC,
-  DesktopHOC
+  DesktopHOC,
+  CloudProviderHOC
 )(GUI);
 
 const GUIWithProps = () => (
