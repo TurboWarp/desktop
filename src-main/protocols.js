@@ -120,9 +120,9 @@ const createErrorPageHTML = (request, errorMessage) => `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf8">
-    <meta name="color-scheme" content="dark light">
+    <title>Protocol handler error</title>
   </head>
-  <body>
+  <body bgcolor="white" text="black">
     <h1>Protocol handler error</h1>
     <pre>${escapeXML(errorMessage)}</pre>
     <pre>URL: ${escapeXML(request.url)}</pre>
