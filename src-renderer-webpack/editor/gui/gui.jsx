@@ -2,8 +2,8 @@ import React from 'react';
 import {compose} from 'redux';
 import GUI, {AppStateHOC} from 'scratch-gui';
 
+import ErrorContainerHOC from '../error/error-container-hoc.jsx';
 import DesktopHOC from './desktop-hoc.jsx';
-import ErrorContainerHOC from './error-container-hoc.jsx';
 import CloudProviderHOC from './cloud-provider-hoc.jsx';
 import './normalize.css';
 import './gui.css';
