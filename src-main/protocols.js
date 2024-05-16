@@ -56,6 +56,7 @@ const FILE_SCHEMES = {
 const MIME_TYPES = new Map();
 MIME_TYPES.set('.html', 'text/html');
 MIME_TYPES.set('.js', 'text/javascript');
+MIME_TYPES.set('.map', 'application/json');
 MIME_TYPES.set('.txt', 'text/plain');
 MIME_TYPES.set('.json', 'application/json');
 MIME_TYPES.set('.wav', 'audio/wav');

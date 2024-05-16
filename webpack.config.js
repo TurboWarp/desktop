@@ -4,7 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const base = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
-    devtool: process.env.NODE_ENV === 'production' ? false : 'eval',
+    devtool: process.env.NODE_ENV === 'production' ? false : 'cheap-source-map',
     target: 'web',
     module: {
         rules: [
