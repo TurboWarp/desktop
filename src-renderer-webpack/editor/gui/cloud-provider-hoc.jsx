@@ -35,14 +35,14 @@ class CloudProvider {
   }
 
   /**
-   * Called by VM
+   * Part of the cloud provider interface, called by VM
    */
   createVariable (name, value) {
     // ignore
   }
 
   /**
-   * Called by VM
+   * Part of the cloud provider interface, called by VM
    */
   updateVariable (name, value) {
     if (this._channel) {
@@ -54,21 +54,21 @@ class CloudProvider {
   }
 
   /**
-   * Called by VM
+   * Part of the cloud provider interface, called by VM
    */
   renameVariable (name, value) {
     // ignore
   }
 
   /**
-   * Called by VM
+   * Part of the cloud provider interface, called by VM
    */
   deleteVariable (name, value) {
     // ignore
   }
 
   /**
-   * Called by VM
+   * Part of the cloud provider interface, called by VM
    */
   requestCloseConnection () {
     if (this._channel) {
@@ -81,15 +81,15 @@ class CloudProvider {
 const CloudProviderHOC = function (WrappedComponent) {
   class CloudProviderComponent extends React.Component {
     componentDidMount () {
-      if (this.props.hasCloudData) {
+      if (this.props.enableCloudVariables) {
         this.connect();
       }
     }
 
     componentDidUpdate (prevProps) {
-      if (!prevProps.hasCloudData && this.props.hasCloudData) {
+      if (!prevProps.enableCloudVariables && this.props.enableCloudVariables) {
         this.connect();
-      } else if (prevProps.hasCloudData && !this.props.hasCloudData) {
+      } else if (prevProps.enableCloudVariables && !this.props.enableCloudVariables) {
         this.disconnect();
       }
     }
@@ -114,7 +114,7 @@ const CloudProviderHOC = function (WrappedComponent) {
 
     render() {
       const {
-        hasCloudData,
+        enableCloudVariables,
         vm,
         ...props
       } = this.props;
@@ -127,14 +127,14 @@ const CloudProviderHOC = function (WrappedComponent) {
   }
 
   CloudProviderComponent.propTypes = {
-    hasCloudData: PropTypes.bool.isRequired,
+    enableCloudVariables: PropTypes.bool.isRequired,
     vm: PropTypes.shape({
       setCloudProvider: PropTypes.func.isRequired,
     }).isRequired,
   };
 
   const mapStateToProps = state => ({
-    hasCloudData: state.scratchGui.tw.hasCloudVariables,
+    enableCloudVariables: state.scratchGui.tw.hasCloudVariables && state.scratchGui.tw.cloud,
     vm: state.scratchGui.vm,
   });
 
