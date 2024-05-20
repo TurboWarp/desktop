@@ -4,6 +4,12 @@ const {APP_NAME} = require('./brand');
 const AbstractWindow = require('./windows/abstract');
 
 const showCrashMessage = (window, type, code, reason) => {
+  // non-technical users won't know what "OOM" means but may be able to understand
+  // what "out of memory" means
+  if (reason === 'oom') {
+    reason = 'out of memory';
+  }
+
   dialog.showMessageBoxSync(window, {
     title: APP_NAME,
     type: 'error',
