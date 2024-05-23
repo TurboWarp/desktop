@@ -12,6 +12,7 @@ const packageJSON = require('../package.json');
  * @property {boolean} [supportFetch]
  * @property {boolean} [secure]
  * @property {boolean} [brotli]
+ * @property {boolean} [embeddable]
  */
 
 /** @type {Record<string, Metadata>} */
@@ -43,7 +44,8 @@ const FILE_SCHEMES = {
   },
   'tw-extensions': {
     root: path.resolve(__dirname, '../dist-extensions'),
-    supportFetch: true
+    supportFetch: true,
+    embeddable: true
   },
   'tw-update': {
     root: path.resolve(__dirname, '../src-renderer/update'),
@@ -137,9 +139,29 @@ const errorPageHeaders = {
   'content-security-policy': 'default-src \'none\''
 };
 
+/**
+ * @param {Metadata} metadata
+ * @returns {Record<string, string>}
+ */
+const getBaseProtocolHeaders = metadata => {
+  const result = {
+    // Make sure the browser always trusts our content-type
+    // (probably does not do anything here)
+    'x-content-type-options': 'nosniff'
+  };
+
+  // Don't allow things like extensiosn to embed custom protocols
+  if (!metadata.embeddable) {
+    result['x-frame-options'] = 'DENY';
+  }
+
+  return result;
+};
+
 /** @param {Metadata} metadata */
 const createModernProtocolHandler = (metadata) => {
   const root = path.join(metadata.root, '/');
+  const baseHeaders = getBaseProtocolHeaders(metadata);
 
   /**
    * @param {Request} request
@@ -150,7 +172,10 @@ const createModernProtocolHandler = (metadata) => {
       console.error(error);
       return new Response(createErrorPageHTML(request, error), {
         status: 400,
-        headers: errorPageHeaders
+        headers: {
+          ...baseHeaders,
+          ...errorPageHeaders
+        }
       });
     };
 
@@ -168,6 +193,7 @@ const createModernProtocolHandler = (metadata) => {
       }
   
       const headers = {
+        ...baseHeaders,
         'content-type': mimeType
       };
   
@@ -195,6 +221,7 @@ const createModernProtocolHandler = (metadata) => {
 /** @param {Metadata} metadata */
 const createLegacyBrotliProtocolHandler = (metadata) => {
   const root = path.join(metadata.root, '/');
+  const baseHeaders = getBaseProtocolHeaders(metadata);
 
   /**
    * @param {Electron.ProtocolRequest} request
@@ -208,7 +235,10 @@ const createLegacyBrotliProtocolHandler = (metadata) => {
       callback({
         data: Buffer.from(createErrorPageHTML(request, error)),
         statusCode: 400,
-        headers: errorPageHeaders
+        headers: {
+          ...baseHeaders,
+          ...errorPageHeaders
+        }
       });
     };
 
@@ -235,6 +265,7 @@ const createLegacyBrotliProtocolHandler = (metadata) => {
       callback({
         data: decompressed,
         headers: {
+          ...baseHeaders,
           'content-type': mimeType
         }
       });
@@ -247,6 +278,7 @@ const createLegacyBrotliProtocolHandler = (metadata) => {
 /** @param {Metadata} metadata */
 const createLegacyFileProtocolHandler = (metadata) => {
   const root = path.join(metadata.root, '/');
+  const baseHeaders = getBaseProtocolHeaders(metadata);
 
   /**
    * @param {Electron.ProtocolRequest} request
@@ -260,7 +292,10 @@ const createLegacyFileProtocolHandler = (metadata) => {
         // All we can return is a file path, so we just have a few different ones baked in
         // for each error that we expect.
         path: path.join(__dirname, `../src-protocol-error/legacy-file/${errorPage}.html`),
-        headers: errorPageHeaders
+        headers: {
+          ...baseHeaders,
+          ...errorPageHeaders
+        }
       });
     };
 
@@ -282,6 +317,7 @@ const createLegacyFileProtocolHandler = (metadata) => {
       callback({
         path: resolved,
         headers: {
+          ...baseHeaders,
           'content-type': mimeType
         }
       });
