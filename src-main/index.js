@@ -13,7 +13,6 @@ const EditorWindow = require('./windows/editor');
 const {checkForUpdates} = require('./update-checker');
 const {tranlateOrNull} = require('./l10n');
 const migrate = require('./migrate');
-const {getPlatform} = require('./platform');
 require('./protocols');
 require('./context-menu');
 require('./menu-bar');
