@@ -32,6 +32,20 @@ const openUpdatePage = () => {
 };
 
 /**
+ * @returns {number}
+ */
+const getElectronMajorVersion = () => +process.versions.electron.split('.')[0];
+
+/**
+ * @returns {number}
+ */
+const getKernelMajorVersion = () => {
+  // This is the only place that uses os, so try to load it lazily
+  const os = require('os');
+  return +os.release().split('.')[0];
+};
+
+/**
  * @returns {boolean} true if the app should continue to launch
  */
 const migrate = async () => {
@@ -53,32 +67,35 @@ const migrate = async () => {
     return false;
   }
 
-  // Legacy version (Electron 22) should only be used on Windows 7, 8, and 8.1
-  if (packageJSON.tw_warn_legacy && process.platform === 'win32') {
-    const electronMajorVersion = +process.versions.electron.split('.')[0];
-    if (electronMajorVersion === 22) {
-      // Note that the real version number before 10 is actually 6.x
-      const os = require('os');
-      const windowsMajorVersion = +os.release().split('.')[0];
-      if (windowsMajorVersion >= 10 && dialog.showMessageBoxSync({
-        title: APP_NAME,
-        type: 'warning',
-        message: translate('unnecessary-legacy.title'),
-        detail: translate('unnecessary-legacy.message').replace('{APP_NAME}', APP_NAME),
-        buttons: [
-          translate('unnecessary-legacy.ok'),
-          translate('unnecessary-legacy.ignore'),
-        ],
-        cancelId: 0,
-        defaultId: 0,
-        noLink: true
-      }) === 0) {
-        openUpdatePage();
-        return false;
-      }
+  // Ask people not to use legacy versions unnecessarily
+  if (packageJSON.tw_warn_legacy && (
+    // Legacy build for Windows before version 10 uses Electron 22
+    // See https://en.wikipedia.org/wiki/Windows_NT#Releases for kernel versions
+    (process.platform === 'win32' && getElectronMajorVersion() === 22 && getKernelMajorVersion() >= 10) ||
+
+    // Legacy build for macOS 10.13 and 10.14 uses Electron 26
+    // See https://en.wikipedia.org/wiki/Darwin_%28operating_system%29#Release_history for kernel versions
+    (process.platform === 'darwin' && getElectronMajorVersion() === 26 && getKernelMajorVersion() >= 19)
+  )) {
+    const result = dialog.showMessageBoxSync({
+      title: APP_NAME,
+      type: 'warning',
+      message: translate('unnecessary-legacy.title'),
+      detail: translate('unnecessary-legacy.message').replace('{APP_NAME}', APP_NAME),
+      buttons: [
+        translate('unnecessary-legacy.ok'),
+        translate('unnecessary-legacy.ignore'),
+      ],
+      cancelId: 0,
+      defaultId: 0,
+      noLink: true
+    })
+    if (result === 0) {
+      openUpdatePage();
+      return false;
     }
   }
-  
+
   // On first launch, there is no data to migrate, so just save the current versions.
   if (isFirstLaunch) {
     await writeCurrentVersion();
