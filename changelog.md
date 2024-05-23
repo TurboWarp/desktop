@@ -2,6 +2,15 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.12.0 (2024-05-23)
+
+ - Added cloud variables syncronization between all open desktop app windows
+ - Cloud variables can be disabled under the "Edit" menu, same button as the website
+ - New extensions: Pen Plus V7, Simple 3D, Mobile Keyboard, Numerical Encoding V2, Ask Before Closing Tab, Font Manager
+ - Optimized loading projects from files by about 10%
+ - Fixed protocol handler errors
+ - Fixed "Allow extensions to access any website" not allowing certain websites to be embedded
+
 # 1.11.1 (2024-04-13)
 
  - Fixed addon errors
