@@ -157,9 +157,9 @@ class RichPresence {
 
     /**
      * @private
-     * @type {string|null}
+     * @type {string}
      */
-    this.activityTitle = null;
+    this.activityTitle = '';
 
     /**
      * @private
@@ -388,7 +388,7 @@ class RichPresence {
    * @private
    */
   writeActivity () {
-    const title = this.activityTitle === null ? translate('rich-presence.untitled') : this.activityTitle;
+    const title = this.activityTitle || translate('rich-presence.untitled');
     this.write(OP_FRAME, {
       cmd: 'SET_ACTIVITY',
       args: {
