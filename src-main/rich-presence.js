@@ -218,6 +218,7 @@ class RichPresence {
       this.socket = await findIPCSocket();
     } catch (e) {
       console.error(e);
+      this.stopFurtherWrites();
       this.reconnect();
       return;
     }
@@ -248,19 +249,13 @@ class RichPresence {
    * @private
    */
   disconnect () {
-    // Stop current connection
-    if (this.socket) {
-      this.socket.end();
-      this.socket = null;
+    this.stopFurtherWrites();
+
+    if (this.reconnectTimeout) {
+      // Stop pending reconnection
+      clearTimeout(this.reconnectTimeout);
+      this.reconnectTimeout = null;
     }
-
-    // Stop pending reconnection
-    clearTimeout(this.reconnectTimeout);
-    this.reconnectTimeout = null;
-
-    // Stop activity interval
-    clearInterval(this.activityInterval);
-    this.activityInterval = null;
   }
 
   /**
@@ -351,9 +346,15 @@ class RichPresence {
    * @private
    */
   stopFurtherWrites () {
-    this.socket = null;
-    clearInterval(this.activityInterval);
-    this.activityInterval = null;
+    if (this.socket) {
+      this.socket.end();
+      this.socket = null;
+    }
+
+    if (this.activityInterval) {
+      clearInterval(this.activityInterval);
+      this.activityInterval = null;
+    }
   }
 
   /**
@@ -418,8 +419,8 @@ class RichPresence {
       args: {
         pid: process.pid,
         activity: {
-          // Needs to be at least 2 characters long, otherwise it is rejected
-          details: title.padEnd(2, ' '),
+          // Needs to be at least 2 characters long and not more than 128, otherwise it is rejected
+          details: title.padEnd(2, ' ').substring(0, 128),
           timestamps: {
             start: this.activityStartTime,
           },
