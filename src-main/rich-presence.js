@@ -50,35 +50,36 @@ const nonce = () => nodeCrypto.randomUUID();
  */
 const getSocketPaths = (i) => {
   if (process.platform === 'win32') {
-    // TODO: test
     return [
       `\\\\?\\pipe\\discord-ipc-${i}`
     ];
   }
 
-  if (process.platform === 'darwin') {
-    // TODO: figure out
-    return [];
-  }
+  // All other platforms are Unix-like
+  const tempDir = (
+    process.env.XDG_RUNTIME_DIR ||
+    process.env.TMPDIR ||
+    process.env.TMP ||
+    process.env.TEMP ||
+    '/tmp'
+  );
 
+  // There are a lot of ways to install Discord on Linux
   if (process.platform === 'linux') {
-    const tempDir = (
-      process.env.XDG_RUNTIME_DIR ||
-      process.env.TMPDIR ||
-      process.env.TMP ||
-      process.env.TEMP ||
-      '/tmp'
-    );
-
     return [
-      pathUtil.join(tempDir, `discord-ipc-${i}`), // Native
-      pathUtil.join(tempDir, `app/com.discordapp.Discord/discord-ipc-${i}`), // Flathub
-      // TODO: snap
-      // TODO: vesktop, etc.?
+      // Native
+      pathUtil.join(tempDir, `discord-ipc-${i}`),
+      // Flatpak
+      pathUtil.join(tempDir, `app/com.discordapp.Discord/discord-ipc-${i}`),
+      // Snap
+      pathUtil.join(tempDir, `snap.discord/discord-ipc-${i}`),
     ];
   }
 
-  return [];
+  // macOS
+  return [
+    pathUtil.join(tempDir, `discord-ipc-${i}`)
+  ];
 };
 
 /**
