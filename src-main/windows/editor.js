@@ -251,6 +251,10 @@ class EditorWindow extends ProjectRunningWindow {
     });
     this.window.setTitle(APP_NAME);
 
+    this.window.on('focus', () => {
+      this.updateRichPresence();
+    });
+
     const ipc = this.window.webContents.ipc;
 
     ipc.on('is-initially-fullscreen', (e) => {
