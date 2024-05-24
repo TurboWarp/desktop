@@ -25,7 +25,9 @@ SOFTWARE.
 
 const net = require('net');
 const pathUtil = require('path');
+const nodeCrypto = require('crypto');
 const {APP_NAME} = require('./brand');
+const settings = require('./settings');
 
 // Ask garbomuffin for changes
 // https://discord.com/developers/applications
@@ -38,144 +40,165 @@ const OP_CLOSE = 2;
 const OP_PING = 3;
 const OP_PONG = 4;
 
-const uuid4122 = () => {
-  let uuid = '';
-  for (let i = 0; i < 32; i++) {
-    if (i === 8 || i === 12 || i === 16 || i === 20) {
-      uuid += '-';
-    }
-    let n;
-    if (i === 12) {
-      n = 4;
-    } else {
-      const random = Math.random() * 16 | 0;
-      if (i === 16) {
-        n = (random & 3) | 0;
-      } else {
-        n = random;
-      }
-    }
-    uuid += n.toString(16);
-  }
-  return uuid;
-};
+// Note that we can't use the randomUUID from web crypto as we need to support Electron 22.
+const nonce = () => nodeCrypto.randomUUID();
 
-class IPC {
-  constructor () {
-    /** @type {Buffer} */
-    this.buffer = Buffer.alloc(0);
-
-    /** @type {net.Socket|null} */
-    this.socket = null;
-
-    /** @type {NodeJS.Timeout|null} */
-    this.reconnectTimeout = null;
-
-    /** @type {string|null} */
-    this.activityTitle = null;
-
-    /** @type {number} */
-    this.activityStartTime = 0;
-
-    this.connect();
+/**
+ * @param {number} i
+ * @returns {string[]}
+ */
+const getSocketPaths = (i) => {
+  if (process.platform === 'win32') {
+    // TODO: test
+    return [
+      `\\\\?\\pipe\\discord-ipc-${i}`
+    ];
   }
 
-  /**
-   * @param {number} i
-   * @returns {string[]}
-   */
-  getSocketPaths (i) {
-    if (process.platform === 'win32') {
-      // TODO: test
-      return [
-        `\\\\?\\pipe\\discord-ipc-${i}`
-      ];
-    }
-
-    if (process.platform === 'darwin') {
-      // TODO: figure out
-      return [];
-    }
-
-    if (process.platform === 'linux') {
-      const tempDir = (
-        process.env.XDG_RUNTIME_DIR ||
-        process.env.TMPDIR ||
-        process.env.TMP ||
-        process.env.TEMP ||
-        '/tmp'
-      );
-
-      return [
-        pathUtil.join(tempDir, `discord-ipc-${i}`), // Native
-        pathUtil.join(tempDir, `app/com.discordapp.Discord/discord-ipc-${i}`), // Flathub
-        // TODO: snap
-        // TODO: vesktop, etc.?
-      ];
-    }
-
+  if (process.platform === 'darwin') {
+    // TODO: figure out
     return [];
   }
 
-  /**
-   * @param {string} path
-   * @returns {Promise<net.Socket>}
-   */
-  tryOpenSocket (path) {
-    return new Promise((resolve, reject) => {
-      const socket = net.connect(path);
-      const onConnect = () => {
-        removeListeners();
-        resolve(socket);
-      };
-      const onError = (error) => {
-        removeListeners();
-        reject(error);
-      };
-      const onTimeout = () => {
-        removeListeners();
-        reject(new Error('Timed out'));
-      };
-      const removeListeners = () => {
-        socket.off('connect', onConnect);
-        socket.off('error', onError);
-        socket.off('timeout', onTimeout);
-      };
-      socket.on('connect', onConnect);
-      socket.on('error', onError);
-      socket.on('timeout', onTimeout);
-    });
+  if (process.platform === 'linux') {
+    const tempDir = (
+      process.env.XDG_RUNTIME_DIR ||
+      process.env.TMPDIR ||
+      process.env.TMP ||
+      process.env.TEMP ||
+      '/tmp'
+    );
+
+    return [
+      pathUtil.join(tempDir, `discord-ipc-${i}`), // Native
+      pathUtil.join(tempDir, `app/com.discordapp.Discord/discord-ipc-${i}`), // Flathub
+      // TODO: snap
+      // TODO: vesktop, etc.?
+    ];
   }
 
-  /**
-   * @returns {Promise<net.Socket>}
-   */
-  async findIPCSocket () {
-    for (let i = 0; i < 10; i++) {
-      for (const path of this.getSocketPaths(i)) {
-        console.log('trying', path);
-        try {
-          return await this.tryOpenSocket(path)
-        } catch (e) {
-          // keep trying the next one
-          console.error(e);
-        }
+  return [];
+};
+
+/**
+ * @param {string} path
+ * @returns {Promise<net.Socket>}
+ */
+const tryOpenSocket = (path) => {
+  return new Promise((resolve, reject) => {
+    const socket = net.connect(path);
+    const onConnect = () => {
+      removeListeners();
+      resolve(socket);
+    };
+    const onError = (error) => {
+      removeListeners();
+      reject(error);
+    };
+    const onTimeout = () => {
+      removeListeners();
+      reject(new Error('Timed out'));
+    };
+    const removeListeners = () => {
+      socket.off('connect', onConnect);
+      socket.off('error', onError);
+      socket.off('timeout', onTimeout);
+    };
+    socket.on('connect', onConnect);
+    socket.on('error', onError);
+    socket.on('timeout', onTimeout);
+  });
+};
+
+/**
+ * @returns {Promise<net.Socket>}
+ */
+const findIPCSocket = async () => {
+  for (let i = 0; i < 10; i++) {
+    for (const path of getSocketPaths(i)) {
+      console.log('trying', path);
+      try {
+        return await tryOpenSocket(path)
+      } catch (e) {
+        // keep trying the next one
+        console.error(e);
       }
     }
+  }
 
-    throw new Error('Could not open IPC');
+  throw new Error('Could not open IPC');
+};
+
+class RichPresence {
+  constructor () {
+    /**
+     * @private
+     * @type {Buffer}
+     */
+    this.buffer = Buffer.alloc(0);
+
+    /**
+     * @private
+     * @type {net.Socket|null}
+     */
+    this.socket = null;
+
+    /**
+     * @private
+     * @type {NodeJS.Timeout|null}
+     */
+    this.reconnectTimeout = null;
+
+    /**
+     * @private
+     * @type {NodeJS.Timeout|null}
+     */
+    this.activityInterval = null;
+
+    /**
+     * @private
+     * @type {string|null}
+     */
+    this.activityTitle = null;
+
+    /**
+     * @private
+     * @type {number}
+     */
+    this.activityStartTime = 0;
+
+    /**
+     * @private
+     * @type {boolean}
+     */
+    this.enabled = false;
+  }
+
+  enable () {
+    if (this.enabled) {
+      return;
+    }
+    this.enabled = true;
+    this.connect();
+  }
+
+  disable () {
+    if (!this.enabled) {
+      return;
+    }
+    this.enabled = false;
+    this.disconnect();
   }
 
   /**
+   * @private
    */
   async connect () {
-    console.log('Trying to connect');
-
     try {
-      this.socket = await this.findIPCSocket();
+      this.socket = await findIPCSocket();
     } catch (e) {
       console.error(e);
-      this.scheduleReconnect();
+      this.connectionLost();
       return;
     }
 
@@ -185,12 +208,12 @@ class IPC {
     });
 
     this.socket.on('close', () => {
-      console.log('Conneciton lost!');
-      this.scheduleReconnect();
+      this.connectionLost();
     });
 
     this.socket.on('error', (err) => {
-      // Close event will be fired immediately after
+      // Only catching this to log the error and avoid uncaught main thread error.
+      // Close event will be fired afterwards, so we don't need to do anything else.
       console.error(err);
     });
 
@@ -200,10 +223,35 @@ class IPC {
     });
   }
 
-  scheduleReconnect () {
-    if (this.reconnectTimeout) {
+  /**
+   * @private
+   */
+  disconnect () {
+    // Stop current connection
+    if (this.socket) {
+      this.socket.end();
+      this.socket = null;
+    }
+
+    // Stop pending reconnection
+    clearTimeout(this.reconnectTimeout);
+    this.reconnectTimeout = null;
+
+    // Stop activity interval
+    clearInterval(this.activityInterval);
+    this.activityInterval = null;
+  }
+
+  /**
+   * @private
+   */
+  connectionLost () {
+    if (this.reconnectTimeout || !this.enabled) {
       return;
     }
+
+    clearInterval(this.activityInterval);
+    this.activityInterval = null;
 
     console.log('Scheduled a reconnection');
     this.reconnectTimeout = setTimeout(() => {
@@ -213,19 +261,21 @@ class IPC {
   }
 
   /**
+   * @private
    * @returns {boolean}
    */
-  isConnected () {
+  canWrite () {
     return !!this.socket && this.socket.readyState === 'open';
   }
 
   /**
+   * @private
    * @param {number} op See constants
    * @param {unknown} data Object to be JSON.stringify()'d
    */
   write (op, data) {
-    if (!this.isConnected()) {
-      throw new Error('Not connected');
+    if (!this.canWrite()) {
+      return;
     }
 
     console.log('writing', op, data);
@@ -239,16 +289,20 @@ class IPC {
   }
 
   /**
+   * @private
    * @param {Buffer} data
    */
   handleSocketData (data) {
     this.buffer = Buffer.concat([this.buffer, data]);
-    this.tryDecodeData();
+    this.parseBuffer();
   }
 
-  tryDecodeData () {
+  /**
+   * @private
+   */
+  parseBuffer () {
     if (this.buffer.byteLength < 8) {
-      // Missing header.
+      // Wait for header.
       return;
     }
 
@@ -256,7 +310,7 @@ class IPC {
     const length = this.buffer.readUint32LE(4);
 
     if (this.buffer.byteLength < 8 + length) {
-      // Missing the full payload.
+      // Wait for full payload.
       return;
     }
 
@@ -265,54 +319,103 @@ class IPC {
       const parsedPayload = JSON.parse(payload.toString('utf-8'));
       this.handleMessage(op, parsedPayload);
     } catch (e) {
-      console.error('error decoding rich presence', e);
+      console.error('error parsing rich presence', e);
     }
 
     // Regardless of success or failure, discard the packet
     this.buffer = this.buffer.subarray(8 + length);
 
-    // Might be another packet
-    this.tryDecodeData();
+    // If there's another packet in the buffer, parse it now
+    this.parseBuffer();
   }
 
   /**
+   * @private
    * @param {number} op See constants
    * @param {unknown} data Parsed JSON object
    */
   handleMessage (op, data) {
     console.log('received', op, data);
-  
-    if (op === OP_PING) {
-      this.write(OP_PONG, data);
-      return;
-    }
 
-    if (op === OP_CLOSE) {
-      this.socket = null;
-      return;
-    }
-
-    if (op === OP_FRAME) {
-      if (data.evt === 'READY') {
-        this.handleReady();
+    switch (op) {
+      case OP_PING: {
+        this.write(OP_PONG, data);
+        break;
       }
 
-      return;
+      case OP_CLOSE: {
+        this.socket = null;
+
+        clearInterval(this.activityInterval);
+        this.activityInterval = null;
+
+        // reconnection will be attempted when the socket actually closes
+
+        break;
+      }
+
+      case OP_FRAME: {
+        if (data.evt === 'READY') {
+          this.handleReady();
+        }
+        break;
+      }
     }
   }
 
+  /**
+   * @private
+   */
   handleReady () {
-    this.writeActivity();
+    if (this.activityTitle !== null) {
+      this.activityChanged();
+    }
   }
 
+  /**
+   * @param {string} title
+   * @param {number} startTime
+   */
+  setActivity (title, startTime) {
+    this.activityTitle = title;
+    this.activityStartTime = startTime;
+    this.activityChanged();
+  }
+
+  clearActivity () {
+    this.activityTitle = null;
+    this.activityStartTime = 0;
+    this.activityChanged();
+  }
+
+  /**
+   * @private
+   */
+  activityChanged () {
+    if (this.activityInterval) {
+      return;
+    }
+
+    console.log('Starting the activity loop');
+    this.writeActivity();
+    this.activityInterval = setInterval(() => {
+      this.writeActivity();
+    }, 1000 * 15);
+  }
+
+  /**
+   * @private
+   */
   writeActivity () {
+    console.log('Activity timer ticked', this.activityTitle);
+
     if (this.activityTitle === null) {
       this.write(OP_FRAME, {
         cmd: 'SET_ACTIVITY',
         args: {
           pid: process.pid
         },
-        nonce: uuid4122()
+        nonce: nonce()
       });
     } else {
       this.write(OP_FRAME, {
@@ -329,58 +432,19 @@ class IPC {
               large_image: LARGE_IMAGE_NAME,
               large_text: APP_NAME
             },
-            instance: false 
+            instance: false
           }
         },
-        nonce: uuid4122()
+        nonce: nonce()
       });
-    }
-  }
-
-  /**
-   * @param {string} title
-   * @param {number} startTime
-   */
-  setActivity (title, startTime) {
-    this.activityTitle = title;
-    this.activityStartTime = startTime;
-
-    if (this.isConnected()) {
-      this.writeActivity();
-    }
-  }
-
-  clearActivity () {
-    this.activityTitle = null;
-    this.activityStartTime = 0;
-
-    if (this.isConnected()) {
-      this.writeActivity();
     }
   }
 }
 
-let singleton = null;
-const getSingleton = () => {
-  if (!singleton) {
-    singleton = new IPC();
-  }
-  return singleton;
-};
+const richPresenceSingleton = new RichPresence();
 
-/**
- * @param {string} title
- * @param {number} startTime
- */
-const setActivity = (title, startTime) => {
-  getSingleton().setActivity(title, startTime);
-};
+if (settings.richPresence) {
+  richPresenceSingleton.enable();
+}
 
-const clearActivity = () => {
-  getSingleton().clearActivity();
-};
-
-module.exports = {
-  setActivity,
-  clearActivity
-};
+module.exports = richPresenceSingleton;

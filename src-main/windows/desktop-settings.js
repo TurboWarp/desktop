@@ -4,6 +4,7 @@ const {translate, getStrings, getLocale} = require('../l10n');
 const {APP_NAME} = require('../brand');
 const settings = require('../settings');
 const {isEnabledAtBuildTime} = require('../update-checker');
+const RichPresence = require('../rich-presence');
 
 class DesktopSettingsWindow extends AbstractWindow {
   constructor () {
@@ -90,8 +91,13 @@ class DesktopSettingsWindow extends AbstractWindow {
       await settings.save();
     });
 
-    ipc.handle('rich-presence', async (event, richPresence) => {
+    ipc.handle('set-rich-presence', async (event, richPresence) => {
       settings.richPresence = richPresence;
+      if (richPresence) {
+        RichPresence.enable();
+      } else {
+        RichPresence.disable();
+      }
       await settings.save();
     });
 

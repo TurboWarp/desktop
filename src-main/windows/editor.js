@@ -14,7 +14,7 @@ const {APP_NAME} = require('../brand');
 const prompts = require('../prompts');
 const settings = require('../settings');
 const privilegedFetch = require('../fetch');
-const RichPresenece = require('../rich-presence.js');
+const RichPresence = require('../rich-presence.js');
 
 const TYPE_FILE = 'file';
 const TYPE_URL = 'url';
@@ -240,10 +240,13 @@ class EditorWindow extends ProjectRunningWindow {
       event.preventDefault();
       if (explicitSet && title) {
         this.window.setTitle(`${title} - ${APP_NAME}`);
+        this.projectTitle = title;
       } else {
         this.window.setTitle(APP_NAME);
+        // TODO: handle this
+        this.projectTitle = '';
       }
-      this.projectTitle = title;
+
       this.updateRichPresence();
     });
     this.window.setTitle(APP_NAME);
@@ -565,9 +568,7 @@ class EditorWindow extends ProjectRunningWindow {
   }
 
   updateRichPresence () {
-    if (settings.richPresence) {
-      RichPresenece.setActivity(this.projectTitle, this.openedProjectAt);
-    }
+    RichPresence.setActivity(this.projectTitle, this.openedProjectAt);
   }
 
   /**
