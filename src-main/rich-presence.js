@@ -76,7 +76,7 @@ const getSocketPaths = (i) => {
     ];
   }
 
-  // macOS
+  // macOS and, theoeretically, other Unixes
   return [
     pathUtil.join(tempDir, `discord-ipc-${i}`)
   ];
@@ -155,7 +155,7 @@ class RichPresence {
      * @private
      * @type {NodeJS.Timeout|null}
      */
-    this.activityInterval = null;
+    this.activityTimeout = null;
 
     /**
      * @private
@@ -351,9 +351,9 @@ class RichPresence {
       this.socket = null;
     }
 
-    if (this.activityInterval) {
-      clearInterval(this.activityInterval);
-      this.activityInterval = null;
+    if (this.activityTimeout) {
+      clearTimeout(this.activityTimeout);
+      this.activityTimeout = null;
     }
   }
 
@@ -391,9 +391,6 @@ class RichPresence {
    */
   handleReady () {
     this.writeActivity();
-    this.activityInterval = setInterval(() => {
-      this.writeActivity();
-    }, 1000 * 15);
   }
 
   /**
@@ -401,11 +398,36 @@ class RichPresence {
    * @param {number} startTime
    */
   setActivity (title, startTime) {
+    if (title === this.activityTitle && startTime === this.activityStartTime) {
+      return;
+    }
+
     this.activityTitle = title;
     this.activityStartTime = startTime;
 
+    // The first time we receive a valid title is when automatic connection is possible.
     if (this.activityTitle) {
       this.checkAutomaticEnable();
+    }
+
+    if (this.canWrite()) {
+      if (this.activityTimeout) {
+        // Changes will be caught when the timeout expires
+      } else {
+        this.writeActivity();
+
+        // The update activity function in Discord's Game SDK rate limits to 5 updates
+        // per 20 seconds. We roughly follow that.
+        // https://github.com/discord/discord-api-docs/blob/main/docs/game_sdk/Activities.md#updateactivity
+        this.activityTimeout = setTimeout(() => {
+          this.activityTimeout = null;
+          if (this.activityTitle !== title || this.activityStartTime !== startTime) {
+            this.writeActivity();
+          }
+        }, 4000);
+      }
+    } else {
+      // Changes will be caught when we get connected
     }
   }
 
