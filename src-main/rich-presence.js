@@ -32,7 +32,7 @@ const settings = require('./settings');
 // Ask garbomuffin for changes
 // https://discord.com/developers/applications
 const APPLICATION_ID = '1243008354037665813';
-const LARGE_IMAGE_NAME = 'icon-2';
+const LARGE_IMAGE_NAME = 'icon';
 
 const OP_HANDSHAKE = 0;
 const OP_FRAME = 1;
