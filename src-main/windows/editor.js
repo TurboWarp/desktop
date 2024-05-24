@@ -14,7 +14,7 @@ const {APP_NAME} = require('../brand');
 const prompts = require('../prompts');
 const settings = require('../settings');
 const privilegedFetch = require('../fetch');
-const {setActivity} = require('../rich-presence.js');
+const RichPresenece = require('../rich-presence.js');
 
 const TYPE_FILE = 'file';
 const TYPE_URL = 'url';
@@ -198,6 +198,8 @@ class EditorWindow extends ProjectRunningWindow {
     // pretty bad right now, so this is the best compromise.
     this.openedFiles = [];
     this.activeFileIndex = -1;
+    this.openedProjectAt = Date.now();
+    this.projectTitle = '';
 
     if (file !== null) {
       this.openedFiles.push(file);
@@ -238,11 +240,11 @@ class EditorWindow extends ProjectRunningWindow {
       event.preventDefault();
       if (explicitSet && title) {
         this.window.setTitle(`${title} - ${APP_NAME}`);
-        setActivity(title);
       } else {
         this.window.setTitle(APP_NAME);
-        setActivity('Untitled Project');
       }
+      this.projectTitle = title;
+      this.updateRichPresence();
     });
     this.window.setTitle(APP_NAME);
 
@@ -297,6 +299,7 @@ class EditorWindow extends ProjectRunningWindow {
         throw new Error('Not a file');
       }
       this.activeFileIndex = index;
+      this.openedProjectAt = Date.now();
       this.window.setRepresentedFilename(file.path);
     });
 
@@ -559,6 +562,12 @@ class EditorWindow extends ProjectRunningWindow {
 
   canExitFullscreenByPressingEscape () {
     return !this.isInEditorFullScreen;
+  }
+
+  updateRichPresence () {
+    if (settings.richPresence) {
+      RichPresenece.setActivity(this.projectTitle, this.openedProjectAt);
+    }
   }
 
   /**

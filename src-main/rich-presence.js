@@ -25,16 +25,18 @@ SOFTWARE.
 
 const net = require('net');
 const pathUtil = require('path');
+const {APP_NAME} = require('./brand');
 
-// https://discord.com/developers
-// ask garbomuffin for changes
+// Ask garbomuffin for changes
+// https://discord.com/developers/applications
 const APPLICATION_ID = '1243008354037665813';
+const LARGE_IMAGE_NAME = 'icon-2';
 
-const HANDSHAKE = 0;
-const FRAME = 1;
-const CLOSE = 2;
-const PING = 3;
-const PONG = 4;
+const OP_HANDSHAKE = 0;
+const OP_FRAME = 1;
+const OP_CLOSE = 2;
+const OP_PING = 3;
+const OP_PONG = 4;
 
 const uuid4122 = () => {
   let uuid = '';
@@ -65,6 +67,15 @@ class IPC {
 
     /** @type {net.Socket|null} */
     this.socket = null;
+
+    /** @type {NodeJS.Timeout|null} */
+    this.reconnectTimeout = null;
+
+    /** @type {string|null} */
+    this.activityTitle = null;
+
+    /** @type {number} */
+    this.activityStartTime = 0;
 
     this.connect();
   }
@@ -112,16 +123,27 @@ class IPC {
    */
   tryOpenSocket (path) {
     return new Promise((resolve, reject) => {
-      const socket = net.connect(path, () => {
+      const socket = net.connect(path);
+      const onConnect = () => {
+        removeListeners();
         resolve(socket);
-      });
-      socket.on('error', (err) => {
-        reject(err);
-      });
-      socket.on('timeout', () => {
+      };
+      const onError = (error) => {
+        removeListeners();
+        reject(error);
+      };
+      const onTimeout = () => {
+        removeListeners();
         reject(new Error('Timed out'));
-      });
-      socket.setTimeout(10000);
+      };
+      const removeListeners = () => {
+        socket.off('connect', onConnect);
+        socket.off('error', onError);
+        socket.off('timeout', onTimeout);
+      };
+      socket.on('connect', onConnect);
+      socket.on('error', onError);
+      socket.on('timeout', onTimeout);
     });
   }
 
@@ -143,31 +165,58 @@ class IPC {
 
     throw new Error('Could not open IPC');
   }
-  
+
+  /**
+   */
   async connect () {
-    this.socket = await this.findIPCSocket();
+    console.log('Trying to connect');
+
+    try {
+      this.socket = await this.findIPCSocket();
+    } catch (e) {
+      console.error(e);
+      this.scheduleReconnect();
+      return;
+    }
+
+    this.buffer = Buffer.alloc(0);
     this.socket.on('data', (data) => {
       this.handleSocketData(data)
     });
+
     this.socket.on('close', () => {
-      this.socket = null;
+      console.log('Conneciton lost!');
+      this.scheduleReconnect();
     });
-    this.write(HANDSHAKE, {
+
+    this.socket.on('error', (err) => {
+      // Close event will be fired immediately after
+      console.error(err);
+    });
+
+    this.write(OP_HANDSHAKE, {
       v: 1,
       client_id: APPLICATION_ID
     });
   }
 
-  close () {
-    if (this.socket) {
-      this.write(CLOSE, {
-        v: 1,
-        client_id: APPLICATION_ID
-      });
+  scheduleReconnect () {
+    if (this.reconnectTimeout) {
+      return;
     }
 
-    this.socket = null;
-    this.buffer = Buffer.alloc(0);
+    console.log('Scheduled a reconnection');
+    this.reconnectTimeout = setTimeout(() => {
+      this.reconnectTimeout = null;
+      this.connect();
+    }, 15 * 1000);
+  }
+
+  /**
+   * @returns {boolean}
+   */
+  isConnected () {
+    return !!this.socket && this.socket.readyState === 'open';
   }
 
   /**
@@ -175,7 +224,7 @@ class IPC {
    * @param {unknown} data Object to be JSON.stringify()'d
    */
   write (op, data) {
-    if (!this.socket) {
+    if (!this.isConnected()) {
       throw new Error('Not connected');
     }
 
@@ -233,17 +282,17 @@ class IPC {
   handleMessage (op, data) {
     console.log('received', op, data);
   
-    if (op === PING) {
-      this.write(PONG, data);
+    if (op === OP_PING) {
+      this.write(OP_PONG, data);
       return;
     }
 
-    if (op === CLOSE) {
+    if (op === OP_CLOSE) {
       this.socket = null;
       return;
     }
 
-    if (op === FRAME) {
+    if (op === OP_FRAME) {
       if (data.evt === 'READY') {
         this.handleReady();
       }
@@ -253,26 +302,85 @@ class IPC {
   }
 
   handleReady () {
-    this.write(FRAME, {
-      cmd: 'SET_ACTIVITY',
-      args: {
-        pid: process.pid,
-        activity: {
-          details: 'test 123',
-          assets: {
-            large_image: 'logo-v2',
-            large_text: 'Test 123'
-          },
-          instance: false 
-        }
-      },
-      nonce: uuid4122()
-    });
+    this.writeActivity();
+  }
+
+  writeActivity () {
+    if (this.activityTitle === null) {
+      this.write(OP_FRAME, {
+        cmd: 'SET_ACTIVITY',
+        args: {
+          pid: process.pid
+        },
+        nonce: uuid4122()
+      });
+    } else {
+      this.write(OP_FRAME, {
+        cmd: 'SET_ACTIVITY',
+        args: {
+          pid: process.pid,
+          activity: {
+            // Needs to be at least 2 characters long
+            details: this.activityTitle.padEnd(2, ' '),
+            timestamps: {
+              start: this.activityStartTime,
+            },
+            assets: {
+              large_image: LARGE_IMAGE_NAME,
+              large_text: APP_NAME
+            },
+            instance: false 
+          }
+        },
+        nonce: uuid4122()
+      });
+    }
+  }
+
+  /**
+   * @param {string} title
+   * @param {number} startTime
+   */
+  setActivity (title, startTime) {
+    this.activityTitle = title;
+    this.activityStartTime = startTime;
+
+    if (this.isConnected()) {
+      this.writeActivity();
+    }
+  }
+
+  clearActivity () {
+    this.activityTitle = null;
+    this.activityStartTime = 0;
+
+    if (this.isConnected()) {
+      this.writeActivity();
+    }
   }
 }
 
-const ipc = new IPC();
+let singleton = null;
+const getSingleton = () => {
+  if (!singleton) {
+    singleton = new IPC();
+  }
+  return singleton;
+};
+
+/**
+ * @param {string} title
+ * @param {number} startTime
+ */
+const setActivity = (title, startTime) => {
+  getSingleton().setActivity(title, startTime);
+};
+
+const clearActivity = () => {
+  getSingleton().clearActivity();
+};
 
 module.exports = {
-  setActivity: () => {}
+  setActivity,
+  clearActivity
 };
