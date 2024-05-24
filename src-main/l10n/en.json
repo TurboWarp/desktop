@@ -263,6 +263,10 @@
     "string": "Exit F11 fullscreen mode (not the fullscreen button in the editor) when pressing escape",
     "developer_comment": "Refering to when an entire window is in fullscreen by pressing F11 or the maximize button on macOS, not the fullscreen mode you get by pressing the fullscreen button in the editor."
   },
+  "desktop-settings.rich-presence": {
+    "string": "Allow TurboWarp to connect to Discord for Rich Presence (requires restart)",
+    "developer_comment": "Option to enable connection to Discord for Rich Presence."
+  },
   "desktop-settings.open-user-data": {
     "string": "Open User Data",
     "developer_comment": "Button in desktop settings to open the user data folder"

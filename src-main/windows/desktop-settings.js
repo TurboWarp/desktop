@@ -32,7 +32,8 @@ class DesktopSettingsWindow extends AbstractWindow {
         backgroundThrottling: settings.backgroundThrottling,
         bypassCORS: settings.bypassCORS,
         spellchecker: settings.spellchecker,
-        exitFullscreenOnEscape: settings.exitFullscreenOnEscape
+        exitFullscreenOnEscape: settings.exitFullscreenOnEscape,
+        richPresence: settings.richPresence
       };
     });
 
@@ -86,6 +87,11 @@ class DesktopSettingsWindow extends AbstractWindow {
 
     ipc.handle('set-exit-fullscreen-on-escape', async (event, exitFullscreenOnEscape) => {
       settings.exitFullscreenOnEscape = exitFullscreenOnEscape;
+      await settings.save();
+    });
+
+    ipc.handle('rich-presence', async (event, richPresence) => {
+      settings.richPresence = richPresence;
       await settings.save();
     });
 

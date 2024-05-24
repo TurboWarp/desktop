@@ -12,5 +12,6 @@ contextBridge.exposeInMainWorld('DesktopSettingsPreload', {
   setBypassCORS: (bypassCORS) => ipcRenderer.invoke('set-bypass-cors', bypassCORS),
   setSpellchecker: (spellchecker) => ipcRenderer.invoke('set-spellchecker', spellchecker),
   setExitFullscreenOnEscape: (exitFullscreenOnEscape) => ipcRenderer.invoke('set-exit-fullscreen-on-escape', exitFullscreenOnEscape),
+  setRichPresence: (richPresence) => ipcRenderer.invoke('rich-presence', richPresence),
   openUserData: () => ipcRenderer.invoke('open-user-data')
 });

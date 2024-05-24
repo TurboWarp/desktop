@@ -296,6 +296,19 @@
         document.querySelector('.exit-fullscreen-on-escape-label').textContent = strings['desktop-settings.exit-fullscreen-on-escape'];
       </script>
 
+      <label>
+        <input type="checkbox" class="rich-presence-checkbox" autocomplete="off">
+        <span class="rich-presence-label"></span>
+      </label>
+      <script>
+        const richPresence = document.querySelector('.rich-presence-checkbox');
+        richPresence.onchange = () => {
+          DesktopSettingsPreload.setRichPresence(richPresence.checked);
+        };
+        richPresence.checked = settings.richPresence;
+        document.querySelector('.rich-presence-label').textContent = strings['desktop-settings.rich-presence'];
+      </script>
+
       <button class="open-user-data"></button>
       <script>
         const openUserData = document.querySelector('.open-user-data');
