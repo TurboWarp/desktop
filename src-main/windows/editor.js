@@ -243,7 +243,6 @@ class EditorWindow extends ProjectRunningWindow {
         this.projectTitle = title;
       } else {
         this.window.setTitle(APP_NAME);
-        // TODO: handle this
         this.projectTitle = '';
       }
 
