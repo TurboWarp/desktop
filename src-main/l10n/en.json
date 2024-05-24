@@ -454,5 +454,9 @@
   "unsafe-path.details": {
     "string": "The file you selected ({file}) is in a folder used internally by {APP_NAME}. It is not safe to save projects here as they can be deleted when the app updates. You must choose a different folder.",
     "developer_comment": "Message of alert that appears when someone tries to save project in a folder used internally by the app. {file} is replaced with the path and {APP_NAME} with the name of the app."
+  },
+  "rich-presence.untitled": {
+    "string": "Untitled Project",
+    "developer_comment": "Appears in Discord rich presence when the current project doesn't have a name."
   }
 }

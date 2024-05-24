@@ -27,7 +27,7 @@ const net = require('net');
 const pathUtil = require('path');
 const nodeCrypto = require('crypto');
 const {APP_NAME} = require('./brand');
-const settings = require('./settings');
+const {translate} = require('./l10n');
 
 // Ask garbomuffin for changes
 // https://discord.com/developers/applications
@@ -165,7 +165,7 @@ class RichPresence {
      * @private
      * @type {number}
      */
-    this.activityStartTime = 0;
+    this.activityStartTime = Date.now();
 
     /**
      * @private
@@ -198,7 +198,7 @@ class RichPresence {
       this.socket = await findIPCSocket();
     } catch (e) {
       console.error(e);
-      this.connectionLost();
+      this.reconnect();
       return;
     }
 
@@ -208,7 +208,8 @@ class RichPresence {
     });
 
     this.socket.on('close', () => {
-      this.connectionLost();
+      this.stopFurtherWrites();
+      this.reconnect();
     });
 
     this.socket.on('error', (err) => {
@@ -245,13 +246,10 @@ class RichPresence {
   /**
    * @private
    */
-  connectionLost () {
+  reconnect () {
     if (this.reconnectTimeout || !this.enabled) {
       return;
     }
-
-    clearInterval(this.activityInterval);
-    this.activityInterval = null;
 
     console.log('Scheduled a reconnection');
     this.reconnectTimeout = setTimeout(() => {
@@ -331,6 +329,15 @@ class RichPresence {
 
   /**
    * @private
+   */
+  stopFurtherWrites () {
+    this.socket = null;
+    clearInterval(this.activityInterval);
+    this.activityInterval = null;
+  }
+
+  /**
+   * @private
    * @param {number} op See constants
    * @param {unknown} data Parsed JSON object
    */
@@ -344,13 +351,8 @@ class RichPresence {
       }
 
       case OP_CLOSE: {
-        this.socket = null;
-
-        clearInterval(this.activityInterval);
-        this.activityInterval = null;
-
+        this.stopFurtherWrites();
         // reconnection will be attempted when the socket actually closes
-
         break;
       }
 
@@ -367,9 +369,10 @@ class RichPresence {
    * @private
    */
   handleReady () {
-    if (this.activityTitle !== null) {
-      this.activityChanged();
-    }
+    this.writeActivity();
+    this.activityInterval = setInterval(() => {
+      this.writeActivity();
+    }, 1000 * 15);
   }
 
   /**
@@ -379,72 +382,33 @@ class RichPresence {
   setActivity (title, startTime) {
     this.activityTitle = title;
     this.activityStartTime = startTime;
-    this.activityChanged();
-  }
-
-  clearActivity () {
-    this.activityTitle = null;
-    this.activityStartTime = 0;
-    this.activityChanged();
-  }
-
-  /**
-   * @private
-   */
-  activityChanged () {
-    if (this.activityInterval) {
-      return;
-    }
-
-    console.log('Starting the activity loop');
-    this.writeActivity();
-    this.activityInterval = setInterval(() => {
-      this.writeActivity();
-    }, 1000 * 15);
   }
 
   /**
    * @private
    */
   writeActivity () {
-    console.log('Activity timer ticked', this.activityTitle);
-
-    if (this.activityTitle === null) {
-      this.write(OP_FRAME, {
-        cmd: 'SET_ACTIVITY',
-        args: {
-          pid: process.pid
-        },
-        nonce: nonce()
-      });
-    } else {
-      this.write(OP_FRAME, {
-        cmd: 'SET_ACTIVITY',
-        args: {
-          pid: process.pid,
-          activity: {
-            // Needs to be at least 2 characters long
-            details: this.activityTitle.padEnd(2, ' '),
-            timestamps: {
-              start: this.activityStartTime,
-            },
-            assets: {
-              large_image: LARGE_IMAGE_NAME,
-              large_text: APP_NAME
-            },
-            instance: false
-          }
-        },
-        nonce: nonce()
-      });
-    }
+    const title = this.activityTitle === null ? translate('rich-presence.untitled') : this.activityTitle;
+    this.write(OP_FRAME, {
+      cmd: 'SET_ACTIVITY',
+      args: {
+        pid: process.pid,
+        activity: {
+          // Needs to be at least 2 characters long, otherwise it is rejected
+          details: title.padEnd(2, ' '),
+          timestamps: {
+            start: this.activityStartTime,
+          },
+          assets: {
+            large_image: LARGE_IMAGE_NAME,
+            large_text: APP_NAME
+          },
+          instance: false
+        }
+      },
+      nonce: nonce()
+    });
   }
 }
 
-const richPresenceSingleton = new RichPresence();
-
-if (settings.richPresence) {
-  richPresenceSingleton.enable();
-}
-
-module.exports = richPresenceSingleton;
+module.exports = new RichPresence();
