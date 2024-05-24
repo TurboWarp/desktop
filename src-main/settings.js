@@ -172,7 +172,7 @@ class Settings {
   }
 
   get richPresence () {
-    return this.data.richPresence !== false;
+    return this.data.richPresence === true;
   }
   set richPresence (richPresence) {
     this.data.richPresence = richPresence;
