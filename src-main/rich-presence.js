@@ -28,6 +28,7 @@ const pathUtil = require('path');
 const nodeCrypto = require('crypto');
 const {APP_NAME} = require('./brand');
 const {translate} = require('./l10n');
+const settings = require('./settings');
 
 // Ask garbomuffin for changes
 // https://discord.com/developers/applications
@@ -171,13 +172,30 @@ class RichPresence {
      * @private
      * @type {boolean}
      */
+    this.checkedAutomaticEnable = false;
+
+    /**
+     * @private
+     * @type {boolean}
+     */
     this.enabled = false;
+  }
+
+  checkAutomaticEnable () {
+    if (this.checkedAutomaticEnable) {
+      return;
+    }
+    this.checkedAutomaticEnable = true;
+    if (settings.richPresence) {
+      this.enable();
+    }
   }
 
   enable () {
     if (this.enabled) {
       return;
     }
+    this.checkedAutomaticEnable = true;
     this.enabled = true;
     this.connect();
   }
@@ -186,6 +204,7 @@ class RichPresence {
     if (!this.enabled) {
       return;
     }
+    this.checkedAutomaticEnable = true;
     this.enabled = false;
     this.disconnect();
   }
@@ -382,6 +401,10 @@ class RichPresence {
   setActivity (title, startTime) {
     this.activityTitle = title;
     this.activityStartTime = startTime;
+
+    if (this.activityTitle) {
+      this.checkAutomaticEnable();
+    }
   }
 
   /**

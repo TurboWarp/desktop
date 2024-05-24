@@ -13,8 +13,6 @@ const EditorWindow = require('./windows/editor');
 const {checkForUpdates} = require('./update-checker');
 const {tranlateOrNull} = require('./l10n');
 const migrate = require('./migrate');
-const settings = require('./settings');
-const RichPresence = require('./rich-presence');
 require('./protocols');
 require('./context-menu');
 require('./menu-bar');
@@ -207,12 +205,6 @@ app.whenReady().then(() => {
     if (AbstractWindow.getAllWindows().length === 0) {
       // No windows were successfully opened. Let's just quit.
       app.quit();
-    }
-
-    // Don't start rich presence until after we have opened the editor windows so the initial
-    // activity won't be empty.
-    if (settings.richPresence) {
-      RichPresence.enable();
     }
 
     checkForUpdates()

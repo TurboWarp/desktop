@@ -198,13 +198,13 @@ class EditorWindow extends ProjectRunningWindow {
     // pretty bad right now, so this is the best compromise.
     this.openedFiles = [];
     this.activeFileIndex = -1;
-    this.openedProjectAt = Date.now();
-    this.projectTitle = '';
 
     if (file !== null) {
       this.openedFiles.push(file);
       this.activeFileIndex = 0;
     }
+
+    this.openedProjectAt = Date.now();
 
     const getFileByIndex = (index) => {
       if (typeof index !== 'number') {
