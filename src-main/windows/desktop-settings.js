@@ -4,6 +4,7 @@ const {translate, getStrings, getLocale} = require('../l10n');
 const {APP_NAME} = require('../brand');
 const settings = require('../settings');
 const {isEnabledAtBuildTime} = require('../update-checker');
+const RichPresence = require('../rich-presence');
 
 class DesktopSettingsWindow extends AbstractWindow {
   constructor () {
@@ -32,7 +33,8 @@ class DesktopSettingsWindow extends AbstractWindow {
         backgroundThrottling: settings.backgroundThrottling,
         bypassCORS: settings.bypassCORS,
         spellchecker: settings.spellchecker,
-        exitFullscreenOnEscape: settings.exitFullscreenOnEscape
+        exitFullscreenOnEscape: settings.exitFullscreenOnEscape,
+        richPresence: settings.richPresence
       };
     });
 
@@ -86,6 +88,16 @@ class DesktopSettingsWindow extends AbstractWindow {
 
     ipc.handle('set-exit-fullscreen-on-escape', async (event, exitFullscreenOnEscape) => {
       settings.exitFullscreenOnEscape = exitFullscreenOnEscape;
+      await settings.save();
+    });
+
+    ipc.handle('set-rich-presence', async (event, richPresence) => {
+      settings.richPresence = richPresence;
+      if (richPresence) {
+        RichPresence.enable();
+      } else {
+        RichPresence.disable();
+      }
       await settings.save();
     });
 

@@ -170,6 +170,13 @@ class Settings {
   set exitFullscreenOnEscape(exitFullscreenOnEscape) {
     this.data.exitFullscreenOnEscape = exitFullscreenOnEscape;
   }
+
+  get richPresence () {
+    return this.data.richPresence === true;
+  }
+  set richPresence (richPresence) {
+    this.data.richPresence = richPresence;
+  }
 }
 
 const settings = new Settings();
