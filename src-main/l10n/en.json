@@ -264,7 +264,7 @@
     "developer_comment": "Refering to when an entire window is in fullscreen by pressing F11 or the maximize button on macOS, not the fullscreen mode you get by pressing the fullscreen button in the editor."
   },
   "desktop-settings.rich-presence": {
-    "string": "Rich presence",
+    "string": "Enable Rich Presence",
     "developer_comment": "Option to enable Discord rich presence support, which shows the name of the project someone is editing on their Discord profile. For compliance with Scratch policies don't use the word \"Discord\" in the translation."
   },
   "desktop-settings.open-user-data": {

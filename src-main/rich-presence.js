@@ -30,7 +30,7 @@ const {APP_NAME} = require('./brand');
 const {translate} = require('./l10n');
 const settings = require('./settings');
 
-// Ask garbomuffin for changes
+// Ask GarboMuffin for changes
 // https://discord.com/developers/applications
 const APPLICATION_ID = '1243008354037665813';
 const LARGE_IMAGE_NAME = 'icon';
@@ -76,7 +76,7 @@ const getSocketPaths = (i) => {
     ];
   }
 
-  // macOS and, theoeretically, other Unixes
+  // macOS and, theoretically, other Unixes
   return [
     pathUtil.join(tempDir, `discord-ipc-${i}`)
   ];
