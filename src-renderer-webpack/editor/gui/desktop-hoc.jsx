@@ -228,6 +228,7 @@ const DesktopHOC = function (WrappedComponent) {
               }
             ])
           ]}
+          onClickDesktopSettings={handleClickDesktopSettings}
           securityManager={securityManager}
           {...props}
         />
