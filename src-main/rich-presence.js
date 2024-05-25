@@ -396,7 +396,7 @@ class RichPresence {
         if (data.evt === 'READY') {
           this.handleReady();
         } else if (data.cmd === 'SET_ACTIVITY') {
-          // They send as an acknowledgement; ignore it
+          // They send us an acknowledgement; ignore it
         } else {
           console.error('Unrecognized rich presence IPC frame', op, data);
         }
