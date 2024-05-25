@@ -118,7 +118,6 @@ const tryOpenSocket = (path) => {
 const findIPCSocket = async () => {
   for (let i = 0; i < 10; i++) {
     for (const path of getSocketPaths(i)) {
-      console.log('trying', path);
       try {
         return await tryOpenSocket(path)
       } catch (e) {
@@ -265,7 +264,6 @@ class RichPresence {
       return;
     }
 
-    console.log('Scheduled a reconnection');
     this.reconnectTimeout = setTimeout(() => {
       this.reconnectTimeout = null;
       this.connect();
@@ -290,7 +288,6 @@ class RichPresence {
       return;
     }
 
-    console.log('writing', op, data);
     const payloadJSON = JSON.stringify(data);
     const payloadLength = Buffer.byteLength(payloadJSON);
     const packet = Buffer.alloc(8 + payloadLength);
@@ -383,8 +380,6 @@ class RichPresence {
    * @param {unknown} data Parsed JSON object
    */
   handleMessage (op, data) {
-    console.log('received', op, data);
-
     switch (op) {
       case OP_PING: {
         this.write(OP_PONG, data);
