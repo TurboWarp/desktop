@@ -45,10 +45,16 @@
 
       <h2 class="if-update-checker">Update Checker</h2>
       <p class="if-update-checker">The desktop app contains an update checker which <a href="#" class="open-desktop-settings">can be disabled in desktop settings</a>.</p>
+
+      <h2>Rich Presence</h2>
+      <p>The desktop app has a disabled-by-default option to enable "Rich Presence" which shares the name of the project you have open and how long it has been open with chat apps running on your computer, which may be displayed on your public profile. This <a href="#" class="open-desktop-settings">can be configured in desktop settings</a>.</p>
+
       <script>
-        document.querySelector('.open-desktop-settings').addEventListener('click', () => {
-          PrivacyPreload.openDesktopSettings();
-        });
+        for (const el of document.querySelectorAll('.open-desktop-settings')) {
+          el.addEventListener('click', () => {
+            PrivacyPreload.openDesktopSettings();
+          });
+        }
       </script>
 
       <h2>Loading projects</h2>
