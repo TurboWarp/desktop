@@ -430,25 +430,30 @@ class RichPresence {
       this.checkAutomaticEnable();
     }
 
-    if (this.canWrite()) {
-      if (this.activityTimeout) {
-        // Changes will be caught when the timeout expires
-      } else {
-        this.writeActivity();
-
-        // The update activity function in Discord's Game SDK rate limits to 5 updates
-        // per 20 seconds. We roughly follow that.
-        // https://github.com/discord/discord-api-docs/blob/main/docs/game_sdk/Activities.md#updateactivity
-        this.activityTimeout = setTimeout(() => {
-          this.activityTimeout = null;
-          if (this.activityTitle !== title || this.activityStartTime !== startTime) {
-            this.writeActivity();
-          }
-        }, 4000);
-      }
-    } else {
-      // Changes will be caught when we get connected
+    if (this.canWrite() && !this.activityTimeout) {
+      this.writeActivity();
+      this.scheduleNextWriteActivity();
     }
+  }
+
+  /**
+   * @private
+   */
+  scheduleNextWriteActivity () {
+    const oldTitle = this.activityTitle;
+    const oldStartTime = this.activityStartTime;
+
+    // The update activity function in Discord's Game SDK rate limits to 5 updates
+    // per 20 seconds. We roughly follow that.
+    // https://github.com/discord/discord-api-docs/blob/main/docs/game_sdk/Activities.md#updateactivity
+    this.activityTimeout = setTimeout(() => {
+      if (this.activityTitle !== oldTitle || this.activityStartTime !== oldStartTime) {
+        this.writeActivity();
+        this.scheduleNextWriteActivity();
+      } else {
+        this.activityTimeout = null;
+      }
+    }, 4000);
   }
 
   /**
