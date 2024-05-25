@@ -122,12 +122,12 @@ const findIPCSocket = async () => {
         return await tryOpenSocket(path)
       } catch (e) {
         // keep trying the next one
-        console.error(e);
+        console.error('Error connecting to rich presence IPC', e);
       }
     }
   }
 
-  throw new Error('Could not open IPC');
+  throw new Error('All paths failed');
 };
 
 class RichPresence {
@@ -220,7 +220,7 @@ class RichPresence {
     try {
       this.socket = await findIPCSocket();
     } catch (e) {
-      console.error(e);
+      console.error('Could not connect to rich presence RPC', e);
       this.stopFurtherWrites();
       this.reconnect();
       return;
@@ -321,7 +321,7 @@ class RichPresence {
   handleSocketError (error) {
     // Only catching this to log the error and avoid uncaught main thread error.
     // Close event will be fired afterwards, so we don't need to do anything else.
-    console.error(error);
+    console.error('Rich presence socket error', error);
   }
 
   /**
@@ -346,7 +346,7 @@ class RichPresence {
       const parsedPayload = JSON.parse(payload.toString('utf-8'));
       this.handleMessage(op, parsedPayload);
     } catch (e) {
-      console.error('error parsing rich presence', e);
+      console.error('Error parsing rich presence IPC data', e);
     }
 
     // Regardless of success or failure, discard the packet
@@ -395,7 +395,16 @@ class RichPresence {
       case OP_FRAME: {
         if (data.evt === 'READY') {
           this.handleReady();
+        } else if (data.cmd === 'SET_ACTIVITY') {
+          // They send as an acknowledgement; ignore it
+        } else {
+          console.error('Unrecognized rich presence IPC frame', op, data);
         }
+        break;
+      }
+
+      default: {
+        console.error('Unrecognized rich presence IPC data', op, data);
         break;
       }
     }
