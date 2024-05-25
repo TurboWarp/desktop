@@ -1,5 +1,18 @@
 [
   {
+    "version": "1.12.0-beta.2",
+    "date": "2024-5-24",
+    "notes": [
+      "Added cloud variables syncronization between all open desktop app windows",
+      "Cloud variables can be disabled under the \"Edit\" menu, same button as the website",
+      "New extensions: Pen Plus V7, Simple 3D, Mobile Keyboard, Numerical Encoding V2, Ask Before Closing Tab, Font Manager",
+      "Added Rich Presence support which can be enabled in \"Settings\" then \"Desktop Settings\"",
+      "Optimized loading projects from files by about 10%",
+      "Fixed protocol handler errors",
+      "Fixed \"Allow extensions to access any website\" not allowing certain websites to be embedded"
+    ]
+  },
+  {
     "version": "1.11.1",
     "date": "2024-4-13",
     "notes": [
