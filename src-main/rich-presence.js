@@ -180,6 +180,10 @@ class RichPresence {
      * @type {boolean}
      */
     this.enabled = false;
+
+    this.handleSocketData =  this.handleSocketData.bind(this);
+    this.handleSocketClose =  this.handleSocketClose.bind(this);
+    this.handleSocketError =  this.handleSocketError.bind(this);
   }
 
   checkAutomaticEnable () {
@@ -223,21 +227,16 @@ class RichPresence {
       return;
     }
 
-    this.buffer = Buffer.alloc(0);
-    this.socket.on('data', (data) => {
-      this.handleSocketData(data)
-    });
-
-    this.socket.on('close', () => {
+    if (!this.enabled) {
       this.stopFurtherWrites();
-      this.reconnect();
-    });
+      return;
+    }
 
-    this.socket.on('error', (err) => {
-      // Only catching this to log the error and avoid uncaught main thread error.
-      // Close event will be fired afterwards, so we don't need to do anything else.
-      console.error(err);
-    });
+    this.buffer = Buffer.alloc(0);
+
+    this.socket.on('data', this.handleSocketData);
+    this.socket.on('close', this.handleSocketClose);
+    this.socket.on('error', this.handleSocketError);
 
     this.write(OP_HANDSHAKE, {
       v: 1,
@@ -313,6 +312,24 @@ class RichPresence {
   /**
    * @private
    */
+  handleSocketClose () {
+    this.stopFurtherWrites();
+    this.reconnect();
+  }
+
+  /**
+   * @private
+   * @param {Error} error
+   */
+  handleSocketError (error) {
+    // Only catching this to log the error and avoid uncaught main thread error.
+    // Close event will be fired afterwards, so we don't need to do anything else.
+    console.error(error);
+  }
+
+  /**
+   * @private
+   */
   parseBuffer () {
     if (this.buffer.byteLength < 8) {
       // Wait for header.
@@ -347,6 +364,9 @@ class RichPresence {
    */
   stopFurtherWrites () {
     if (this.socket) {
+      this.socket.off('data', this.handleSocketData);
+      this.socket.off('close', this.handleSocketClose);
+      this.socket.off('error', this.handleSocketError);
       this.socket.end();
       this.socket = null;
     }
