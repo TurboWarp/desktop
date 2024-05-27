@@ -64,7 +64,7 @@
       <description>
         <ul>
           <li>New extensions: Pen Plus V7, Simple 3D, Mobile Keyboard, Numerical Encoding V2, Ask Before Closing Tab, Font Manager</li>
-          <li>Added cloud variables syncronization between all open desktop app windows. This can be disabled under the "Edit" menu</li>
+          <li>Added cloud variables synchronization between all open desktop app windows. This can be disabled under the "Edit" menu</li>
           <li>Added optional Rich Presence support. This can be enabled under the "Settings" menu then "Desktop Settings"</li>
           <li>Optimized project loading by about 10%</li>
           <li>Improved high contrast extension colors</li>
