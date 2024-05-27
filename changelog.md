@@ -2,15 +2,16 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.12.0-beta.2 (2024-05-24)
+# 1.12.0 (2024-05-27)
 
- - Added cloud variables syncronization between all open desktop app windows
- - Cloud variables can be disabled under the "Edit" menu, same button as the website
  - New extensions: Pen Plus V7, Simple 3D, Mobile Keyboard, Numerical Encoding V2, Ask Before Closing Tab, Font Manager
- - Added Rich Presence support which can be enabled in "Settings" then "Desktop Settings"
- - Optimized loading projects from files by about 10%
+ - Added cloud variables syncronization between all open desktop app windows. This can be disabled under the "Edit" menu
+ - Added optional Rich Presence support. This can be enabled under the "Settings" menu then "Desktop Settings"
+ - Optimized project loading by about 10%
+ - Improved high contrast extension colors
  - Fixed protocol handler errors
- - Fixed "Allow extensions to access any website" not allowing certain websites to be embedded
+ - Fixed "Allow extensions to access any website" not allowing certain websites to be embedded using Iframe extension
+ - Various other bug fixes
 
 # 1.11.1 (2024-04-13)
 
