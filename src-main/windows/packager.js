@@ -2,6 +2,7 @@ const AbstractWindow = require('./abstract');
 const {PACKAGER_NAME} = require('../brand');
 const PackagerPreviewWindow = require('./packager-preview');
 const prompts = require('../prompts');
+const FileAccessWindow = require('./file-access-window');
 
 class PackagerWindow extends AbstractWindow {
   constructor (editorWindow) {
@@ -38,6 +39,10 @@ class PackagerWindow extends AbstractWindow {
 
     ipc.on('confirm', (event, message) => {
       event.returnValue = prompts.confirm(this.window, message);
+    });
+
+    ipc.handle('check-drag-and-drop-path', (event, path) => {
+      FileAccessWindow.check(path);
     });
 
     this.window.webContents.on('did-finish-load', () => {
