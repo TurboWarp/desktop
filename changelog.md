@@ -2,6 +2,12 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.12.1 (2024-05-28)
+
+ - Updated packager
+ - Linux: Fixed incorrect metadata in .desktop launcher causing some desktop environments to behave strangely
+ - Linux: Flatpak version now detects drag-and-drop-related permission issues and suggests how to fix them
+
 # 1.12.0 (2024-05-27)
 
  - New extensions: Pen Plus V7, Simple 3D, Mobile Keyboard, Numerical Encoding V2, Ask Before Closing Tab, Font Manager
