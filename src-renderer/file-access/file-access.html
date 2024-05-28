@@ -43,12 +43,7 @@
         // It's not the end of the world if this is imperfect as we won't automatically run the command,
         // just show it to the user. The things we're escaping are file paths so it's quite unlikely that
         // there would be any shell code in there unless the system is already compromised.
-        // https://www.gnu.org/software/bash/manual/html_node/Double-Quotes.html
-        const escapeForShellDoubleQuotes = (string) => string
-          .replace(/\\/g, '\\\\')
-          .replace(/\$/g, '\\$')
-          .replace(/`/g, '\\`')
-          .replace(/!/g, '\\!');
+        const escapeForShellSingleQuotes = (string) => string.replace(/'/g, `'"'"'`);
 
         const makeNode = () => ({
           leaf: false,
@@ -72,7 +67,7 @@
           node.leaf = true;
         };
         
-        const getLeafDirectories = () => {
+        const getOverridePaths = () => {
           const recurse = (path, node) => {
             if (node.leaf) {
               // Ignore children.
@@ -100,14 +95,16 @@
           fileListElement.appendChild(pathElement);
 
           addPathToGraph(path);
-          const overrides = getLeafDirectories().map(i => {
-            // --filesystem=/ isn't valid, need to use --filesystem=host
+          const overrides = getOverridePaths().map(i => {
+            // --filesystem=/ isn't valid, need to use --filesystem=host instead
             const value = i === '/' ? 'host' : i;
-            return `--filesystem="${escapeForShellDoubleQuotes(value)}"`;
+            // The \ need to be escaped for flatpak to handle them properly
+            const escaped = escapeForShellSingleQuotes(value.replace(/\\/g, '\\\\'));
+            return `--filesystem='${escaped}'`;
           });
-          // Don't bother escaping FLATPAK_ID as if someone has enough control over the system
-          // to get shell code into that, they've already won.
-          const command = `flatpak override ${FLATPAK_ID} --user ${overrides.join(' ')}`;
+
+          // Escaping FLATPAK_ID is not necessary. Just being extra safe.
+          const command = `flatpak override '${escapeForShellSingleQuotes(FLATPAK_ID)}' --user ${overrides.join(' ')}`;
           commandElement.textContent = command;
         };
 
