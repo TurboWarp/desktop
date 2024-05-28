@@ -510,10 +510,7 @@ class EditorWindow extends ProjectRunningWindow {
     });
 
     ipc.handle('check-drag-and-drop-path', (event, filePath) => {
-      // Do not return anything to the renderer as that would allow it to detect if given files exist
-      if (path.isAbsolute(filePath)) {
-        FileAccessWindow.check(filePath);
-      }
+      FileAccessWindow.check(filePath);
     });
 
     /**

@@ -1,4 +1,5 @@
 const fsPromises = require('fs/promises');
+const pathUtil = require('path');
 const {getPlatform} = require('../platform');
 const AbstractWindow = require('./abstract');
 const {translate, getLocale, getStrings} = require('../l10n');
@@ -6,9 +7,14 @@ const {APP_NAME} = require('../brand');
 
 /**
  * @param {string} path
- * @returns {Promise<boolean>}
+ * @returns {Promise<boolean>} Promise that resolves to true if access seems to be missing.
  */
 const missingFileAccess = async (path) => {
+  // Sanity check.
+  if (!pathUtil.isAbsolute(path)) {
+    return false;
+  }
+
   try {
     await fsPromises.stat(path);
   } catch (e) {
@@ -16,6 +22,9 @@ const missingFileAccess = async (path) => {
       return true;
     }
   }
+
+  // We were able to access the file, or the stat failed for a reason other than it not existing.
+  // Asking for more permission won't fix this.
   return false;
 };
 
