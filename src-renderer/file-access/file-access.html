@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: black;
+        background-color: white;
+        accent-color: #ff4c4c;
+      }
+      main {
+        padding: 1rem;
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 100vh;
+        border: 20px solid #ff4c4c;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      h1, p, ul {
+        margin: 0;
+      }
+      .file-path, .command {
+        font-family: monospace;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+      .command::before {
+        content: '$ ';
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <script>
+        // This file only does anything on Linux, so we don't need to worry about Windows paths.
+
+        const FLATPAK_APP_ID = 'org.turbowarp.TurboWarp';
+
+        // https://www.gnu.org/software/bash/manual/html_node/Double-Quotes.html
+        const escapeForShellDoubleQuotes = (string) => string
+          .replace(/\\/g, '\\\\')
+          .replace(/\$/g, '\\$')
+          .replace(/`/g, '\\`')
+          .replace(/!/g, '\\!');
+
+        const makeNode = () => ({
+          leaf: false,
+          children: Object.create(null)
+        });
+        const root = makeNode();
+
+        const addPathToGraph = (path) => {
+          const parts = path.split('/');
+          let node = root;
+
+          // Paths always start with / and the last part is the filename, so ignore first and last item.
+          for (let i = 1; i < parts.length - 1; i++) {
+            const name = parts[i];
+            if (!Object.prototype.hasOwnProperty.call(node.children, name)) {
+              node.children[name] = makeNode();
+            }
+            node = node.children[name];
+          }
+
+          node.leaf = true;
+        };
+        
+        const getLeafDirectories = () => {
+          const recurse = (path, node) => {
+            if (node.leaf) {
+              // Ignore children.
+              return [path];
+            }
+
+            const result = [];
+            for (const childName of Object.keys(node.children)) {
+              const childPath = `${path}${childName}/`;
+              const childLeaves = recurse(childPath, node.children[childName]);
+              for (const leaf of childLeaves) {
+                result.push(leaf);
+              }
+            }
+            return result;
+          };
+
+          return recurse('/', root);
+        };
+
+        const addPath = (path) => {
+          const pathElement = document.createElement('li');
+          pathElement.className = 'file-path';
+          pathElement.textContent = path;
+          fileListElement.appendChild(pathElement);
+
+          addPathToGraph(path);
+          const overrides = getLeafDirectories().map(i => {
+            // --filesystem=/ isn't valid, need to use --filesystem=host
+            const value = i === '/' ? 'host' : i;
+            return `--filesystem="${escapeForShellDoubleQuotes(value)}"`;
+          });
+          const command = `flatpak override ${FLATPAK_APP_ID} --user ${overrides.join(' ')}`;
+          commandElement.textContent = command;
+        };
+
+        FileAccessPreload.onNewPath(addPath);
+
+        const {locale, strings, APP_NAME, initialPaths} = FileAccessPreload.init();
+        document.documentElement.lang = locale;
+      </script>
+
+      <p class="introduction"></p>
+      <script>
+        document.querySelector('.introduction').textContent = strings['file-access.flatpak'].replace('{APP_NAME}', APP_NAME);
+      </script>
+
+      <ul class="file-list"></ul>
+
+      <p class="how-to-fix"></p>
+      <script>
+        document.querySelector('.how-to-fix').textContent = strings['file-access.how-to-fix'];
+      </script>
+
+      <p class="command"></p>
+
+      <script>
+        const fileListElement = document.querySelector('.file-list');
+        const commandElement = document.querySelector('.command');
+        for (const path of initialPaths) {
+          addPath(path);
+        }
+      </script>
+    </main>
+  </body>
+</html>

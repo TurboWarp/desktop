@@ -15,6 +15,7 @@ const prompts = require('../prompts');
 const settings = require('../settings');
 const privilegedFetch = require('../fetch');
 const RichPresence = require('../rich-presence.js');
+const FileAccessWindow = require('./file-access-window.js');
 
 const TYPE_FILE = 'file';
 const TYPE_URL = 'url';
@@ -506,6 +507,10 @@ class EditorWindow extends ProjectRunningWindow {
         userscript,
         userstyle
       };
+    });
+
+    ipc.handle('check-drag-and-drop-path', (event, filePath) => {
+      FileAccessWindow.check(filePath);
     });
 
     /**

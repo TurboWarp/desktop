@@ -52,6 +52,9 @@ const FILE_SCHEMES = {
   },
   'tw-security-prompt': {
     root: path.resolve(__dirname, '../src-renderer/security-prompt'),
+  },
+  'tw-file-access': {
+    root: path.resolve(__dirname, '../src-renderer/file-access'),
   }
 };
 
