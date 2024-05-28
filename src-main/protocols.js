@@ -72,6 +72,7 @@ MIME_TYPES.set('.gif', 'image/gif');
 MIME_TYPES.set('.cur', 'image/x-icon');
 MIME_TYPES.set('.ico', 'image/x-icon');
 MIME_TYPES.set('.mp3', 'audio/mpeg');
+MIME_TYPES.set('.mp4', 'video/mp4');
 MIME_TYPES.set('.wav', 'audio/wav');
 MIME_TYPES.set('.ogg', 'audio/ogg');
 MIME_TYPES.set('.ttf', 'font/ttf');
