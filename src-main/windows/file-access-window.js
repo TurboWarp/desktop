@@ -47,7 +47,7 @@ class FileAccessWindow extends AbstractWindow {
         locale: getLocale(),
         strings: getStrings(),
         APP_NAME,
-        FLATPAK_ID: process.env.FLATPAK_ID,
+        FLATPAK_ID: process.env.FLATPAK_ID || '[No App ID]',
         initialPaths: this.paths,
       };
     });
