@@ -41,15 +41,6 @@
         // This file only does anything on Linux, so we don't need to worry about Windows paths.
 
         const FLATPAK_APP_ID = 'org.turbowarp.TurboWarp';
-        let directories = [];
-
-        const dirname = (path) => {
-          const match = path.match(/^.*\//);
-          if (!match) {
-            return path;
-          }
-          return match[0];
-        };
 
         // https://www.gnu.org/software/bash/manual/html_node/Double-Quotes.html
         const escapeForShellDoubleQuotes = (string) => string
@@ -58,47 +49,47 @@
           .replace(/`/g, '\\`')
           .replace(/!/g, '\\!');
 
-        const simplifyDirectories = (directories) => {
-          const makeNode = () => ({
-            leaf: false,
-            children: Object.create(null)
-          });
+        const makeNode = () => ({
+          leaf: false,
+          children: Object.create(null)
+        });
+        const root = makeNode();
 
-          // Build directed graph of all the directories.
-          const root = makeNode();
-          for (const directory of directories) {
-            const parts = directory.split('/');
-            let node = root;
+        const addPathToGraph = (path) => {
+          const parts = path.split('/');
+          let node = root;
 
-            // Paths always start and ends with /, so discard first and last items as they will be empty.
-            for (let i = 1; i < parts.length - 1; i++) {
-              const name = parts[i];
-              if (!Object.prototype.hasOwnProperty.call(node.children, name)) {
-                node.children[name] = makeNode();
-              }
-              node = node.children[name];
+          // Paths always start with / and the last part is the filename, so ignore first and last item.
+          for (let i = 1; i < parts.length - 1; i++) {
+            const name = parts[i];
+            if (!Object.prototype.hasOwnProperty.call(node.children, name)) {
+              node.children[name] = makeNode();
             }
-
-            node.leaf = true;
+            node = node.children[name];
           }
 
-          // Discard directories that are children of another
-          const visitLeaves = (path, node) => {
+          node.leaf = true;
+        };
+        
+        const getLeafDirectories = () => {
+          const recurse = (path, node) => {
             if (node.leaf) {
+              // Ignore children.
               return [path];
             }
 
             const result = [];
             for (const childName of Object.keys(node.children)) {
               const childPath = `${path}${childName}/`;
-              const childLeaves = visitLeaves(childPath, node.children[childName]);
+              const childLeaves = recurse(childPath, node.children[childName]);
               for (const leaf of childLeaves) {
                 result.push(leaf);
               }
             }
             return result;
           };
-          return visitLeaves('/', root);
+
+          return recurse('/', root);
         };
 
         const addPath = (path) => {
@@ -107,9 +98,8 @@
           pathElement.textContent = path;
           fileListElement.appendChild(pathElement);
 
-          const directory = dirname(path);
-          directories = simplifyDirectories([...directories, directory])
-          const overrides = directories.map(i => {
+          addPathToGraph(path);
+          const overrides = getLeafDirectories().map(i => {
             // --filesystem=/ isn't valid, need to use --filesystem=host
             const value = i === '/' ? 'host' : i;
             return `--filesystem="${escapeForShellDoubleQuotes(value)}"`;
