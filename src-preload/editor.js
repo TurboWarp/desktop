@@ -1,4 +1,5 @@
-const {contextBridge, ipcRenderer} = require('electron');
+// webUtils will not be available in legacy builds (Electron 22 or 26)
+const {contextBridge, ipcRenderer, webUtils} = require('electron');
 
 contextBridge.exposeInMainWorld('EditorPreload', {
   isInitiallyFullscreen: () => ipcRenderer.sendSync('is-initially-fullscreen'),
@@ -70,3 +71,19 @@ contextBridge.exposeInMainWorld('PromptsPreload', {
   alert: (message) => ipcRenderer.sendSync('alert', message),
   confirm: (message) => ipcRenderer.sendSync('confirm', message),
 });
+
+// In some Linux environments, people may drag & drop files that we don't have access to.
+// Remove when https://github.com/electron/electron/issues/30650 is fixed.
+if (navigator.userAgent.includes('Linux')) {
+  document.addEventListener('drop', (e) => {
+    if (e.isTrusted) {
+      for (const file of e.dataTransfer.files) {
+        // Using webUtils is safe as we don't have a legacy build for Linux
+        const path = webUtils.getPathForFile(file);
+        ipcRenderer.invoke('check-drag-and-drop-path', path);
+      }
+    }
+  }, {
+    capture: true
+  });
+}

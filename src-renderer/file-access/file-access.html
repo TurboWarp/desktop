@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: black;
+        background-color: white;
+        accent-color: #ff4c4c;
+      }
+      main {
+        padding: 1rem;
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 100vh;
+        border: 20px solid #ff4c4c;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      h1, p, ul {
+        margin: 0;
+      }
+      .file-path, .command {
+        font-family: monospace;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+      .command::before {
+        content: '$ ';
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <script>
+        const FLATPAK_APP_ID = 'org.turbowarp.TurboWarp';
+        let directories = [];
+
+        const dirname = (path) => {
+          // This only runs on Linux, so don't need to worry about Windows paths
+          const match = path.match(/^.*\//);
+          if (!match) {
+            return path;
+          }
+          return match[0];
+        };
+
+        // https://www.gnu.org/software/bash/manual/html_node/Double-Quotes.html
+        const escapeForShellDoubleQuotes = (string) => string
+          .replace(/\\/g, '\\\\')
+          .replace(/\$/g, '\\$')
+          .replace(/`/g, '\\`')
+          .replace(/!/g, '\\!');
+
+        // Removes directories that are children of another directory
+        const simplifyDirectories = (directories) => {
+          const result = [];
+
+          // This is O(n^2) but the list should never be big enough for that to matter
+          for (const directory of directories) {
+            let isImportant = true;
+            for (const other of directories) {
+              if (directory === other) {
+                continue;
+              }
+
+              if (directory.startsWith(other)) {
+                isImportant = false;
+                break;
+              }
+            }
+
+            if (isImportant) {
+              result.push(directory);
+            }
+          }
+
+          return result;
+        };
+
+        const addPath = (path) => {
+          const pathElement = document.createElement('li');
+          pathElement.className = 'file-path';
+          pathElement.textContent = path;
+          fileListElement.appendChild(pathElement);
+
+          const directory = dirname(path);
+          if (!directories.includes(directory)) {
+            directories = simplifyDirectories([...directories, directory])
+            const overrides = directories.map(i => {
+              // --filesystem=/ isn't valid, need to use --filesystem=host
+              const value = i === '/' ? 'host' : i;
+              return `--filesystem="${escapeForShellDoubleQuotes(value)}"`;
+            });
+            const command = `flatpak override ${FLATPAK_APP_ID} --user ${overrides.join(' ')}`;
+            commandElement.textContent = command;
+          }
+        };
+
+        FileAccessPreload.onNewPath(addPath);
+
+        const {locale, strings, APP_NAME, initialPaths} = FileAccessPreload.init();
+        document.documentElement.lang = locale;
+      </script>
+
+      <p class="introduction"></p>
+      <script>
+        document.querySelector('.introduction').textContent = strings['file-access.flatpak'].replace('{APP_NAME}', APP_NAME);
+      </script>
+
+      <ul class="file-list"></ul>
+
+      <p class="how-to-fix"></p>
+      <script>
+        document.querySelector('.how-to-fix').textContent = strings['file-access.how-to-fix'];
+      </script>
+
+      <p class="command"></p>
+
+      <script>
+        const fileListElement = document.querySelector('.file-list');
+        const commandElement = document.querySelector('.command');
+        for (const path of initialPaths) {
+          addPath(path);
+        }
+      </script>
+    </main>
+  </body>
+</html>
