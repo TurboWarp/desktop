@@ -40,8 +40,9 @@
       <script>
         // This file only does anything on Linux, so we don't need to worry about Windows paths.
 
-        const FLATPAK_APP_ID = 'org.turbowarp.TurboWarp';
-
+        // It's not the end of the world if this is imperfect as we won't automatically run the command,
+        // just show it to the user. The things we're escaping are file paths so it's quite unlikely that
+        // there would be any shell code in there unless the system is already compromised.
         // https://www.gnu.org/software/bash/manual/html_node/Double-Quotes.html
         const escapeForShellDoubleQuotes = (string) => string
           .replace(/\\/g, '\\\\')
@@ -104,13 +105,15 @@
             const value = i === '/' ? 'host' : i;
             return `--filesystem="${escapeForShellDoubleQuotes(value)}"`;
           });
-          const command = `flatpak override ${FLATPAK_APP_ID} --user ${overrides.join(' ')}`;
+          // Don't bother escaping FLATPAK_ID as if someone has enough control over the system
+          // to get shell code into that, they've already won.
+          const command = `flatpak override ${FLATPAK_ID} --user ${overrides.join(' ')}`;
           commandElement.textContent = command;
         };
 
         FileAccessPreload.onNewPath(addPath);
 
-        const {locale, strings, APP_NAME, initialPaths} = FileAccessPreload.init();
+        const {locale, strings, APP_NAME, FLATPAK_ID, initialPaths} = FileAccessPreload.init();
         document.documentElement.lang = locale;
       </script>
 
