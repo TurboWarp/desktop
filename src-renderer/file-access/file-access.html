@@ -38,11 +38,12 @@
   <body>
     <main>
       <script>
+        // This file only does anything on Linux, so we don't need to worry about Windows paths.
+
         const FLATPAK_APP_ID = 'org.turbowarp.TurboWarp';
         let directories = [];
 
         const dirname = (path) => {
-          // This only runs on Linux, so don't need to worry about Windows paths
           const match = path.match(/^.*\//);
           if (!match) {
             return path;
@@ -57,30 +58,47 @@
           .replace(/`/g, '\\`')
           .replace(/!/g, '\\!');
 
-        // Removes directories that are children of another directory
         const simplifyDirectories = (directories) => {
-          const result = [];
+          const makeNode = () => ({
+            leaf: false,
+            children: Object.create(null)
+          });
 
-          // This is O(n^2) but the list should never be big enough for that to matter
+          // Build directed graph of all the directories.
+          const root = makeNode();
           for (const directory of directories) {
-            let isImportant = true;
-            for (const other of directories) {
-              if (directory === other) {
-                continue;
-              }
+            const parts = directory.split('/');
+            let node = root;
 
-              if (directory.startsWith(other)) {
-                isImportant = false;
-                break;
+            // Paths always start and ends with /, so discard first and last items as they will be empty.
+            for (let i = 1; i < parts.length - 1; i++) {
+              const name = parts[i];
+              if (!Object.prototype.hasOwnProperty.call(node.children, name)) {
+                node.children[name] = makeNode();
               }
+              node = node.children[name];
             }
 
-            if (isImportant) {
-              result.push(directory);
-            }
+            node.leaf = true;
           }
 
-          return result;
+          // Discard directories that are children of another
+          const visitLeaves = (path, node) => {
+            if (node.leaf) {
+              return [path];
+            }
+
+            const result = [];
+            for (const childName of Object.keys(node.children)) {
+              const childPath = `${path}${childName}/`;
+              const childLeaves = visitLeaves(childPath, node.children[childName]);
+              for (const leaf of childLeaves) {
+                result.push(leaf);
+              }
+            }
+            return result;
+          };
+          return visitLeaves('/', root);
         };
 
         const addPath = (path) => {
@@ -90,16 +108,14 @@
           fileListElement.appendChild(pathElement);
 
           const directory = dirname(path);
-          if (!directories.includes(directory)) {
-            directories = simplifyDirectories([...directories, directory])
-            const overrides = directories.map(i => {
-              // --filesystem=/ isn't valid, need to use --filesystem=host
-              const value = i === '/' ? 'host' : i;
-              return `--filesystem="${escapeForShellDoubleQuotes(value)}"`;
-            });
-            const command = `flatpak override ${FLATPAK_APP_ID} --user ${overrides.join(' ')}`;
-            commandElement.textContent = command;
-          }
+          directories = simplifyDirectories([...directories, directory])
+          const overrides = directories.map(i => {
+            // --filesystem=/ isn't valid, need to use --filesystem=host
+            const value = i === '/' ? 'host' : i;
+            return `--filesystem="${escapeForShellDoubleQuotes(value)}"`;
+          });
+          const command = `flatpak override ${FLATPAK_APP_ID} --user ${overrides.join(' ')}`;
+          commandElement.textContent = command;
         };
 
         FileAccessPreload.onNewPath(addPath);
