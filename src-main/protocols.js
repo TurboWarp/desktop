@@ -13,6 +13,7 @@ const packageJSON = require('../package.json');
  * @property {boolean} [secure]
  * @property {boolean} [brotli]
  * @property {boolean} [embeddable]
+ * @property {boolean} [stream]
  */
 
 /** @type {Record<string, Metadata>} */
@@ -45,7 +46,8 @@ const FILE_SCHEMES = {
   'tw-extensions': {
     root: path.resolve(__dirname, '../dist-extensions'),
     supportFetch: true,
-    embeddable: true
+    embeddable: true,
+    stream: true
   },
   'tw-update': {
     root: path.resolve(__dirname, '../src-renderer/update'),
@@ -86,7 +88,8 @@ protocol.registerSchemesAsPrivileged(Object.entries(FILE_SCHEMES).map(([scheme, 
   privileges: {
     standard: !!metadata.standard,
     supportFetchAPI: !!metadata.supportFetch,
-    secure: !!metadata.secure
+    secure: !!metadata.secure,
+    stream: !!metadata.stream
   }
 })));
 
