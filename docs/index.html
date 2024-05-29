@@ -544,7 +544,7 @@
     <script type="generated-locale-names">{"en":"English","ca":"Català","de":"Deutsch","es":"Español (España)","fi":"Suomi","it":"Italiano","ja":"日本語","ko":"한국어","nb":"Norsk Bokmål","nl":"Nederlands","pt-br":"Português Brasileiro","ru":"Русский","sv":"Svenska","tr":"Türkçe","uk":"Українська","zh-cn":"简体中文"}</script>
 
     <script>
-      const VERSION = '1.12.0';
+      const VERSION = '1.12.1';
 
       // OS-specific styles
       const getOS = () => {
@@ -922,6 +922,14 @@
       <h2 l10n="changelog">Changelog</h2>
       <div lang="en">
         <!-- CHANGELOG_START -->
+        <div data-version="1.12.1">
+          <h3>v1.12.1 (May 28 2024)</h3>
+          <ul>
+            <li>Updated packager</li>
+            <li>Linux: Fixed incorrect metadata in .desktop launcher causing some desktop environments to behave strangely</li>
+            <li>Linux: Flatpak version now detects drag-and-drop-related permission issues and suggests how to fix them</li>
+          </ul>
+        </div>
         <div data-version="1.12.0">
           <h3>v1.12.0 (May 27 2024)</h3>
           <ul>
