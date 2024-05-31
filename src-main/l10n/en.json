@@ -265,7 +265,15 @@
   },
   "desktop-settings.rich-presence": {
     "string": "Enable Rich Presence",
-    "developer_comment": "Option to enable Discord rich presence support, which shows the name of the project someone is editing on their Discord profile. For compliance with Scratch policies don't use the word \"Discord\" in the translation."
+    "developer_comment": "Option to enable Discord Rich Presence support, which shows the name of the project someone is editing on their Discord profile. For compliance with Scratch policies don't use the word \"Discord\" in the translation."
+  },
+  "desktop-settings.rich-presence-unavailable": {
+    "string": "Rich Presence is not available in this version of the app",
+    "developer_comment": "Appears in desktop settings after a disabled checkbox (grayed out and unchangeable) if Discord Rich Presence can't be enabled."
+  },
+  "desktop-settings.more-information": {
+    "string": "(more information)",
+    "developer_comment": "Appears in desktop settings after options as a link to a webpage with more information about the option."
   },
   "desktop-settings.open-user-data": {
     "string": "Open User Data",

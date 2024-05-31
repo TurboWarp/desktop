@@ -34,6 +34,7 @@ class DesktopSettingsWindow extends AbstractWindow {
         bypassCORS: settings.bypassCORS,
         spellchecker: settings.spellchecker,
         exitFullscreenOnEscape: settings.exitFullscreenOnEscape,
+        richPresenceAvailable: RichPresence.isAvailable(),
         richPresence: settings.richPresence
       };
     });

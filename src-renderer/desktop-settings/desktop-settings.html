@@ -299,14 +299,25 @@
       <label>
         <input type="checkbox" class="rich-presence-checkbox" autocomplete="off">
         <span class="rich-presence-label"></span>
+        <a class="rich-presence-more-information" href="https://docs.turbowarp.org/desktop/rich-presence" target="_blank" rel="noreferrer"></a>
       </label>
       <script>
         const richPresence = document.querySelector('.rich-presence-checkbox');
-        richPresence.onchange = () => {
-          DesktopSettingsPreload.setRichPresence(richPresence.checked);
-        };
-        richPresence.checked = settings.richPresence;
-        document.querySelector('.rich-presence-label').textContent = strings['desktop-settings.rich-presence'];
+        const richPresenceLabel = document.querySelector('.rich-presence-label');
+        const richPresenceMoreInformation = document.querySelector('.rich-presence-more-information');
+        if (settings.richPresenceAvailable) {
+          richPresence.onchange = () => {
+            DesktopSettingsPreload.setRichPresence(richPresence.checked);
+          };
+          richPresence.checked = settings.richPresence;
+          richPresenceLabel.textContent = strings['desktop-settings.rich-presence'];
+        } else {
+          richPresence.disabled = true;
+          richPresence.checked = false;
+          richPresenceLabel.textContent = strings['desktop-settings.rich-presence-unavailable'];
+          richPresenceMoreInformation.href += '#supported-platforms';
+        }
+        richPresenceMoreInformation.textContent = strings['desktop-settings.more-information'];
       </script>
 
       <button class="open-user-data"></button>
