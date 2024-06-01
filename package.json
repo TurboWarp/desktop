@@ -1,4 +1,5 @@
 {
+  "tw_update": true,
   "name": "turbowarp-desktop",
   "description": "Scratch mod with a compiler, dark mode, a bunch of addons, and more.",
   "version": "1.12.1",

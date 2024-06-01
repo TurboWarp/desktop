@@ -12,6 +12,10 @@ const URL = 'https://desktop.turbowarp.org/version.json';
  * @returns {boolean}
  */
 const isUpdateCheckerAllowed = () => {
+  if (process.env.TW_DISABLE_UPDATE_CHECKER) {
+    return false;
+  }
+
   // Must be enabled in package.json
   return !!packageJSON.tw_update;
 };
