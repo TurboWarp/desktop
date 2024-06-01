@@ -6,10 +6,18 @@ const privilegedFetch = require('./fetch');
 const currentVersion = packageJSON.version;
 const URL = 'https://desktop.turbowarp.org/version.json';
 
-const isEnabledAtBuildTime = () => !!packageJSON.tw_update;
+/**
+ * Determines whether the update checker is even allowed to be enabled
+ * in this build of the app.
+ * @returns {boolean}
+ */
+const isUpdateCheckerAllowed = () => {
+  // Must be enabled in package.json
+  return !!packageJSON.tw_update;
+};
 
 const checkForUpdates = async () => {
-  if (!isEnabledAtBuildTime() || settings.updateChecker === 'never') {
+  if (!isUpdateCheckerAllowed() || settings.updateChecker === 'never') {
     return;
   }
 
@@ -57,7 +65,7 @@ const ignoreUpdate = async (version, until) => {
 };
 
 module.exports = {
-  isEnabledAtBuildTime,
+  isUpdateCheckerAllowed,
   checkForUpdates,
   ignoreUpdate
 };

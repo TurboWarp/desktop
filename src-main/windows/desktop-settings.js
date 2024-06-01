@@ -3,7 +3,7 @@ const AbstractWindow = require('./abstract');
 const {translate, getStrings, getLocale} = require('../l10n');
 const {APP_NAME} = require('../brand');
 const settings = require('../settings');
-const {isEnabledAtBuildTime} = require('../update-checker');
+const {isUpdateCheckerAllowed} = require('../update-checker');
 const RichPresence = require('../rich-presence');
 
 class DesktopSettingsWindow extends AbstractWindow {
@@ -25,7 +25,7 @@ class DesktopSettingsWindow extends AbstractWindow {
 
     ipc.on('get-settings', (event) => {
       event.returnValue = {
-        updateCheckerAllowed: isEnabledAtBuildTime(),
+        updateCheckerAllowed: isUpdateCheckerAllowed(),
         updateChecker: settings.updateChecker,
         microphone: settings.microphone,
         camera: settings.camera,
