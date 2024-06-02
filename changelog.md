@@ -2,6 +2,11 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.12.3 (2024-06-02)
+
+ - Fixed one-time data migration from version before 1.9.0
+ - Fixed default URL in video extension
+
 # 1.12.1 (2024-05-28)
 
  - Updated packager
