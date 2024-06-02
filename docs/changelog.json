@@ -3,7 +3,7 @@
     "version": "1.12.3",
     "date": "2024-6-2",
     "notes": [
-      "Fixed one-time data migration from version before 1.9.0",
+      "Fixed one-time data migration from versions before 1.9.0",
       "Fixed default URL in video extension"
     ]
   },

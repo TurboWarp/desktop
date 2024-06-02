@@ -4,7 +4,7 @@ Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **form
 
 # 1.12.3 (2024-06-02)
 
- - Fixed one-time data migration from version before 1.9.0
+ - Fixed one-time data migration from versions before 1.9.0
  - Fixed default URL in video extension
 
 # 1.12.1 (2024-05-28)

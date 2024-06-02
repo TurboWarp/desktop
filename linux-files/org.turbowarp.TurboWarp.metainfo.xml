@@ -63,7 +63,7 @@
     <release version="1.12.3" date="2024-6-2">
       <description>
         <ul>
-          <li>Fixed one-time data migration from version before 1.9.0</li>
+          <li>Fixed one-time data migration from versions before 1.9.0</li>
           <li>Fixed default URL in video extension</li>
         </ul>
       </description>
