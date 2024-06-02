@@ -22,7 +22,8 @@ const FILE_SCHEMES = {
     root: path.resolve(__dirname, '../dist-renderer-webpack/editor'),
     standard: true,
     supportFetch: true,
-    secure: true
+    secure: true,
+    embeddable: true, // migration helper
   },
   'tw-desktop-settings': {
     root: path.resolve(__dirname, '../src-renderer/desktop-settings')
@@ -36,7 +37,8 @@ const FILE_SCHEMES = {
   'tw-packager': {
     root: path.resolve(__dirname, '../src-renderer/packager'),
     standard: true,
-    secure: true
+    secure: true,
+    embeddable: true, // migration helper
   },
   'tw-library': {
     root: path.resolve(__dirname, '../dist-library-files'),
