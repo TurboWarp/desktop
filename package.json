@@ -23,7 +23,7 @@
     "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.13.13",
     "@electron/fuses": "^1.7.0",
-    "adm-zip": "^0.5.10",
+    "adm-zip": "^0.5.14",
     "async-limiter": "^2.0.0",
     "autoprefixer": "^9.8.8",
     "babel-loader": "^8.3.0",
