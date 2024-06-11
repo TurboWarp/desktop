@@ -140,6 +140,8 @@ const createAtomicWriteStream = async (path) => {
   // same directory as the destination file.
   const isSeverelySandboxed = !!process.mas;
 
+  const runningHash = nodeCrypto.createHash('sha512');
+
   const tempPath = getTemporaryPath(path, isSeverelySandboxed);
   const fileHandle = await fsPromises.open(tempPath, 'w', originalMode);
   const writeStream = fileHandle.createWriteStream({
@@ -225,12 +227,29 @@ const createAtomicWriteStream = async (path) => {
         }
       }
 
+      // One final check to make sure nothing went wrong
+      const expectedHash = runningHash.digest('hex');
+      const finalHash = await sha512(path);
+      if (expectedHash !== finalHash) {
+        throw new Error('Final integrity hash check failed');
+      }
+
       writeStream.emit('atomic-finish');
       releaseFileLock();
     } catch (error) {
       handleError(error);
     }
   });
+
+  const oldWrite = writeStream.write;
+  writeStream.write = function (chunk, ...extra) {
+    if (extra.length !== 0) {
+      throw new Error('Atomic write() only supports one argument');
+    }
+
+    runningHash.update(chunk);
+    return oldWrite.call(this, chunk);
+  };
 
   return writeStream;
 };
