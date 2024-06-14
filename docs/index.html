@@ -235,6 +235,15 @@
       .apple-icon {
         background-image: url(apple.svg);
       }
+      .flathub-icon {
+        background-image: url(flathub.svg);
+      }
+      .snapcraft-icon {
+        background-image: url(snapcraft.svg);
+      }
+      .aur-icon {
+        background-image: url(aur.svg);
+      }
       .store-badge > div > :first-child {
         text-align: left;
         font-size: 0.9em;
@@ -1311,6 +1320,33 @@
 
     <div class="manual-installation section" id="linux">
       <h2 l10n="lin">Install on Linux</h2>
+
+      <div>
+        <a class="store-badge flathub" href="https://flathub.org/apps/org.turbowarp.TurboWarp">
+          <div class="store-icon flathub-icon"></div>
+          <div class="store-badge-text">
+            <div l10n="getiton" l10n-description="Used in the context 'Get it from Flathub'. Flathub is on a separate line (above in Japanese, below in others)">Get it on</div>
+            <div>Flathub</div>
+          </div>
+        </a>
+
+        <a class="store-badge snapcraft" href="https://apps.microsoft.com/store/detail/turbowarp/9P4DPZGV5ZKL">
+          <div class="store-icon snapcraft-icon"></div>
+          <div class="store-badge-text">
+            <div l10n="getiton" l10n-description="Used in the context 'Get it from Flathub'. Flathub is on a separate line (above in Japanese, below in others)">Get it on</div>
+            <div>Snapcraft</div>
+          </div>
+        </a>
+
+        <a class="store-badge aur" href="https://aur.archlinux.org/packages/turbowarp-desktop-bin/">
+          <div class="store-icon aur-icon"></div>
+          <div class="store-badge-text">
+            <div l10n="getiton" l10n-description="Used in the context 'Get it from Flathub'. Flathub is on a separate line (above in Japanese, below in others)">Get it on</div>
+            <div>Arch User Repository</div>
+          </div>
+        </a>
+      </div>
+
       <p l10n="lin2">Try searching for "TurboWarp" in your distribution's software manager and choose the first option that appears. If it doesn't appear or if you're an advanced user, choose one of these installation methods:</p>
 
       <h3>Debian, Ubuntu, Raspberry Pi OS, Linux Mint</h3>
