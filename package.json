@@ -74,6 +74,10 @@
       {
         "from": "art/icon.png",
         "to": "icon.png"
+      },
+      {
+        "from": "art/icon.svg",
+        "to": "icon.svg"
       }
     ],
     "win": {
