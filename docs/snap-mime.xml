@@ -1,19 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
-  <!-- This file is from https://desktop.turbowarp.org/snap-mime.xml -->
-  <!-- The Snap version of TurboWarp can't add file type information for Scratch projects files (sb, sb2, sb3) to your system. -->
-  <!-- This file can be used to manually add that information. -->
-  <!-- This lets you set TurboWarp (or any other app) as the opener for Scratch projects without affecting other file types such as normal zip archives. -->
+  <!--
+    This file is from https://desktop.turbowarp.org/snap-mime.xml
+    It should be saved to /usr/share/mime/packages/turbowarp-desktop-snap.xml
+    Run sudo update-mime-database /usr/share/mime after creating or deleting this file.
+
+    Canonical, in their infinite wisdom, do not let apps installed from snap install additional MIME
+    types to your system's database (flatpak does not have this restriction). sb2 and sb3 files are
+    actually zips so some file managers will treat them as zip files and prevent you from changing
+    the associated app without also affecting normal zip files. This is an objectively awful user
+    experience.
+
+    This file will tell your system that sb, sb2, and sb3 files should be treated separately so you
+    can set TurboWarp (or any other app) as the associated app without affecting normal zip files.
+  -->
+
   <mime-type type="application/x.scratch.sb3">
+    <sub-class-of type="application/zip" />
     <glob pattern="*.sb3" />
-    <icon name="x-office-document" />
+    <comment>Scratch 3 Project</comment>
+    <acronym>SB3</acronym>
+    <generic-icon name="x-office-document" />
   </mime-type>
   <mime-type type="application/x.scratch.sb2">
+    <sub-class-of type="application/zip" />
     <glob pattern="*.sb2" />
-    <icon name="x-office-document" />
+    <comment>Scratch 2 Project</comment>
+    <acronym>SB2</acronym>
+    <generic-icon name="x-office-document" />
   </mime-type>
   <mime-type type="application/x.scratch.sb">
     <glob pattern="*.sb" />
-    <icon name="x-office-document" />
+    <comment>Scratch 1 Project</comment>
+    <acronym>SB</acronym>
+    <generic-icon name="x-office-document" />
   </mime-type>
 </mime-info>
