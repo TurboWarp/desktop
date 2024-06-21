@@ -1,3 +1,5 @@
+require('./patch-electron-builder');
+
 const pathUtil = require('path');
 const fs = require('fs');
 const builder = require('electron-builder');
