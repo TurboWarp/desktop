@@ -95,6 +95,12 @@ class ProjectRunningWindow extends AbtractWindow {
   }
 
   onBeforeRequest (details, callback) {
+    if (details.resourceType === 'cspReport' || details.resourceType === 'ping') {
+      return callback({
+        cancel: true
+      });
+    }
+
     const parsed = new URL(details.url);
 
     if (parsed.origin === 'https://cdn.assets.scratch.mit.edu' || parsed.origin === 'https://assets.scratch.mit.edu') {
@@ -149,7 +155,7 @@ class ProjectRunningWindow extends AbtractWindow {
             break;
 
           // Modify CSP frame-ancestors to allow embedding
-          // We modify the report-only header too so that we send fewer useless reports
+          // We modify the report-only header to reduce console spam
           case 'content-security-policy':
           case 'content-security-policy-report-only': {
             // We try to add allowed origins rather than completely remove/replace to reduce possible security impact.
