@@ -37,14 +37,6 @@ const getProtocol = url => {
 const WEB_PROTOCOLS = ['http:', 'https:'];
 
 class ProjectRunningWindow extends AbtractWindow {
-  constructor (...args) {
-    super(...args);
-
-    this.window.webContents.on('did-create-window', (newWindow) => {
-      new DataWindow(this.window, newWindow);
-    });
-  }
-
   handlePermissionCheck (permission, details) {
     return (
       // Autoplay audio and media device enumeration
@@ -187,6 +179,21 @@ class ProjectRunningWindow extends AbtractWindow {
     }
 
     super.onHeadersReceived(details, callback);
+  }
+
+  handleWindowOpen (details) {
+    const parsed = new URL(details.url);
+    if (parsed.protocol === 'data:') {
+      // Imported lazily due to circular dependencies
+      const DataPreviewWindow = require('./data-preview');
+      DataPreviewWindow.open(this.window, details.url);
+
+      return {
+        action: 'deny'
+      };
+    }
+
+    return super.handleWindowOpen(details);
   }
 }
 

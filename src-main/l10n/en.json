@@ -478,5 +478,9 @@
   "file-access.how-to-fix": {
     "string": "Use the file pickers in the app instead of drag and drop, or run the following command in a terminal and restart the app to grant access:",
     "developer_comment": "Part of window that appears when user tries to drag & drop a file that the app can't access. Followed by a terminal command."
+  },
+  "data-preview.title": {
+    "string": "data: preview",
+    "developer_comment": "Title of windows when a project opens a data: URL. data: is a technical term, you probably don't need to translate it."
   }
 }
