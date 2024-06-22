@@ -21,6 +21,7 @@ class AbstractWindow {
     this.window = options.existingWindow || new BrowserWindow(this.getWindowOptions());
     this.window.webContents.setWindowOpenHandler(this.handleWindowOpen.bind(this));
     this.window.webContents.on('before-input-event', this.handleInput.bind(this));
+    this.window.webContents.on('will-navigate', this.handleWillNavigate.bind(this));
     this.applySettings();
 
     if (!options.existingWindow) {
@@ -283,6 +284,18 @@ class AbstractWindow {
         event.preventDefault();
         this.reload();
       }
+    }
+  }
+
+  /**
+   * @param {Electron.WillNavigateEvent} event 
+   * @param {string} url
+   */
+  handleWillNavigate (event, url) {
+    // Only allow windows to refresh, not navigate anywhere.
+    if (url !== this.initialURL) {
+      event.preventDefault();
+      openExternal(url);
     }
   }
 
