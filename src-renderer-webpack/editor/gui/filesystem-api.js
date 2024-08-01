@@ -1,6 +1,10 @@
 /**
- * Partial reimplementation of the FileSystem API
- * https://web.dev/file-system-access/
+ * Partial reimplementation of the FileSystem API (https://web.dev/file-system-access/)
+ * 
+ * Unlike the default FileSystem API, we can construct a file handle from an ID from
+ * the main process without showing the file picker. The IDs are managed by the main
+ * process, so malicious extensions can't abuse this to get arbitrary read/write,
+ * and it lets us not share full file paths which could contain eg. the user's name.
  */
 
 /**
@@ -100,7 +104,7 @@ class WrappedFileWritable {
   }
 }
 
-export class WrappedFileHandle {
+class WrappedFileHandle {
   /**
    * @param {number} id File ID from main.
    * @param {string} name Name including file extension.
@@ -127,7 +131,15 @@ class AbortError extends Error {
   }
 }
 
-window.showSaveFilePicker = async (options) => {
+const showOpenFilePicker = async () => {
+  const result = await EditorPreload.showOpenFilePicker();
+  if (result === null) {
+    throw new AbortError('No file selected');
+  }
+  return [new WrappedFileHandle(result.id, result.name)];
+};
+
+const showSaveFilePicker = async (options) => {
   const result = await EditorPreload.showSaveFilePicker(options.suggestedName);
   if (result === null) {
     throw new AbortError('No file selected');
@@ -135,10 +147,8 @@ window.showSaveFilePicker = async (options) => {
   return new WrappedFileHandle(result.id, result.name);
 };
 
-window.showOpenFilePicker = async () => {
-  const result = await EditorPreload.showOpenFilePicker();
-  if (result === null) {
-    throw new AbortError('No file selected');
-  }
-  return [new WrappedFileHandle(result.id, result.name)];
+export {
+  WrappedFileHandle,
+  showOpenFilePicker,
+  showSaveFilePicker
 };

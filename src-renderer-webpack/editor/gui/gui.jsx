@@ -5,6 +5,7 @@ import GUI, {AppStateHOC} from 'scratch-gui';
 import ErrorContainerHOC from '../error/error-container-hoc.jsx';
 import DesktopHOC from './desktop-hoc.jsx';
 import CloudProviderHOC from './cloud-provider-hoc.jsx';
+import {showOpenFilePicker, showSaveFilePicker} from './filesystem-api.js';
 import './normalize.css';
 import './gui.css';
 
@@ -28,6 +29,9 @@ const GUIWithProps = () => (
 
     backpackVisible
     backpackHost="_local_"
+
+    showOpenFilePicker={showOpenFilePicker}
+    showSaveFilePicker={showSaveFilePicker}
   />
 );
 

@@ -11,7 +11,7 @@ import {
   requestNewProject
 } from 'scratch-gui/src/reducers/project-state';
 import {setFileHandle, setUsername} from 'scratch-gui/src/reducers/tw';
-import {WrappedFileHandle} from './filesystem-api-impl';
+import {WrappedFileHandle} from './filesystem-api.js';
 import {setStrings} from '../prompt/prompt.js';
 
 let mountedOnce = false;
