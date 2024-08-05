@@ -105,10 +105,10 @@
         "microsoft-store-screenshot-packager": "Вбудований пакувальник для конвертування проектів в HTML файли або програми для Windows, macOS, та Linux."
     },
     "zh-cn": {
-        "microsoft-store-description": "TurboWarp 是 Scratch 的一个修改版，具有编译器，可以更快地运行作品，黑暗模式、一些扩展等。\n\n- 运行作品的速度比 Scratch 快20倍以上\n- 闲置时使用的内存明显减少\n- 黑暗模式\n- 开发者工具、可搜索的下拉菜单、勾选选项\n- 更多的扩展和自定义选项\n- 与 Scratch 100% 兼容\n- 本地文件系统和文件资源管理器集成\n- 编辑大型作品时的延迟更小\n- 可选择支持补帧、60 FPS、高清画笔、无限克隆等功能\n- 背包\n- 以及更多\n\nTurboWarp 的开发者与 Scratch 团队没有任何关系。这是一个由社区开发的修改版。\n\n截图中显示的作品是{screenshot_project_link}。\n",
-        "microsoft-store-generic-release-notes": "要查看最新的英语发行说明，请查看{changelog_link}",
-        "microsoft-store-screenshot-addons": "有多达 {number_of_addons} 个插件用于自定义和增强您的体验",
-        "microsoft-store-screenshot-caption": "示范作品：{screenshot_project_link}",
-        "microsoft-store-screenshot-packager": "内置的包装器可将作品转换为 HTML 文件或适用于 Windows、macOS、Linux 的应用程序。"
+        "microsoft-store-description": "TurboWarp 是 Scratch 编程语言的一个修改版，具有编译器、深色模式、一些扩展等功能，可以更快地运行作品。\n\n- 运行作品的速度比 Scratch 快 20 倍以上\n- 闲置时使用的内存明显减少\n- 深色模式\n- 开发者工具、可搜索的下拉菜单、洋葱皮动画工具\n- 更多的插件和可自定义选项\n- 与 Scratch 100% 兼容\n- 本地文件系统和文件资源管理器集成\n- 编辑大型作品时的延迟更低\n- 可选择支持补帧、60 FPS、高清画笔、无限克隆等功能\n- 背包\n- 以及更多\n\nTurboWarp 的开发者与 Scratch 团队没有任何关系。这是一个由社区开发的修改版。\n\n截图中显示的作品是{screenshot_project_link}。\n",
+        "microsoft-store-generic-release-notes": "要查看最新的发行说明，请访问{changelog_link}",
+        "microsoft-store-screenshot-addons": "多达 {number_of_addons} 个插件，可用于自定义和增强您的体验。",
+        "microsoft-store-screenshot-caption": "图片中的作品：{screenshot_project_link}",
+        "microsoft-store-screenshot-packager": "内置的包装器可将作品转换为 HTML 文件或适用于 Windows、macOS 或 Linux 的应用程序。"
     }
 }
