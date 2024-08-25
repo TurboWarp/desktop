@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.13.0-beta.1",
+    "date": "2024-8-25",
+    "notes": [
+      "Added Steamworks extension",
+      "Optimized pen rendering",
+      "Removed restricted trademarks",
+      "Various bug fixes"
+    ]
+  },
+  {
     "version": "1.12.3",
     "date": "2024-6-2",
     "notes": [

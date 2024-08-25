@@ -2,6 +2,13 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.13.0-beta.1 (2024-08-25)
+
+ - Added Steamworks extension
+ - Optimized pen rendering
+ - Removed restricted trademarks
+ - Various bug fixes
+
 # 1.12.3 (2024-06-02)
 
  - Fixed one-time data migration from versions before 1.9.0
