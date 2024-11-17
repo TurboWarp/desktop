@@ -90,7 +90,10 @@ class ProjectRunningWindow extends AbtractWindow {
       permission === 'clipboard-sanitized-write' ||
 
       // Wake Lock extension
-      permission === 'screen-wake-lock'
+      permission === 'screen-wake-lock' ||
+
+      // Backpack, restore points want persistent storage
+      permission === 'persistent-storage'
     );
   }
 
