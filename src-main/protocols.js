@@ -14,6 +14,7 @@ const packageJSON = require('../package.json');
  * @property {boolean} [brotli]
  * @property {boolean} [embeddable]
  * @property {boolean} [stream]
+ * @property {string} [index]
  */
 
 /** @type {Record<string, Metadata>} */
@@ -49,7 +50,8 @@ const FILE_SCHEMES = {
     root: path.resolve(__dirname, '../dist-extensions'),
     supportFetch: true,
     embeddable: true,
-    stream: true
+    stream: true,
+    index: '.html'
   },
   'tw-update': {
     root: path.resolve(__dirname, '../src-renderer/update'),
@@ -193,22 +195,27 @@ const createModernProtocolHandler = (metadata) => {
 
     try {
       const parsedURL = new URL(request.url);
-      const resolved = path.join(root, parsedURL.pathname);
+      let resolved = path.join(root, parsedURL.pathname);
       if (!resolved.startsWith(root)) {
         return createErrorResponse(new Error('Path traversal blocked'));
       }
-  
-      const fileExtension = path.extname(resolved);
+
+      let fileExtension = path.extname(resolved);
+      if (!fileExtension && metadata.index) {
+        fileExtension = metadata.index;
+        resolved = `${resolved}${fileExtension}`;
+      }
+
       const mimeType = MIME_TYPES.get(fileExtension);
       if (!mimeType) {
         return createErrorResponse(new Error(`Invalid file extension: ${fileExtension}`));
       }
-  
+
       const headers = {
         ...baseHeaders,
         'content-type': mimeType
       };
-  
+
       if (metadata.brotli) {
         // Reading it all into memory is not ideal, but we've had so many problems with streaming
         // files from the asar that I can settle with this.
@@ -219,7 +226,7 @@ const createModernProtocolHandler = (metadata) => {
           headers
         });
       }
-  
+
       const response = await net.fetch(nodeURL.pathToFileURL(resolved));
       return new Response(response.body, {
         headers
@@ -256,13 +263,18 @@ const createLegacyBrotliProtocolHandler = (metadata) => {
 
     try {
       const parsedURL = new URL(request.url);
-      const resolved = path.join(root, parsedURL.pathname);
+      let resolved = path.join(root, parsedURL.pathname);
       if (!resolved.startsWith(root)) {
         returnErrorPage(new Error('Path traversal blocked'));
         return;
       }
-  
-      const fileExtension = path.extname(resolved);
+
+      let fileExtension = path.extname(resolved);
+      if (!fileExtension && metadata.index) {
+        fileExtension = metadata.index;
+        resolved = `${resolved}${fileExtension}`;
+      }
+
       const mimeType = MIME_TYPES.get(fileExtension);
       if (!mimeType) {
         returnErrorPage(new Error(`Invalid file extension: ${fileExtension}`));
@@ -318,7 +330,7 @@ const createLegacyFileProtocolHandler = (metadata) => {
         returnErrorResponse(new Error('Path traversal blocked'), 'path-traversal');
         return;
       }
-  
+
       const fileExtension = path.extname(resolved);
       const mimeType = MIME_TYPES.get(fileExtension);
       if (!mimeType) {

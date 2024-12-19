@@ -16,6 +16,7 @@ const settings = require('../settings');
 const privilegedFetch = require('../fetch');
 const RichPresence = require('../rich-presence.js');
 const FileAccessWindow = require('./file-access-window.js');
+const ExtensionDocumentationWindow = require('./extension-documentation.js');
 
 const TYPE_FILE = 'file';
 const TYPE_URL = 'url';
@@ -562,12 +563,27 @@ class EditorWindow extends ProjectRunningWindow {
 
   handleWindowOpen (details) {
     // Open extension sample projects in-app
-    const match = details.url.match(
+    const extensionSamplesMatch = details.url.match(
       /^tw-editor:\/\/\.\/gui\/editor\?project_url=(https:\/\/extensions\.turbowarp\.org\/samples\/.+\.sb3)$/
     );
-    if (match) {
-      EditorWindow.openFiles([match[1]], false, '');
+    if (extensionSamplesMatch) {
+      EditorWindow.openFiles([extensionSamplesMatch[1]], false, '');
+      return {
+        action: 'deny'
+      };
     }
+
+    // Open extension documentation in-app
+    const extensionsDocsMatch = details.url.match(
+      /^https:\/\/extensions\.turbowarp\.org\/([\w_\-.\/]+)$/
+    );
+    if (extensionsDocsMatch) {
+      ExtensionDocumentationWindow.open(extensionsDocsMatch[1]);
+      return {
+        action: 'deny'
+      };
+    }
+
     return super.handleWindowOpen(details);
   }
 

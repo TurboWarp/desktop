@@ -482,5 +482,9 @@
   "data-preview.title": {
     "string": "data: preview",
     "developer_comment": "Title of windows when a project opens a data: URL. data: is a technical term, you probably don't need to translate it."
+  },
+  "extension-documentation.title": {
+    "string": "{APP_NAME} Extension Documentation",
+    "developer_comment": "Title of in-app window for viewing extension documentation."
   }
 }
