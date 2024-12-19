@@ -14,17 +14,10 @@ The website source code is in the `docs` folder.
 
 ## Development
 
-We use submodules, so clone using:
+Clone using:
 
 ```bash
-git clone --recursive https://github.com/TurboWarp/desktop turbowarp-desktop
-```
-
-or run this after cloning:
-
-```bash
-git submodule init
-git submodule update
+git clone https://github.com/TurboWarp/desktop turbowarp-desktop
 ```
 
 Install dependencies using:
