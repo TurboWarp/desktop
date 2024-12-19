@@ -84,6 +84,9 @@ MIME_TYPES.set('.otf', 'font/otf');
 MIME_TYPES.set('.woff', 'font/woff');
 MIME_TYPES.set('.woff2', 'font/woff2');
 MIME_TYPES.set('.hex', 'application/octet-stream');
+MIME_TYPES.set('.zip', 'application/zip');
+MIME_TYPES.set('.xml', 'text/xml');
+MIME_TYPES.set('.md', 'text/markdown');
 
 protocol.registerSchemesAsPrivileged(Object.entries(FILE_SCHEMES).map(([scheme, metadata]) => ({
   scheme,
