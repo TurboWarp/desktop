@@ -1,10 +1,12 @@
 [
   {
     "version": "1.13.0-beta.1",
-    "date": "2024-8-25",
+    "date": "2024-12-19",
     "notes": [
       "Added Steamworks extension",
+      "Extension documentation now opens inside the app and does not require an internet connection",
       "Optimized pen rendering",
+      "Improved reliability of file saving",
       "Removed restricted trademarks",
       "Various bug fixes"
     ]
