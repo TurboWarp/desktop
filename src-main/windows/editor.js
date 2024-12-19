@@ -295,17 +295,15 @@ class EditorWindow extends ProjectRunningWindow {
       this.updateRichPresence();
     });
 
-    const ipc = this.window.webContents.ipc;
-
-    ipc.on('is-initially-fullscreen', (e) => {
+    this.ipc.on('is-initially-fullscreen', (e) => {
       e.returnValue = isInitiallyFullscreen;
     });
 
-    ipc.handle('get-initial-file', () => {
+    this.ipc.handle('get-initial-file', () => {
       return this.activeFileId;
     });
 
-    ipc.handle('get-file', async (event, id) => {
+    this.ipc.handle('get-file', async (event, id) => {
       const file = getFileById(id);
       const {name, data} = await file.read();
       return {
@@ -315,7 +313,7 @@ class EditorWindow extends ProjectRunningWindow {
       };
     });
 
-    ipc.on('set-locale', async (event, locale) => {
+    this.ipc.on('set-locale', async (event, locale) => {
       if (settings.locale !== locale) {
         settings.locale = locale;
         updateLocale(locale);
@@ -333,11 +331,11 @@ class EditorWindow extends ProjectRunningWindow {
       };
     });
 
-    ipc.handle('set-changed', (event, changed) => {
+    this.ipc.handle('set-changed', (event, changed) => {
       this.window.setDocumentEdited(changed);
     });
 
-    ipc.handle('opened-file', (event, id) => {
+    this.ipc.handle('opened-file', (event, id) => {
       const file = getFileById(id);
       if (file.type !== TYPE_FILE) {
         throw new Error('Not a file');
@@ -347,12 +345,12 @@ class EditorWindow extends ProjectRunningWindow {
       this.window.setRepresentedFilename(file.path);
     });
 
-    ipc.handle('closed-file', () => {
+    this.ipc.handle('closed-file', () => {
       this.activeFileId = null;
       this.window.setRepresentedFilename('');
     });
 
-    ipc.handle('show-open-file-picker', async () => {
+    this.ipc.handle('show-open-file-picker', async () => {
       const result = await dialog.showOpenDialog(this.window, {
         properties: ['openFile'],
         defaultPath: settings.lastDirectory,
@@ -380,7 +378,7 @@ class EditorWindow extends ProjectRunningWindow {
       };
     });
 
-    ipc.handle('show-save-file-picker', async (event, suggestedName) => {
+    this.ipc.handle('show-save-file-picker', async (event, suggestedName) => {
       const result = await dialog.showSaveDialog(this.window, {
         defaultPath: path.join(settings.lastDirectory, suggestedName),
         filters: [
@@ -423,14 +421,14 @@ class EditorWindow extends ProjectRunningWindow {
       };
     });
 
-    ipc.handle('get-preferred-media-devices', () => {
+    this.ipc.handle('get-preferred-media-devices', () => {
       return {
         microphone: settings.microphone,
         camera: settings.camera
       };
     });
 
-    ipc.on('start-write-stream', async (startEvent, id) => {
+    this.ipc.on('start-write-stream', async (startEvent, id) => {
       const file = getFileById(id);
       if (file.type !== TYPE_FILE) {
         throw new Error('Not a file');
@@ -503,39 +501,39 @@ class EditorWindow extends ProjectRunningWindow {
       port.start();
     });
 
-    ipc.on('alert', (event, message) => {
+    this.ipc.on('alert', (event, message) => {
       event.returnValue = prompts.alert(this.window, message);
     });
 
-    ipc.on('confirm', (event, message) => {
+    this.ipc.on('confirm', (event, message) => {
       event.returnValue = prompts.confirm(this.window, message);
     });
 
-    ipc.handle('open-packager', () => {
+    this.ipc.handle('open-packager', () => {
       PackagerWindow.forEditor(this);
     });
 
-    ipc.handle('open-new-window', () => {
+    this.ipc.handle('open-new-window', () => {
       EditorWindow.newWindow();
     });
 
-    ipc.handle('open-addon-settings', (event, search) => {
+    this.ipc.handle('open-addon-settings', (event, search) => {
       AddonsWindow.show(search);
     });
 
-    ipc.handle('open-desktop-settings', () => {
+    this.ipc.handle('open-desktop-settings', () => {
       DesktopSettingsWindow.show();
     });
 
-    ipc.handle('open-privacy', () => {
+    this.ipc.handle('open-privacy', () => {
       PrivacyWindow.show();
     });
 
-    ipc.handle('open-about', () => {
+    this.ipc.handle('open-about', () => {
       AboutWindow.show();
     });
 
-    ipc.handle('get-advanced-customizations', async () => {
+    this.ipc.handle('get-advanced-customizations', async () => {
       const USERSCRIPT_PATH = path.join(app.getPath('userData'), 'userscript.js');
       const USERSTYLE_PATH = path.join(app.getPath('userData'), 'userstyle.css');
 
@@ -550,7 +548,7 @@ class EditorWindow extends ProjectRunningWindow {
       };
     });
 
-    ipc.handle('check-drag-and-drop-path', (event, filePath) => {
+    this.ipc.handle('check-drag-and-drop-path', (event, filePath) => {
       FileAccessWindow.check(filePath);
     });
 
@@ -560,7 +558,7 @@ class EditorWindow extends ProjectRunningWindow {
      */
     this.isInEditorFullScreen = false;
 
-    ipc.handle('set-is-full-screen', (event, isFullScreen) => {
+    this.ipc.handle('set-is-full-screen', (event, isFullScreen) => {
       this.isInEditorFullScreen = !!isFullScreen;
     });
 
@@ -590,7 +588,7 @@ class EditorWindow extends ProjectRunningWindow {
   enumerateMediaDevices () {
     // Used by desktop settings
     return new Promise((resolve, reject) => {
-      this.window.webContents.ipc.once('enumerated-media-devices', (event, result) => {
+      this.ipc.once('enumerated-media-devices', (event, result) => {
         if (typeof result.error !== 'undefined') {
           reject(result.error);
         } else {

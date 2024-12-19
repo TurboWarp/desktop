@@ -8,13 +8,11 @@ class PrivacyWindow extends AbstractWindow {
   constructor () {
     super();
 
-    const ipc = this.window.webContents.ipc;
-
-    ipc.on('is-update-checker-allowed', (e) => {
+    this.ipc.on('is-update-checker-allowed', (e) => {
       e.returnValue = isUpdateCheckerAllowed();
     });
 
-    ipc.handle('open-desktop-settings', () => {
+    this.ipc.handle('open-desktop-settings', () => {
       DesktopSettingsWindow.show();
     });
 

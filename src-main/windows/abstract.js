@@ -40,6 +40,11 @@ class AbstractWindow {
       this.window.setBounds(bounds);
     }
 
+    /**
+     * ipcMain object scoped to the window's main frame only.
+     */
+    this.ipc = this.window.webContents.mainFrame.ipc;
+
     this.initialURL = null;
     this.protocol = null;
 
