@@ -41,7 +41,7 @@ ipcRenderer.on('export-project-to-port', (e) => {
 window.addEventListener('message', (e) => {
   if (e.source === window) {
     const data = e.data;
-    if (data && typeof data.ipcStartWriteStream === 'number') {
+    if (data && typeof data.ipcStartWriteStream === 'string') {
       ipcRenderer.postMessage('start-write-stream', data.ipcStartWriteStream, e.ports);
     }
   }

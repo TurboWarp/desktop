@@ -187,36 +187,75 @@ const isChildPath = (parent, child) => {
   return !!relative && !relative.startsWith('..') && !path.isAbsolute(relative);
 };
 
+/** @type {Set<string>} */
+const allFileIDs = new Set();
+
+/**
+ * @returns {string} A unique string.
+ */
+const generateFileId = () => {
+  let result;
+  let tries = 0;
+
+  do {
+    tries++;
+    if (tries > 50) {
+      // Should never happen...
+      throw new Error('Failed to generate file ID');
+    }
+
+    result = 'desktop_file_id{';
+
+    // >200 bits of randomness; impractical to brute force.
+    // Math.random() is not cryptographically secure, but even if someone can reverse it, they would
+    // still only be able to access files that were already opened, so impact is not that big.
+    const soup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    for (let i = 0; i < 40; i++) {
+      result += soup[Math.floor(Math.random() * soup.length)];
+    }
+
+    result += '}';
+  } while (allFileIDs.has(result));
+
+  allFileIDs.add(result);
+  return result;
+};
+
 class EditorWindow extends ProjectRunningWindow {
   /**
-   * @param {OpenedFile|null} file
+   * @param {OpenedFile|null} initialFile
    * @param {boolean} isInitiallyFullscreen
    */
-  constructor (file, isInitiallyFullscreen) {
+  constructor (initialFile, isInitiallyFullscreen) {
     super();
 
-    // This file ID system is not quite perfect. Ideally we would completely revoke permission to access
-    // old projects after you load the next one, but our handling of file handles in scratch-gui is
-    // pretty bad right now, so this is the best compromise.
-    this.openedFiles = [];
-    this.activeFileIndex = -1;
+    /**
+     * Ideally we would revoke access after loading a new project, but our file handle handling in
+     * the GUI isn't robust enough for that yet. We do at least use random file handle IDs which
+     * makes it much harder for malicious code in the renderer process to enumerate all previously
+     * opened IDs and overwrite them.
+     * @type {Map<string, OpenedFile>}
+     */
+    this.openedFiles = new Map();
+    this.activeFileId = null;
 
-    if (file !== null) {
-      this.openedFiles.push(file);
-      this.activeFileIndex = 0;
+    if (initialFile !== null) {
+      this.activeFileId = generateFileId();
+      this.openedFiles.set(this.activeFileId, initialFile);
     }
 
     this.openedProjectAt = Date.now();
 
-    const getFileByIndex = (index) => {
-      if (typeof index !== 'number') {
-        throw new Error('File ID not number');
-      }
-      const value = this.openedFiles[index];
-      if (!(value instanceof OpenedFile)) {
+    /**
+     * @param {string} id
+     * @returns {OpenedFile}
+     * @throws if invalid ID
+     */
+    const getFileById = (id) => {
+      if (!this.openedFiles.has(id)) {
         throw new Error('Invalid file ID');
       }
-      return this.openedFiles[index];
+      return this.openedFiles.get(id);
     };
 
     this.window.webContents.on('will-prevent-unload', (event) => {
@@ -263,14 +302,11 @@ class EditorWindow extends ProjectRunningWindow {
     });
 
     ipc.handle('get-initial-file', () => {
-      if (this.activeFileIndex === -1) {
-        return null;
-      }
-      return this.activeFileIndex;
+      return this.activeFileId;
     });
 
-    ipc.handle('get-file', async (event, index) => {
-      const file = getFileByIndex(index);
+    ipc.handle('get-file', async (event, id) => {
+      const file = getFileById(id);
       const {name, data} = await file.read();
       return {
         name,
@@ -301,18 +337,18 @@ class EditorWindow extends ProjectRunningWindow {
       this.window.setDocumentEdited(changed);
     });
 
-    ipc.handle('opened-file', (event, index) => {
-      const file = getFileByIndex(index);
+    ipc.handle('opened-file', (event, id) => {
+      const file = getFileById(id);
       if (file.type !== TYPE_FILE) {
         throw new Error('Not a file');
       }
-      this.activeFileIndex = index;
+      this.activeFileId = id;
       this.openedProjectAt = Date.now();
       this.window.setRepresentedFilename(file.path);
     });
 
     ipc.handle('closed-file', () => {
-      this.activeFileIndex = -1;
+      this.activeFileId = null;
       this.window.setRepresentedFilename('');
     });
 
@@ -331,14 +367,16 @@ class EditorWindow extends ProjectRunningWindow {
         return null;
       }
 
-      const file = result.filePaths[0];
-      settings.lastDirectory = path.dirname(file);
+      const filePath = result.filePaths[0];
+      settings.lastDirectory = path.dirname(filePath);
       await settings.save();
 
-      this.openedFiles.push(new OpenedFile(TYPE_FILE, file));
+      const id = generateFileId();
+      this.openedFiles.set(id, new OpenedFile(TYPE_FILE, filePath));
+
       return {
-        id: this.openedFiles.length - 1,
-        name: path.basename(file)
+        id,
+        name: path.basename(filePath)
       };
     });
 
@@ -356,30 +394,32 @@ class EditorWindow extends ProjectRunningWindow {
         return null;
       }
 
-      const file = result.filePath;
+      const filePath = result.filePath;
 
-      const unsafePath = getUnsafePaths().find(i => isChildPath(i.path, file));
+      const unsafePath = getUnsafePaths().find(i => isChildPath(i.path, filePath));
       if (unsafePath) {
-        // No need to wait for the message box to close
+        // No need to block until the message box is closed
         dialog.showMessageBox(this.window, {
           type: 'error',
           title: APP_NAME,
           message: translate('unsafe-path.title'),
           detail: translate(`unsafe-path.details`)
             .replace('{APP_NAME}', unsafePath.app)
-            .replace('{file}', file),
+            .replace('{file}', filePath),
           noLink: true
         });  
         return null;
       }
 
-      settings.lastDirectory = path.dirname(file);
+      settings.lastDirectory = path.dirname(filePath);
       await settings.save();
 
-      this.openedFiles.push(new OpenedFile(TYPE_FILE, file));
+      const id = generateFileId();
+      this.openedFiles.set(id, new OpenedFile(TYPE_FILE, filePath));
+
       return {
-        id: this.openedFiles.length - 1,
-        name: path.basename(file)
+        id,
+        name: path.basename(filePath)
       };
     });
 
@@ -390,8 +430,8 @@ class EditorWindow extends ProjectRunningWindow {
       };
     });
 
-    ipc.on('start-write-stream', async (startEvent, index) => {
-      const file = getFileByIndex(index);
+    ipc.on('start-write-stream', async (startEvent, id) => {
+      const file = getFileById(id);
       if (file.type !== TYPE_FILE) {
         throw new Error('Not a file');
       }
