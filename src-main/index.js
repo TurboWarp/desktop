@@ -104,6 +104,17 @@ app.on('session-created', (session) => {
 });
 
 app.on('web-contents-created', (event, webContents) => {
+  // Event handler added here as a safety measure.
+  webContents.on('will-navigate', (event, url) => {
+    const window = AbstractWindow.getWindowByWebContents(webContents);
+    if (window) {
+      window.handleWillNavigate(event, url);
+    } else {
+      // Unknown web contents; give minimal possible permissions.
+      event.preventDefault();
+    }
+  });
+
   // Overwritten by AbstractWindow. We just set this here as a safety measure.
   webContents.setWindowOpenHandler((details) => ({
     action: 'deny'
