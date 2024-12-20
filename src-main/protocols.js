@@ -8,13 +8,14 @@ const packageJSON = require('../package.json');
 /**
  * @typedef Metadata
  * @property {string} root
- * @property {boolean} [standard]
- * @property {boolean} [supportFetch]
- * @property {boolean} [secure]
- * @property {boolean} [brotli]
- * @property {boolean} [embeddable]
- * @property {boolean} [stream]
- * @property {string} [index]
+ * @property {boolean} [standard] Defaults to false
+ * @property {boolean} [supportFetch] Defaults to false
+ * @property {boolean} [secure] Defaults to false
+ * @property {boolean} [brotli] Defaults to false
+ * @property {boolean} [embeddable] Defaults to false
+ * @property {boolean} [stream] Defaults to false
+ * @property {string} [index] Defaults to none
+ * @property {string} [csp] Defaults to none
  */
 
 /** @type {Record<string, Metadata>} */
@@ -27,13 +28,16 @@ const FILE_SCHEMES = {
     embeddable: true, // migration helper
   },
   'tw-desktop-settings': {
-    root: path.resolve(__dirname, '../src-renderer/desktop-settings')
+    root: path.resolve(__dirname, '../src-renderer/desktop-settings'),
+    csp: "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'"
   },
   'tw-privacy': {
-    root: path.resolve(__dirname, '../src-renderer/privacy')
+    root: path.resolve(__dirname, '../src-renderer/privacy'),
+    csp: "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'"
   },
   'tw-about': {
-    root: path.resolve(__dirname, '../src-renderer/about')
+    root: path.resolve(__dirname, '../src-renderer/about'),
+    csp: "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'"
   },
   'tw-packager': {
     root: path.resolve(__dirname, '../src-renderer/packager'),
@@ -44,23 +48,28 @@ const FILE_SCHEMES = {
   'tw-library': {
     root: path.resolve(__dirname, '../dist-library-files'),
     supportFetch: true,
-    brotli: true
+    brotli: true,
+    csp: "default-src 'none';"
   },
   'tw-extensions': {
     root: path.resolve(__dirname, '../dist-extensions'),
     supportFetch: true,
     embeddable: true,
     stream: true,
-    index: '.html'
+    index: '.html',
+    csp: "default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; script-src 'self' 'unsafe-inline'"
   },
   'tw-update': {
     root: path.resolve(__dirname, '../src-renderer/update'),
+    csp: "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src https://desktop.turbowarp.org"
   },
   'tw-security-prompt': {
     root: path.resolve(__dirname, '../src-renderer/security-prompt'),
+    csp: "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline';"
   },
   'tw-file-access': {
     root: path.resolve(__dirname, '../src-renderer/file-access'),
+    csp: "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'"
   }
 };
 
@@ -159,10 +168,14 @@ const errorPageHeaders = {
  */
 const getBaseProtocolHeaders = metadata => {
   const result = {
-    // Make sure the browser always trusts our content-type
-    // (probably does not do anything here)
+    // Make sure Chromium always trusts our content-type and doesn't try anything clever
     'x-content-type-options': 'nosniff'
   };
+
+  // Optional Content-Security-Policy
+  if (metadata.csp) {
+    result['content-security-policy'] = metadata.csp;
+  }
 
   // Don't allow things like extensiosn to embed custom protocols
   if (!metadata.embeddable) {
