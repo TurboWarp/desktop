@@ -19,7 +19,6 @@ class AbstractWindow {
 
     /** @type {Electron.BrowserWindow} */
     this.window = options.existingWindow || new BrowserWindow(this.getWindowOptions());
-    this.window.webContents.setWindowOpenHandler(this.handleWindowOpen.bind(this));
     this.window.webContents.on('before-input-event', this.handleInput.bind(this));
     this.applySettings();
 

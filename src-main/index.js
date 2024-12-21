@@ -104,7 +104,10 @@ app.on('session-created', (session) => {
 });
 
 app.on('web-contents-created', (event, webContents) => {
-  // Event handler added here as a safety measure.
+  // For safety reasons, we add these listeners here so that they apply to any web contents,
+  // even ones that somehow got created without an associated one of our AbstractWindows
+  // also being created.
+
   webContents.on('will-navigate', (event, url) => {
     const window = AbstractWindow.getWindowByWebContents(webContents);
     if (window) {
@@ -115,10 +118,16 @@ app.on('web-contents-created', (event, webContents) => {
     }
   });
 
-  // Overwritten by AbstractWindow. We just set this here as a safety measure.
-  webContents.setWindowOpenHandler((details) => ({
-    action: 'deny'
-  }));
+  webContents.setWindowOpenHandler((details) => {
+    const window = AbstractWindow.getWindowByWebContents(webContents);
+    if (window) {
+      return window.handleWindowOpen(details);
+    }
+    // Unknown web contents; give minimal possible permissions.
+    return {
+      action: 'deny'
+    };
+  });
 });
 
 app.on('window-all-closed', () => {
