@@ -39,15 +39,6 @@ class ExtensionDocumentationWindow extends AbstractWindow {
     return true;
   }
 
-  handleWillNavigate (event, url) {
-    const match = url.match(/^tw-extensions:\/\/\.(\/.*)$/);
-    if (match) {
-      url = `https://extensions.turbowarp.org${match[1]}`;
-    }
-
-    return super.handleWillNavigate(event, url);
-  }
-
   /**
    * @param {string} path Path part of an https://extensions.turbowarp.org URL, without leading /
    */
