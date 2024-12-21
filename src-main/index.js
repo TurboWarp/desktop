@@ -7,7 +7,6 @@ if (!process.mas && !app.requestSingleInstanceLock()) {
 }
 
 const path = require('path');
-const openExternal = require('./open-external');
 const AbstractWindow = require('./windows/abstract');
 const EditorWindow = require('./windows/editor');
 const {checkForUpdates} = require('./update-checker');
