@@ -14,7 +14,8 @@ const packageJSON = require('../package.json');
  * @property {boolean} [brotli] Defaults to false
  * @property {boolean} [embeddable] Defaults to false
  * @property {boolean} [stream] Defaults to false
- * @property {string} [index] Defaults to none
+ * @property {string} [directoryIndex] Defaults to none
+ * @property {string} [defaultExtension] Defaults to n one
  * @property {string} [csp] Defaults to none
  */
 
@@ -56,7 +57,8 @@ const FILE_SCHEMES = {
     supportFetch: true,
     embeddable: true,
     stream: true,
-    index: '.html',
+    directoryIndex: 'index.html',
+    defaultExtension: '.html',
     csp: "default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; script-src 'self' 'unsafe-inline'"
   },
   'tw-update': {
@@ -207,15 +209,19 @@ const createModernProtocolHandler = (metadata) => {
     };
 
     try {
-      const parsedURL = new URL(request.url);
+      let parsedURL = new URL(request.url);
+      if (parsedURL.pathname.endsWith('/') && metadata.directoryIndex) {
+        parsedURL = new URL(metadata.directoryIndex, parsedURL);
+      }
+
       let resolved = path.join(root, parsedURL.pathname);
       if (!resolved.startsWith(root)) {
         return createErrorResponse(new Error('Path traversal blocked'));
       }
 
       let fileExtension = path.extname(resolved);
-      if (!fileExtension && metadata.index) {
-        fileExtension = metadata.index;
+      if (!fileExtension && metadata.defaultExtension) {
+        fileExtension = metadata.defaultExtension;
         resolved = `${resolved}${fileExtension}`;
       }
 
@@ -275,7 +281,11 @@ const createLegacyBrotliProtocolHandler = (metadata) => {
     };
 
     try {
-      const parsedURL = new URL(request.url);
+      let parsedURL = new URL(request.url);
+      if (parsedURL.pathname.endsWith('/') && metadata.directoryIndex) {
+        parsedURL = new URL(metadata.directoryIndex, parsedURL);
+      }
+
       let resolved = path.join(root, parsedURL.pathname);
       if (!resolved.startsWith(root)) {
         returnErrorPage(new Error('Path traversal blocked'));
@@ -283,8 +293,8 @@ const createLegacyBrotliProtocolHandler = (metadata) => {
       }
 
       let fileExtension = path.extname(resolved);
-      if (!fileExtension && metadata.index) {
-        fileExtension = metadata.index;
+      if (!fileExtension && metadata.defaultExtension) {
+        fileExtension = metadata.defaultExtension;
         resolved = `${resolved}${fileExtension}`;
       }
 
@@ -337,14 +347,23 @@ const createLegacyFileProtocolHandler = (metadata) => {
     };
 
     try {
-      const parsedURL = new URL(request.url);
-      const resolved = path.join(root, parsedURL.pathname);
+      let parsedURL = new URL(request.url);
+      if (parsedURL.pathname.endsWith('/') && metadata.directoryIndex) {
+        parsedURL = new URL(metadata.directoryIndex, parsedURL);
+      }
+
+      let resolved = path.join(root, parsedURL.pathname);
       if (!resolved.startsWith(root)) {
         returnErrorResponse(new Error('Path traversal blocked'), 'path-traversal');
         return;
       }
 
-      const fileExtension = path.extname(resolved);
+      let fileExtension = path.extname(resolved);
+      if (!fileExtension && metadata.defaultExtension) {
+        fileExtension = metadata.defaultExtension;
+        resolved = `${resolved}${fileExtension}`;
+      }
+
       const mimeType = MIME_TYPES.get(fileExtension);
       if (!mimeType) {
         returnErrorResponse(new Error(`Invalid file extension: ${fileExtension}`), 'invalid-extension');

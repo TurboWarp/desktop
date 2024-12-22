@@ -122,9 +122,9 @@ class ProjectRunningWindow extends AbtractWindow {
     }
 
     if (parsed.origin === 'https://extensions.turbowarp.org') {
-      const pathname = parsed.pathname.endsWith('/') ? `${parsed.pathname}index.html` : parsed.pathname;
       return callback({
-        redirectURL: `tw-extensions://.${pathname}`
+        // pathname always has a leading / already
+        redirectURL: `tw-extensions://.${parsed.pathname}`
       });
     }
 
