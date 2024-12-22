@@ -1,4 +1,5 @@
 const pathUtil = require('path');
+const {promisify} = require('util');
 const fs = require('fs');
 const zlib = require('zlib');
 const Builder = require('@turbowarp/extensions/builder');
@@ -13,15 +14,34 @@ fs.rmSync(outputDirectory, {
   recursive: true,
   force: true,
 });
-for (const [relativePath, file] of Object.entries(build.files)) {
-  console.log(`Compressing ${relativePath}`);
-  const directoryName = pathUtil.dirname(relativePath);
-  fs.mkdirSync(pathUtil.join(outputDirectory, directoryName), {
-    recursive: true,
-  });
-  const contents = file.read();
-  const compressed = zlib.brotliCompressSync(contents);
-  fs.writeFileSync(pathUtil.join(outputDirectory, `${relativePath}.br`), compressed);
-}
 
-console.log(`Exported to ${outputDirectory}`);
+const brotliCompress = promisify(zlib.brotliCompress);
+const mkdir = promisify(fs.mkdir);
+const writeFile = promisify(fs.writeFile);
+
+const exportFile = async (relativePath, file) => {
+  // This part is unfortunately still synchronous
+  const contents = file.read();
+  console.log(`Generated ${relativePath}`);
+
+  const compressed = await brotliCompress(contents);
+
+  const directoryName = pathUtil.dirname(relativePath);
+  await mkdir(pathUtil.join(outputDirectory, directoryName), {
+    recursive: true
+  });
+
+  await writeFile(pathUtil.join(outputDirectory, `${relativePath}.br`), compressed)
+
+  console.log(`Compressed ${relativePath}`);
+};
+
+const promises = Object.entries(build.files).map(([relativePath, file]) => exportFile(relativePath, file));
+Promise.all(promises)
+  .then(() => {
+    console.log(`Exported to ${outputDirectory}`);
+  })
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
