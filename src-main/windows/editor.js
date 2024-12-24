@@ -1,6 +1,7 @@
 const fsPromises = require('fs/promises');
 const path = require('path');
 const nodeURL = require('url');
+const zlib = require('zlib');
 const {app, dialog} = require('electron');
 const ProjectRunningWindow = require('./project-running-window');
 const AddonsWindow = require('./addons');
@@ -65,11 +66,25 @@ class OpenedFile {
 
     if (this.type === TYPE_SAMPLE) {
       const sampleRoot = path.resolve(__dirname, '../../dist-extensions/samples/');
-      const joined = path.join(sampleRoot, this.path);
-      if (joined.startsWith(sampleRoot)) {
+      const resolvedPath = path.join(sampleRoot, this.path);
+      if (resolvedPath.startsWith(sampleRoot)) {
+        const compressedPath = `${resolvedPath}.br`;
+        const compressedData = await fsPromises.readFile(compressedPath);
+
+        // dist-extensions is all brotli'd; must decompress
+        const decompressedData = await new Promise((resolve, reject) => {
+          zlib.brotliDecompress(compressedData, (err, res) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(res);
+            }
+          });
+        });
+
         return {
           name: this.path,
-          data: await fsPromises.readFile(joined)
+          data: decompressedData
         };
       }
       throw new Error('Unsafe join');
