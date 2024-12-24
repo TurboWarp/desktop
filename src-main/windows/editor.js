@@ -615,15 +615,23 @@ class EditorWindow extends ProjectRunningWindow {
   }
 
   handleWindowOpen (details) {
+    const url = new URL(details.url);
+    const params = new URLSearchParams(url.search);
+
     // Open extension sample projects in-app
-    const extensionSamplesMatch = details.url.match(
-      /^tw-editor:\/\/\.\/gui\/editor\?project_url=(https:\/\/extensions\.turbowarp\.org\/samples\/.+\.sb3)$/
-    );
-    if (extensionSamplesMatch) {
-      EditorWindow.openFiles([extensionSamplesMatch[1]], false, '');
-      return {
-        action: 'deny'
-      };
+    if (
+      url.protocol === 'tw-editor:' &&
+      url.host === '.' &&
+      params.has('project_url')
+    ) {
+      const projectUrl = params.get('project_url');
+      const parsedFile = parseOpenedFile(projectUrl, null);
+      if (parsedFile.type === TYPE_SAMPLE) {
+        new EditorWindow(parsedFile, null);
+        return {
+          action: 'deny'
+        };
+      }
     }
 
     // Open extension documentation in-app
