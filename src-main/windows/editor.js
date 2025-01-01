@@ -2,6 +2,7 @@ const fsPromises = require('fs/promises');
 const path = require('path');
 const nodeURL = require('url');
 const zlib = require('zlib');
+const nodeCrypto = require('crypto');
 const {app, dialog} = require('electron');
 const ProjectRunningWindow = require('./project-running-window');
 const AddonsWindow = require('./addons');
@@ -202,38 +203,12 @@ const isChildPath = (parent, child) => {
   return !!relative && !relative.startsWith('..') && !path.isAbsolute(relative);
 };
 
-/** @type {Set<string>} */
-const allFileIDs = new Set();
-
 /**
  * @returns {string} A unique string.
  */
 const generateFileId = () => {
-  let result;
-  let tries = 0;
-
-  do {
-    tries++;
-    if (tries > 50) {
-      // Should never happen...
-      throw new Error('Failed to generate file ID');
-    }
-
-    result = 'desktop_file_id{';
-
-    // >200 bits of randomness; impractical to brute force.
-    // Math.random() is not cryptographically secure, but even if someone can reverse it, they would
-    // still only be able to access files that were already opened, so impact is not that big.
-    const soup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-    for (let i = 0; i < 40; i++) {
-      result += soup[Math.floor(Math.random() * soup.length)];
-    }
-
-    result += '}';
-  } while (allFileIDs.has(result));
-
-  allFileIDs.add(result);
-  return result;
+  // Note that we can't use the randomUUID from web crypto as we need to support Electron 22.
+  return `desktop_file_id{${nodeCrypto.randomUUID()}}`;
 };
 
 class EditorWindow extends ProjectRunningWindow {
