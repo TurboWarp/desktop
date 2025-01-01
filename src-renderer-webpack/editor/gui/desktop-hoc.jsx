@@ -250,7 +250,7 @@ const DesktopHOC = function (WrappedComponent) {
     loadingState: PropTypes.string.isRequired,
     projectChanged: PropTypes.bool.isRequired,
     fileHandle: PropTypes.shape({
-      id: PropTypes.number.isRequired
+      id: PropTypes.string.isRequired
     }),
     isFullScreen: PropTypes.bool.isRequired,
     reduxUsername: PropTypes.string.isRequired,
