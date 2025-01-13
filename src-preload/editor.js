@@ -1,6 +1,15 @@
 const {contextBridge, ipcRenderer} = require('electron');
 
-contextBridge.exposeInMainWorld('EditorPreload', {
+const exposeInMainWorld = (name, api) => {
+  // TODO: find a better way to do this
+  try {
+    contextBridge.exposeInMainWorld(name, api);
+  } catch (e) {
+    global[name] = api;
+  }
+};
+
+exposeInMainWorld('EditorPreload', {
   isInitiallyFullscreen: () => ipcRenderer.sendSync('is-initially-fullscreen'),
   getInitialFile: () => ipcRenderer.invoke('get-initial-file'),
   getFile: (id) => ipcRenderer.invoke('get-file', id),
@@ -66,7 +75,7 @@ ipcRenderer.on('enumerate-media-devices', (e) => {
     });
 });
 
-contextBridge.exposeInMainWorld('PromptsPreload', {
+exposeInMainWorld('PromptsPreload', {
   alert: (message) => ipcRenderer.sendSync('alert', message),
   confirm: (message) => ipcRenderer.sendSync('confirm', message),
 });

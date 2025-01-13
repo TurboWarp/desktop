@@ -62,13 +62,15 @@ class SecurityState {
 
 class SecurityPromptWindow extends AbstractWindow {
   /**
-   * @param {Electron.BrowserWindow} projectWindow
+   * @param {Electron.BrowserWindow|null} projectWindow
    * @param {string} type
    */
   constructor (projectWindow, type) {
     super({
       parentWindow: projectWindow
     });
+
+    this.type = type;
 
     /** @type {Promise<boolean>} */
     this.promptPromise = new Promise((resolve) => {
@@ -128,6 +130,13 @@ class SecurityPromptWindow extends AbstractWindow {
 
   done () {
     return this.promptPromise;
+  }
+
+  static async requestNodeIntegration () {
+    const securityWindows = AbstractWindow.getWindowsByClass(SecurityPromptWindow);
+    const existingWindow = securityWindows.find(i => i.type === 'node-integration');
+    const window = existingWindow || new SecurityPromptWindow(null, 'node-integration');
+    return window.done();
   }
 
   static async requestReadClipboard (window) {
