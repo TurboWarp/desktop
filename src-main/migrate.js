@@ -5,7 +5,7 @@ const settings = require('./settings');
 const MigrateWindow = require('./windows/migrate');
 const {APP_NAME} = require('./brand');
 const {translate} = require('./l10n');
-const safelyOpenExternal = require('./open-external');
+const openExternal = require('./open-external');
 const packageJSON = require('../package.json');
 
 // Avoid running migrate logic on fresh installs when we can. Not required, just helps
@@ -28,7 +28,7 @@ const writeCurrentVersion = async () => {
 };
 
 const openUpdatePage = () => {
-  safelyOpenExternal('https://desktop.turbowarp.org/');
+  openExternal('https://desktop.turbowarp.org/');
 };
 
 /**

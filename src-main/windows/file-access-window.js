@@ -38,9 +38,7 @@ class FileAccessWindow extends AbstractWindow {
     /** @type {boolean} */
     this.ready = false;
 
-    const ipc = this.window.webContents.ipc;
-
-    ipc.on('init', (e) => {
+    this.ipc.on('init', (e) => {
       this.ready = true;
 
       e.returnValue = {

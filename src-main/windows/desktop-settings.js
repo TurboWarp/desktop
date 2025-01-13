@@ -14,16 +14,14 @@ class DesktopSettingsWindow extends AbstractWindow {
     this.window.setMinimizable(false);
     this.window.setMaximizable(false);
 
-    const ipc = this.window.webContents.ipc;
-
-    ipc.on('get-strings', (event) => {
+    this.ipc.on('get-strings', (event) => {
       event.returnValue = {
         locale: getLocale(),
         strings: getStrings()
       }
     });
 
-    ipc.on('get-settings', (event) => {
+    this.ipc.on('get-settings', (event) => {
       event.returnValue = {
         updateCheckerAllowed: isUpdateCheckerAllowed(),
         updateChecker: settings.updateChecker,
@@ -39,12 +37,12 @@ class DesktopSettingsWindow extends AbstractWindow {
       };
     });
 
-    ipc.handle('set-update-checker', async (event, updateChecker) => {
+    this.ipc.handle('set-update-checker', async (event, updateChecker) => {
       settings.updateChecker = updateChecker;
       await settings.save();
     });
 
-    ipc.handle('enumerate-media-devices', async () => {
+    this.ipc.handle('enumerate-media-devices', async () => {
       // Imported late due to circular dependencies
       const EditorWindow = require('./editor');
       const anEditorWindow = AbstractWindow.getWindowsByClass(EditorWindow)[0];
@@ -55,44 +53,44 @@ class DesktopSettingsWindow extends AbstractWindow {
       return anEditorWindow.enumerateMediaDevices();
     });
 
-    ipc.handle('set-microphone', async (event, microphone) => {
+    this.ipc.handle('set-microphone', async (event, microphone) => {
       settings.microphone = microphone;
       await settings.save();
     });
 
-    ipc.handle('set-camera', async (event, camera) => {
+    this.ipc.handle('set-camera', async (event, camera) => {
       settings.camera = camera;
       await settings.save();
     });
 
-    ipc.handle('set-hardware-acceleration', async (event, hardwareAcceleration) => {
+    this.ipc.handle('set-hardware-acceleration', async (event, hardwareAcceleration) => {
       settings.hardwareAcceleration = hardwareAcceleration;
       await settings.save();
     });
 
-    ipc.handle('set-background-throttling', async (event, backgroundThrottling) => {
+    this.ipc.handle('set-background-throttling', async (event, backgroundThrottling) => {
       settings.backgroundThrottling = backgroundThrottling;
       AbstractWindow.settingsChanged();
       await settings.save();
     });
 
-    ipc.handle('set-bypass-cors', async (event, bypassCORS) => {
+    this.ipc.handle('set-bypass-cors', async (event, bypassCORS) => {
       settings.bypassCORS = bypassCORS;
       await settings.save();
     });
 
-    ipc.handle('set-spellchecker', async (event, spellchecker) => {
+    this.ipc.handle('set-spellchecker', async (event, spellchecker) => {
       settings.spellchecker = spellchecker;
       AbstractWindow.settingsChanged();
       await settings.save();
     });
 
-    ipc.handle('set-exit-fullscreen-on-escape', async (event, exitFullscreenOnEscape) => {
+    this.ipc.handle('set-exit-fullscreen-on-escape', async (event, exitFullscreenOnEscape) => {
       settings.exitFullscreenOnEscape = exitFullscreenOnEscape;
       await settings.save();
     });
 
-    ipc.handle('set-rich-presence', async (event, richPresence) => {
+    this.ipc.handle('set-rich-presence', async (event, richPresence) => {
       settings.richPresence = richPresence;
       if (richPresence) {
         RichPresence.enable();
@@ -102,7 +100,7 @@ class DesktopSettingsWindow extends AbstractWindow {
       await settings.save();
     });
 
-    ipc.handle('open-user-data', async () => {
+    this.ipc.handle('open-user-data', async () => {
       shell.showItemInFolder(app.getPath('userData'));
     });
 

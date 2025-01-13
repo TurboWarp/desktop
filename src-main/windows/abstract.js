@@ -19,9 +19,7 @@ class AbstractWindow {
 
     /** @type {Electron.BrowserWindow} */
     this.window = options.existingWindow || new BrowserWindow(this.getWindowOptions());
-    this.window.webContents.setWindowOpenHandler(this.handleWindowOpen.bind(this));
     this.window.webContents.on('before-input-event', this.handleInput.bind(this));
-    this.window.webContents.on('will-navigate', this.handleWillNavigate.bind(this));
     this.applySettings();
 
     if (!options.existingWindow) {
@@ -40,6 +38,11 @@ class AbstractWindow {
       }
       this.window.setBounds(bounds);
     }
+
+    /**
+     * ipcMain object scoped to the window's main frame only.
+     */
+    this.ipc = this.window.webContents.mainFrame.ipc;
 
     this.initialURL = null;
     this.protocol = null;

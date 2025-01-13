@@ -8,12 +8,15 @@ const packageJSON = require('../package.json');
 /**
  * @typedef Metadata
  * @property {string} root
- * @property {boolean} [standard]
- * @property {boolean} [supportFetch]
- * @property {boolean} [secure]
- * @property {boolean} [brotli]
- * @property {boolean} [embeddable]
- * @property {boolean} [stream]
+ * @property {boolean} [standard] Defaults to false
+ * @property {boolean} [supportFetch] Defaults to false
+ * @property {boolean} [secure] Defaults to false
+ * @property {boolean} [brotli] Defaults to false
+ * @property {boolean} [embeddable] Defaults to false
+ * @property {boolean} [stream] Defaults to false
+ * @property {string} [directoryIndex] Defaults to none
+ * @property {string} [defaultExtension] Defaults to n one
+ * @property {string} [csp] Defaults to none
  */
 
 /** @type {Record<string, Metadata>} */
@@ -26,13 +29,16 @@ const FILE_SCHEMES = {
     embeddable: true, // migration helper
   },
   'tw-desktop-settings': {
-    root: path.resolve(__dirname, '../src-renderer/desktop-settings')
+    root: path.resolve(__dirname, '../src-renderer/desktop-settings'),
+    csp: "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'"
   },
   'tw-privacy': {
-    root: path.resolve(__dirname, '../src-renderer/privacy')
+    root: path.resolve(__dirname, '../src-renderer/privacy'),
+    csp: "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'"
   },
   'tw-about': {
-    root: path.resolve(__dirname, '../src-renderer/about')
+    root: path.resolve(__dirname, '../src-renderer/about'),
+    csp: "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'"
   },
   'tw-packager': {
     root: path.resolve(__dirname, '../src-renderer/packager'),
@@ -43,22 +49,30 @@ const FILE_SCHEMES = {
   'tw-library': {
     root: path.resolve(__dirname, '../dist-library-files'),
     supportFetch: true,
-    brotli: true
+    brotli: true,
+    csp: "default-src 'none';"
   },
   'tw-extensions': {
     root: path.resolve(__dirname, '../dist-extensions'),
     supportFetch: true,
+    brotli: true,
     embeddable: true,
-    stream: true
+    stream: true,
+    directoryIndex: 'index.html',
+    defaultExtension: '.html',
+    csp: "default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; script-src 'self' 'unsafe-inline'"
   },
   'tw-update': {
     root: path.resolve(__dirname, '../src-renderer/update'),
+    csp: "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src https://desktop.turbowarp.org"
   },
   'tw-security-prompt': {
     root: path.resolve(__dirname, '../src-renderer/security-prompt'),
+    csp: "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline';"
   },
   'tw-file-access': {
     root: path.resolve(__dirname, '../src-renderer/file-access'),
+    csp: "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'"
   }
 };
 
@@ -84,6 +98,9 @@ MIME_TYPES.set('.otf', 'font/otf');
 MIME_TYPES.set('.woff', 'font/woff');
 MIME_TYPES.set('.woff2', 'font/woff2');
 MIME_TYPES.set('.hex', 'application/octet-stream');
+MIME_TYPES.set('.zip', 'application/zip');
+MIME_TYPES.set('.xml', 'text/xml');
+MIME_TYPES.set('.md', 'text/markdown');
 
 protocol.registerSchemesAsPrivileged(Object.entries(FILE_SCHEMES).map(([scheme, metadata]) => ({
   scheme,
@@ -154,10 +171,14 @@ const errorPageHeaders = {
  */
 const getBaseProtocolHeaders = metadata => {
   const result = {
-    // Make sure the browser always trusts our content-type
-    // (probably does not do anything here)
+    // Make sure Chromium always trusts our content-type and doesn't try anything clever
     'x-content-type-options': 'nosniff'
   };
+
+  // Optional Content-Security-Policy
+  if (metadata.csp) {
+    result['content-security-policy'] = metadata.csp;
+  }
 
   // Don't allow things like extensiosn to embed custom protocols
   if (!metadata.embeddable) {
@@ -189,23 +210,32 @@ const createModernProtocolHandler = (metadata) => {
     };
 
     try {
-      const parsedURL = new URL(request.url);
-      const resolved = path.join(root, parsedURL.pathname);
+      let parsedURL = new URL(request.url);
+      if (parsedURL.pathname.endsWith('/') && metadata.directoryIndex) {
+        parsedURL = new URL(metadata.directoryIndex, parsedURL);
+      }
+
+      let resolved = path.join(root, parsedURL.pathname);
       if (!resolved.startsWith(root)) {
         return createErrorResponse(new Error('Path traversal blocked'));
       }
-  
-      const fileExtension = path.extname(resolved);
+
+      let fileExtension = path.extname(resolved);
+      if (!fileExtension && metadata.defaultExtension) {
+        fileExtension = metadata.defaultExtension;
+        resolved = `${resolved}${fileExtension}`;
+      }
+
       const mimeType = MIME_TYPES.get(fileExtension);
       if (!mimeType) {
         return createErrorResponse(new Error(`Invalid file extension: ${fileExtension}`));
       }
-  
+
       const headers = {
         ...baseHeaders,
         'content-type': mimeType
       };
-  
+
       if (metadata.brotli) {
         // Reading it all into memory is not ideal, but we've had so many problems with streaming
         // files from the asar that I can settle with this.
@@ -216,7 +246,7 @@ const createModernProtocolHandler = (metadata) => {
           headers
         });
       }
-  
+
       const response = await net.fetch(nodeURL.pathToFileURL(resolved));
       return new Response(response.body, {
         headers
@@ -252,14 +282,23 @@ const createLegacyBrotliProtocolHandler = (metadata) => {
     };
 
     try {
-      const parsedURL = new URL(request.url);
-      const resolved = path.join(root, parsedURL.pathname);
+      let parsedURL = new URL(request.url);
+      if (parsedURL.pathname.endsWith('/') && metadata.directoryIndex) {
+        parsedURL = new URL(metadata.directoryIndex, parsedURL);
+      }
+
+      let resolved = path.join(root, parsedURL.pathname);
       if (!resolved.startsWith(root)) {
         returnErrorPage(new Error('Path traversal blocked'));
         return;
       }
-  
-      const fileExtension = path.extname(resolved);
+
+      let fileExtension = path.extname(resolved);
+      if (!fileExtension && metadata.defaultExtension) {
+        fileExtension = metadata.defaultExtension;
+        resolved = `${resolved}${fileExtension}`;
+      }
+
       const mimeType = MIME_TYPES.get(fileExtension);
       if (!mimeType) {
         returnErrorPage(new Error(`Invalid file extension: ${fileExtension}`));
@@ -309,14 +348,23 @@ const createLegacyFileProtocolHandler = (metadata) => {
     };
 
     try {
-      const parsedURL = new URL(request.url);
-      const resolved = path.join(root, parsedURL.pathname);
+      let parsedURL = new URL(request.url);
+      if (parsedURL.pathname.endsWith('/') && metadata.directoryIndex) {
+        parsedURL = new URL(metadata.directoryIndex, parsedURL);
+      }
+
+      let resolved = path.join(root, parsedURL.pathname);
       if (!resolved.startsWith(root)) {
         returnErrorResponse(new Error('Path traversal blocked'), 'path-traversal');
         return;
       }
-  
-      const fileExtension = path.extname(resolved);
+
+      let fileExtension = path.extname(resolved);
+      if (!fileExtension && metadata.defaultExtension) {
+        fileExtension = metadata.defaultExtension;
+        resolved = `${resolved}${fileExtension}`;
+      }
+
       const mimeType = MIME_TYPES.get(fileExtension);
       if (!mimeType) {
         returnErrorResponse(new Error(`Invalid file extension: ${fileExtension}`), 'invalid-extension');

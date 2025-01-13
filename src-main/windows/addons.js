@@ -18,17 +18,15 @@ class AddonsWindow extends AbstractWindow {
     });
     this.window.setTitle(`${translate('addon-settings')} - ${APP_NAME}`);
 
-    const ipc = this.window.webContents.ipc;
-
-    ipc.on('alert', (event, message) => {
+    this.ipc.on('alert', (event, message) => {
       event.returnValue = prompts.alert(this.window, message);
     });
 
-    ipc.on('confirm', (event, message) => {
+    this.ipc.on('confirm', (event, message) => {
       event.returnValue = prompts.confirm(this.window, message);
     });
 
-    ipc.handle('export-settings', async (event, settings) => {
+    this.ipc.handle('export-settings', async (event, settings) => {
       const result = await dialog.showSaveDialog(this.window, {
         defaultPath: path.join(app.getPath('downloads'), 'turbowarp-addon-settings.json'),
         filters: [

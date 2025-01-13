@@ -1,19 +1,47 @@
 const pathUtil = require('path');
+const {promisify} = require('util');
+const fs = require('fs');
+const zlib = require('zlib');
+const Builder = require('@turbowarp/extensions/builder');
 
-let Builder;
-try {
-  Builder = require('../extensions/development/builder');
-} catch (e) {
-  console.error('Could not load TurboWarp/extensions build scripts, most likely because the submodule is missing.');
-  console.error('Try running: `git submodule init` and `git submodule update`');
-  console.error(e);
-  process.exit(1);
-}
-
-const outputDirectory = pathUtil.join(__dirname, '../dist-extensions/');
 const mode = 'desktop';
 const builder = new Builder(mode);
 const build = builder.build();
-build.export(outputDirectory);
+console.log(`Built extensions (mode: ${mode})`);
 
-console.log(`Built ${mode} copy of extensions.turbowarp.org to ${outputDirectory}`);
+const outputDirectory = pathUtil.join(__dirname, '../dist-extensions/');
+fs.rmSync(outputDirectory, {
+  recursive: true,
+  force: true,
+});
+
+const brotliCompress = promisify(zlib.brotliCompress);
+const mkdir = promisify(fs.mkdir);
+const writeFile = promisify(fs.writeFile);
+
+const exportFile = async (relativePath, file) => {
+  // This part is unfortunately still synchronous
+  const contents = file.read();
+  console.log(`Generated ${relativePath}`);
+
+  const compressed = await brotliCompress(contents);
+
+  const directoryName = pathUtil.dirname(relativePath);
+  await mkdir(pathUtil.join(outputDirectory, directoryName), {
+    recursive: true
+  });
+
+  await writeFile(pathUtil.join(outputDirectory, `${relativePath}.br`), compressed)
+
+  console.log(`Compressed ${relativePath}`);
+};
+
+const promises = Object.entries(build.files).map(([relativePath, file]) => exportFile(relativePath, file));
+Promise.all(promises)
+  .then(() => {
+    console.log(`Exported to ${outputDirectory}`);
+  })
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

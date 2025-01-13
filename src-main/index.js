@@ -7,7 +7,6 @@ if (!process.mas && !app.requestSingleInstanceLock()) {
 }
 
 const path = require('path');
-const openExternal = require('./open-external');
 const AbstractWindow = require('./windows/abstract');
 const EditorWindow = require('./windows/editor');
 const {checkForUpdates} = require('./update-checker');
@@ -104,10 +103,30 @@ app.on('session-created', (session) => {
 });
 
 app.on('web-contents-created', (event, webContents) => {
-  // Overwritten by AbstractWindow. We just set this here as a safety measure.
-  webContents.setWindowOpenHandler((details) => ({
-    action: 'deny'
-  }));
+  // For safety reasons, we add these listeners here so that they apply to any web contents,
+  // even ones that somehow got created without an associated one of our AbstractWindows
+  // also being created.
+
+  webContents.on('will-navigate', (event, url) => {
+    const window = AbstractWindow.getWindowByWebContents(webContents);
+    if (window) {
+      window.handleWillNavigate(event, url);
+    } else {
+      // Unknown web contents; give minimal possible permissions.
+      event.preventDefault();
+    }
+  });
+
+  webContents.setWindowOpenHandler((details) => {
+    const window = AbstractWindow.getWindowByWebContents(webContents);
+    if (window) {
+      return window.handleWindowOpen(details);
+    }
+    // Unknown web contents; give minimal possible permissions.
+    return {
+      action: 'deny'
+    };
+  });
 });
 
 app.on('window-all-closed', () => {

@@ -1,6 +1,8 @@
 const fsPromises = require('fs/promises');
 const path = require('path');
 const nodeURL = require('url');
+const zlib = require('zlib');
+const nodeCrypto = require('crypto');
 const {app, dialog} = require('electron');
 const ProjectRunningWindow = require('./project-running-window');
 const AddonsWindow = require('./addons');
@@ -16,6 +18,7 @@ const settings = require('../settings');
 const privilegedFetch = require('../fetch');
 const RichPresence = require('../rich-presence.js');
 const FileAccessWindow = require('./file-access-window.js');
+const ExtensionDocumentationWindow = require('./extension-documentation.js');
 
 const TYPE_FILE = 'file';
 const TYPE_URL = 'url';
@@ -64,11 +67,25 @@ class OpenedFile {
 
     if (this.type === TYPE_SAMPLE) {
       const sampleRoot = path.resolve(__dirname, '../../dist-extensions/samples/');
-      const joined = path.join(sampleRoot, this.path);
-      if (joined.startsWith(sampleRoot)) {
+      const resolvedPath = path.join(sampleRoot, this.path);
+      if (resolvedPath.startsWith(sampleRoot)) {
+        const compressedPath = `${resolvedPath}.br`;
+        const compressedData = await fsPromises.readFile(compressedPath);
+
+        // dist-extensions is all brotli'd; must decompress
+        const decompressedData = await new Promise((resolve, reject) => {
+          zlib.brotliDecompress(compressedData, (err, res) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(res);
+            }
+          });
+        });
+
         return {
           name: this.path,
-          data: await fsPromises.readFile(joined)
+          data: decompressedData
         };
       }
       throw new Error('Unsafe join');
@@ -186,36 +203,49 @@ const isChildPath = (parent, child) => {
   return !!relative && !relative.startsWith('..') && !path.isAbsolute(relative);
 };
 
+/**
+ * @returns {string} A unique string.
+ */
+const generateFileId = () => {
+  // Note that we can't use the randomUUID from web crypto as we need to support Electron 22.
+  return `desktop_file_id{${nodeCrypto.randomUUID()}}`;
+};
+
 class EditorWindow extends ProjectRunningWindow {
   /**
-   * @param {OpenedFile|null} file
+   * @param {OpenedFile|null} initialFile
    * @param {boolean} isInitiallyFullscreen
    */
-  constructor (file, isInitiallyFullscreen) {
+  constructor (initialFile, isInitiallyFullscreen) {
     super();
 
-    // This file ID system is not quite perfect. Ideally we would completely revoke permission to access
-    // old projects after you load the next one, but our handling of file handles in scratch-gui is
-    // pretty bad right now, so this is the best compromise.
-    this.openedFiles = [];
-    this.activeFileIndex = -1;
+    /**
+     * Ideally we would revoke access after loading a new project, but our file handle handling in
+     * the GUI isn't robust enough for that yet. We do at least use random file handle IDs which
+     * makes it much harder for malicious code in the renderer process to enumerate all previously
+     * opened IDs and overwrite them.
+     * @type {Map<string, OpenedFile>}
+     */
+    this.openedFiles = new Map();
+    this.activeFileId = null;
 
-    if (file !== null) {
-      this.openedFiles.push(file);
-      this.activeFileIndex = 0;
+    if (initialFile !== null) {
+      this.activeFileId = generateFileId();
+      this.openedFiles.set(this.activeFileId, initialFile);
     }
 
     this.openedProjectAt = Date.now();
 
-    const getFileByIndex = (index) => {
-      if (typeof index !== 'number') {
-        throw new Error('File ID not number');
-      }
-      const value = this.openedFiles[index];
-      if (!(value instanceof OpenedFile)) {
+    /**
+     * @param {string} id
+     * @returns {OpenedFile}
+     * @throws if invalid ID
+     */
+    const getFileById = (id) => {
+      if (!this.openedFiles.has(id)) {
         throw new Error('Invalid file ID');
       }
-      return this.openedFiles[index];
+      return this.openedFiles.get(id);
     };
 
     this.window.webContents.on('will-prevent-unload', (event) => {
@@ -255,21 +285,16 @@ class EditorWindow extends ProjectRunningWindow {
       this.updateRichPresence();
     });
 
-    const ipc = this.window.webContents.ipc;
-
-    ipc.on('is-initially-fullscreen', (e) => {
+    this.ipc.on('is-initially-fullscreen', (e) => {
       e.returnValue = isInitiallyFullscreen;
     });
 
-    ipc.handle('get-initial-file', () => {
-      if (this.activeFileIndex === -1) {
-        return null;
-      }
-      return this.activeFileIndex;
+    this.ipc.handle('get-initial-file', () => {
+      return this.activeFileId;
     });
 
-    ipc.handle('get-file', async (event, index) => {
-      const file = getFileByIndex(index);
+    this.ipc.handle('get-file', async (event, id) => {
+      const file = getFileById(id);
       const {name, data} = await file.read();
       return {
         name,
@@ -278,7 +303,7 @@ class EditorWindow extends ProjectRunningWindow {
       };
     });
 
-    ipc.on('set-locale', async (event, locale) => {
+    this.ipc.on('set-locale', async (event, locale) => {
       if (settings.locale !== locale) {
         settings.locale = locale;
         updateLocale(locale);
@@ -296,26 +321,26 @@ class EditorWindow extends ProjectRunningWindow {
       };
     });
 
-    ipc.handle('set-changed', (event, changed) => {
+    this.ipc.handle('set-changed', (event, changed) => {
       this.window.setDocumentEdited(changed);
     });
 
-    ipc.handle('opened-file', (event, index) => {
-      const file = getFileByIndex(index);
+    this.ipc.handle('opened-file', (event, id) => {
+      const file = getFileById(id);
       if (file.type !== TYPE_FILE) {
         throw new Error('Not a file');
       }
-      this.activeFileIndex = index;
+      this.activeFileId = id;
       this.openedProjectAt = Date.now();
       this.window.setRepresentedFilename(file.path);
     });
 
-    ipc.handle('closed-file', () => {
-      this.activeFileIndex = -1;
+    this.ipc.handle('closed-file', () => {
+      this.activeFileId = null;
       this.window.setRepresentedFilename('');
     });
 
-    ipc.handle('show-open-file-picker', async () => {
+    this.ipc.handle('show-open-file-picker', async () => {
       const result = await dialog.showOpenDialog(this.window, {
         properties: ['openFile'],
         defaultPath: settings.lastDirectory,
@@ -330,18 +355,20 @@ class EditorWindow extends ProjectRunningWindow {
         return null;
       }
 
-      const file = result.filePaths[0];
-      settings.lastDirectory = path.dirname(file);
+      const filePath = result.filePaths[0];
+      settings.lastDirectory = path.dirname(filePath);
       await settings.save();
 
-      this.openedFiles.push(new OpenedFile(TYPE_FILE, file));
+      const id = generateFileId();
+      this.openedFiles.set(id, new OpenedFile(TYPE_FILE, filePath));
+
       return {
-        id: this.openedFiles.length - 1,
-        name: path.basename(file)
+        id,
+        name: path.basename(filePath)
       };
     });
 
-    ipc.handle('show-save-file-picker', async (event, suggestedName) => {
+    this.ipc.handle('show-save-file-picker', async (event, suggestedName) => {
       const result = await dialog.showSaveDialog(this.window, {
         defaultPath: path.join(settings.lastDirectory, suggestedName),
         filters: [
@@ -355,42 +382,44 @@ class EditorWindow extends ProjectRunningWindow {
         return null;
       }
 
-      const file = result.filePath;
+      const filePath = result.filePath;
 
-      const unsafePath = getUnsafePaths().find(i => isChildPath(i.path, file));
+      const unsafePath = getUnsafePaths().find(i => isChildPath(i.path, filePath));
       if (unsafePath) {
-        // No need to wait for the message box to close
+        // No need to block until the message box is closed
         dialog.showMessageBox(this.window, {
           type: 'error',
           title: APP_NAME,
           message: translate('unsafe-path.title'),
           detail: translate(`unsafe-path.details`)
             .replace('{APP_NAME}', unsafePath.app)
-            .replace('{file}', file),
+            .replace('{file}', filePath),
           noLink: true
         });  
         return null;
       }
 
-      settings.lastDirectory = path.dirname(file);
+      settings.lastDirectory = path.dirname(filePath);
       await settings.save();
 
-      this.openedFiles.push(new OpenedFile(TYPE_FILE, file));
+      const id = generateFileId();
+      this.openedFiles.set(id, new OpenedFile(TYPE_FILE, filePath));
+
       return {
-        id: this.openedFiles.length - 1,
-        name: path.basename(file)
+        id,
+        name: path.basename(filePath)
       };
     });
 
-    ipc.handle('get-preferred-media-devices', () => {
+    this.ipc.handle('get-preferred-media-devices', () => {
       return {
         microphone: settings.microphone,
         camera: settings.camera
       };
     });
 
-    ipc.on('start-write-stream', async (startEvent, index) => {
-      const file = getFileByIndex(index);
+    this.ipc.on('start-write-stream', async (startEvent, id) => {
+      const file = getFileById(id);
       if (file.type !== TYPE_FILE) {
         throw new Error('Not a file');
       }
@@ -462,39 +491,39 @@ class EditorWindow extends ProjectRunningWindow {
       port.start();
     });
 
-    ipc.on('alert', (event, message) => {
+    this.ipc.on('alert', (event, message) => {
       event.returnValue = prompts.alert(this.window, message);
     });
 
-    ipc.on('confirm', (event, message) => {
+    this.ipc.on('confirm', (event, message) => {
       event.returnValue = prompts.confirm(this.window, message);
     });
 
-    ipc.handle('open-packager', () => {
+    this.ipc.handle('open-packager', () => {
       PackagerWindow.forEditor(this);
     });
 
-    ipc.handle('open-new-window', () => {
+    this.ipc.handle('open-new-window', () => {
       EditorWindow.newWindow();
     });
 
-    ipc.handle('open-addon-settings', (event, search) => {
+    this.ipc.handle('open-addon-settings', (event, search) => {
       AddonsWindow.show(search);
     });
 
-    ipc.handle('open-desktop-settings', () => {
+    this.ipc.handle('open-desktop-settings', () => {
       DesktopSettingsWindow.show();
     });
 
-    ipc.handle('open-privacy', () => {
+    this.ipc.handle('open-privacy', () => {
       PrivacyWindow.show();
     });
 
-    ipc.handle('open-about', () => {
+    this.ipc.handle('open-about', () => {
       AboutWindow.show();
     });
 
-    ipc.handle('get-advanced-customizations', async () => {
+    this.ipc.handle('get-advanced-customizations', async () => {
       const USERSCRIPT_PATH = path.join(app.getPath('userData'), 'userscript.js');
       const USERSTYLE_PATH = path.join(app.getPath('userData'), 'userstyle.css');
 
@@ -509,7 +538,7 @@ class EditorWindow extends ProjectRunningWindow {
       };
     });
 
-    ipc.handle('check-drag-and-drop-path', (event, filePath) => {
+    this.ipc.handle('check-drag-and-drop-path', (event, filePath) => {
       FileAccessWindow.check(filePath);
     });
 
@@ -519,7 +548,7 @@ class EditorWindow extends ProjectRunningWindow {
      */
     this.isInEditorFullScreen = false;
 
-    ipc.handle('set-is-full-screen', (event, isFullScreen) => {
+    this.ipc.handle('set-is-full-screen', (event, isFullScreen) => {
       this.isInEditorFullScreen = !!isFullScreen;
     });
 
@@ -549,7 +578,7 @@ class EditorWindow extends ProjectRunningWindow {
   enumerateMediaDevices () {
     // Used by desktop settings
     return new Promise((resolve, reject) => {
-      this.window.webContents.ipc.once('enumerated-media-devices', (event, result) => {
+      this.ipc.once('enumerated-media-devices', (event, result) => {
         if (typeof result.error !== 'undefined') {
           reject(result.error);
         } else {
@@ -561,13 +590,36 @@ class EditorWindow extends ProjectRunningWindow {
   }
 
   handleWindowOpen (details) {
+    const url = new URL(details.url);
+    const params = new URLSearchParams(url.search);
+
     // Open extension sample projects in-app
-    const match = details.url.match(
-      /^tw-editor:\/\/\.\/gui\/editor\?project_url=(https:\/\/extensions\.turbowarp\.org\/samples\/.+\.sb3)$/
-    );
-    if (match) {
-      EditorWindow.openFiles([match[1]], false, '');
+    if (
+      url.protocol === 'tw-editor:' &&
+      url.host === '.' &&
+      params.has('project_url')
+    ) {
+      const projectUrl = params.get('project_url');
+      const parsedFile = parseOpenedFile(projectUrl, null);
+      if (parsedFile.type === TYPE_SAMPLE) {
+        new EditorWindow(parsedFile, null);
+        return {
+          action: 'deny'
+        };
+      }
     }
+
+    // Open extension documentation in-app
+    const extensionsDocsMatch = details.url.match(
+      /^https:\/\/extensions\.turbowarp\.org\/([\w_\-.\/]+)$/
+    );
+    if (extensionsDocsMatch) {
+      ExtensionDocumentationWindow.open(extensionsDocsMatch[1]);
+      return {
+        action: 'deny'
+      };
+    }
+
     return super.handleWindowOpen(details);
   }
 

@@ -1,7 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {openLoadingProject, closeLoadingProject} from 'scratch-gui/src/reducers/modals';
+import {
+  openLoadingProject,
+  closeLoadingProject,
+  openInvalidProjectModal
+} from 'scratch-gui/src/reducers/modals';
 import {
   requestProjectUpload,
   setProjectId,
@@ -10,7 +14,11 @@ import {
   onLoadedProject,
   requestNewProject
 } from 'scratch-gui/src/reducers/project-state';
-import {setFileHandle, setUsername} from 'scratch-gui/src/reducers/tw';
+import {
+  setFileHandle,
+  setUsername,
+  setProjectError
+} from 'scratch-gui/src/reducers/tw';
 import {WrappedFileHandle} from './filesystem-api.js';
 import {setStrings} from '../prompt/prompt.js';
 
@@ -140,8 +148,8 @@ const DesktopHOC = function (WrappedComponent) {
         }
       })().catch(error => {
         console.error(error);
-        alert(error);
 
+        this.props.onShowErrorModal(error);
         this.props.onLoadingCompleted();
         this.props.onLoadedProject(this.props.loadingState, false);
         this.props.onHasInitialProject(false, this.props.loadingState);
@@ -193,6 +201,7 @@ const DesktopHOC = function (WrappedComponent) {
         onRequestNewProject,
         onSetFileHandle,
         onSetReduxUsername,
+        onShowErrorModal,
         vm,
         ...props
       } = this.props;
@@ -241,7 +250,7 @@ const DesktopHOC = function (WrappedComponent) {
     loadingState: PropTypes.string.isRequired,
     projectChanged: PropTypes.bool.isRequired,
     fileHandle: PropTypes.shape({
-      id: PropTypes.number.isRequired
+      id: PropTypes.string.isRequired
     }),
     isFullScreen: PropTypes.bool.isRequired,
     reduxUsername: PropTypes.string.isRequired,
@@ -253,6 +262,7 @@ const DesktopHOC = function (WrappedComponent) {
     onRequestNewProject: PropTypes.func.isRequired,
     onSetFileHandle: PropTypes.func.isRequired,
     onSetReduxUsername: PropTypes.func.isRequired,
+    onShowErrorModal: PropTypes.func.isRequired,
     vm: PropTypes.shape({
       loadProject: PropTypes.func.isRequired
     }).isRequired
@@ -283,7 +293,11 @@ const DesktopHOC = function (WrappedComponent) {
     },
     onRequestNewProject: () => dispatch(requestNewProject(false)),
     onSetFileHandle: fileHandle => dispatch(setFileHandle(fileHandle)),
-    onSetReduxUsername: (username) => dispatch(setUsername(username))
+    onSetReduxUsername: username => dispatch(setUsername(username)),
+    onShowErrorModal: error => {
+      dispatch(setProjectError(error));
+      dispatch(openInvalidProjectModal());
+    }
   });
 
   return connect(
