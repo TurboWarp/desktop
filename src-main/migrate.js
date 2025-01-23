@@ -117,12 +117,7 @@ const migrate = async () => {
   if (
     settings.dataVersion > MigrateWindow.LATEST_VERSION ||
     semverLt(desktopVersion, settings.desktopVersion) ||
-    (semverLt(electronVersion, settings.electronVersion) && !(
-      // Our v1.13.0-beta.3 uses Electron 32.2.7, but we then downgraded to 32.0.2 to workaround
-      // a regression. This is technically a downgrade but it's a very small change so there is
-      // no data loss, so we don't want to bother the user about the downgrade.
-      electronVersion === '32.0.2' && settings.electronVersion === '32.2.7'
-    ))
+    semverLt(electronVersion, settings.electronVersion)
   ) {
     // Something was downgraded. This is not something we officially support.
     const changes = [];
