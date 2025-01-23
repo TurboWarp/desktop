@@ -1,5 +1,16 @@
 [
   {
+    "version": "1.13.0-beta.4",
+    "date": "2025-1-23",
+    "notes": [
+      "Compress extensions to reduce app size by about 7MB",
+      "Various security hardening",
+      "Various extension updates",
+      "Various packager fixes",
+      "Linux: fix file pickers not using portals in 1.13.0-beta.3"
+    ]
+  },
+  {
     "version": "1.13.0-beta.3",
     "date": "2024-12-19",
     "notes": [
