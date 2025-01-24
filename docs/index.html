@@ -545,7 +545,7 @@
     <script type="generated-locale-names">{"en":"English","ca":"Català","de":"Deutsch","es":"Español (España)","fi":"Suomi","it":"Italiano","ja":"日本語","ko":"한국어","nb":"Norsk Bokmål","nl":"Nederlands","pt-br":"Português Brasileiro","ru":"Русский","sl":"Slovenščina","sv":"Svenska","tr":"Türkçe","uk":"Українська","zh-cn":"简体中文"}</script>
 
     <script>
-      const VERSION = '1.12.3';
+      const VERSION = '1.13.0';
 
       // OS-specific styles
       const getOS = () => {
@@ -805,7 +805,7 @@
       <div><b l10n="webapp" l10n-description="Followed by link to turbowarp.org/editor">Or use our web app in any browser:</b> <a href="https://turbowarp.org/editor">turbowarp.org/editor</a></div>
 
       <!-- when there is no beta update, leave this hidden instead of removing so we don't lose the l10n string -->
-      <div>
+      <div hidden>
         <b class="beta-badge" l10n="beta" l10n-description="Followed by a version number eg. v1.7.2-beta.1 that is a link to learn more about the current beta release.">Beta version available:</b>
         <a href="https://github.com/TurboWarp/desktop/releases/tag/v1.13.0-beta.4">v1.13.0 beta 4</a>
       </div>
@@ -923,6 +923,17 @@
       <h2 l10n="changelog">Changelog</h2>
       <div lang="en">
         <!-- CHANGELOG_START -->
+        <div data-version="1.13.0">
+          <h3>v1.13.0 (January 24 2025)</h3>
+          <ul>
+            <li>Added Steamworks extension</li>
+            <li>Extension documentation opens inside the app and does not require an internet connection</li>
+            <li>Optimized pen rendering</li>
+            <li>Improved reliability of file saving</li>
+            <li>Removed restricted trademarks</li>
+            <li>Various bug fixes and security hardening</li>
+          </ul>
+        </div>
         <div data-version="1.12.3">
           <h3>v1.12.3 (June 2 2024)</h3>
           <ul>
