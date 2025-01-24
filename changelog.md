@@ -2,22 +2,14 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.13.0-beta.4 (2025-01-23)
-
- - Compress extensions to reduce app size by about 7MB
- - Various security hardening
- - Various extension updates
- - Various packager fixes
- - Linux: fix file pickers not using portals in 1.13.0-beta.3
-
-# 1.13.0-beta.3 (2024-12-19)
+# 1.13.0 (2025-01-24)
 
  - Added Steamworks extension
- - Extension documentation now opens inside the app and does not require an internet connection
+ - Extension documentation opens inside the app and does not require an internet connection
  - Optimized pen rendering
  - Improved reliability of file saving
  - Removed restricted trademarks
- - Various bug fixes
+ - Various bug fixes and security hardening
 
 # 1.12.3 (2024-06-02)
 
