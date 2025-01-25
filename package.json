@@ -183,7 +183,6 @@
       "plugs": [
         "default",
         "camera",
-        "audio-playback",
         "audio-record",
         "joystick",
         "removable-media"
