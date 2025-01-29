@@ -57,7 +57,7 @@ jobs:
         # @electron/notaraize documentation says key should be an absolute path
         export APPLE_API_KEY="$(pwd)/$APPLE_API_KEY_NAME"
         node release-automation/build.js --mac --universal --production
-        node release-automation/build.js --mac-legacy --x64 --production
+        node release-automation/build.js --mac-legacy-10.13-10.14 --x64 --production
         # for safety
         rm "$APPLE_API_KEY_NAME"
       env:

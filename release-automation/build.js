@@ -251,7 +251,7 @@ const buildMac = () => build({
   }
 });
 
-const buildMacLegacy = () => {
+const buildMacLegacy10131014 = () => {
   // This is the last release of Electron 26
   // Electron 27 dropped support for macOS 10.13 and 10.14
   const LEGACY_ELECTRON_VERSION = '26.6.10';
@@ -263,7 +263,7 @@ const buildMacLegacy = () => {
     legacy: true,
     extraConfig: {
       mac: {
-        artifactName: '${productName} Legacy Setup ${version}.${ext}'
+        artifactName: '${productName} Legacy 10.13 10.14 Setup ${version}.${ext}'
       }
     },
     prepare: async (archName) => {
@@ -318,7 +318,7 @@ const run = async () => {
     '--windows-dir': buildWindowsDir,
     '--microsoft-store': buildMicrosoftStore,
     '--mac': buildMac,
-    '--mac-legacy': buildMacLegacy,
+    '--mac-legacy-10.13-10.14': buildMacLegacy10131014,
     '--mac-dir': buildMacDir,
     '--debian': buildDebian,
     '--tarball': buildTarball,

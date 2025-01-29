@@ -28,8 +28,8 @@ You must specify which platform to build for:
 --mac
     Create app for macOS 10.15 and later.
 
---mac-legacy
-    Create app for macOS 10.13 and later (less secure than --mac).
+--mac-legacy-10.13-10.14
+    Create app for macOS 10.13 and 10.14 (less secure than --mac).
 
 --mac-dir
     Generate executables for macOS 10.15 and later but don't package into a complete DMG installer.

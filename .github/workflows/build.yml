@@ -37,7 +37,7 @@ jobs:
       if: runner.os == 'macOS'
       run: |
         node release-automation/build.js --mac --universal
-        node release-automation/build.js --mac-legacy --x64
+        node release-automation/build.js --mac-legacy-10.13-10.14 --x64
     - name: Package Linux
       if: runner.os == 'Linux'
       run: |
