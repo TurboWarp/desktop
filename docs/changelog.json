@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.13.2",
+    "date": "2025-1-30",
+    "notes": [
+      "Fixed disable cloud variables option in the \"Edit\" menu",
+      "Fixed downloading files in packaged projects",
+      "Windows: Fixed app name in task manager"
+    ]
+  },
+  {
     "version": "1.13.0",
     "date": "2025-1-24",
     "notes": [

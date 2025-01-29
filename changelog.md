@@ -2,6 +2,12 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.13.2 (2025-01-30)
+
+ - Fixed disable cloud variables option in the "Edit" menu
+ - Fixed downloading files in packaged projects
+ - Windows: Fixed app name in task manager
+
 # 1.13.0 (2025-01-24)
 
  - Added Steamworks extension
