@@ -5,7 +5,8 @@ Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **form
 # 1.13.2 (2025-01-30)
 
  - Fixed disable cloud variables option in the "Edit" menu
- - Fixed downloading files in packaged projects
+ - Fixed using files extension to download files in packaged projects
+ - Fixed pointerlock extension returning incorrect values for y position
  - Windows: Fixed app name in task manager
 
 # 1.13.0 (2025-01-24)
