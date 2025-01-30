@@ -4,7 +4,8 @@
     "date": "2025-1-30",
     "notes": [
       "Fixed disable cloud variables option in the \"Edit\" menu",
-      "Fixed downloading files in packaged projects",
+      "Fixed using files extension to download files in packaged projects",
+      "Fixed pointerlock extension returning incorrect values for y position",
       "Windows: Fixed app name in task manager"
     ]
   },
