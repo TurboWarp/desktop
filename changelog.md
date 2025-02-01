@@ -7,6 +7,9 @@ Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **form
  - Fixed disable cloud variables option in the "Edit" menu
  - Fixed using files extension to download files in packaged projects
  - Fixed pointerlock extension returning incorrect values for y position
+ - Fixed more motion direction to block returning values in incorrect range
+ - Fixed tween extension resuming incorrectly after project is paused
+ - Fixed more timers extension being affected by system time changes
  - Windows: Fixed app name in task manager
 
 # 1.13.0 (2025-01-24)
