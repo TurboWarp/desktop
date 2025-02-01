@@ -130,7 +130,7 @@ const generateJSON = (releases) => {
   for (const {version, date, notes} of releases) {
     data.push({
       version,
-      date: `${date.getUTCFullYear()}-${date.getMonth() + 1}-${date.getUTCDate()}`,
+      date: `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`,
       notes
     });
   }
