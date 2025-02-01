@@ -2,7 +2,7 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.13.2 (2025-01-30)
+# 1.13.2 (2025-02-01)
 
  - Fixed disable cloud variables option in the "Edit" menu
  - Fixed using files extension to download files in packaged projects

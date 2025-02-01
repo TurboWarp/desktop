@@ -1,7 +1,7 @@
 [
   {
     "version": "1.13.2",
-    "date": "2025-1-30",
+    "date": "2025-2-1",
     "notes": [
       "Fixed disable cloud variables option in the \"Edit\" menu",
       "Fixed using files extension to download files in packaged projects",
