@@ -66,6 +66,10 @@
           <li>Fixed disable cloud variables option in the "Edit" menu</li>
           <li>Fixed using files extension to download files in packaged projects</li>
           <li>Fixed pointerlock extension returning incorrect values for y position</li>
+          <li>Fixed more motion "direction to" block returning values in incorrect range</li>
+          <li>Fixed tween extension resuming incorrectly when project is paused and unpaused</li>
+          <li>Fixed more timers extension being affected by system time changes</li>
+          <li>Fixed video extension not pausing when pause button pressed in packaged projects</li>
         </ul>
       </description>
     </release>
