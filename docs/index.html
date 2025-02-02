@@ -464,11 +464,11 @@
       [data-os="mac-modern"] [data-if-os="mac-modern"] {
         display: initial;
       }
-      [data-os="mac-legacy"] [data-if-os="mac-legacy"] {
+      [data-os="mac-10.13-10.14"] [data-if-os="mac-10.13-10.14"] {
         display: initial;
       }
       [data-os="mac-modern"] [data-if-os="mac-any"],
-      [data-os="mac-legacy"] [data-if-os="mac-any"] {
+      [data-os="mac-10.13-10.14"] [data-if-os="mac-any"] {
         display: initial;
       }
       [data-os="linux"] [data-if-os="linux"] {
@@ -545,9 +545,7 @@
     <script type="generated-locale-names">{"en":"English","ca":"Català","de":"Deutsch","es":"Español (España)","fi":"Suomi","it":"Italiano","ja":"日本語","ko":"한국어","nb":"Norsk Bokmål","nl":"Nederlands","pt-br":"Português Brasileiro","ru":"Русский","sl":"Slovenščina","sv":"Svenska","tr":"Türkçe","uk":"Українська","zh-cn":"简体中文"}</script>
 
     <script>
-      // FIXME: when >= 1.13.2 is released, update the .deb packages to not hardcode 1.13.1
-      // FIXME: when >= 1.13.2 is released, macOS legacy download name may need to be updated
-      const VERSION = '1.13.0';
+      const VERSION = '1.13.2';
 
       // OS-specific styles
       const getOS = () => {
@@ -558,7 +556,7 @@
         if (navigator.userAgent.includes('CrOS')) return 'unsupported';
         // macOS 10.13 and 10.14 are legacy platforms
         // crazy regex handles some browsers doing 10_13 and others doing 10.13, and also avoids a hypothetical 10.130 from being detected.
-        if (/mac os x 10[._]1[34][^\d]/i.test(navigator.userAgent)) return 'mac-legacy';
+        if (/mac os x 10[._]1[34][^\d]/i.test(navigator.userAgent)) return 'mac-10.13-10.14';
         if (/mac/i.test(navigator.userAgent)) return 'mac-modern';
         if (/windows nt 6/i.test(navigator.userAgent)) return 'windows-legacy';
         if (/windows/i.test(navigator.userAgent)) return 'windows-modern';
@@ -781,8 +779,8 @@
         <a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Setup-{version}.dmg" l10n="mac-modern-download" l10n-description="Universal is Apple's marketing term for an app that works on Intel and ARM Macs">Download for macOS 10.15 and later (Universal)</a>
       </div>
 
-      <div data-if-os="mac-legacy">
-        <a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Legacy-Setup-{version}.dmg" l10n="mac-legacy-download">Download for macOS 10.13 or 10.14</a>
+      <div data-if-os="mac-10.13-10.14">
+        <a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Legacy-10.13-10.14-Setup-{version}.dmg" l10n="mac-legacy-download">Download for macOS 10.13 or 10.14</a>
       </div>
 
       <div data-if-os="linux">
@@ -1320,7 +1318,7 @@
     <div class="manual-installation section" id="mac">
       <h2 l10n="mac-legacy-header">Install on macOS 10.13 or 10.14</h2>
       <p l10n="mac-legacy-body">We will support old versions of macOS as long as it is not an unreasonable burden. Open the .DMG, then drag TurboWarp into Applications. If it tells you that TurboWarp already exists, choose "Replace".</p>
-      <a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Legacy-Setup-{version}.dmg" l10n="mac-legacy-download">Download for macOS 10.13 or 10.14</a>
+      <a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Legacy-10.13-10.14-Setup-{version}.dmg" l10n="mac-legacy-download">Download for macOS 10.13 or 10.14</a>
     </div>
 
     <div class="manual-installation section" id="linux">
@@ -1337,9 +1335,9 @@
       </code>
       <p l10n="deb2" l10n-description="apt refers to a Linux command line tool">Or manually install the .deb (won't add apt repository):</p>
       <ul class="download-list">
-        <li><a class="download-button" href="https://github.com/TurboWarp/desktop/releases/download/v1.13.1/TurboWarp-linux-amd64-1.13.1.deb">x86 64-bit</a></li>
-        <li><a class="download-button" href="https://github.com/TurboWarp/desktop/releases/download/v1.13.1/TurboWarp-linux-arm64-1.13.1.deb">ARM 64-bit</a></li>
-        <li><a class="download-button" href="https://github.com/TurboWarp/desktop/releases/download/v1.13.1/TurboWarp-linux-armv7l-1.13.1.deb">ARMv7l</a></li>
+        <li><a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-linux-amd64-{version}.deb">x86 64-bit</a></li>
+        <li><a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-linux-arm64-{version}.deb">ARM 64-bit</a></li>
+        <li><a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-linux-armv7l-{version}.deb">ARMv7l</a></li>
       </ul>
 
       <h3>Arch User Repository</h3>
