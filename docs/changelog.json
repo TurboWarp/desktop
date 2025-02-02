@@ -1,15 +1,15 @@
 [
   {
     "version": "1.13.2",
-    "date": "2025-2-1",
+    "date": "2025-2-2",
     "notes": [
       "Fixed disable cloud variables option in the \"Edit\" menu",
-      "Fixed using files extension to download files in packaged projects",
+      "Fixed pause button in packaged projects not adjusting timers used by blocks like \"glide to\" when unpausing",
+      "Fixed pause button in packaged projects not pausing videos from the video extension",
+      "Fixed files extension failing to download files in packaged projects",
       "Fixed pointerlock extension returning incorrect values for y position",
-      "Fixed more motion \"direction to\" block returning values in incorrect range",
-      "Fixed tween extension resuming incorrectly when project is paused and unpaused",
+      "Fixed more motion extension \"direction to\" block returning values in incorrect range",
       "Fixed more timers extension being affected by system time changes",
-      "Fixed video extension not pausing when pause button pressed in packaged projects",
       "Windows: Fixed app name in task manager"
     ]
   },

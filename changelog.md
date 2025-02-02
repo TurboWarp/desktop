@@ -2,15 +2,15 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.13.2 (2025-02-01)
+# 1.13.2 (2025-02-02)
 
  - Fixed disable cloud variables option in the "Edit" menu
- - Fixed using files extension to download files in packaged projects
+ - Fixed pause button in packaged projects not adjusting timers used by blocks like "glide to" when unpausing
+ - Fixed pause button in packaged projects not pausing videos from the video extension
+ - Fixed files extension failing to download files in packaged projects
  - Fixed pointerlock extension returning incorrect values for y position
- - Fixed more motion "direction to" block returning values in incorrect range
- - Fixed tween extension resuming incorrectly when project is paused and unpaused
+ - Fixed more motion extension "direction to" block returning values in incorrect range
  - Fixed more timers extension being affected by system time changes
- - Fixed video extension not pausing when pause button pressed in packaged projects
  - Windows: Fixed app name in task manager
 
 # 1.13.0 (2025-01-24)
