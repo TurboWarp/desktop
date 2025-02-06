@@ -17,6 +17,11 @@ const ELECTRON_22_FINAL = '22.3.27';
 // Electron 26 is the last version to support macOS 10.13, 10.14
 const ELECTRON_26_FINAL = '26.6.10';
 
+// Electron 32 is the last version to support macOS 10.15
+// TODO: Electron 32 is still being supported. There will likely be a 32.3.1 etc.
+// before support is dropped. Replace this once that happens.
+const ELECTRON_32_FINAL = '32.3.0';
+
 /**
  * @param {string} platformName
  * @returns {string} a string that indexes into Arch[...]
@@ -275,6 +280,29 @@ const buildMacLegacy10131014 = () => build({
   }
 });
 
+const buildMacLegacy1015 = () => build({
+  platformName: 'MAC',
+  platformType: 'dmg',
+  manageUpdates: true,
+  legacy: true,
+  extraConfig: {
+    mac: {
+      artifactName: '${productName} Legacy 10.15 Setup ${version}.${ext}'
+    }
+  },
+  prepare: async (archName) => {
+    const electronDist = await downloadElectronArtifact({
+      version: ELECTRON_32_FINAL,
+      platform: 'darwin',
+      artifactName: 'electron',
+      arch: archName
+    });
+    return {
+      electronDist
+    };
+  }
+});
+
 const buildMacDir = () => build({
   platformName: 'MAC',
   platformType: 'dir',
@@ -314,6 +342,7 @@ const run = async () => {
     '--microsoft-store': buildMicrosoftStore,
     '--mac': buildMac,
     '--mac-legacy-10.13-10.14': buildMacLegacy10131014,
+    '--mac-legacy-10.15': buildMacLegacy1015,
     '--mac-dir': buildMacDir,
     '--debian': buildDebian,
     '--tarball': buildTarball,
