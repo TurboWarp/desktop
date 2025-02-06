@@ -11,6 +11,12 @@ const {Platform, Arch} = builder;
 
 const isProduction = process.argv.includes('--production');
 
+// Electron 22 is the last version to support Windows 7, 8, 8.1
+const ELECTRON_22_FINAL = '22.3.27';
+
+// Electron 26 is the last version to support macOS 10.13, 10.14
+const ELECTRON_26_FINAL = '26.6.10';
+
 /**
  * @param {string} platformName
  * @returns {string} a string that indexes into Arch[...]
@@ -190,33 +196,28 @@ const buildWindows = () => build({
   manageUpdates: true
 });
 
-const buildWindowsLegacy = async () => {
-  // This is the last release of Electron 22, which no longer receives updates.
-  const LEGACY_ELECTRON_VERSION = '22.3.27';
-
-  return build({
-    platformName: 'WINDOWS',
-    platformType: 'nsis',
-    manageUpdates: true,
-    legacy: true,
-    extraConfig: {
-      nsis: {
-        artifactName: '${productName} Legacy Setup ${version} ${arch}.${ext}'
-      }
-    },
-    prepare: async (archName) => {
-      const electronDist = await downloadElectronArtifact({
-        version: LEGACY_ELECTRON_VERSION,
-        platform: 'win32',
-        artifactName: 'electron',
-        arch: archName
-      });
-      return {
-        electronDist
-      };
+const buildWindowsLegacy = () => build({
+  platformName: 'WINDOWS',
+  platformType: 'nsis',
+  manageUpdates: true,
+  legacy: true,
+  extraConfig: {
+    nsis: {
+      artifactName: '${productName} Legacy Setup ${version} ${arch}.${ext}'
     }
-  });
-};
+  },
+  prepare: async (archName) => {
+    const electronDist = await downloadElectronArtifact({
+      version: ELECTRON_22_FINAL,
+      platform: 'win32',
+      artifactName: 'electron',
+      arch: archName
+    });
+    return {
+      electronDist
+    };
+  }
+});
 
 const buildWindowsPortable = () => build({
   platformName: 'WINDOWS',
@@ -251,34 +252,28 @@ const buildMac = () => build({
   }
 });
 
-const buildMacLegacy10131014 = () => {
-  // This is the last release of Electron 26
-  // Electron 27 dropped support for macOS 10.13 and 10.14
-  const LEGACY_ELECTRON_VERSION = '26.6.10';
-
-  return build({
-    platformName: 'MAC',
-    platformType: 'dmg',
-    manageUpdates: true,
-    legacy: true,
-    extraConfig: {
-      mac: {
-        artifactName: '${productName} Legacy 10.13 10.14 Setup ${version}.${ext}'
-      }
-    },
-    prepare: async (archName) => {
-      const electronDist = await downloadElectronArtifact({
-        version: LEGACY_ELECTRON_VERSION,
-        platform: 'darwin',
-        artifactName: 'electron',
-        arch: archName
-      });
-      return {
-        electronDist
-      };
+const buildMacLegacy10131014 = () => build({
+  platformName: 'MAC',
+  platformType: 'dmg',
+  manageUpdates: true,
+  legacy: true,
+  extraConfig: {
+    mac: {
+      artifactName: '${productName} Legacy 10.13 10.14 Setup ${version}.${ext}'
     }
-  });
-};
+  },
+  prepare: async (archName) => {
+    const electronDist = await downloadElectronArtifact({
+      version: ELECTRON_26_FINAL,
+      platform: 'darwin',
+      artifactName: 'electron',
+      arch: archName
+    });
+    return {
+      electronDist
+    };
+  }
+});
 
 const buildMacDir = () => build({
   platformName: 'MAC',
