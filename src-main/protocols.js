@@ -172,7 +172,10 @@ const errorPageHeaders = {
 const getBaseProtocolHeaders = metadata => {
   const result = {
     // Make sure Chromium always trusts our content-type and doesn't try anything clever
-    'x-content-type-options': 'nosniff'
+    'x-content-type-options': 'nosniff',
+
+    // Needed for collectJavaScriptCallStack() in Electron 34.
+    'document-policy': 'include-js-call-stacks-in-crash-reports=?1'
   };
 
   // Optional Content-Security-Policy

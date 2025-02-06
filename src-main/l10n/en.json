@@ -486,5 +486,13 @@
   "extension-documentation.title": {
     "string": "{APP_NAME} Extension Documentation",
     "developer_comment": "Title of in-app window for viewing extension documentation."
+  },
+  "unresponsive.message": {
+    "string": "This window is unresponsive. It will continue to run in the background.",
+    "developer_comment": "Alert that appears when a window stops responding (stuck in infinite loop)"
+  },
+  "unresponsive.checkbox": {
+    "string": "Ignore future warnings",
+    "developer_comment": "Option in unresponsive window alert to ignore additional alerts."
   }
 }
