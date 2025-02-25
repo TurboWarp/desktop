@@ -424,36 +424,48 @@
     "developer_comment": "Appears in file saving dialog when saving some types of packaged projects"
   },
   "security-prompt.title": {
-    "string": "Extension Security",
-    "developer_comment": "Title of extension security prompt window"
+    "string": "Security",
+    "developer_comment": "Title of desktop app's security prompt window"
   },
   "security-prompt.allow": {
     "string": "Allow",
-    "developer_comment": "Title of extension security prompt window. This button allows the permission."
+    "developer_comment": "Title of desktop app's security prompt window. This button grants the request."
   },
   "security-prompt.deny": {
     "string": "Deny",
-    "developer_comment": "Title of extension security prompt window. This button denies the permission."
+    "developer_comment": "Title of desktop app's security prompt window. This button denies the request."
+  },
+  "security-prompt.node-integration1": {
+    "string": "{APP_NAME} was started in a special mode that will give any opened project unrestricted access to your computer. This would allow stealing passwords and installing malware.",
+    "developer_comment": "Part of the desktop app's security prompt window"
+  },
+  "security-prompt.node-integration2": {
+    "string": "The {APP_NAME} developers are not responsible for any damages.",
+    "developer_comment": "Part of the desktop app's security prompt window"
+  },
+  "security-prompt.node-integration3": {
+    "string": "If you were not expecting to see this screen, please click \"Deny\" to safely exit.",
+    "developer_comment": "Part of the desktop app's security prompt window"
   },
   "security-prompt.read-clipboard1": {
     "string": "The project wants to read data from your clipboard.",
-    "developer_comment": "Part of the extension security prompt window"
+    "developer_comment": "Part of the desktop app's security prompt window"
   },
   "security-prompt.read-clipboard2": {
     "string": "If your clipboard contains things like passwords, the project may be able to share those with other users or servers.",
-    "developer_comment": "Part of the extension security prompt window"
+    "developer_comment": "Part of the desktop app's security prompt window"
   },
   "security-prompt.read-clipboard3": {
     "string": "Clipboard access may not work on some systems. If allowed, further clipboard reads will be automatically allowed.",
-    "developer_comment": "Part of the extension security prompt window"
+    "developer_comment": "Part of the desktop app's security prompt window"
   },
   "security-prompt.notifications1": {
     "string": "The project wants to display notifications.",
-    "developer_comment": "Part of the extension security prompt window"
+    "developer_comment": "Part of the desktop app's security prompt window"
   },
   "security-prompt.notifications2": {
     "string": "If allowed, you may be prompted to enable notifications by your operating system, and further notifications will be automatically allowed.",
-    "developer_comment": "Part of the extension security prompt window"
+    "developer_comment": "Part of the desktop app's security prompt window"
   },
   "unsafe-path.title": {
     "string": "Invalid File Location",
@@ -486,5 +498,9 @@
   "extension-documentation.title": {
     "string": "{APP_NAME} Extension Documentation",
     "developer_comment": "Title of in-app window for viewing extension documentation."
+  },
+  "node-integration.prefix": {
+    "string": "Unrestricted System Access",
+    "developer_comment": "Appears in titles of desktop app windows that have been given full access to the user's sytem"
   }
 }
