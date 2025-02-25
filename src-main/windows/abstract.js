@@ -1,7 +1,9 @@
-const { BrowserWindow, screen, session } = require('electron');
+const {BrowserWindow, screen, session, dialog} = require('electron');
 const path = require('path');
 const openExternal = require('../open-external');
 const settings = require('../settings');
+const {APP_NAME} = require('../brand');
+const {translate} = require('../l10n');
 
 /** @type {Map<unknown, AbstractWindow[]>} */
 const windowsByClass = new Map();
@@ -21,6 +23,13 @@ class AbstractWindow {
     this.window = options.existingWindow || new BrowserWindow(this.getWindowOptions());
     this.window.webContents.on('before-input-event', this.handleInput.bind(this));
     this.applySettings();
+
+    this.window.webContents.on('unresponsive', this.handleUnresponsive.bind(this));
+    this.window.webContents.on('responsive', this.handleResponsive.bind(this));
+    /** @type {AbortController|null} */
+    this._unresponsiveController = null;
+    /** @type {boolean} */
+    this._unresponsiveWarningsDisabled = false;
 
     if (!options.existingWindow) {
       // getCursorScreenPoint() segfaults on Linux in Wayland if called before a BrowserWindow is created, so
@@ -287,6 +296,80 @@ class AbstractWindow {
         event.preventDefault();
         this.reload();
       }
+    }
+  }
+
+  async handleUnresponsive () {
+    if (this._unresponsiveWarningsDisabled) {
+      return;
+    }
+
+    if (this._unresponsiveController) {
+      this._unresponsiveController.abort();
+    }
+
+    const controller = new AbortController();
+    this._unresponsiveController = controller;
+
+    let detail = `URL: ${this.window.webContents.mainFrame.url}\n`;
+
+    // collectJavaScriptCallStack() was added in Electron 34, so not support in legacy
+    // builds for Windows 7, 8, 8.1 or macOS 10.13, 10.14, 10.15
+    if (typeof this.window.webContents.mainFrame.collectJavaScriptCallStack === 'function') {
+      let stack;
+      try {
+        const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+        // collectJavaScriptCallStack will never resolve if somehow no JavaScript is running, so
+        // add a timer so we never wait too long.
+        stack = await Promise.race([
+          this.window.webContents.mainFrame.collectJavaScriptCallStack(),
+          sleep(1000).then(() => null)
+        ]).catch(() => null);
+      } catch (e) {
+        console.error(e);
+        stack = '' + e;
+      }
+
+      // collectJavaScriptCallStack returns non-string if it couldn't get details for any reason.
+      if (typeof stack === 'string') {
+        detail += `Stack: ${stack}\n`;
+      } else {
+        detail += 'Stack: internal error\n';
+      }
+    } else {
+      detail += 'Stack: API not available\n';
+    }
+
+    // Operations above are async; window may have become responsive during that time.
+    if (!controller.signal.aborted) {
+      dialog.showMessageBox(this.window, {
+        type: 'error',
+        title: APP_NAME,
+        signal: controller.signal,
+        message: translate('unresponsive.message'),
+        checkboxChecked: false,
+        checkboxLabel: translate('unresponsive.checkbox'),
+        noLink: true,
+        detail
+      }).then((result) => {
+        // TODO: only consider checkboxes when user clicks explicitly and not when its checked
+        // then the window becomes responsive?
+        if (result.checkboxChecked) {
+          this._unresponsiveWarningsDisabled = true;
+        }
+  
+        if (this._unresponsiveController === controller) {
+          this._unresponsiveController = null
+        }
+      });
+    }
+  }
+
+  handleResponsive () {
+    if (this._unresponsiveController) {
+      this._unresponsiveController.abort();
+      this._unresponsiveController = null;
     }
   }
 
