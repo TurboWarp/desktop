@@ -98,6 +98,7 @@ const generateMetainfo = (releases) => {
   let xml = '';
   for (const {version, date, notes} of releases) {
     xml += `    <release version="${version}" date="${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}">\n`;
+    xml += `      <url type="details">https://github.com/TurboWarp/desktop/releases/tag/v${version}</url>\n`;
     xml += '      <description>\n';
     xml += '        <ul>\n';
     for (let note of notes) {
