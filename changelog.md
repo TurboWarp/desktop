@@ -2,6 +2,14 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.14.0 (2025-03-02)
+
+ - New extension: Camera V2
+ - Fixed text bubble font
+ - Fixed compiler bugs caused by incorrect variable type assumptions after running block in compatibility layer
+ - Fixed various other bugs
+ - macOS: macOS 10.15 devices now need to install a special "legacy" version of the app. It has the same features but will be less secure
+
 # 1.13.2 (2025-02-02)
 
  - Fixed disable cloud variables option in the "Edit" menu
