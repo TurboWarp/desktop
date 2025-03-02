@@ -1,5 +1,16 @@
 [
   {
+    "version": "1.14.0",
+    "date": "2025-3-2",
+    "notes": [
+      "New extension: Camera V2",
+      "Fixed text bubble font",
+      "Fixed compiler bugs caused by incorrect variable type assumptions after running block in compatibility layer",
+      "Fixed various other bugs",
+      "macOS: macOS 10.15 devices now need to install a special \"legacy\" version of the app. It has the same features but will be less secure"
+    ]
+  },
+  {
     "version": "1.13.2",
     "date": "2025-2-2",
     "notes": [
