@@ -9,6 +9,7 @@ Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **form
  - Fixed compiler bugs caused by incorrect variable type assumptions after running block in compatibility layer
  - Fixed various other bugs
  - macOS: macOS 10.15 devices now need to install a special "legacy" version of the app. It has the same features but will be less secure
+ - Linux: Fixed importing sprites on some systems
 
 # 1.13.2 (2025-02-02)
 

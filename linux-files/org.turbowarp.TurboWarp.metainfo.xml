@@ -76,6 +76,7 @@
           <li>Fixed text bubble font</li>
           <li>Fixed compiler bugs caused by incorrect variable type assumptions after running block in compatibility layer</li>
           <li>Fixed various other bugs</li>
+          <li>Fixed importing sprites on some systems</li>
         </ul>
       </description>
     </release>

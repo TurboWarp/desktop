@@ -7,7 +7,8 @@
       "Fixed text bubble font",
       "Fixed compiler bugs caused by incorrect variable type assumptions after running block in compatibility layer",
       "Fixed various other bugs",
-      "macOS: macOS 10.15 devices now need to install a special \"legacy\" version of the app. It has the same features but will be less secure"
+      "macOS: macOS 10.15 devices now need to install a special \"legacy\" version of the app. It has the same features but will be less secure",
+      "Linux: Fixed importing sprites on some systems"
     ]
   },
   {
