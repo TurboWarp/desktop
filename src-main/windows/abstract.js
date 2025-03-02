@@ -278,7 +278,12 @@ class AbstractWindow {
 
       // F11 and alt+enter to toggle fullscreen
       if (input.key === 'F11' || (input.key === 'Enter' && input.alt)) {
-        event.preventDefault();
+        // Don't do preventDefault() for alt+enter as then the renderer won't receive the
+        // event that the alt key was unpressed, which causes the costume editor to get
+        // stuck in duplicating mode.
+        if (input.key === 'F11') {
+          event.preventDefault();
+        }
         this.window.setFullScreen(!this.window.isFullScreen());
       }
 
