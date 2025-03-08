@@ -18,9 +18,7 @@ const ELECTRON_22_FINAL = '22.3.27';
 const ELECTRON_26_FINAL = '26.6.10';
 
 // Electron 32 is the last version to support macOS 10.15
-// TODO: Electron 32 is still being supported. There will be more updates before
-// support is dropped. See https://github.com/electron/electron/releases?q=v32
-const ELECTRON_32_FINAL = '32.3.2';
+const ELECTRON_32_FINAL = '32.3.3';
 
 /**
  * @param {string} platformName
