@@ -1,6 +1,6 @@
 from collections import namedtuple
 import os
-from datetime import datetime
+import datetime
 import hashlib
 import locale
 
@@ -8,7 +8,7 @@ import locale
 locale.setlocale(locale.LC_ALL, 'C')
 
 # Same format as `date -Ru`
-date = datetime.utcnow().strftime('%a, %d %b %Y %H:%M:%S +0000')
+date = datetime.datetime.now(datetime.UTC).strftime('%a, %d %b %Y %H:%M:%S +0000')
 
 FileInfo = namedtuple('FileInfo', ['name', 'size', 'md5', 'sha1', 'sha256'])
 
