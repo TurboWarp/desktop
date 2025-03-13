@@ -26,6 +26,16 @@ app.commandLine.appendSwitch('host-resolver-rules', 'MAP device-manager.scratch.
 
 if (!settings.hardwareAcceleration) {
   app.disableHardwareAcceleration();
+
+  // SwiftShader is Chromium's software WebGL fallback. Starting in Chrome 137,
+  // it will be disabled by default. Enabling SwiftShader is required for the
+  // editor to work without hardware acceleration, so adding this flag will be
+  // required. Chromium considers this dangerous, so only add the flag when it
+  // is needed.
+  // https://github.com/TurboWarp/desktop/issues/1158
+  // https://chromestatus.com/feature/5166674414927872
+  // https://chromium.googlesource.com/chromium/src/+/main/docs/gpu/swiftshader.md
+  app.commandLine.appendSwitch('--enable-unsafe-swiftshader');
 }
 
 app.on('session-created', (session) => {
