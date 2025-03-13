@@ -12,6 +12,7 @@ const EditorWindow = require('./windows/editor');
 const {checkForUpdates} = require('./update-checker');
 const {tranlateOrNull} = require('./l10n');
 const migrate = require('./migrate');
+const settings = require('./settings');
 require('./protocols');
 require('./context-menu');
 require('./menu-bar');
@@ -22,6 +23,10 @@ app.enableSandbox();
 // Allows certain versions of Scratch Link to work without an internet connection
 // https://github.com/LLK/scratch-desktop/blob/4b462212a8e406b15bcf549f8523645602b46064/src/main/index.js#L45
 app.commandLine.appendSwitch('host-resolver-rules', 'MAP device-manager.scratch.mit.edu 127.0.0.1');
+
+if (!settings.hardwareAcceleration) {
+  app.disableHardwareAcceleration();
+}
 
 app.on('session-created', (session) => {
   // Permission requests are delegated to AbstractWindow
