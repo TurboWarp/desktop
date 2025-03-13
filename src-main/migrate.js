@@ -73,9 +73,13 @@ const migrate = async () => {
     // See https://en.wikipedia.org/wiki/Windows_NT#Releases for kernel versions
     (process.platform === 'win32' && getElectronMajorVersion() === 22 && getKernelMajorVersion() >= 10) ||
 
-    // Legacy build for macOS 10.13 and 10.14 uses Electron 26
     // See https://en.wikipedia.org/wiki/Darwin_%28operating_system%29#Release_history for kernel versions
-    (process.platform === 'darwin' && getElectronMajorVersion() === 26 && getKernelMajorVersion() >= 19)
+    (process.platform === 'darwin' && (
+      // Legacy build for macOS 10.13 and 10.14 uses Electron 26
+      (getElectronMajorVersion() === 26 && getKernelMajorVersion() >= 19) ||
+      // Legacy build for macOS 10.15 uses Electron 32
+      (getElectronMajorVersion() === 32 && getKernelMajorVersion() >= 20)
+    ))
   )) {
     const result = dialog.showMessageBoxSync({
       title: APP_NAME,
