@@ -8,7 +8,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: vedantmgoyal9/winget-releaser@4ffc7888bffd451b357355dc214d43bb9f23917e
+      - uses: vedantmgoyal9/winget-releaser@f7efa6288d37219838d58cb2d953d35b71ebc5d3
         with:
           identifier: GarboMuffin.TurboWarp
           installers-regex: 'TurboWarp-Setup-[\d.]+-\w+\.exe$'
