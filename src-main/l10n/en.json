@@ -231,12 +231,16 @@
     "string": "You may have to restart the application for microphone or camera changes to apply.",
     "developer_comment": "Warning that appears in desktop settings after changing the selected camera or microphone"
   },
-  "desktop-settings.hardware-acceleration": {
+  "desktop-settings.hardware-acceleration-when-available": {
     "string": "Use graphics acceleration when available (requires restart)",
     "developer_comment": "Desktop settings option to toggle hardware acceleration/graphics acceleration"
   },
+  "desktop-settings.hardware-acceleration": {
+    "string": "Use graphics acceleration (requires restart)",
+    "developer_comment": "Desktop settings option to toggle hardware acceleration/graphics acceleration"
+  },
   "desktop-settings.hardware-acceleration-disabled": {
-    "string": "Disabling graphics acceleration significantly reduces performance. Some projects can run over 100x slower as all rendering will be done by your CPU. This should only be done as a last resort if hardware acceleration is causing crashes.",
+    "string": "Disabling graphics acceleration significantly reduces performance. Some projects can run over 100x slower as all rendering will be done by your CPU. This should only be done as a last resort if graphics acceleration is causing crashes.",
     "developer_comment": "Warning that appears in desktop settings when hardware acceleration/graphics acceleration is disabled"
   },
   "desktop-settings.background-throttling": {
