@@ -232,12 +232,12 @@
     "developer_comment": "Warning that appears in desktop settings after changing the selected camera or microphone"
   },
   "desktop-settings.hardware-acceleration": {
-    "string": "Use hardware acceleration (requires restart)",
-    "developer_comment": "Desktop settings option to toggle hardware acceleration"
+    "string": "Use graphics acceleration when available (requires restart)",
+    "developer_comment": "Desktop settings option to toggle hardware acceleration/graphics acceleration"
   },
   "desktop-settings.hardware-acceleration-disabled": {
-    "string": "Disabling hardware acceleration is not recommended as hardware acceleration almost always improves performance.",
-    "developer_comment": "Warning that appears in desktop settings when hardware acceleration is disabled"
+    "string": "Disabling graphics acceleration significantly reduces performance. Some projects can run over 100x slower as all rendering will be done by your CPU. This should only be done as a last resort if hardware acceleration is causing crashes.",
+    "developer_comment": "Warning that appears in desktop settings when hardware acceleration/graphics acceleration is disabled"
   },
   "desktop-settings.background-throttling": {
     "string": "Sleep hidden windows",
