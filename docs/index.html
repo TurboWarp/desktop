@@ -1368,7 +1368,7 @@
       <p><span l10n="flatpak" l10n-description="Flatpak refers to flatpak.org and Flathub refers to flathub.org">We maintain an official Flatpak version on Flathub:</span> <a href="https://flathub.org/apps/details/org.turbowarp.TurboWarp">org.turbowarp.TurboWarp</a></p>
       <p l10n="flatpak-gamepad" l10n-description="Flatpak refers to flatpak.org">By default, gamepads will not work in the Flatpak version. To fix this, run this command:</p>
       <code class="terminal">
-        <div class="command">flatpak override org.turbowarp.TurboWarp --filesystem=/run/udev:ro</div>
+        <div class="command">flatpak override org.turbowarp.TurboWarp --user --filesystem=/run/udev:ro</div>
       </code>
 
       <h3>Snap Store</h3>
