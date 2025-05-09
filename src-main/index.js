@@ -35,7 +35,12 @@ if (!settings.hardwareAcceleration) {
   // https://github.com/TurboWarp/desktop/issues/1158
   // https://chromestatus.com/feature/5166674414927872
   // https://chromium.googlesource.com/chromium/src/+/main/docs/gpu/swiftshader.md
-  app.commandLine.appendSwitch('--enable-unsafe-swiftshader');
+  app.commandLine.appendSwitch('enable-unsafe-swiftshader');
+}
+
+// Workaround for https://github.com/electron/electron/issues/46538
+if (process.platform === 'linux') {
+  app.commandLine.appendSwitch('gtk-version', '3');
 }
 
 app.on('session-created', (session) => {
