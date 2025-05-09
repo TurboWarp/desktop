@@ -1,4 +1,4 @@
-const {app, Menu, clipboard} = require('electron');
+const {app, Menu, clipboard, BrowserWindow} = require('electron');
 const {translate} = require('./l10n');
 const openExternal = require('./open-external');
 
@@ -76,7 +76,10 @@ app.on('web-contents-created', (_event, webContents) => {
 
     if (menuItems.length > 0) {
       const menu = Menu.buildFromTemplate(menuItems);
-      menu.popup();
+      menu.popup({
+        window: BrowserWindow.getFocusedWindow(),
+        frame: webContents.focusedFrame
+      });
     }
   });
 });
