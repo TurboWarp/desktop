@@ -142,6 +142,9 @@ const createAtomicWriteStream = async (path) => {
       highWaterMark: 1024 * 1024 * 5
     });
   } catch (err) {
+    if (fileHandle) {
+      fileHandle.close();
+    }
     releaseFileLock();
     throw err;
   }
