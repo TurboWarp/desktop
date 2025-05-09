@@ -3,6 +3,7 @@ const fsPromises = require('fs/promises');
 const nodeCrypto = require('crypto');
 const pathUtil = require('path');
 const {app} = require('electron');
+const stream = require('stream');
 
 // This file was initially based on:
 // https://github.com/npm/write-file-atomic/blob/a37fdc843f4d391cf1cff85c8e69c3d80e05b049/lib/index.js
@@ -119,16 +120,17 @@ const copy = (from, to) => new Promise((resolve, reject) => {
   // data recovery later.
   const readStream = fs.createReadStream(from);
   const writeStream = fs.createWriteStream(to);
-  readStream.on('error', (error) => {
-    reject(error);
-  });
-  writeStream.on('error', (error) => {
-    reject(error);
-  });
-  writeStream.on('finish', () => {
-    resolve();
-  });
-  readStream.pipe(writeStream);
+  stream.pipeline(
+    readStream,
+    writeStream,
+    (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    }
+  );
 });
 
 const createAtomicWriteStream = async (path) => {
