@@ -126,16 +126,25 @@ const createAtomicWriteStream = async (path) => {
   const isSeverelySandboxed = !!process.mas;
 
   const runningHash = nodeCrypto.createHash('sha512');
-
   const tempPath = getTemporaryPath(path, isSeverelySandboxed);
-  const fileHandle = await fsPromises.open(tempPath, 'w', originalMode);
-  const writeStream = fileHandle.createWriteStream({
-    autoClose: false,
-    // Increase high water mark from default value of 16384.
-    // Increasing this results in less time spent waiting for disk IO to complete, which would pause
-    // the sb3 generation stream in scratch-gui. Increasing this does increase memory usage.
-    highWaterMark: 1024 * 1024 * 5
-  });
+
+  /** @type {fs.promises.FileHandle} */
+  let fileHandle;
+  /** @type {fs.WriteStream} */
+  let writeStream;
+  try {
+    fileHandle = await fsPromises.open(tempPath, 'w', originalMode);
+    writeStream = fileHandle.createWriteStream({
+      autoClose: false,
+      // Increase high water mark from default value of 16384.
+      // Increasing this results in less time spent waiting for disk IO to complete, which would pause
+      // the sb3 generation stream in scratch-gui. Increasing this does increase memory usage.
+      highWaterMark: 1024 * 1024 * 5
+    });
+  } catch (err) {
+    releaseFileLock();
+    throw err;
+  }
 
   const handleError = async (error) => {
     await new Promise((resolve) => {
