@@ -35,8 +35,8 @@ const getOriginalMode = async (path) => {
     const stat = await fsPromises.stat(path);
     return stat.mode;
   } catch (e) {
-    // TODO: we do this because write-file-atomic did it but that seems kinda not great??
-    // read and write for all users
+    // The project should be readable and writable, but not executable.
+    // Whatever umask the user has set for our process will override this.
     return 0o666;
   }
 };
