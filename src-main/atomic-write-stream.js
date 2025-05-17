@@ -192,10 +192,9 @@ const createAtomicWriteStream = async (path) => {
       try {
         await fsPromises.rename(tempPath, path);
 
-        // One final check to make sure nothing went wrong
         const finalHash = await sha512(path);
         if (expectedHash !== finalHash) {
-          throw new Error('Final integrity hash check failed');
+          throw new Error('Atomc write stream integrity check failed');
         }
       } catch (err) {
         if (err.syscall === 'rename' && err.code === 'EXDEV') {
@@ -214,6 +213,11 @@ const createAtomicWriteStream = async (path) => {
           const destinationHandle = await fsPromises.open(path, 'a');
           await destinationHandle.sync();
           await destinationHandle.close();
+
+          const finalHash = await sha512(path);
+          if (expectedHash !== finalHash) {
+            throw new Error('Atomc write stream integrity check failed in EXDEV fallback');
+          }
 
           await fsPromises.unlink(tempPath);
         } else if (process.platform === 'win32' && err.syscall === 'rename' && err.code === 'EPERM') {
