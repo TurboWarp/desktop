@@ -16,7 +16,7 @@
     "electron:package:dir": "electron-builder --dir"
   },
   "dependencies": {
-    "semver": "^7.7.1"
+    "semver": "^7.7.2"
   },
   "devDependencies": {
     "@babel/core": "^7.27.1",
