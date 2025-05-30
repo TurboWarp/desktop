@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.14.1",
+    "date": "2025-5-29",
+    "notes": [
+      "Significantly optimize saving large projects",
+      "Fixed a series of security bugs related to vector costumes",
+      "Fixed various extension bugs"
+    ]
+  },
+  {
     "version": "1.14.0",
     "date": "2025-3-12",
     "notes": [
