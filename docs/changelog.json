@@ -1,7 +1,7 @@
 [
   {
-    "version": "1.14.1",
-    "date": "2025-5-29",
+    "version": "1.14.2",
+    "date": "2025-5-30",
     "notes": [
       "Significantly optimize saving large projects",
       "Fixed a series of security bugs related to vector costumes",
