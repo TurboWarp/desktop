@@ -76,7 +76,7 @@
           <li>Fixed some large projects not working when packaged</li>
           <li>Fixed Clipping and Blending extension</li>
           <li>Improved performance of Animated Text extension when many clones have been created and deleted</li>
-          <li>Improved performance of Camera extension when many clones have been created and deleted</li>
+          <li>Improved performance of Camera V2 extension when many clones have been created and deleted</li>
           <li>Improved performance of Simple 3D extension while mouse is pressed</li>
         </ul>
       </description>
