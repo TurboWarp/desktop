@@ -105,7 +105,7 @@
         "microsoft-store-screenshot-packager": "Вбудований пакувальник для конвертування проектів в HTML файли або програми для Windows, macOS, та Linux."
     },
     "zh-cn": {
-        "microsoft-store-description": "　　TurboWarp 是 Scratch 编程语言的一个修改版，带有编译器，可以更快地运行项目，支持深色模式，提供大量扩展功能等等。\n　　 - 运行作品的速度比 Scratch 快 20 倍以上\n　　 - 闲置时使用的内存明显减少\n　　 - 深色模式\n　　 - 开发者工具、可搜索的下拉菜单、洋葱皮动画工具\n　　 - 更多的插件和可自定义选项\n　　 - 几乎 100% 兼容 Scratch\n　　 - 本地文件系统和文件资源管理器集成\n　　 - 编辑大型作品时的延迟更低\n　　 - 可选择补帧、60 FPS、高清画笔、无限克隆等功能支持\n　　 - 背包\n　　 - 以及更多\n　　TurboWarp 的开发者与 Scratch 团队没有任何关系。这是一个由社区开发的修改版。\n　　截图中展示的作品是{screenshot_project_link}。\n",
+        "microsoft-store-description": "　　TurboWarp 是 Scratch 编程语言的一个修改版，有能更高效运行作品的编译器、深色模式、大量插件等。\n　　 - 运行作品的速度比 Scratch 快 20 倍以上\n　　 - 闲置时使用的内存明显减少\n　　 - 深色模式\n　　 - 开发者工具、可搜索的下拉菜单、洋葱皮动画工具\n　　 - 更多的插件和可自定义选项\n　　 - 几乎 100% 兼容 Scratch\n　　 - 本地文件系统和文件资源管理器集成\n　　 - 编辑大型作品时的延迟更低\n　　 - 可选择补帧、60 FPS、高清画笔、无限克隆等功能支持\n　　 - 背包\n　　 - 以及更多\n　　TurboWarp 的开发者与 Scratch 团队没有任何关系。这是一个由社区开发的修改版。\n　　截图中展示的作品是{screenshot_project_link}。\n",
         "microsoft-store-generic-release-notes": "有关最新发行版说明，请访问{changelog_link}",
         "microsoft-store-screenshot-addons": "多达 {number_of_addons} 个插件，可用于自定义和增强您的体验。",
         "microsoft-store-screenshot-caption": "图片中的作品：{screenshot_project_link}",
