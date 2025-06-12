@@ -2,6 +2,14 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.14.3 (2025-06-12)
+
+ - Reduced size of packaged projects by 400KB
+ - Fixed Clipping and Blending extension
+ - Improved performance of Simple 3D extension when the mouse is down
+ - Improved performance of Animated Text extension when there are many clones
+ - Improved performance of Camera extension when there are many clones
+
 # 1.14.2 (2025-05-30)
 
  - Significantly optimize saving large projects
