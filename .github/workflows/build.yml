@@ -4,15 +4,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
-
+  build-linux:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
       with:
         submodules: recursive
         persist-credentials: false
@@ -20,25 +16,103 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 22
-        cache: npm
     - name: Install dependencies
-      run: npm ci
+      run: npm ci --loglevel=info
     - name: Fetch
       run: npm run fetch
     - name: Compile
-      run: npm run webpack:compile
-    - name: Package Windows
-      if: runner.os == 'Windows'
+      run: npm run webpack:prod
+    - name: Package
+      run: |
+        node release-automation/build.js --debian --tarball --appimage --x64 --armv7l --arm64
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: linux
+        path: |
+          dist/*.deb
+          dist/*.tar.gz
+          dist/*.AppImage
+
+  build-mac:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        persist-credentials: false
+    - name: Install Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+    - name: Install dependencies
+      run: npm ci --loglevel=info
+    - name: Fetch
+      run: npm run fetch
+    - name: Compile
+      run: npm run webpack:prod
+    - name: Package
+      run: |
+        node release-automation/build.js --mac --universal
+        node release-automation/build.js --mac-legacy-10.13-10.14 --x64
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: mac
+        path: dist/*.dmg
+
+  build-windows:
+    # GitHub's Windows runners have a C: drive and a D: drive.
+    # C: is for the OS and has good read performance but awful write performance.
+    # D: has much better faster write performance (>20x faster than C:)
+    # We want to use the D: drive whenever we can. Trying to do "npm ci" on the C:
+    # drive has been observed to take over an hour!
+    runs-on: windows-latest
+    steps:
+    # actions/checkout can only clone to paths in $GITHUB_WORKSPACE which is on the C: drive,
+    # so we have to clone to C: then copy to D: after. This repository itself isn't huge so
+    # this is plenty fast.
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        persist-credentials: false
+        path: repo
+    - name: "Move repository to D: drive"
+      run: |
+        Copy-Item -Path repo -Destination D:\repo -Recurse
+        Remove-Item -Path repo -Recurse -Force
+    - name: Install Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+    # The repository being on D: means that node_modules IO will be fast, but npm still downloads
+    # packages to a temporary folder for caching which is on C: by default. We need to make sure
+    # npm uses the D: drive instead otherwise we still get bottlenecked by C:.
+    - name: "Configure npm to use D: drive"
+      run: |
+        npm config set cache D:\npm-cache
+        npm config set prefix D:\npm-prefix
+    - name: Install dependencies
+      working-directory: D:\repo
+      run: npm ci --loglevel=info
+    - name: Fetch
+      working-directory: D:\repo
+      run: npm run fetch
+    - name: Compile
+      working-directory: D:\repo
+      run: npm run webpack:prod
+    - name: Package
+      working-directory: D:\repo
       run: |
         node release-automation/build.js --windows --microsoft-store --x64 --ia32 --arm64
         node release-automation/build.js --windows-portable --x64
         node release-automation/build.js --windows-legacy --ia32 --x64
-    - name: Package macOS
-      if: runner.os == 'macOS'
-      run: |
-        node release-automation/build.js --mac --universal
-        node release-automation/build.js --mac-legacy-10.13-10.14 --x64
-    - name: Package Linux
-      if: runner.os == 'Linux'
-      run: |
-        node release-automation/build.js --debian --tarball --appimage --x64 --armv7l --arm64
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows
+        path: |
+          D:\repo\dist\*.exe
+          D:\repo\dist\*.appx
