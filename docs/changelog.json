@@ -1,6 +1,6 @@
 [
   {
-    "version": "1.14.3",
+    "version": "1.14.4",
     "date": "2025-6-12",
     "notes": [
       "Reduced size of packaged projects by 400KB",
