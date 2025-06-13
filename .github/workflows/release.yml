@@ -33,14 +33,6 @@ jobs:
         node release-automation/build.js --debian --tarball --appimage --x64 --armv7l --arm64 --production
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: linux
-        path: |
-          dist/*.deb
-          dist/*.tar.gz
-          dist/*.AppImage
 
   release-mac:
     runs-on: macos-latest
