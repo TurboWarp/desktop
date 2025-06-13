@@ -75,11 +75,6 @@ jobs:
         # electron-builder documentation says password won't be escaped, so don't use any
         # special characters that the shell will mess with
         CSC_KEY_PASSWORD: ${{ secrets.APPLE_CSC_KEY_PASSWORD }}
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: mac
-        path: dist/*.dmg
 
   release-windows:
     # GitHub's Windows runners have a C: drive and a D: drive.
