@@ -263,6 +263,10 @@
     "string": "Enable spell checker",
     "developer_comment": "Option in desktop settings to disable spell checking"
   },
+  "desktop-settings.resume-session": {
+    "string": "Continue from the last opened file.",
+    "developer_comment": "Desktop settings option to enable session resuming"
+  },
   "desktop-settings.exit-fullscreen-on-escape": {
     "string": "Exit F11 fullscreen mode (not the fullscreen button in the editor) when pressing escape",
     "developer_comment": "Refering to when an entire window is in fullscreen by pressing F11 or the maximize button on macOS, not the fullscreen mode you get by pressing the fullscreen button in the editor."
