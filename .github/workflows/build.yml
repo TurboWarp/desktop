@@ -25,7 +25,7 @@ jobs:
     - name: Package
       run: |
         node release-automation/build.js --debian --tarball --appimage --x64 --armv7l --arm64
-    - name: Upload artifacts
+    - name: Upload artifacts to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
         name: linux
@@ -56,7 +56,7 @@ jobs:
       run: |
         node release-automation/build.js --mac --universal
         node release-automation/build.js --mac-legacy-10.13-10.14 --x64
-    - name: Upload artifacts
+    - name: Upload artifacts to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
         name: mac
@@ -109,7 +109,7 @@ jobs:
         node release-automation/build.js --windows --microsoft-store --x64 --ia32 --arm64
         node release-automation/build.js --windows-portable --x64
         node release-automation/build.js --windows-legacy --ia32 --x64
-    - name: Upload artifacts
+    - name: Upload artifacts to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
         name: windows
