@@ -96,7 +96,7 @@
       ]
     },
     "appx": {
-      "artifactName": "${productName} MS Store ${version} ${arch}.${ext}",
+      "artifactName": "${productName}-MS-Store-${version}-${arch}.${ext}",
       "applicationId": "TurboWarp",
       "displayName": "TurboWarp",
       "identityName": "45747ThomasWeber.TurboWarpDesktop",
@@ -113,13 +113,13 @@
       ]
     },
     "nsis": {
-      "artifactName": "${productName} Setup ${version} ${arch}.${ext}",
+      "artifactName": "${productName}-Setup-${version}-${arch}.${ext}",
       "oneClick": false,
       "deleteAppDataOnUninstall": false,
       "allowToChangeInstallationDirectory": true
     },
     "mac": {
-      "artifactName": "${productName} Setup ${version}.${ext}",
+      "artifactName": "${productName}-Setup-${version}.${ext}",
       "icon": "build/icon.icns",
       "category": "public.app-category.education",
       "darkModeSupport": true,
