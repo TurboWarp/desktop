@@ -31,8 +31,19 @@ jobs:
     - name: Package
       run: |
         node release-automation/build.js --debian --tarball --appimage --x64 --armv7l --arm64 --production
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload artifacts to GitHub Actions
+      uses: actions/upload-artifact@v4
+      with:
+        name: linux
+        path: |
+          dist/*.deb
+          dist/*.tar.gz
+          dist/*.AppImage
+    - name: Upload artifacts to tag
+      uses: xresloader/upload-to-github-release@2bcae85344d41e21f7fc4c47fa2ed68223afdb49
+      with:
+        file: dist/*.deb;dist/*.tar.gz;dist/*.AppImage
+        draft: true
 
   release-mac:
     runs-on: macos-latest
@@ -65,7 +76,6 @@ jobs:
         # for safety
         rm "$APPLE_API_KEY_NAME"
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
         APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
         APPLE_API_KEY_NAME: ${{ secrets.APPLE_API_KEY_NAME }}
@@ -75,6 +85,16 @@ jobs:
         # electron-builder documentation says password won't be escaped, so don't use any
         # special characters that the shell will mess with
         CSC_KEY_PASSWORD: ${{ secrets.APPLE_CSC_KEY_PASSWORD }}
+    - name: Upload artifacts to GitHub Actions
+      uses: actions/upload-artifact@v4
+      with:
+        name: mac
+        path: dist/*.dmg
+    - name: Upload artifacts to tag
+      uses: xresloader/upload-to-github-release@2bcae85344d41e21f7fc4c47fa2ed68223afdb49
+      with:
+        file: dist/*.dmg
+        draft: true
 
   release-windows:
     # GitHub's Windows runners have a C: drive and a D: drive.
@@ -123,10 +143,45 @@ jobs:
         node release-automation/build.js --windows --microsoft-store --x64 --ia32 --arm64 --production
         node release-automation/build.js --windows-portable --x64 --production
         node release-automation/build.js --windows-legacy --ia32 --x64 --production
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Upload Microsoft Store Artifact
+    - name: Upload unsigned artifacts to GitHub Actions
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-unsigned
+        path: D:\repo\dist\*.exe
+    - name: Upload Microsoft Store artifact to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
         name: appx
         path: D:\repo\dist\*.appx
+    - name: Upload unsigned artifacts for SignPath
+      uses: actions/upload-artifact@v4
+      id: signpath-unsigned
+      with:
+        name: artifact-for-signpath
+        # keep this list in sync with the signed artifiact upload below
+        path: |
+          D:\repo\dist\TurboWarp-Setup*x64.exe
+    - name: Sign executables with SignPath
+      uses: signpath/github-action-submit-signing-request@4f13d373e8f0cd8d3c0465ff4877feff27aed2ae
+      with:
+        api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+        organization-id: 04444052-261e-46eb-8168-ed0eee93c57c
+        project-slug: desktop_
+        signing-policy-slug: test-signing
+        github-artifact-id: ${{ steps.signpath-unsigned.outputs.artifact-id }}
+        artifact-configuration-slug: sign_installers
+        wait-for-completion: true
+        # overwrite the unsigned files
+        output-artifact-directory: D:\repo\dist
+    - name: Upload signed artifacts to GitHub Actions
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-signed
+        # keep this list in sync with the signpath artifact upload above
+        path: |
+          D:\repo\dist\TurboWarp-Setup*x64.exe
+    - name: Upload signed artifacts to tag
+      uses: xresloader/upload-to-github-release@2bcae85344d41e21f7fc4c47fa2ed68223afdb49
+      with:
+        file: D:\repo\dist\*.exe
+        draft: true
