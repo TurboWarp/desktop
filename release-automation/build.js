@@ -5,7 +5,6 @@ const fs = require('fs');
 const builder = require('electron-builder');
 const builderUtil = require('builder-util');
 const electronFuses = require('@electron/fuses');
-const packageJSON = require('../package.json');
 
 const {Platform, Arch} = builder;
 
@@ -87,47 +86,38 @@ const downloadElectronArtifact = async ({version, platform, artifactName, arch})
 };
 
 const addElectronFuses = async (context) => {
-  // Have to apply fuses manually per https://github.com/electron-userland/electron-builder/issues/6365
-  // This code is based on the comments on that issue
-
-  const platformName = context.electronPlatformName;
-  const getExecutableName = () => {
-    if (platformName === 'win32') return `${context.packager.appInfo.productFilename}.exe`;
-    if (platformName === 'darwin') return `${context.packager.appInfo.productFilename}.app`;
-    if (platformName === 'linux') return packageJSON.name;
-    throw new Error(`Unknown platform: ${platformName}`);
-  };
-
-  const electronBinaryPath = pathUtil.join(context.appOutDir, getExecutableName());
-  process.stdout.write(`Flipping fuses in ${electronBinaryPath}...`);
+  const electronMajorVersion = +context.packager.info.framework.version.split('.')[0];
 
   /** @type {import('@electron/fuses').FuseV1Config} */
   const newFuses = {
-    // Necessary for building on Apple Silicon
-    resetAdHocDarwinSignature: platformName === 'darwin',
-
     version: electronFuses.FuseVersion.V1,
-
-    // https://www.electronjs.org/blog/statement-run-as-node-cves
-    // Because our app is likely to have access to the user's microphone and camera, we should make it slightly
-    // more difficult for a local attacker to elevate permissions. This probably isn't perfect and any bypasses
-    // won't be eligible for a bug bounty from us (if you have a local attacker, you've already lost).
-    [electronFuses.FuseV1Options.RunAsNode]: false,
-    [electronFuses.FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false,
-    [electronFuses.FuseV1Options.EnableNodeCliInspectArguments]: false,
-    [electronFuses.FuseV1Options.OnlyLoadAppFromAsar]: true,
+    strictlyRequireAllFuses: true,
   };
 
-  // - EnableCookieEncryption should be considered in the future once we analyze performance, backwards
-  //   compatibility, make sure data doesn't get lost on uninstall, unsigned versions, etc.
-  // - electron-builder does not generate hashes needed for EnableEmbeddedAsarIntegrityValidation
-  //   https://github.com/electron-userland/electron-builder/issues/6930
-  // - LoadBrowserProcessSpecificV8Snapshot is not useful for us.
-  // - GrantFileProtocolExtraPrivileges breaks migrate.html
+  // We don't use this option, but we have to set it explicitly due to strictlyRequireAllFuses.
+  newFuses[electronFuses.FuseV1Options.LoadBrowserProcessSpecificV8Snapshot] = false;
 
-  await electronFuses.flipFuses(electronBinaryPath, newFuses);
+  // Disable various Node.js features that we do not use
+  newFuses[electronFuses.FuseV1Options.RunAsNode] = false;
+  newFuses[electronFuses.FuseV1Options.EnableNodeOptionsEnvironmentVariable] = false;
+  newFuses[electronFuses.FuseV1Options.EnableNodeCliInspectArguments] = false;
 
-  console.log(' done');
+  // Prevent the app from being tricked into accessing files outside of the ASAR
+  newFuses[electronFuses.FuseV1Options.OnlyLoadAppFromAsar] = false;
+
+  // We should consider this option after analyzing performance.
+  newFuses[electronFuses.FuseV1Options.EnableEmbeddedAsarIntegrityValidation] = false;
+
+  // We should consider this option after analyzing performance and ensuring that data can't be
+  // accidentally lost very easily.
+  newFuses[electronFuses.FuseV1Options.EnableCookieEncryption] = false;
+
+  if (electronMajorVersion >= 29) {
+    // We should try to disable this in the future but currently it breaks migrate.html.
+    newFuses[electronFuses.FuseV1Options.GrantFileProtocolExtraPrivileges] = true;
+  }
+
+  await context.packager.addElectronFuses(context, newFuses);
 };
 
 const afterPack = async (context) => {
