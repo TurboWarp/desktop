@@ -107,9 +107,11 @@ const recursivelySetFileTimes = (directory, date) => {
     const stat = fs.statSync(filePath);
     if (stat.isDirectory()) {
       recursivelySetFileTimes(filePath, date);
+    } else {
+      fs.utimesSync(filePath, date, date);
     }
-    fs.utimesSync(filePath, date, date);
   }
+  fs.utimesSync(directory, date, date);
 };
 
 /**
