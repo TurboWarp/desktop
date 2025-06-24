@@ -1,5 +1,8 @@
 require('./patch-electron-builder');
 
+const fs = require('fs');
+const pathUtil = require('path');
+const nodeCrypto = require('crypto');
 const builder = require('electron-builder');
 const electronFuses = require('@electron/fuses');
 
@@ -44,6 +47,17 @@ const getArchesToBuild = (platformName) => {
     arches.push(getDefaultArch(platformName));
   }
   return arches;
+};
+
+const afterAllArtifactBuild = (buildResult) => {
+  for (const artifactPath of buildResult.artifactPaths) {
+    const data = fs.readFileSync(artifactPath);
+    const hash = nodeCrypto
+      .createHash('sha-256')
+      .update(data)
+      .digest('hex');
+    console.log(`${hash}  ${artifactPath}`);
+  }
 };
 
 const addElectronFuses = async (context) => {
@@ -121,6 +135,7 @@ const build = async ({
         tw_warn_legacy: isProduction,
         tw_update: isProduction && manageUpdates
       },
+      afterAllArtifactBuild,
       afterPack,
       ...extraConfig,
       ...await prepare(archName)
