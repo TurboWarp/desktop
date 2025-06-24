@@ -1,114 +1,100 @@
 const fs = require('fs');
+const fsPromises = require('fs/promises');
 const pathUtil = require('path');
-const Limiter = require('async-limiter');
-const crypto = require('crypto');
-const promisify = require('util').promisify;
-const zlib = require('zlib');
+const {computeMD5, computeSHA256, persistentFetch} = require('./lib');
+const {brotliCompress, brotliDecompress} = require('zlib');
 
-const compress = promisify(zlib.brotliCompress);
-const writeFile = promisify(fs.writeFile);
-const {fetch} = require('./lib');
+/**
+ * @typedef AssetMetadata
+ * @property {string} src
+ * @property {string} md5
+ * @property {string} sha256
+ */
 
-const libraryFiles = pathUtil.join(__dirname, '../dist-library-files');
-if (!fs.existsSync(libraryFiles)) {
-  console.log('Making library files folder');
-  fs.mkdirSync(libraryFiles, {
+const outDirectory = pathUtil.join(__dirname, '../dist-library-files');
+
+/**
+ * @param {AssetMetadata[]} remainingAssets List of remaining assets. Modified in-place.
+ */
+const startDownloading = async (remainingAssets) => {
+  while (remainingAssets.length) {
+    const asset = remainingAssets.shift();
+
+    const extension = pathUtil.extname(asset.src);
+    const assetPath = pathUtil.join(outDirectory, `${asset.md5}${extension}.br`);
+
+    try {
+      const compressedData = await fsPromises.readFile(assetPath);
+      const decompressedData = await new Promise((resolve, reject) => {
+        brotliDecompress(compressedData, (err, res) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(res);
+          }
+        });
+      });
+
+      const actualMD5 = computeMD5(decompressedData);
+      const actualSHA256 = computeSHA256(decompressedData);
+      if (actualMD5 !== asset.md5) {
+        throw new Error(`MD5 mismatch. Expected ${asset.md5} got ${actualMD5}`);
+      }
+      if (actualSHA256 !== asset.sha256) {
+        throw new Error(`SHA256 mismatch. Expected ${asset.sha256} got ${actualSHA256}`);
+      }
+
+      console.log(`Already fetched ${asset.src}`);
+      continue;
+    } catch (e) {
+      if (e.code != 'ENOENT') {
+        console.error(e);
+      }
+    }
+
+    console.log(`Fetching ${asset.src}`);
+    const response = await persistentFetch(asset.src);
+    const data = await response.arrayBuffer();
+
+    const actualMD5 = computeMD5(data);
+    const actualSHA256 = computeSHA256(data);
+    if (actualMD5 !== asset.md5) {
+      throw new Error(`MD5 mismatch. Expected ${asset.md5} got ${actualMD5}`);
+    }
+    if (actualSHA256 !== asset.sha256) {
+      throw new Error(`SHA256 mismatch. Expected ${asset.sha256} got ${actualSHA256}`);
+    }
+
+    const compressedData = await new Promise((resolve, reject) => {
+      brotliCompress(data, (err, res) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    });
+
+    await fsPromises.writeFile(assetPath, compressedData);
+  }
+};
+
+const run = async () => {
+  const metadataFile = pathUtil.join(__dirname, 'library-files.json');
+  const remainingAssets = JSON.parse(fs.readFileSync(metadataFile, 'utf-8'));
+
+  await fsPromises.mkdir(outDirectory, {
     recursive: true
   });
-}
 
-const guiLibraryFolder = pathUtil.join(__dirname, '../node_modules/scratch-gui/src/lib/libraries');
-const costumesManifest = pathUtil.join(guiLibraryFolder, 'costumes.json');
-const backdropManifest = pathUtil.join(guiLibraryFolder, 'backdrops.json');
-const spriteManifest = pathUtil.join(guiLibraryFolder, 'sprites.json');
-const soundManifest = pathUtil.join(guiLibraryFolder, 'sounds.json');
-if (!fs.existsSync(costumesManifest)) {
-  throw new Error('costumes.json does not exist -- did you forget a step?');
-}
-if (!fs.existsSync(backdropManifest)) {
-  throw new Error('backdrops.json does not exist -- did you forget a step?');
-}
-if (!fs.existsSync(spriteManifest)) {
-  throw new Error('sprites.json does not exist -- did you forget a step?');
-}
-if (!fs.existsSync(soundManifest)) {
-  throw new Error('sounds.json does not exist -- did you forget a step?');
-}
+  const concurrentFetches = 20;
+  await Promise.all(Array(concurrentFetches).fill().map(i => startDownloading(remainingAssets)));
 
-const costumes = JSON.parse(fs.readFileSync(costumesManifest));
-const backdrops = JSON.parse(fs.readFileSync(backdropManifest));
-const sprites = JSON.parse(fs.readFileSync(spriteManifest));
-const sounds = JSON.parse(fs.readFileSync(soundManifest));
-
-const md5 = (buffer) => crypto.createHash('md5').update(new Uint8Array(buffer)).digest('hex');
-
-const allCompressedFiles = [];
-
-const downloadAsset = async (asset) => {
-  const md5ext = asset.md5ext;
-  if (!/^[0-9a-f]+\.[a-z]+$/gi.test(md5ext)) {
-    throw new Error(`invalid md5ext: ${md5ext}`);
-  }
-
-  const compressedName = `${md5ext}.br`;
-  allCompressedFiles.push(compressedName);
-  const compressedPath = pathUtil.join(libraryFiles, compressedName);
-  if (fs.existsSync(compressedPath)) {
-    console.log(`Already downloaded: ${md5ext}`);
-    return;
-  }
-
-  console.log(`Downloading: ${md5ext}`);
-  const response = await fetch(`https://assets.scratch.mit.edu/${md5ext}`);
-  const uncompressed = await response.buffer();
-
-  const expectedHash = asset.assetId;
-  const hash = md5(uncompressed);
-  if (hash !== expectedHash) {
-    throw new Error(`${md5ext}: Hash mismatch: expected ${expectedHash} but found ${hash}`);
-  }
-
-  const compressed = await compress(uncompressed);
-  await writeFile(compressedPath, Buffer.from(compressed));
+  console.log('Downloaded all library assets.');
 };
 
-const limiter = new Limiter({
-  concurrency: 10
-});
-
-const queueDownloadAsset = (asset) => {
-  limiter.push((done) => downloadAsset(asset)
-    .then(done)
-    .catch((error) => {
-      console.error(error);
-      process.exit(1);
-    })
-  );
-};
-
-const assets = new Set();
-
-for (const asset of [...costumes, ...backdrops, ...sounds]) {
-  assets.add(asset);
-}
-for (const sprite of sprites) {
-  for (const asset of [...sprite.costumes, ...sprite.sounds]) {
-    assets.add(asset);
-  }
-}
-
-for (const asset of assets) {
-  queueDownloadAsset(asset);
-}
-
-console.time('Download assets');
-
-limiter.onDone(() => {
-  for (const file of fs.readdirSync(libraryFiles)) {
-    if (!allCompressedFiles.includes(file)) {
-      console.warn(`Extraneous: ${file}`);
-    }
-  }
-  console.timeEnd('Download assets');
-  process.exit(0);
-});
+run()
+  .catch(err => {
+    console.error(err);
+    process.exit(1);
+  });

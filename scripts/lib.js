@@ -1,12 +1,29 @@
-const https = require('https');
-const fetch = require('node-fetch');
+const nodeCrypto = require('crypto');
 
-const httpsAgent = new https.Agent({
-  keepAlive: true
-});
+/**
+ * @param {ArrayBuffer} buffer
+ * @returns {string}
+ */
+const computeMD5 = (buffer) => nodeCrypto
+  .createHash('md5')
+  .update(new Uint8Array(buffer))
+  .digest('hex');
 
-const persistentFetch = async (url, opts = {}) => {
-  opts.agent = httpsAgent;
+/**
+ * @param {ArrayBuffer} buffer
+ * @returns {string}
+ */
+const computeSHA256 = (buffer) => nodeCrypto
+  .createHash('sha256')
+  .update(new Uint8Array(buffer))
+  .digest('hex');
+
+/**
+ * @param {string} url
+ * @param {RequestInit} [opts]
+ * @returns {Promise<Response>}
+ */
+const persistentFetch = async (url, opts) => {
   let err;
   for (let i = 0; i < 3; i++) {
     try {
@@ -24,5 +41,7 @@ const persistentFetch = async (url, opts = {}) => {
 };
 
 module.exports = {
-  fetch: persistentFetch
+  computeMD5,
+  computeSHA256,
+  persistentFetch
 };

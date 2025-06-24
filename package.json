@@ -25,7 +25,6 @@
     "@electron/fuses": "^1.7.0",
     "@turbowarp/extensions": "github:TurboWarp/extensions#master",
     "adm-zip": "^0.5.16",
-    "async-limiter": "^2.0.0",
     "autoprefixer": "^9.8.8",
     "babel-loader": "^8.4.1",
     "copy-webpack-plugin": "^6.4.1",
