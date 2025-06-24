@@ -104,11 +104,10 @@ const recursivelySetFileTimes = (directory, date) => {
   const files = fs.readdirSync(directory);
   for (const file of files) {
     const filePath = pathUtil.join(directory, file);
+    fs.utimesSync(filePath, date, date);
     const stat = fs.statSync(filePath);
     if (stat.isDirectory()) {
       recursivelySetFileTimes(filePath, date);
-    } else {
-      fs.utimesSync(filePath, date, date);
     }
   }
 };
