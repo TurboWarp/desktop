@@ -3,6 +3,7 @@ require('./patch-electron-builder');
 const fs = require('fs');
 const pathUtil = require('path');
 const nodeCrypto = require('crypto');
+const childProcess = require('child_process');
 const builder = require('electron-builder');
 const electronFuses = require('@electron/fuses');
 
@@ -60,7 +61,7 @@ const afterAllArtifactBuild = (buildResult) => {
   }
 };
 
-const addElectronFuses = async (context) => {
+const flipFuses = async (context) => {
   const electronMajorVersion = +context.packager.info.framework.version.split('.')[0];
 
   /** @type {import('@electron/fuses').FuseV1Config} */
@@ -95,8 +96,34 @@ const addElectronFuses = async (context) => {
   await context.packager.addElectronFuses(context, newFuses);
 };
 
+/**
+ * @param {string} directory
+ * @param {Date} date
+ */
+const recursivelySetFileTimes = (directory, date) => {
+  const files = fs.readdirSync(directory);
+  for (const file of files) {
+    const filePath = pathUtil.join(directory, file);
+    const stat = fs.statSync(filePath);
+    if (stat.isDirectory()) {
+      recursivelySetFileTimes(filePath, date);
+    } else {
+      fs.utimesSync(filePath, date, date);
+    }
+  }
+};
+
+/**
+ * @returns {Date}
+ */
+const getLastCommitTimestamp = () => {
+  const stdout = childProcess.execSync('git log -1 --format="%at"').toString('utf-8');
+  return new Date((+stdout) * 1000);
+};
+
 const afterPack = async (context) => {
-  await addElectronFuses(context)
+  await flipFuses(context);
+  recursivelySetFileTimes(context.appOutDir, getLastCommitTimestamp());
 };
 
 const build = async ({
