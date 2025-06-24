@@ -192,7 +192,7 @@ const buildWindowsLegacy = () => build({
   legacy: true,
   extraConfig: {
     nsis: {
-      artifactName: '${productName} Legacy Setup ${version} ${arch}.${ext}'
+      artifactName: '${productName}-Legacy-Setup-${version}-${arch}.${ext}'
     }
   },
   prepare: async (archName) => {
@@ -248,7 +248,7 @@ const buildMacLegacy10131014 = () => build({
   legacy: true,
   extraConfig: {
     mac: {
-      artifactName: '${productName} Legacy 10.13 10.14 Setup ${version}.${ext}'
+      artifactName: '${productName}-Legacy-10.13-10.14-Setup-${version}.${ext}'
     }
   },
   prepare: async (archName) => {
@@ -271,7 +271,7 @@ const buildMacLegacy1015 = () => build({
   legacy: true,
   extraConfig: {
     mac: {
-      artifactName: '${productName} Legacy 10.15 Setup ${version}.${ext}'
+      artifactName: '${productName}-Legacy-10.15-Setup-${version}.${ext}'
     }
   },
   prepare: async (archName) => {
