@@ -117,14 +117,23 @@ const recursivelySetFileTimes = (directory, date) => {
 /**
  * @returns {Date}
  */
-const getLastCommitTimestamp = () => {
-  const stdout = childProcess.execSync('git log -1 --format="%at"').toString('utf-8');
-  return new Date((+stdout) * 1000);
+const getSourceDateEpoch = () => {
+  // Standard variable for defining the time for a build
+  // https://reproducible-builds.org/docs/source-date-epoch/
+  if (process.env.SOURCE_DATE_EPOCH) {
+    return new Date((+process.env.SOURCE_DATE_EPOCH) * 1000);
+  }
+
+  // Otherwise, use an arbitrary constant date to ensure reproducibility.
+  // This constant is from commit 35045e7c0fa4e4e14b2747e967adb4029cedb945.
+  // We could instead use the timestamp from last git commit, but that would break
+  // source builds without git history, and it doesn't seem necessary anyways.
+  return new Date(1609809111000);
 };
 
 const afterPack = async (context) => {
   await flipFuses(context);
-  recursivelySetFileTimes(context.appOutDir, getLastCommitTimestamp());
+  recursivelySetFileTimes(context.appOutDir, getSourceDateEpoch());
 };
 
 const build = async ({
