@@ -147,6 +147,11 @@ app.on('web-contents-created', (event, webContents) => {
       action: 'deny'
     };
   });
+
+  // We don't use Electron's webview, so disable it entirely as an extra layer of security.
+  webContents.on('will-attach-webview', (event) => {
+    event.preventDefault();
+  });
 });
 
 app.on('window-all-closed', () => {
