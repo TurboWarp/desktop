@@ -1,9 +1,6 @@
 require('./patch-electron-builder');
 
-const pathUtil = require('path');
-const fs = require('fs');
 const builder = require('electron-builder');
-const builderUtil = require('builder-util');
 const electronFuses = require('@electron/fuses');
 
 const {Platform, Arch} = builder;
@@ -47,42 +44,6 @@ const getArchesToBuild = (platformName) => {
     arches.push(getDefaultArch(platformName));
   }
   return arches;
-};
-
-const downloadElectronArtifact = async ({version, platform, artifactName, arch}) => {
-  const name = `${artifactName}-v${version}-${platform}-${arch}`;
-  const extractPath = pathUtil.join(__dirname, '.cache', name);
-
-  if (!fs.existsSync(extractPath)) {
-    console.log(`Downloading ${name}, this may take a while...`);
-
-    // In case the process fails mid way, extract to temporary path and then rename so we have some level of atomicity
-    const tempExtractPath = `${extractPath}.temp`;
-
-    // Download and extract Electron using the same logic that electron-builder does, otherwise signing
-    // the macOS legacy build fails for reasons I don't understand.
-    // https://github.com/electron-userland/electron-builder/blob/89656087d683dbe53240c920a684092b70d638db/packages/app-builder-lib/src/electron/ElectronFramework.ts#L195
-    await builderUtil.executeAppBuilder([
-      'unpack-electron',
-      '--configuration',
-      JSON.stringify([{
-        platform,
-        arch,
-        version
-      }]),
-      '--output',
-      tempExtractPath,
-      '--distMacOsAppName',
-      'Electron.app'
-    ]);
-
-    fs.renameSync(tempExtractPath, extractPath);
-    console.log(`Extracted to ${extractPath}`);
-  } else {
-    console.log(`Already downloaded ${name}`);
-  }
-
-  return extractPath;
 };
 
 const addElectronFuses = async (context) => {
@@ -193,18 +154,8 @@ const buildWindowsLegacy = () => build({
   extraConfig: {
     nsis: {
       artifactName: '${productName}-Legacy-Setup-${version}-${arch}.${ext}'
-    }
-  },
-  prepare: async (archName) => {
-    const electronDist = await downloadElectronArtifact({
-      version: ELECTRON_22_FINAL,
-      platform: 'win32',
-      artifactName: 'electron',
-      arch: archName
-    });
-    return {
-      electronDist
-    };
+    },
+    electronVersion: ELECTRON_22_FINAL
   }
 });
 
@@ -249,18 +200,8 @@ const buildMacLegacy10131014 = () => build({
   extraConfig: {
     mac: {
       artifactName: '${productName}-Legacy-10.13-10.14-Setup-${version}.${ext}'
-    }
-  },
-  prepare: async (archName) => {
-    const electronDist = await downloadElectronArtifact({
-      version: ELECTRON_26_FINAL,
-      platform: 'darwin',
-      artifactName: 'electron',
-      arch: archName
-    });
-    return {
-      electronDist
-    };
+    },
+    electronVersion: ELECTRON_26_FINAL
   }
 });
 
@@ -272,18 +213,8 @@ const buildMacLegacy1015 = () => build({
   extraConfig: {
     mac: {
       artifactName: '${productName}-Legacy-10.15-Setup-${version}.${ext}'
-    }
-  },
-  prepare: async (archName) => {
-    const electronDist = await downloadElectronArtifact({
-      version: ELECTRON_32_FINAL,
-      platform: 'darwin',
-      artifactName: 'electron',
-      arch: archName
-    });
-    return {
-      electronDist
-    };
+    },
+    electronVersion: ELECTRON_32_FINAL
   }
 });
 
