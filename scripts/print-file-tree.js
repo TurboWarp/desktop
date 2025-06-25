@@ -5,9 +5,7 @@ const nodeCrypto = require('crypto');
 const recursivelyPrint = (directory) => {
     const dirStat = fs.statSync(directory);
     console.log(pathUtil.join(directory, '/'));
-    console.log(`\tCreated: ${dirStat.birthtime.toUTCString()}`);
     console.log(`\tModified: ${dirStat.mtime.toUTCString()}`);
-    console.log(`\tAccessed: ${dirStat.atime.toUTCString()}`);
 
     const children = fs.readdirSync(directory);
     for (const child of children) {
@@ -21,9 +19,7 @@ const recursivelyPrint = (directory) => {
                 .update(data)
                 .digest('hex');
             console.log(`\tSHA-256: ${sha256}`);
-            console.log(`\tCreated: ${childStat.birthtime.toUTCString()}`);
             console.log(`\tModified: ${childStat.mtime.toUTCString()}`);
-            console.log(`\tAccessed: ${childStat.atime.toUTCString()}`);
         } else {
             recursivelyPrint(path);
         }
