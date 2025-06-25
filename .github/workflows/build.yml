@@ -12,6 +12,8 @@ jobs:
       with:
         submodules: recursive
         persist-credentials: false
+    - name: Ensure reproducibility
+      run: echo "SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)" >> $GITHUB_ENV
     - name: Install Node.js
       uses: actions/setup-node@v4
       with:
@@ -46,6 +48,8 @@ jobs:
       with:
         submodules: recursive
         persist-credentials: false
+    - name: Ensure reproducibility
+      run: echo "SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)" >> $GITHUB_ENV
     - name: Install Node.js
       uses: actions/setup-node@v4
       with:
@@ -95,6 +99,8 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 22
+    - name: Ensure reproducibility
+      run: echo "SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)" >> $env:GITHUB_ENV
     # The repository being on D: means that node_modules IO will be fast, but npm still downloads
     # packages to a temporary folder for caching which is on C: by default. We need to make sure
     # npm uses the D: drive instead otherwise we still get bottlenecked by C:.
