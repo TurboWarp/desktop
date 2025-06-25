@@ -12,7 +12,7 @@ jobs:
       with:
         submodules: recursive
         persist-credentials: false
-    - name: Ensure reproducibility
+    - name: Set SOURCE_DATE_EPOCH
       run: echo "SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)" >> $GITHUB_ENV
     - name: Install Node.js
       uses: actions/setup-node@v4
@@ -48,7 +48,7 @@ jobs:
       with:
         submodules: recursive
         persist-credentials: false
-    - name: Ensure reproducibility
+    - name: Set SOURCE_DATE_EPOCH
       run: echo "SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)" >> $GITHUB_ENV
     - name: Install Node.js
       uses: actions/setup-node@v4
@@ -66,6 +66,10 @@ jobs:
         node release-automation/build.js --mac-legacy-10.13-10.14 --mac-legacy-10.15 --x64
       env:
         DEBUG: electron-builder
+    - name: Normalize tarballs for reproducibility
+      run: |
+        sudo apt install strip-nondeterminism
+        strip-nondeterminism dist/*.tar.gz
     - name: Debug info
       run: node scripts/print-file-tree.js dist
     - name: Upload artifacts to GitHub Actions
@@ -95,13 +99,13 @@ jobs:
       run: |
         Copy-Item -Path repo -Destination D:\repo -Recurse
         Remove-Item -Path repo -Recurse -Force
+    - name: Set SOURCE_DATE_EPOCH
+      working-directory: D:\repo
+      run: echo "SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)" >> $env:GITHUB_ENV
     - name: Install Node.js
       uses: actions/setup-node@v4
       with:
         node-version: 22
-    - name: Ensure reproducibility
-      working-directory: D:\repo
-      run: echo "SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)" >> $env:GITHUB_ENV
     # The repository being on D: means that node_modules IO will be fast, but npm still downloads
     # packages to a temporary folder for caching which is on C: by default. We need to make sure
     # npm uses the D: drive instead otherwise we still get bottlenecked by C:.
