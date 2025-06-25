@@ -68,7 +68,7 @@ jobs:
         DEBUG: electron-builder
     - name: Normalize tarballs for reproducibility
       run: |
-        sudo apt install strip-nondeterminism
+        sudo apt-get install -y strip-nondeterminism
         strip-nondeterminism dist/*.tar.gz
     - name: Debug info
       run: node scripts/print-file-tree.js dist
