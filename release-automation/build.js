@@ -3,7 +3,6 @@ require('./patch-electron-builder');
 const fs = require('fs');
 const pathUtil = require('path');
 const nodeCrypto = require('crypto');
-const childProcess = require('child_process');
 const builder = require('electron-builder');
 const electronFuses = require('@electron/fuses');
 
