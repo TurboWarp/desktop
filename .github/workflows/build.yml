@@ -100,6 +100,7 @@ jobs:
       with:
         node-version: 22
     - name: Ensure reproducibility
+      working-directory: D:\repo
       run: echo "SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)" >> $env:GITHUB_ENV
     # The repository being on D: means that node_modules IO will be fast, but npm still downloads
     # packages to a temporary folder for caching which is on C: by default. We need to make sure
