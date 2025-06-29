@@ -2,7 +2,6 @@ require('./patch-electron-builder');
 
 const fs = require('fs');
 const pathUtil = require('path');
-const nodeCrypto = require('crypto');
 const builder = require('electron-builder');
 const electronFuses = require('@electron/fuses');
 
@@ -49,18 +48,7 @@ const getArchesToBuild = (platformName) => {
   return arches;
 };
 
-const afterAllArtifactBuild = (buildResult) => {
-  for (const artifactPath of buildResult.artifactPaths) {
-    const data = fs.readFileSync(artifactPath);
-    const hash = nodeCrypto
-      .createHash('sha-256')
-      .update(data)
-      .digest('hex');
-    console.log(`${hash}  ${artifactPath}`);
-  }
-};
-
-const addElectronFuses = async (context) => {
+const flipFuses = async (context) => {
   const electronMajorVersion = +context.packager.info.framework.version.split('.')[0];
 
   /** @type {import('@electron/fuses').FuseV1Config} */
@@ -95,8 +83,44 @@ const addElectronFuses = async (context) => {
   await context.packager.addElectronFuses(context, newFuses);
 };
 
+/**
+ * @param {string} directory
+ * @param {Date} date
+ */
+const recursivelySetFileTimes = (directory, date) => {
+  const files = fs.readdirSync(directory);
+  for (const file of files) {
+    const filePath = pathUtil.join(directory, file);
+    const stat = fs.statSync(filePath);
+    if (stat.isDirectory()) {
+      recursivelySetFileTimes(filePath, date);
+    } else {
+      fs.utimesSync(filePath, date, date);
+    }
+  }
+  fs.utimesSync(directory, date, date);
+};
+
+/**
+ * @returns {Date}
+ */
+const getSourceDateEpoch = () => {
+  // Standard variable for defining the time for a build
+  // https://reproducible-builds.org/docs/source-date-epoch/
+  if (process.env.SOURCE_DATE_EPOCH) {
+    return new Date((+process.env.SOURCE_DATE_EPOCH) * 1000);
+  }
+
+  // Otherwise, use an arbitrary constant date to ensure reproducibility.
+  // This constant is from commit 35045e7c0fa4e4e14b2747e967adb4029cedb945.
+  // We could instead use the timestamp from last git commit, but that would break
+  // source builds without git history, and it doesn't seem necessary anyways.
+  return new Date(1609809111000);
+};
+
 const afterPack = async (context) => {
-  await addElectronFuses(context)
+  await flipFuses(context);
+  recursivelySetFileTimes(context.appOutDir, getSourceDateEpoch());
 };
 
 const build = async ({
@@ -135,7 +159,6 @@ const build = async ({
         tw_warn_legacy: isProduction,
         tw_update: isProduction && manageUpdates
       },
-      afterAllArtifactBuild,
       afterPack,
       ...extraConfig,
       ...await prepare(archName)
@@ -177,6 +200,12 @@ const buildWindowsLegacy = () => build({
 const buildWindowsPortable = () => build({
   platformName: 'WINDOWS',
   platformType: 'portable',
+  manageUpdates: true
+});
+
+const buildWindowsMSI = () => build({
+  platformName: 'WINDOWS',
+  platformType: 'msi',
   manageUpdates: true
 });
 
@@ -268,6 +297,7 @@ const run = async () => {
     '--windows': buildWindows,
     '--windows-legacy': buildWindowsLegacy,
     '--windows-portable': buildWindowsPortable,
+    '--windows-msi': buildWindowsMSI,
     '--windows-dir': buildWindowsDir,
     '--microsoft-store': buildMicrosoftStore,
     '--mac': buildMac,
