@@ -167,10 +167,6 @@
     "string": "Source Code",
     "developer_comment": "Part of the in-app (?) button's menu. Opens link to source code."
   },
-  "in-app-about.donate": {
-    "string": "Donate",
-    "developer_comment": "Part of the in-app (?) button's menu. Opens link to donation page."
-  },
   "desktop-settings.title": {
     "string": "Desktop Settings",
     "developer_comment": "Title of desktop settings window"

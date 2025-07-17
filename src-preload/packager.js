@@ -23,16 +23,6 @@ contextBridge.exposeInMainWorld('PromptsPreload', {
 
 contextBridge.exposeInMainWorld('IsDesktop', true);
 
-// Donation link must be hidden in MAS builds for App store compliance
-if (ipcRenderer.sendSync('is-mas')) {
-  const style = document.createElement('style');
-  style.textContent = '.donate-link { display: none !important; }';
-  // No DOM exists yet when preload script runs
-  document.addEventListener('DOMContentLoaded', () => {
-    document.head.appendChild(style);
-  });
-}
-
 // In some Linux environments, people may try to drag & drop files that we don't have access to.
 // Remove when https://github.com/electron/electron/issues/30650 is fixed.
 if (navigator.userAgent.includes('Linux')) {

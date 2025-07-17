@@ -62,10 +62,6 @@ const handleClickSourceCode = () => {
   window.open('https://github.com/TurboWarp');
 };
 
-const handleClickDonate = () => {
-  window.open('https://github.com/sponsors/GarboMuffin');
-};
-
 const securityManager = {
   // Everything not specified here falls back to the scratch-gui security manager
 
@@ -92,7 +88,6 @@ const DesktopHOC = function (WrappedComponent) {
       // Changing locale always re-mounts this component
       const stateFromMain = EditorPreload.setLocale(this.props.locale);
       this.messages = stateFromMain.strings;
-      this.isMAS = stateFromMain.mas;
       setStrings({
         ok: this.messages['prompt.ok'],
         cancel: this.messages['prompt.cancel']
@@ -229,13 +224,6 @@ const DesktopHOC = function (WrappedComponent) {
               title: this.messages['in-app-about.source-code'],
               onClick: handleClickSourceCode
             },
-            // Donation link must be hidden in MAS builds for App store compliance
-            ...(this.isMAS ? [] : [
-              {
-                title: this.messages['in-app-about.donate'],
-                onClick: handleClickDonate
-              }
-            ])
           ]}
           onClickDesktopSettings={handleClickDesktopSettings}
           securityManager={securityManager}

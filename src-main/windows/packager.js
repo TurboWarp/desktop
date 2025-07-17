@@ -16,10 +16,6 @@ class PackagerWindow extends AbstractWindow {
       event.preventDefault();
     });
 
-    this.ipc.on('is-mas', (event) => {
-      event.returnValue = !!process.mas;
-    });
-
     this.ipc.on('import-project-with-port', (event) => {
       const port = event.ports[0];
       if (this.editorWindow.window.isDestroyed()) {

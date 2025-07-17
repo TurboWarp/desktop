@@ -316,8 +316,7 @@ class EditorWindow extends ProjectRunningWindow {
         Promise.resolve().then(() => settings.save());
       }
       event.returnValue = {
-        strings: getStrings(),
-        mas: !!process.mas
+        strings: getStrings()
       };
     });
 
