@@ -2,7 +2,6 @@ require('./patch-electron-builder');
 
 const fs = require('fs');
 const pathUtil = require('path');
-const nodeCrypto = require('crypto');
 const builder = require('electron-builder');
 const electronFuses = require('@electron/fuses');
 
@@ -49,18 +48,7 @@ const getArchesToBuild = (platformName) => {
   return arches;
 };
 
-const afterAllArtifactBuild = (buildResult) => {
-  for (const artifactPath of buildResult.artifactPaths) {
-    const data = fs.readFileSync(artifactPath);
-    const hash = nodeCrypto
-      .createHash('sha-256')
-      .update(data)
-      .digest('hex');
-    console.log(`${hash}  ${artifactPath}`);
-  }
-};
-
-const addElectronFuses = async (context) => {
+const flipFuses = async (context) => {
   const electronMajorVersion = +context.packager.info.framework.version.split('.')[0];
 
   /** @type {import('@electron/fuses').FuseV1Config} */
@@ -96,7 +84,7 @@ const addElectronFuses = async (context) => {
 };
 
 const afterPack = async (context) => {
-  await addElectronFuses(context)
+  await flipFuses(context);
 };
 
 const build = async ({
