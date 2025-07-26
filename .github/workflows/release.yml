@@ -31,6 +31,8 @@ jobs:
     - name: Package
       run: |
         node release-automation/build.js --debian --tarball --appimage --x64 --armv7l --arm64 --production
+    - name: Print file tree
+      run: node scripts/print-file-tree.js dist
     - name: Upload artifacts to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
@@ -85,6 +87,8 @@ jobs:
         # electron-builder documentation says password won't be escaped, so don't use any
         # special characters that the shell will mess with
         CSC_KEY_PASSWORD: ${{ secrets.APPLE_CSC_KEY_PASSWORD }}
+    - name: Print file tree
+      run: node scripts/print-file-tree.js dist
     - name: Upload artifacts to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
@@ -143,6 +147,9 @@ jobs:
         node release-automation/build.js --windows --microsoft-store --x64 --ia32 --arm64 --production
         node release-automation/build.js --windows-portable --x64 --production
         node release-automation/build.js --windows-legacy --ia32 --x64 --production
+    - name: Print file tree
+      working-directory: D:\repo
+      run: node scripts/print-file-tree.js dist
     - name: Upload unsigned artifacts to GitHub Actions
       uses: actions/upload-artifact@v4
       with:

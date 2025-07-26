@@ -25,6 +25,8 @@ jobs:
     - name: Package
       run: |
         node release-automation/build.js --debian --tarball --appimage --x64 --armv7l --arm64
+    - name: Print file tree
+      run: node scripts/print-file-tree.js dist
     - name: Upload artifacts to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
@@ -56,6 +58,8 @@ jobs:
       run: |
         node release-automation/build.js --mac --universal
         node release-automation/build.js --mac-legacy-10.13-10.14 --mac-legacy-10.15 --x64
+    - name: Print file tree
+      run: node scripts/print-file-tree.js dist
     - name: Upload artifacts to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
@@ -109,6 +113,9 @@ jobs:
         node release-automation/build.js --windows --microsoft-store --x64 --ia32 --arm64
         node release-automation/build.js --windows-portable --x64
         node release-automation/build.js --windows-legacy --ia32 --x64
+    - name: Print file tree
+      working-directory: D:\repo
+      run: node scripts/print-file-tree.js dist
     - name: Upload artifacts to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
