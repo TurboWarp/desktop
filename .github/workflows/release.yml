@@ -176,7 +176,7 @@ jobs:
         api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
         organization-id: 04444052-261e-46eb-8168-ed0eee93c57c
         project-slug: desktop_
-        signing-policy-slug: test-signing
+        signing-policy-slug: release-signing
         github-artifact-id: ${{ steps.signpath-unsigned.outputs.artifact-id }}
         artifact-configuration-slug: sign_installers
         wait-for-completion: true

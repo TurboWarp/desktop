@@ -112,6 +112,14 @@ npx electron-builder --linux deb
 
 You can typically only package for a certain operating system while on that operating system.
 
+## Code signing policy
+
+TurboWarp Desktop uses a free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/).
+
+ * Approvers:
+   * [GarboMuffin](https://github.com/GarboMuffin)
+ * Privacy policy: https://desktop.turbowarp.org/privacy.html
+
 ## Advanced customizations
 
 TurboWarp Desktop lets you configure custom JS and CSS without rebuilding the app.
