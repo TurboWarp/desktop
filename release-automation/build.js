@@ -155,6 +155,12 @@ const afterPack = async (context) => {
   recursivelySetFileTimes(context.appOutDir, sourceDateEpoch);
 };
 
+const afterSign = async (context) => {
+  // Ensure that modification times are still reproducible after signing and resource
+  // editing.
+  recursivelySetFileTimes(context.appOutDir, sourceDateEpoch);
+};
+
 const build = async ({
   platformName, // String that indexes into Platform[...]
   platformType, // Passed as first argument into platform.createTarget(...)
@@ -192,6 +198,7 @@ const build = async ({
         tw_update: isProduction && manageUpdates
       },
       afterPack,
+      afterSign,
       ...extraConfig,
       ...await prepare(archName)
     };
