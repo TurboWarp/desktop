@@ -18,6 +18,8 @@ jobs:
       with:
         submodules: recursive
         persist-credentials: false
+    - name: Install strip-nondeterminism
+      run: sudo apt-get install strip-nondeterminism
     - name: Install Node.js
       uses: actions/setup-node@v4
       with:

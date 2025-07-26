@@ -6,6 +6,11 @@ These are the bespoke scripts that we use to automate various aspects of releasi
 
 This is what creates most of the downloads that are up on our website and on GitHub.
 
+Optional dependencies:
+
+ * [Git](https://git-scm.com/) (used to get the time of the most recent commit)
+ * [strip-nondeterminism](https://salsa.debian.org/reproducible-builds/strip-nondeterminism) (Linux only, used for tarballs)
+
 You must specify which platform to build for:
 
 ```
@@ -44,6 +49,7 @@ You must specify which platform to build for:
 
 --tarball
     Create tar.gz files for Linux.
+    If strip-nondeterminism is installed, tarballs will be reproducible.
 
 --appimage
     Create AppImage executables for Linux.

@@ -303,7 +303,30 @@ const buildDebian = () => build({
 const buildTarball = () => build({
   platformName: 'LINUX',
   platformType: 'tar.gz',
-  manageUpdates: true
+  manageUpdates: true,
+  extraConfig: {
+    // gzip header contains various non-deterministic fields that we would like to remove.
+    // TODO: would be nice to reimplement this small part of strip-nondeterminism in JS to remove dependency.
+    artifactBuildCompleted: async (artifact) => new Promise((resolve, reject) => {
+      console.log(`Running strip-nondeterminism on ${artifact.file}`)
+      const stripNondeterminism = childProcess.spawn('strip-nondeterminism', [artifact.file]);
+      stripNondeterminism.on('error', (e) => {
+        if (e.code === 'ENOENT') {
+          console.error('strip-nondeterminism is not installed; tarball may not be reproducible.')
+          resolve();
+        } else {
+          reject(e);
+        }
+      });
+      stripNondeterminism.on('close', (code) => {
+        if (code === 0) {
+          resolve();
+        } else {
+          reject(new Error(`strip-nondeterminism exited with status code ${code}`));
+        }
+      });
+    })
+  }
 });
 
 const buildAppImage = () => build({
