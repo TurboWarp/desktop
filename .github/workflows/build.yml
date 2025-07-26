@@ -29,6 +29,13 @@ jobs:
         node release-automation/build.js --debian --tarball --appimage --x64 --armv7l --arm64
       env:
         DEBUG: electron-builder
+    - name: Normalize tarball gzip header
+      # Note that strip-nondeterminism only adjusts the timestamp in the gzip header. To make sure that
+      # the timestamps inside the tar itself are also reproducible, build.js sets the modification date
+      # of all included files to SOURCE_DATE_EPOCH before packing begins.
+      run: |
+        sudo apt-get install -y strip-nondeterminism
+        strip-nondeterminism dist/*.tar.gz
     - name: Debug info
       run: node scripts/print-file-tree.js dist
     - name: Upload artifacts to GitHub Actions
