@@ -2,6 +2,7 @@ require('./patch-electron-builder');
 
 const fs = require('fs');
 const pathUtil = require('path');
+const childProcess = require('child_process');
 const builder = require('electron-builder');
 const electronFuses = require('@electron/fuses');
 
@@ -17,6 +18,51 @@ const ELECTRON_26_FINAL = '26.6.10';
 
 // Electron 32 is the last version to support macOS 10.15
 const ELECTRON_32_FINAL = '32.3.3';
+
+/**
+ * @returns {Date}
+ */
+const getSourceDateEpoch = () => {
+  // Used if a better date cannot be obtained for any reason.
+  // This is from commit 35045e7c0fa4e4e14b2747e967adb4029cedb945.
+  const ARBITRARY_FALLBACK = 1609809111000;
+
+  // If SOURCE_DATE_EPOCH is set externally, use it.
+  if (process.env.SOURCE_DATE_EPOCH) {
+    return new Date((+process.env.SOURCE_DATE_EPOCH) * 1000);
+  }
+
+  // Otherwise, try to get the time of the most recent commit.
+  const gitProcess = childProcess.spawnSync('git', ['log', '-1', '--pretty=%ct']);
+
+  if (gitProcess.error) {
+    if (gitProcess.error === 'ENOENT') {
+      console.warn('Could not get source date epoch: git is not installed');
+      return new Date(ARBITRARY_FALLBACK);
+    }
+    throw gitProcess.error;
+  }
+
+  if (gitProcess.status !== 0) {
+    console.warn(`Could not get source date epoch: git returned status ${gitProcess.status}`);
+    return new Date(ARBITRARY_FALLBACK);
+  }
+
+  const gitStdout = gitProcess.stdout.toString().trim();
+  if (/^\d+$/.test(gitStdout)) {
+    return new Date((+gitStdout) * 1000);
+  }
+
+  console.warn(`Could not get source date epoch: git did not return a date`);
+  return new Date(ARBITRARY_FALLBACK);
+};
+
+const sourceDateEpoch = getSourceDateEpoch();
+// Ensure that we have a SOURCE_DATE_EPOCH environment variable so that it is available
+// to child processes of electron-builder. This is necessary for making the Debian
+// packages producibile.
+process.env.SOURCE_DATE_EPOCH = Math.round(sourceDateEpoch.getTime() / 1000).toString();
+console.log(`Source date epoch: ${sourceDateEpoch.toISOString()} (${process.env.SOURCE_DATE_EPOCH})`);
 
 /**
  * @param {string} platformName
@@ -83,8 +129,30 @@ const flipFuses = async (context) => {
   await context.packager.addElectronFuses(context, newFuses);
 };
 
+/**
+ * @param {string} directory
+ * @param {Date} date
+ */
+const recursivelySetFileTimes = (directory, date) => {
+  const files = fs.readdirSync(directory);
+  for (const file of files) {
+    const filePath = pathUtil.join(directory, file);
+    const stat = fs.statSync(filePath);
+    if (stat.isDirectory()) {
+      recursivelySetFileTimes(filePath, date);
+    } else {
+      fs.utimesSync(filePath, date, date);
+    }
+  }
+  fs.utimesSync(directory, date, date);
+};
+
 const afterPack = async (context) => {
   await flipFuses(context);
+
+  // When electron-builder packs the folder, modification times of the files are
+  // preserved for some formats, so ensure that modification times are reproducible.
+  recursivelySetFileTimes(context.appOutDir, sourceDateEpoch);
 };
 
 const build = async ({
@@ -123,7 +191,6 @@ const build = async ({
         tw_warn_legacy: isProduction,
         tw_update: isProduction && manageUpdates
       },
-      afterAllArtifactBuild,
       afterPack,
       ...extraConfig,
       ...await prepare(archName)
