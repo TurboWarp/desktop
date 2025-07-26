@@ -117,6 +117,9 @@
       "deleteAppDataOnUninstall": false,
       "allowToChangeInstallationDirectory": true
     },
+    "msi": {
+      "artifactName": "${productName}-Setup-${version}-${arch}.${ext}"
+    },
     "mac": {
       "artifactName": "${productName}-Setup-${version}.${ext}",
       "icon": "build/icon.icns",

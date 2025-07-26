@@ -180,6 +180,12 @@ const buildWindowsPortable = () => build({
   manageUpdates: true
 });
 
+const buildWindowsMSI = () => build({
+  platformName: 'WINDOWS',
+  platformType: 'msi',
+  manageUpdates: true
+});
+
 const buildWindowsDir = () => build({
   platformName: 'WINDOWS',
   platformType: 'dir',
@@ -268,6 +274,7 @@ const run = async () => {
     '--windows': buildWindows,
     '--windows-legacy': buildWindowsLegacy,
     '--windows-portable': buildWindowsPortable,
+    '--windows-msi': buildWindowsMSI,
     '--windows-dir': buildWindowsDir,
     '--microsoft-store': buildMicrosoftStore,
     '--mac': buildMac,

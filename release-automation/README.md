@@ -10,13 +10,16 @@ You must specify which platform to build for:
 
 ```
 --windows
-    Create Windows installers for Windows 10 or later.
+    Create Windows installers for Windows 10 or later using NSIS.
 
 --windows-legacy
-    Create Windows installers for Windows 7 or later (less secure than --windows).
+    Create Windows installers for Windows 7 or later using NSIS (less secure than --windows).
 
 --windows-portable
-    Create portable Windows executables for Windows 10 or later.
+    Create portable Windows executables for Windows 10 or later using NSIS.
+
+--windows-msi
+    Create Windows installers for Windows 10 or later using the Windows Installer format.
 
 --windows-dir
     Generate executables for Windows but don't package into a single executable file
