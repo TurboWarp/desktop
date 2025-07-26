@@ -83,8 +83,43 @@ const flipFuses = async (context) => {
   await context.packager.addElectronFuses(context, newFuses);
 };
 
+/**
+ * @param {string} directory
+ * @param {Date} date
+ */
+const recursivelySetFileTimes = (directory, date) => {
+  const files = fs.readdirSync(directory);
+  for (const file of files) {
+    const filePath = pathUtil.join(directory, file);
+    const stat = fs.statSync(filePath);
+    if (stat.isDirectory()) {
+      recursivelySetFileTimes(filePath, date);
+    } else {
+      fs.utimesSync(filePath, date, date);
+    }
+  }
+  fs.utimesSync(directory, date, date);
+};
+
+/**
+ * @returns {Date}
+ */
+const getSourceDateEpoch = () => {
+  // Standard variable for defining the time for a build
+  // https://reproducible-builds.org/docs/source-date-epoch/
+  if (process.env.SOURCE_DATE_EPOCH) {
+    return new Date((+process.env.SOURCE_DATE_EPOCH) * 1000);
+  }
+
+  // Otherwise, use an arbitrary constant date to ensure builds are still
+  // reproducible even without SOURCE_DATE_EPOCH being set. This constant is
+  // from commit 35045e7c0fa4e4e14b2747e967adb4029cedb945.
+  return new Date(1609809111000);
+};
+
 const afterPack = async (context) => {
   await flipFuses(context);
+  recursivelySetFileTimes(context.appOutDir, getSourceDateEpoch());
 };
 
 const build = async ({
