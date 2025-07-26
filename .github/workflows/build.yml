@@ -12,6 +12,8 @@ jobs:
       with:
         submodules: recursive
         persist-credentials: false
+    - name: Set SOURCE_DATE_EPOCH
+      run: echo "SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)" >> "$GITHUB_ENV"
     - name: Install Node.js
       uses: actions/setup-node@v4
       with:
@@ -46,6 +48,8 @@ jobs:
       with:
         submodules: recursive
         persist-credentials: false
+    - name: Set SOURCE_DATE_EPOCH
+      run: echo "SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)" >> "$GITHUB_ENV"
     - name: Install Node.js
       uses: actions/setup-node@v4
       with:
@@ -91,6 +95,9 @@ jobs:
       run: |
         Copy-Item -Path repo -Destination D:\repo -Recurse
         Remove-Item -Path repo -Recurse -Force
+    - name: Set SOURCE_DATE_EPOCH
+      working-directory: D:\repo
+      run: echo "SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)" >> "$env:GITHUB_ENV"
     - name: Install Node.js
       uses: actions/setup-node@v4
       with:
