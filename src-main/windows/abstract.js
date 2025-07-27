@@ -10,6 +10,7 @@ const windowsByClass = new Map();
  * @typedef AbstractWindowOptions
  * @property {Electron.BrowserWindow} [existingWindow]
  * @property {Electron.BrowserWindow} [parentWindow]
+ * @property {boolean} [nodeIntegration]
  */
 
 class AbstractWindow {
@@ -18,7 +19,7 @@ class AbstractWindow {
     this.parentWindow = options.parentWindow || null;
 
     /** @type {Electron.BrowserWindow} */
-    this.window = options.existingWindow || new BrowserWindow(this.getWindowOptions());
+    this.window = options.existingWindow || new BrowserWindow(this.getWindowOptions(options));
     this.window.webContents.on('before-input-event', this.handleInput.bind(this));
     this.applySettings();
 
@@ -163,7 +164,10 @@ class AbstractWindow {
     return '#ffffff';
   }
 
-  getWindowOptions () {
+  /**
+   * @param {AbstractWindowOptions} constructorOptions
+   */
+  getWindowOptions (constructorOptions) {
     /** @type {Electron.BrowserWindowConstructorOptions} */
     const options = {};
 
@@ -174,8 +178,11 @@ class AbstractWindow {
     // Child classes are expected to show the window on their own
     options.show = false;
 
-    // These should all be redundant already, but defense-in-depth.
-    options.webPreferences = {
+    options.webPreferences = constructorOptions.nodeIntegration ? {
+      nodeIntegration: true,
+      contextIsolation: false,
+      sandbox: false,
+    } : {
       nodeIntegration: false,
       contextIsolation: true,
       sandbox: true,
