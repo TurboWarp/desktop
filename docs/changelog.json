@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.14.5",
+    "date": "2025-8-25",
+    "notes": [
+      "Optimized stamps when using the Animated Text extension",
+      "Added code signing for some Windows builds using free using code signing provided by SignPath.io and certificate by SignPath Foundation",
+      "Remove donation links"
+    ]
+  },
+  {
     "version": "1.14.4",
     "date": "2025-6-12",
     "notes": [
