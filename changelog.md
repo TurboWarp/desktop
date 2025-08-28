@@ -2,11 +2,10 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.14.5 (2025-08-25)
+# 1.14.5 (2025-08-28)
 
  - Optimized stamps when using the Animated Text extension
  - Added code signing for some Windows builds using free using code signing provided by SignPath.io and certificate by SignPath Foundation
- - Remove donation links
 
 # 1.14.4 (2025-06-12)
 
