@@ -538,7 +538,7 @@
     <script type="generated-locale-names">{"en":"English","ca":"Català","de":"Deutsch","es":"Español (España)","fi":"Suomi","it":"Italiano","ja":"日本語","ko":"한국어","nb":"Norsk Bokmål","nl":"Nederlands","pt-br":"Português Brasileiro","ru":"Русский","sl":"Slovenščina","sv":"Svenska","tr":"Türkçe","uk":"Українська","zh-cn":"简体中文"}</script>
 
     <script>
-      const VERSION = '1.14.4';
+      const VERSION = '1.14.5';
 
       // OS-specific styles
       const getOS = () => {
@@ -906,6 +906,13 @@
       <h2 l10n="changelog">Changelog</h2>
       <div lang="en">
         <!-- CHANGELOG_START -->
+        <div data-version="1.14.5">
+          <h3>v1.14.5 (August 28 2025)</h3>
+          <ul>
+            <li>Optimized stamps when using the Animated Text extension</li>
+            <li>Added code signing for some Windows builds using free using code signing provided by SignPath.io and certificate by SignPath Foundation</li>
+          </ul>
+        </div>
         <div data-version="1.14.4">
           <h3>v1.14.4 (June 12 2025)</h3>
           <ul>
@@ -1311,12 +1318,14 @@
         </div>
       </a>
 
-      <p l10n="win-modern2">Or download an installer. If a Windows SmartScreen alert appears, click "More info" then "Run anyways".</p>
+      <p l10n="win-modern2">Or download an installer.</p>
       <ul class="download-list">
         <li><a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Setup-{version}-x64.exe" l10n="w642">Download installer (64-bit, recommended)</a></li>
         <li><a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Setup-{version}-ia32.exe" l10n="w323" l10n-description="Alternative download button">32-bit</a></li>
         <li><a class="download-button" href="https://github.com/TurboWarp/desktop/releases" data-asset="TurboWarp-Setup-{version}-arm64.exe">ARM</a></li>
       </ul>
+
+      <p lang="en">TurboWarp Desktop uses a free code signing provided by <a href="https://about.signpath.io/">SignPath.io</a>, certificate by <a href="https://signpath.org/">SignPath Foundation</a>.</p>
     </div>
 
     <div class="manual-installation section" id="windows-legacy">
