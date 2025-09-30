@@ -248,23 +248,29 @@ class EditorWindow extends ProjectRunningWindow {
       return this.openedFiles.get(id);
     };
 
-    this.window.webContents.on('will-prevent-unload', (event) => {
-      const choice = dialog.showMessageBoxSync(this.window, {
-        title: APP_NAME,
-        type: 'info',
-        buttons: [
-          translate('unload.stay'),
-          translate('unload.leave')
-        ],
-        cancelId: 0,
-        defaultId: 0,
-        message: translate('unload.message'),
-        detail: translate('unload.detail'),
-        noLink: true
-      });
-      if (choice === 1) {
-        event.preventDefault();
-      }
+    this.window.webContents.on('will-prevent-unload', () => {
+      // Using showMessageBoxSync immediately within the event handler breaks focus on
+      // Windows - https://github.com/TurboWarp/desktop/issues/1245.
+      // Instead, we'll let the window refuse the unload, then show our own prompt after
+      // the event finishes and manually close it ourselves instead of relying on Electron.
+      queueMicrotask(() => {
+        const choice = dialog.showMessageBoxSync(this.window, {
+          title: APP_NAME,
+          type: 'info',
+          buttons: [
+            translate('unload.stay'),
+            translate('unload.leave')
+          ],
+          cancelId: 0,
+          defaultId: 0,
+          message: translate('unload.message'),
+          detail: translate('unload.detail'),
+          noLink: true
+        });
+        if (choice === 1) {
+          this.window.destroy();
+        }
+      })
     });
 
     this.window.on('page-title-updated', (event, title, explicitSet) => {
