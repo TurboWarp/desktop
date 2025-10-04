@@ -44,10 +44,12 @@ jobs:
           dist/*.tar.gz
           dist/*.AppImage
     - name: Upload artifacts to tag
-      uses: xresloader/upload-to-github-release@2bcae85344d41e21f7fc4c47fa2ed68223afdb49
-      with:
-        file: dist/*.deb;dist/*.tar.gz;dist/*.AppImage
-        draft: true
+      run: |
+        node scripts/upload-to-github-releases.js TurboWarp desktop "dist/*.deb"
+        node scripts/upload-to-github-releases.js TurboWarp desktop "dist/*.tar.gz"
+        node scripts/upload-to-github-releases.js TurboWarp desktop "dist/*.AppImage"
+      env:
+        GH_TOKEN: "${{ github.token }}"
 
   release-mac:
     runs-on: macos-latest
@@ -97,10 +99,10 @@ jobs:
         name: mac
         path: dist/*.dmg
     - name: Upload artifacts to tag
-      uses: xresloader/upload-to-github-release@2bcae85344d41e21f7fc4c47fa2ed68223afdb49
-      with:
-        file: dist/*.dmg
-        draft: true
+      run: |
+        node scripts/upload-to-github-releases.js TurboWarp desktop "dist/*.dmg"
+      env:
+        GH_TOKEN: "${{ github.token }}"
 
   release-windows:
     # GitHub's Windows runners have a C: drive and a D: drive.
@@ -190,7 +192,8 @@ jobs:
         path: |
           D:\repo\dist\TurboWarp-Setup*x64.exe
     - name: Upload signed artifacts to tag
-      uses: xresloader/upload-to-github-release@2bcae85344d41e21f7fc4c47fa2ed68223afdb49
-      with:
-        file: D:\repo\dist\*.exe
-        draft: true
+      working-directory: D:\repo
+      run: |
+        node scripts/upload-to-github-releases.js TurboWarp desktop "dist/*.exe"
+      env:
+        GH_TOKEN: "${{ github.token }}"
