@@ -2,6 +2,11 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.15.0 (2025-10-04)
+
+ - New compiler; some projects run twice as fast
+ - macOS: Fixed poor performance on macOS 26
+
 # 1.14.5 (2025-08-28)
 
  - Optimized stamps when using the Animated Text extension

@@ -1,5 +1,13 @@
 [
   {
+    "version": "1.15.0",
+    "date": "2025-10-4",
+    "notes": [
+      "New compiler; some projects run twice as fast",
+      "macOS: Fixed poor performance on macOS 26"
+    ]
+  },
+  {
     "version": "1.14.5",
     "date": "2025-8-28",
     "notes": [
