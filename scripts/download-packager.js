@@ -1,9 +1,9 @@
-const fs = require('fs');
-const pathUtil = require('path');
-const {computeSHA256, persistentFetch} = require('./lib');
-const packagerInfo = require('./packager.json');
+import * as fs from 'node:fs';
+import * as pathUtil from 'node:path';
+import { computeSHA256, persistentFetch } from './lib.js';
+import packagerInfo from './packager.json' with { type: 'json' };
 
-const path = pathUtil.join(__dirname, '../src-renderer/packager/standalone.html');
+const path = pathUtil.join(import.meta.dirname, '../src-renderer/packager/standalone.html');
 
 const isAlreadyDownloaded = () => {
   try {

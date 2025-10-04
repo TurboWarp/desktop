@@ -1,15 +1,15 @@
-const pathUtil = require('path');
-const {promisify} = require('util');
-const fs = require('fs');
-const zlib = require('zlib');
-const Builder = require('@turbowarp/extensions/builder');
+import * as pathUtil from 'node:path';
+import { promisify } from 'node:util';
+import * as fs from 'node:fs';
+import * as zlib from 'node:zlib';
+import Builder from '@turbowarp/extensions/builder';
 
 const mode = 'desktop';
 const builder = new Builder(mode);
 const build = builder.build();
 console.log(`Built extensions (mode: ${mode})`);
 
-const outputDirectory = pathUtil.join(__dirname, '../dist-extensions/');
+const outputDirectory = pathUtil.join(import.meta.dirname, '../dist-extensions/');
 fs.rmSync(outputDirectory, {
   recursive: true,
   force: true,

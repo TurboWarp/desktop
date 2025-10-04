@@ -4,7 +4,8 @@
     "date": "2025-10-4",
     "notes": [
       "New compiler; some projects run twice as fast",
-      "macOS: Fixed poor performance on macOS 26"
+      "macOS: Fixed poor performance on macOS 26",
+      "Linux: Changed executable name back to \"turbowarp-desktop\" after unintentional change in previous update"
     ]
   },
   {

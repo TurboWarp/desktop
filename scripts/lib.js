@@ -1,10 +1,10 @@
-const nodeCrypto = require('crypto');
+import * as nodeCrypto from 'node:crypto';
 
 /**
  * @param {ArrayBuffer} buffer
  * @returns {string}
  */
-const computeMD5 = (buffer) => nodeCrypto
+export const computeMD5 = (buffer) => nodeCrypto
   .createHash('md5')
   .update(new Uint8Array(buffer))
   .digest('hex');
@@ -13,7 +13,7 @@ const computeMD5 = (buffer) => nodeCrypto
  * @param {ArrayBuffer} buffer
  * @returns {string}
  */
-const computeSHA256 = (buffer) => nodeCrypto
+export const computeSHA256 = (buffer) => nodeCrypto
   .createHash('sha256')
   .update(new Uint8Array(buffer))
   .digest('hex');
@@ -23,7 +23,7 @@ const computeSHA256 = (buffer) => nodeCrypto
  * @param {RequestInit} [opts]
  * @returns {Promise<Response>}
  */
-const persistentFetch = async (url, opts) => {
+export const persistentFetch = async (url, opts) => {
   let err;
   for (let i = 0; i < 3; i++) {
     try {
@@ -38,10 +38,4 @@ const persistentFetch = async (url, opts) => {
     }
   }
   throw err;
-};
-
-module.exports = {
-  computeMD5,
-  computeSHA256,
-  persistentFetch
 };

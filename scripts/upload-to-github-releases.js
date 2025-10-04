@@ -1,7 +1,6 @@
-const fs = require('node:fs');
-const fsPromises = require('node:fs/promises');
-const pathUtil = require('node:path');
-const childProcess = require('node:child_process');
+import * as fsPromises from 'node:fs/promises';
+import * as pathUtil from 'node:path';
+import * as childProcess from 'node:child_process';
 
 /** @type {string} */
 const GH_TOKEN = process.env.GH_TOKEN;

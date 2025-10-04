@@ -1,6 +1,6 @@
-const fs = require('fs');
-const pathUtil = require('path');
-const {computeMD5, computeSHA256, persistentFetch} = require('./lib');
+import * as fs from 'node:fs';
+import * as pathUtil from 'node:path';
+import { computeMD5, computeSHA256, persistentFetch } from './lib.js';
 
 /**
  * @typedef AssetMetadata
@@ -13,7 +13,7 @@ const {computeMD5, computeSHA256, persistentFetch} = require('./lib');
  * @returns {string[]} Array of md5exts
  */
 const getAllMd5exts = () => {
-  const guiLibraryFolder = pathUtil.join(__dirname, '../node_modules/scratch-gui/src/lib/libraries');
+  const guiLibraryFolder = pathUtil.join(import.meta.dirname, '../node_modules/scratch-gui/src/lib/libraries');
   const costumesManifest = pathUtil.join(guiLibraryFolder, 'costumes.json');
   const backdropManifest = pathUtil.join(guiLibraryFolder, 'backdrops.json');
   const spriteManifest = pathUtil.join(guiLibraryFolder, 'sprites.json');
@@ -89,7 +89,7 @@ const run = async () => {
     .flat()
     .sort((a, b) => a.md5.localeCompare(b.md5));
 
-  const outFile = pathUtil.join(__dirname, 'library-files.json');
+  const outFile = pathUtil.join(import.meta.dirname, 'library-files.json');
   fs.writeFileSync(outFile, JSON.stringify(sortedAssets, null, 2));
 
   console.log('Metadata updated. Run `node scripts/download-library-files.js` to finish updating.');

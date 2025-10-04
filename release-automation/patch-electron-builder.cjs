@@ -7,7 +7,7 @@ const packageJSON = require('../package.json');
 // Override https://github.com/electron-userland/electron-builder/blob/14942b70a5da79a5e36e330f64de66ec501b4ac6/packages/app-builder-lib/src/targets/LinuxTargetHelper.ts#L28-L53
 // The upstream Linux file association support is not great so we'll just replace it with the one
 // that we wrote by hand until we can send an upstream-ready PR.
-const LinuxTargetHelper = require('../node_modules/app-builder-lib/out/targets/LinuxTargetHelper.js').LinuxTargetHelper;
+const LinuxTargetHelper = require('app-builder-lib/out/targets/LinuxTargetHelper.js').LinuxTargetHelper;
 LinuxTargetHelper.prototype.computeMimeTypeFiles = async function (...args) {
     const tempFile = await this.packager.getTempFile('.xml');
     console.log(`${packageJSON.name}: LinuxTargetHelper.prototype.computeMimeTypeFiles has been patched. mime.xml to be saved to ${tempFile}`);

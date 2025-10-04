@@ -1,6 +1,6 @@
-const pathUtil = require('path');
-const fs = require('fs');
-const nodeCrypto = require('crypto');
+import * as pathUtil from 'node:path';
+import * as fs from 'node:fs';
+import * as nodeCrypto from 'node:crypto';
 
 const recursivelyPrint = (directory) => {
   const dirStat = fs.statSync(directory);

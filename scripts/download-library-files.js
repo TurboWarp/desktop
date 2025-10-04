@@ -1,8 +1,8 @@
-const fs = require('fs');
-const fsPromises = require('fs/promises');
-const pathUtil = require('path');
-const {computeMD5, computeSHA256, persistentFetch} = require('./lib');
-const {brotliCompress, brotliDecompress} = require('zlib');
+import * as fs from 'node:fs';
+import * as fsPromises from 'node:fs/promises';
+import * as pathUtil from 'node:path';
+import { brotliCompress, brotliDecompress } from 'node:zlib';
+import { computeMD5, computeSHA256, persistentFetch } from './lib.js';
 
 /**
  * @typedef AssetMetadata
@@ -11,7 +11,7 @@ const {brotliCompress, brotliDecompress} = require('zlib');
  * @property {string} sha256
  */
 
-const outDirectory = pathUtil.join(__dirname, '../dist-library-files');
+const outDirectory = pathUtil.join(import.meta.dirname, '../dist-library-files');
 
 /**
  * @param {AssetMetadata[]} remainingAssets List of remaining assets. Modified in-place.
@@ -80,7 +80,7 @@ const startDownloading = async (remainingAssets) => {
 };
 
 const run = async () => {
-  const metadataFile = pathUtil.join(__dirname, 'library-files.json');
+  const metadataFile = pathUtil.join(import.meta.dirname, 'library-files.json');
   const remainingAssets = JSON.parse(fs.readFileSync(metadataFile, 'utf-8'));
 
   await fsPromises.mkdir(outDirectory, {

@@ -72,6 +72,7 @@
       <description>
         <ul>
           <li>New compiler; some projects run twice as fast</li>
+          <li>Changed executable name back to "turbowarp-desktop" after unintentional change in previous update</li>
         </ul>
       </description>
     </release>
