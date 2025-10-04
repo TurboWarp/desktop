@@ -6,6 +6,7 @@ Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **form
 
  - New compiler; some projects run twice as fast
  - macOS: Fixed poor performance on macOS 26
+ - Linux: Changed executable name back to "turbowarp-desktop" after unintentional change in previous update
 
 # 1.14.5 (2025-08-28)
 
