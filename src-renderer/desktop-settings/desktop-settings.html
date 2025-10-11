@@ -225,7 +225,14 @@
         hardwareAcceleration.checked = settings.hardwareAcceleration;
         hardwareAccelerationWarning.hidden = hardwareAcceleration.checked;
 
-        document.querySelector('.hardware-acceleration-label').textContent = strings['desktop-settings.hardware-acceleration-when-available'];
+        const chromiumMajorVersion = +(navigator.userAgent.match(/Chrome\/(\d+)/)[1]);
+        document.querySelector('.hardware-acceleration-label').textContent = (
+          // Chromium 139 no longer does software fallback for WebGL by default
+          // https://chromestatus.com/feature/5166674414927872
+          chromiumMajorVersion >= 139 ?
+          strings['desktop-settings.hardware-acceleration'] :
+          strings['desktop-settings.hardware-acceleration-when-available']
+        );
         hardwareAccelerationWarning.textContent = strings['desktop-settings.hardware-acceleration-disabled'];
       </script>
 
