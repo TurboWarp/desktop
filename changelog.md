@@ -2,11 +2,14 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.15.0 (2025-10-04)
+# 1.15.0 (2025-10-12)
 
- - New compiler; some projects run twice as fast
- - Added face sensing extension
+ - New compiler runs some projects twice as fast
+ - Added face sensing extension, compatible with Scratch
+ - If your computer does not support hardware-accelerated WebGL, you will be forced to open Desktop Settings and disable graphics acceleration. Previously the CPU fallback would be automatically used, but a manual toggle is now required as it is very slow and is less secure
  - macOS: Fixed poor performance on macOS 26
+ - macOS: macOS 11 users now have to use a special legacy version of the app which is slower and less secure than the regular version
+ - Linux: If you use a Wayland compositor, the app will now use native Wayland instead of the Xwayland compatibility layer
  - Linux: Changed executable name back to "turbowarp-desktop" after unintentional change in previous update
 
 # 1.14.5 (2025-08-28)
