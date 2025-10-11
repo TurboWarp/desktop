@@ -251,8 +251,9 @@ class EditorWindow extends ProjectRunningWindow {
     this.window.webContents.on('will-prevent-unload', () => {
       // Using showMessageBoxSync synchronously in the event handler causes broken focus on Windows.
       // See https://github.com/TurboWarp/desktop/issues/1245
-      // To work around that, we'll let the will-prevent-unload event happen so the window stays open,
-      // then show our own prompt after a very short delay so that window focus doesn't break.
+      // To work around that, we'll won't cancel that will-prevent-unload event so the window stays
+      // open. After a very short delay to let focus get fixed, we'll show the dialog and force close
+      // the window ourselves if the user wants.
 
       setTimeout(() => {
         const choice = dialog.showMessageBoxSync(this.window, {
