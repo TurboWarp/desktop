@@ -248,12 +248,20 @@ class EditorWindow extends ProjectRunningWindow {
       return this.openedFiles.get(id);
     };
 
+    let processingWillPreventUnload = false;
     this.window.webContents.on('will-prevent-unload', () => {
       // Using showMessageBoxSync synchronously in the event handler causes broken focus on Windows.
       // See https://github.com/TurboWarp/desktop/issues/1245
       // To work around that, we won't cancel that will-prevent-unload event so the window stays
       // open. After a very short delay to let focus get fixed, we'll show a dialog and force close
       // the window ourselves if the user wants.
+
+      // Due to the timeout, this event could theoretically fire multiple times before we show the
+      // dialog. Make sure to only show one dialog if that happens.
+      if (processingWillPreventUnload) {
+        return;
+      }
+      processingWillPreventUnload = true;
 
       setTimeout(() => {
         const choice = dialog.showMessageBoxSync(this.window, {
@@ -272,6 +280,7 @@ class EditorWindow extends ProjectRunningWindow {
         if (choice === 1) {
           this.window.destroy();
         }
+        processingWillPreventUnload = false;
       });
     });
 
