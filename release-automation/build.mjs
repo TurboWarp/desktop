@@ -18,6 +18,10 @@ const ELECTRON_26_FINAL = '26.6.10';
 // Electron 32 is the last version to support macOS 10.15
 const ELECTRON_32_FINAL = '32.3.3';
 
+// Electron 37 is the last version to support macOS 11
+// TODO: 37 is still being updates, we should keep bumping this
+const ELECTRON_37_FINAL = '37.6.1';
+
 /**
  * @returns {Date}
  */
@@ -294,6 +298,19 @@ const buildMacLegacy1015 = () => build({
   }
 });
 
+const buildMacLegacy11 = () => build({
+  platformName: 'MAC',
+  platformType: 'dmg',
+  manageUpdates: true,
+  legacy: true,
+  extraConfig: {
+    mac: {
+      artifactName: '${productName}-Legacy-11-Setup-${version}.${ext}'
+    },
+    electronVersion: ELECTRON_37_FINAL
+  }
+});
+
 const buildMacDir = () => build({
   platformName: 'MAC',
   platformType: 'dir',
@@ -357,6 +374,7 @@ const run = async () => {
     '--mac': buildMac,
     '--mac-legacy-10.13-10.14': buildMacLegacy10131014,
     '--mac-legacy-10.15': buildMacLegacy1015,
+    '--mac-legacy-11': buildMacLegacy11,
     '--mac-dir': buildMacDir,
     '--debian': buildDebian,
     '--tarball': buildTarball,

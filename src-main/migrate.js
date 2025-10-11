@@ -78,7 +78,9 @@ const migrate = async () => {
       // Legacy build for macOS 10.13 and 10.14 uses Electron 26
       (getElectronMajorVersion() === 26 && getKernelMajorVersion() >= 19) ||
       // Legacy build for macOS 10.15 uses Electron 32
-      (getElectronMajorVersion() === 32 && getKernelMajorVersion() >= 20)
+      (getElectronMajorVersion() === 32 && getKernelMajorVersion() >= 20) ||
+      // Legacy build for macOS 11 uses Electron 37
+      (getElectronMajorVersion() === 37 && getKernelMajorVersion() >= 21)
     ))
   )) {
     const result = dialog.showMessageBoxSync({
