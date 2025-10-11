@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 import * as pathUtil from 'node:path';
-import { computeSHA256, persistentFetch } from './lib.js';
+import { computeSHA256, persistentFetch } from './lib.mjs';
 
 const run = async () => {
   const releases = await (await persistentFetch('https://api.github.com/repos/TurboWarp/packager/releases')).json();

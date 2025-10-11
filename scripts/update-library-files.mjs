@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 import * as pathUtil from 'node:path';
-import { computeMD5, computeSHA256, persistentFetch } from './lib.js';
+import { computeMD5, computeSHA256, persistentFetch } from './lib.mjs';
 
 /**
  * @typedef AssetMetadata
