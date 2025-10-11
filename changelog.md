@@ -5,6 +5,7 @@ Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **form
 # 1.15.0 (2025-10-04)
 
  - New compiler; some projects run twice as fast
+ - Added face sensing extension
  - macOS: Fixed poor performance on macOS 26
  - Linux: Changed executable name back to "turbowarp-desktop" after unintentional change in previous update
 
