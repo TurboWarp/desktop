@@ -1,8 +1,7 @@
 const {contextBridge, ipcRenderer} = require('electron');
 
 contextBridge.exposeInMainWorld('DesktopSettingsPreload', {
-  getStrings: () => ipcRenderer.sendSync('get-strings'),
-  getSettings: () => ipcRenderer.sendSync('get-settings'),
+  init: () => ipcRenderer.sendSync('init'),
   setUpdateChecker: (updateChecker) => ipcRenderer.invoke('set-update-checker', updateChecker),
   enumerateMediaDevices: () => ipcRenderer.invoke('enumerate-media-devices'),
   setMicrophone: (microphone) => ipcRenderer.invoke('set-microphone', microphone),

@@ -55,10 +55,8 @@
   <body>
     <main>
       <script>
-        const {locale, strings} = DesktopSettingsPreload.getStrings();
+        const {locale, strings, settings} = DesktopSettingsPreload.init();
         document.documentElement.lang = locale;
-
-        const settings = DesktopSettingsPreload.getSettings();
       </script>
 
       <h1 class="title"></h1>

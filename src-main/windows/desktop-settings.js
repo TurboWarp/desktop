@@ -14,26 +14,23 @@ class DesktopSettingsWindow extends AbstractWindow {
     this.window.setMinimizable(false);
     this.window.setMaximizable(false);
 
-    this.ipc.on('get-strings', (event) => {
+    this.ipc.on('init', (event) => {
       event.returnValue = {
         locale: getLocale(),
-        strings: getStrings()
-      }
-    });
-
-    this.ipc.on('get-settings', (event) => {
-      event.returnValue = {
-        updateCheckerAllowed: isUpdateCheckerAllowed(),
-        updateChecker: settings.updateChecker,
-        microphone: settings.microphone,
-        camera: settings.camera,
-        hardwareAcceleration: settings.hardwareAcceleration,
-        backgroundThrottling: settings.backgroundThrottling,
-        bypassCORS: settings.bypassCORS,
-        spellchecker: settings.spellchecker,
-        exitFullscreenOnEscape: settings.exitFullscreenOnEscape,
-        richPresenceAvailable: RichPresence.isAvailable(),
-        richPresence: settings.richPresence
+        strings: getStrings(),
+        settings: {
+          updateCheckerAllowed: isUpdateCheckerAllowed(),
+          updateChecker: settings.updateChecker,
+          microphone: settings.microphone,
+          camera: settings.camera,
+          hardwareAcceleration: settings.hardwareAcceleration,
+          backgroundThrottling: settings.backgroundThrottling,
+          bypassCORS: settings.bypassCORS,
+          spellchecker: settings.spellchecker,
+          exitFullscreenOnEscape: settings.exitFullscreenOnEscape,
+          richPresenceAvailable: RichPresence.isAvailable(),
+          richPresence: settings.richPresence
+        }
       };
     });
 
