@@ -248,23 +248,31 @@ class EditorWindow extends ProjectRunningWindow {
       return this.openedFiles.get(id);
     };
 
-    this.window.webContents.on('will-prevent-unload', (event) => {
-      const choice = dialog.showMessageBoxSync(this.window, {
-        title: APP_NAME,
-        type: 'info',
-        buttons: [
-          translate('unload.stay'),
-          translate('unload.leave')
-        ],
-        cancelId: 0,
-        defaultId: 0,
-        message: translate('unload.message'),
-        detail: translate('unload.detail'),
-        noLink: true
+    this.window.webContents.on('will-prevent-unload', () => {
+      // Using showMessageBoxSync synchronously in the event handler causes broken focus on Windows.
+      // See https://github.com/TurboWarp/desktop/issues/1245
+      // To work around that, we won't cancel that will-prevent-unload event so the window stays
+      // open. After a very short delay to let focus get fixed, we'll show a dialog and force close
+      // the window ourselves if the user wants.
+
+      setTimeout(() => {
+        const choice = dialog.showMessageBoxSync(this.window, {
+          title: APP_NAME,
+          type: 'info',
+          buttons: [
+            translate('unload.stay'),
+            translate('unload.leave')
+          ],
+          cancelId: 0,
+          defaultId: 0,
+          message: translate('unload.message'),
+          detail: translate('unload.detail'),
+          noLink: true
+        });
+        if (choice === 1) {
+          this.window.destroy();
+        }
       });
-      if (choice === 1) {
-        event.preventDefault();
-      }
     });
 
     this.window.on('page-title-updated', (event, title, explicitSet) => {
