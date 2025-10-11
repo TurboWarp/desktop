@@ -158,6 +158,17 @@ const afterPack = async (context) => {
   recursivelySetFileTimes(context.appOutDir, sourceDateEpoch);
 };
 
+const afterPackForUniversalMac = async (context) => {
+  // For universal binaries on macOS, we should only need to apply fuses at the end of the build,
+  // not on each child build that happens for Intel and ARM.
+  // https://github.com/electron-userland/electron-builder/issues/6365#issuecomment-1191747089
+  if (context.arch === Arch.universal) {
+    await flipFuses(context);
+  }
+
+  recursivelySetFileTimes(context.appOutDir, sourceDateEpoch);
+};
+
 const afterSign = async (context) => {
   // Ensure that modification times are still reproducible after signing and resource
   // editing.
@@ -200,7 +211,7 @@ const build = async ({
         tw_warn_legacy: isProduction,
         tw_update: isProduction && manageUpdates
       },
-      afterPack,
+      afterPack: arch === Arch.universal ? afterPackForUniversalMac : afterPack,
       afterSign,
       ...extraConfig,
       ...await prepare(archName)
@@ -260,16 +271,7 @@ const buildMicrosoftStore = () => build({
 const buildMac = () => build({
   platformName: 'MAC',
   platformType: 'dmg',
-  manageUpdates: true,
-  extraConfig: {
-    afterPack: async (context) => {
-      // For non-legacy macOS we should only need to apply fuses on the universal build at the end
-      // https://github.com/electron-userland/electron-builder/issues/6365#issuecomment-1191747089
-      if (context.arch === Arch.universal) {
-        await afterPack(context);
-      }
-    }
-  }
+  manageUpdates: true
 });
 
 const buildMacLegacy10131014 = () => build({
