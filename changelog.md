@@ -7,6 +7,7 @@ Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **form
  - New compiler runs some projects twice as fast
  - Added face sensing extension, compatible with Scratch
  - If your computer does not support hardware-accelerated WebGL, you will be forced to open Desktop Settings and disable graphics acceleration. Previously the CPU fallback would be automatically used, but a manual toggle is now required as it is very slow and is less secure
+ - Windows: Fixed broken text boxes after choosing "Stay" in the unsaved changes confirmation dialog
  - macOS: Fixed poor performance on macOS 26
  - macOS: macOS 11 users now have to use a special legacy version of the app which is slower and less secure than the regular version
  - Linux: If you use a Wayland compositor, the app will now use native Wayland instead of the Xwayland compatibility layer
