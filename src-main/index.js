@@ -18,8 +18,6 @@ require('./context-menu');
 require('./menu-bar');
 require('./crash-messages');
 
-app.enableSandbox();
-
 // Allows certain versions of Scratch Link to work without an internet connection
 // https://github.com/LLK/scratch-desktop/blob/4b462212a8e406b15bcf549f8523645602b46064/src/main/index.js#L45
 app.commandLine.appendSwitch('host-resolver-rules', 'MAP device-manager.scratch.mit.edu 127.0.0.1');
@@ -155,7 +153,7 @@ app.on('web-contents-created', (event, webContents) => {
 });
 
 app.on('window-all-closed', () => {
-  if (!isMigrating) {
+  if (!isInitializing) {
     app.quit();
   }
 });
@@ -174,15 +172,22 @@ app.on('open-file', (event, path) => {
   // This event can be called before ready.
   if (app.isReady() && !isMigrating) {
     // The path we get should already be absolute
-    EditorWindow.openFiles([path], '');
+    EditorWindow.openPaths([path], false, false, null);
   } else {
     filesQueuedToOpen.push(path);
   }
 });
 
 /**
+ * @typedef ParsedCommandLine
+ * @property {string[]} files
+ * @property {boolean} fullscreen
+ * @property {boolean} nodeIntegration
+ */
+
+/**
  * @param {string[]} argv
- * @returns {{files: string[]; fullscreen: boolean;}}
+ * @returns {ParsedCommandLine}
  */
 const parseCommandLine = (argv) => {
   // argv could be any of:
@@ -201,27 +206,35 @@ const parseCommandLine = (argv) => {
     .slice(process.defaultApp ? 2 : 1);
 
   const fullscreen = argv.includes('--fullscreen');
+  const nodeIntegration = argv.includes('--give-projects-full-access-to-my-computer-including-ability-to-install-malware');
 
   return {
     files,
-    fullscreen
+    fullscreen,
+    nodeIntegration
   };
 };
 
 let isMigrating = true;
+let isInitializing = true;
 let migratePromise = null;
 
 app.on('second-instance', (event, argv, workingDirectory) => {
   migratePromise.then(() => {
     const commandLineOptions = parseCommandLine(argv);
-    EditorWindow.openFiles(commandLineOptions.files, commandLineOptions.fullscreen, workingDirectory);
+    EditorWindow.openPaths(
+      commandLineOptions.files,
+      commandLineOptions.fullscreen,
+      commandLineOptions.nodeIntegration,
+      workingDirectory
+    );
   });
 });
 
 app.whenReady().then(() => {
   AbstractWindow.settingsChanged();
 
-  migratePromise = migrate().then((shouldContinue) => {
+  migratePromise = migrate().then(async (shouldContinue) => {
     if (!shouldContinue) {
       // If we use exit() instead of quit() then openExternal() calls made before the app quits
       // won't work on Windows.
@@ -232,10 +245,17 @@ app.whenReady().then(() => {
     isMigrating = false;
 
     const commandLineOptions = parseCommandLine(process.argv);
-    EditorWindow.openFiles([
-      ...filesQueuedToOpen,
-      ...commandLineOptions.files
-    ], commandLineOptions.fullscreen, process.cwd());
+    await EditorWindow.openPaths(
+      [
+        ...filesQueuedToOpen,
+        ...commandLineOptions.files
+      ],
+      commandLineOptions.fullscreen,
+      commandLineOptions.nodeIntegration,
+      process.cwd()
+    );
+
+    isInitializing = false;
 
     if (AbstractWindow.getAllWindows().length === 0) {
       // No windows were successfully opened. Let's just quit.
