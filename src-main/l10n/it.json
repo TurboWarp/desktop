@@ -1,0 +1,490 @@
+{  
+  "unload.stay": {  
+    "string": "Resta",  
+    "developer_comment": "Parte del prompt di conferma che appare quando si chiude l'app desktop con modifiche non salvate"  
+  },  
+  "unload.leave": {  
+    "string": "Esci",  
+    "developer_comment": "Parte del prompt di conferma che appare quando si chiude l'app desktop con modifiche non salvate"  
+  },  
+  "unload.message": {  
+    "string": "Sei sicuro di voler uscire?",  
+    "developer_comment": "Parte del prompt di conferma che appare quando si chiude l'app desktop con modifiche non salvate"  
+  },  
+  "unload.detail": {  
+    "string": "Tutte le modifiche non salvate andranno perse.",  
+    "developer_comment": "Parte del prompt di conferma che appare quando si chiude l'app desktop con modifiche non salvate"  
+  },  
+  "addon-settings": {  
+    "string": "Impostazioni Addon",  
+    "developer_comment": "Titolo della finestra delle impostazioni degli addon"  
+  },  
+  "privacy-policy": {  
+    "string": "Informativa sulla Privacy",  
+    "developer_comment": "Titolo della finestra dell'informativa sulla privacy"  
+  },  
+  "about": {  
+    "string": "Informazioni su {APP_NAME}",  
+    "developer_comment": "Titolo della finestra delle informazioni su"  
+  },  
+  "menu.about": {  
+    "string": "Informazioni su {APP_NAME}",  
+    "developer_comment": "Elemento della barra dei menu di macOS per aprire la finestra delle informazioni su"  
+  },  
+  "menu.new-window": {  
+    "string": "Nuova Finestra",  
+    "developer_comment": "Elemento della barra dei menu di macOS per aprire una nuova finestra dell'editor"  
+  },  
+  "menu.close-window": {  
+    "string": "Chiudi Finestra",  
+    "developer_comment": "Elemento della barra dei menu di macOS per chiudere la finestra corrente"  
+  },  
+  "menu.settings": {  
+    "string": "Impostazioni",  
+    "developer_comment": "Elemento della barra dei menu di macOS per aprire la finestra delle impostazioni desktop"  
+  },  
+  "menu.addons": {  
+    "string": "Addon",  
+    "developer_comment": "Elemento della barra dei menu di macOS per aprire la finestra delle impostazioni degli addon"  
+  },  
+  "menu.package": {  
+    "string": "Crea Pacchetto Progetto",  
+    "developer_comment": "Elemento della barra dei menu di macOS per creare il pacchetto del progetto aperto nell'editor"  
+  },  
+  "menu.reload": {  
+    "string": "Ricarica",  
+    "developer_comment": "Elemento della barra dei menu di macOS per ricaricare la finestra, come un browser"  
+  },  
+  "menu.learn-more": {  
+    "string": "Scopri di più",  
+    "developer_comment": "Elemento della barra dei menu di macOS per saperne di più"  
+  },  
+  "context.add-to-dictionary": {  
+    "string": "Aggiungi al Dizionario",  
+    "developer_comment": "Elemento del menu contestuale che appare quando si fa clic con il tasto destro su una parola scritta in modo errato"  
+  },  
+  "context.open-link": {  
+    "string": "Apri Link",  
+    "developer_comment": "Elemento del menu contestuale per aprire il link"  
+  },  
+  "context.cut": {  
+    "string": "Taglia",  
+    "developer_comment": "Elemento del menu contestuale per tagliare"  
+  },  
+  "context.copy": {  
+    "string": "Copia",  
+    "developer_comment": "Elemento del menu contestuale per copiare"  
+  },  
+  "context.paste": {  
+    "string": "Incolla",  
+    "developer_comment": "Elemento del menu contestuale per incollare"  
+  },  
+  "permission.audio-denied": {  
+    "string": "Permesso Microfono Negato",  
+    "developer_comment": "Appare quando qualcuno non concede all'app l'accesso al proprio microfono."  
+  },  
+  "permission.audio-denied-description": {  
+    "string": "L'app non sarà in grado di registrare suoni o rilevare il volume.",  
+    "developer_comment": "Appare quando qualcuno non concede all'app l'accesso al proprio microfono."  
+  },  
+  "permission.video-denied": {  
+    "string": "Permesso Fotocamera Negato",  
+    "developer_comment": "Appare quando qualcuno non concede all'app l'accesso alla propria fotocamera."  
+  },  
+  "permission.video-denied-description": {  
+    "string": "L'app non sarà in grado di scattare foto o utilizzare il rilevamento video.",  
+    "developer_comment": "Appare quando qualcuno non concede all'app l'accesso alla propria fotocamera."  
+  },  
+  "permission.macos-instructions": {  
+    "string": "Per modificare le autorizzazioni, apri Preferenze di Sistema > Sicurezza e Privacy > Privacy > Fotocamera o Microfono.",  
+    "developer_comment": "Appare su macOS quando qualcuno non concede all'app l'accesso alla propria fotocamera o microfono"  
+  },  
+  "crash.title": {  
+    "string": "Arrestato in modo Anomalo",  
+    "developer_comment": "Appare quando un processo si arresta in modo anomalo"  
+  },  
+  "crash.description": {  
+    "string": "Processo arrestato in modo anomalo: {type}: {reason} ({code})",  
+    "developer_comment": "Appare quando un processo si arresta in modo anomalo"  
+  },  
+  "prompt.ok": {  
+    "string": "OK",  
+    "developer_comment": "Appare in finestre di avviso, messaggi di conferma e prompt di testo"  
+  },  
+  "prompt.cancel": {  
+    "string": "Annulla",  
+    "developer_comment": "Appare in messaggi di conferma e prompt di testo"  
+  },  
+  "packager.loading-preview": {  
+    "string": "Caricamento...",  
+    "developer_comment": "Messaggio di caricamento per le finestre di anteprima del packager"  
+  },  
+  "arm-translation.title": {  
+    "string": "Scarica invece la versione ARM",  
+    "developer_comment": "Appare quando si esegue l'app in un traduttore ARM come Rosetta di Apple"  
+  },  
+  "arm-translation.message": {  
+    "string": "Stai usando {APP_NAME} in un livello di traduzione come Apple Rosetta. Installa invece la versione ARM nativa, poiché funzionerà meglio e consumerà meno batteria.",  
+    "developer_comment": "Appare quando si esegue l'app in un traduttore ARM come Rosetta di Apple"  
+  },  
+  "arm-translation.ok": {  
+    "string": "Esci e Aggiorna",  
+    "developer_comment": "Appare quando si esegue l'app in un traduttore ARM come Rosetta di Apple. Questo pulsante aprirà un browser per installare la versione corretta."  
+  },  
+  "arm-translation.ignore": {  
+    "string": "Ignora Avviso",  
+    "developer_comment": "Appare quando si esegue l'app in un traduttore ARM come Rosetta di Apple. Questo pulsante ignorerà l'avviso e continuerà comunque."  
+  },  
+  "unnecessary-legacy.title": {  
+    "string": "Si prega di non utilizzare la versione legacy",  
+    "developer_comment": "Appare quando si esegue la versione legacy dell'app su un dispositivo che non ne ha bisogno"  
+  },  
+  "unnecessary-legacy.message": {  
+    "string": "Stai utilizzando la versione 'Legacy' di {APP_NAME} su un dispositivo che non ne ha bisogno. Questo è insicuro, più lento e potrebbe eliminare PERMANENTEMENTE le tue impostazioni e il tuo zaino. Installa invece la versione normale.",  
+    "developer_comment": "Appare quando si esegue la versione legacy dell'app su un dispositivo che non ne ha bisogno"  
+  },  
+  "unnecessary-legacy.ok": {  
+    "string": "Esci e Aggiorna",  
+    "developer_comment": "Appare quando si esegue la versione legacy dell'app su un dispositivo che non ne ha bisogno. Questo pulsante aprirà un browser per installare la versione corretta."  
+  },  
+  "unnecessary-legacy.ignore": {  
+    "string": "Ignora Avviso",  
+    "developer_comment": "Appare quando si esegue la versione legacy dell'app su un dispositivo che non ne ha bisogno. Questo pulsante ignorerà l'avviso e continuerà comunque."  
+  },  
+  "in-app-about.desktop-settings": {  
+    "string": "Impostazioni Desktop",  
+    "developer_comment": "Parte del menu del pulsante in-app (?). Apre la finestra delle impostazioni desktop."  
+  },  
+  "in-app-about.privacy": {  
+    "string": "Informativa sulla Privacy",  
+    "developer_comment": "Parte del menu del pulsante in-app (?). Apre la finestra dell'informativa sulla privacy."  
+  },  
+  "in-app-about.about": {  
+    "string": "Informazioni su",  
+    "developer_comment": "Parte del menu del pulsante in-app (?). Apre la finestra delle informazioni su."  
+  },  
+  "in-app-about.source-code": {  
+    "string": "Codice Sorgente",  
+    "developer_comment": "Parte del menu del pulsante in-app (?). Apre il link al codice sorgente."  
+  },  
+  "desktop-settings.title": {  
+    "string": "Impostazioni Desktop",  
+    "developer_comment": "Titolo della finestra delle impostazioni desktop"  
+  },  
+  "desktop-settings.update-checker-not-allowed": {  
+    "string": "Gli aggiornamenti sono gestiti dallo store da cui hai installato l'app.",  
+    "developer_comment": "Appare nelle impostazioni desktop quando gli aggiornamenti sono gestiti dallo store da cui l'app è stata installata, come Microsoft Store."  
+  },  
+  "desktop-settings.update-checker": {  
+    "string": "Controllo Aggiornamenti",  
+    "developer_comment": "Etichetta del menu a tendina per configurare il controllo aggiornamenti"  
+  },  
+  "desktop-settings.notify-unstable": {  
+    "string": "Avvisami degli aggiornamenti instabili",  
+    "developer_comment": "Opzione di configurazione del controllo aggiornamenti"  
+  },  
+  "desktop-settings.notify-stable": {  
+    "string": "Avvisami degli aggiornamenti stabili",  
+    "developer_comment": "Opzione di configurazione del controllo aggiornamenti"  
+  },  
+  "desktop-settings.notify-security": {  
+    "string": "Avvisami degli aggiornamenti di sicurezza",  
+    "developer_comment": "Opzione di configurazione del controllo aggiornamenti"  
+  },  
+  "desktop-settings.notify-never": {  
+    "string": "Non avvisarmi mai degli aggiornamenti",  
+    "developer_comment": "Opzione di configurazione del controllo aggiornamenti"  
+  },  
+  "desktop-settings.disabled-updates": {  
+    "string": "Disabilitare il controllo aggiornamenti non è raccomandato, in quanto non sarai avvisato degli aggiornamenti di sicurezza.",  
+    "developer_comment": "Avviso che appare nelle impostazioni desktop quando il controllo aggiornamenti è disabilitato"  
+  },  
+  "desktop-settings.microphone": {  
+    "string": "Microfono Selezionato",  
+    "developer_comment": "Etichetta del menu a tendina per selezionare il microfono attivo"  
+  },  
+  "desktop-settings.camera": {  
+    "string": "Fotocamera Selezionata",  
+    "developer_comment": "Etichetta del menu a tendina per selezionare la fotocamera attiva"  
+  },  
+  "desktop-settings.loading": {  
+    "string": "Caricamento...",  
+    "developer_comment": "Elemento segnaposto nel menu a tendina mentre i dati vengono recuperati"  
+  },  
+  "desktop-settings.no-devices": {  
+    "string": "Nessun dispositivo",  
+    "developer_comment": "Appare nel menu a tendina per selezionare la fotocamera o il microfono se non ne sono stati trovati"  
+  },  
+  "desktop-settings.error": {  
+    "string": "Errore: {error}",  
+    "developer_comment": "Appare nel menu a tendina per selezionare la fotocamera o il microfono se si è verificato un errore"  
+  },  
+  "desktop-settings.editor-must-be-open": {  
+    "string": "Errore: Apri l'editor per configurare i dispositivi",  
+    "developer_comment": "Appare nel menu a tendina per selezionare la fotocamera o il microfono se l'editor non è aperto"  
+  },  
+  "desktop-settings.media-devices-changed": {  
+    "string": "Potrebbe essere necessario riavviare l'applicazione affinché le modifiche al microfono o alla fotocamera vengano applicate.",  
+    "developer_comment": "Avviso che appare nelle impostazioni desktop dopo aver modificato la fotocamera o il microfono selezionati"  
+  },  
+  "desktop-settings.hardware-acceleration-when-available": {  
+    "string": "Usa l'accelerazione grafica quando disponibile (richiede il riavvio)",  
+    "developer_comment": "Opzione delle impostazioni desktop per attivare/disattivare l'accelerazione hardware/accelerazione grafica"  
+  },  
+  "desktop-settings.hardware-acceleration": {  
+    "string": "Usa l'accelerazione grafica (richiede il riavvio)",  
+    "developer_comment": "Opzione delle impostazioni desktop per attivare/disattivare l'accelerazione hardware/accelerazione grafica"  
+  },  
+  "desktop-settings.hardware-acceleration-disabled": {  
+    "string": "Disabilitare l'accelerazione grafica riduce significativamente le prestazioni. Alcuni progetti possono essere eseguiti oltre 100 volte più lentamente poiché tutto il rendering verrà eseguito dalla CPU. Questo dovrebbe essere fatto solo come ultima risorsa se l'accelerazione grafica causa arresti anomali.",  
+    "developer_comment": "Avviso che appare nelle impostazioni desktop quando l'accelerazione hardware/accelerazione grafica è disabilitata"  
+  },  
+  "desktop-settings.background-throttling": {  
+    "string": "Metti in sospensione le finestre nascoste",  
+    "developer_comment": "Opzione delle impostazioni desktop per disabilitare la limitazione delle finestre in background"  
+  },  
+  "desktop-settings.background-throttling-disabled": {  
+    "string": "Consentire alle finestre nascoste di rimanere attive comporterà un maggiore utilizzo della CPU e una minore durata della batteria.",  
+    "developer_comment": "Avviso che appare nelle impostazioni desktop quando la limitazione in background è disabilitata"  
+  },  
+  "desktop-settings.bypass-cors": {  
+    "string": "Consenti alle estensioni di accedere a qualsiasi sito web",  
+    "developer_comment": "Opzione delle impostazioni desktop per consentire alle estensioni di bypassare le normali protezioni di sicurezza"  
+  },  
+  "desktop-settings.bypass-cors-enabled": {  
+    "string": "Questo disabilita diverse funzionalità di sicurezza web progettate per proteggerti. Progetti o estensioni dannosi saranno in grado di accedere a qualsiasi sito web o dispositivo sulla tua rete.",  
+    "developer_comment": "Avviso che appare nelle impostazioni desktop quando il bypass CORS è abilitato"  
+  },  
+  "desktop-settings.spellchecker": {  
+    "string": "Abilita il correttore ortografico",  
+    "developer_comment": "Opzione nelle impostazioni desktop per disabilitare il controllo ortografico"  
+  },  
+  "desktop-settings.exit-fullscreen-on-escape": {  
+    "string": "Esci dalla modalità a schermo intero F11 (non il pulsante a schermo intero nell'editor) quando si preme Esc",  
+    "developer_comment": "Riferimento a quando un'intera finestra è a schermo intero premendo F11 o il pulsante di ingrandimento su macOS, non alla modalità a schermo intero che si ottiene premendo il pulsante a schermo intero nell'editor."  
+  },  
+  "desktop-settings.rich-presence": {  
+    "string": "Abilita Rich Presence",  
+    "developer_comment": "Opzione per abilitare il supporto Discord Rich Presence, che mostra il nome del progetto che qualcuno sta modificando sul proprio profilo Discord. Per la conformità con le politiche di Scratch non usare la parola \"Discord\" nella traduzione."  
+  },  
+  "desktop-settings.rich-presence-unavailable": {  
+    "string": "Rich Presence non è disponibile in questa versione dell'app",  
+    "developer_comment": "Appare nelle impostazioni desktop dopo una casella di controllo disabilitata (grigia e non modificabile) se Discord Rich Presence non può essere abilitato."  
+  },  
+  "desktop-settings.more-information": {  
+    "string": "(maggiori informazioni)",  
+    "developer_comment": "Appare nelle impostazioni desktop dopo le opzioni come link a una pagina web con maggiori informazioni sull'opzione."  
+  },  
+  "desktop-settings.open-user-data": {  
+    "string": "Apri i Dati Utente",  
+    "developer_comment": "Pulsante nelle impostazioni desktop per aprire la cartella dei dati utente"  
+  },  
+  "migrate.title": {  
+    "string": "Completamento aggiornamento...",  
+    "developer_comment": "Titolo della finestra che esegue varie operazioni per completare un aggiornamento"  
+  },  
+  "migrate.description": {  
+    "string": "Questo è un processo una tantum che potrebbe richiedere alcuni istanti.",  
+    "developer_comment": "Maggiori informazioni sul processo per completare un aggiornamento"  
+  },  
+  "migrate.error": {  
+    "string": "Si è verificato un errore durante il completamento di questo aggiornamento. Alcuni dati potrebbero non essere stati trasferiti correttamente. Invia uno screenshot di questa finestra a:",  
+    "developer_comment": "Appare quando si è verificato un errore durante il completamento di un aggiornamento. Seguito da un'email."  
+  },  
+  "migrate.timed-out": {  
+    "string": "Questo processo sta richiedendo un tempo insolitamente lungo. Se non vengono compiuti progressi, invia uno screenshot di questa finestra a:",  
+    "developer_comment": "Appare quando il completamento di un aggiornamento richiede più tempo del solito. Ci sono altri testi sullo schermo che potrebbero indicare che i progressi sono ancora in corso, anche se lentamente. Seguito da un'email."  
+  },  
+  "migrate.renderer-gone": {  
+    "string": "Il processo di aggiornamento si è arrestato in modo anomalo (motivo: {reason}, codice: {code}). Alcuni dati potrebbero non essere stati trasferiti correttamente. Invia uno screenshot di questa finestra a:",  
+    "developer_comment": "Appare quando un processo importante si arresta in modo anomalo durante il completamento di un aggiornamento."  
+  },  
+  "migrate.continue-anyways": {  
+    "string": "Continua Comunque",  
+    "developer_comment": "Appare quando si è verificato un errore durante il completamento di un aggiornamento. Questo pulsante ignora l'errore e continua comunque."  
+  },  
+  "migrate.continue-anyways-afterword": {  
+    "string": "Se mancano dei dati, contattaci all'indirizzo {email}.",  
+    "developer_comment": "Appare dopo che si è verificato un errore durante il completamento di un aggiornamento e qualcuno fa clic sul pulsante Continua Comunque per ignorare l'errore."  
+  },  
+  "migrate.exit": {  
+    "string": "Esci",  
+    "developer_comment": "Appare quando si è verificato un errore durante il completamento di un aggiornamento. Questo pulsante chiude l'app e non continua."  
+  },  
+  "migrate.preparing": {  
+    "string": "Preparazione...",  
+    "developer_comment": "Messaggio di stato che appare durante il completamento di un aggiornamento."  
+  },  
+  "migrate.transfer-editor": {  
+    "string": "Trasferimento impostazioni zaino e addon...",  
+    "developer_comment": "Messaggio di stato che appare durante il completamento di un aggiornamento."  
+  },  
+  "migrate.transfer-packager": {  
+    "string": "Trasferimento impostazioni packager...",  
+    "developer_comment": "Messaggio di stato che appare durante il completamento di un aggiornamento."  
+  },  
+  "migrate.finalizing": {  
+    "string": "Finalizzazione...",  
+    "developer_comment": "Messaggio di stato che appare durante il completamento di un aggiornamento."  
+  },  
+  "migrate.delete-legacy": {  
+    "string": "Eliminazione vecchi dati...",  
+    "developer_comment": "Messaggio di stato che appare durante il completamento di un aggiornamento. Vecchi dati si riferisce ai dati archiviati dalle vecchie versioni dell'app che ora sono ridondanti dopo gli aggiornamenti."  
+  },  
+  "downgrade-warning.title": {  
+    "string": "Il downgrade non è supportato",  
+    "developer_comment": "Appare quando qualcuno installa l'ultima versione dell'app desktop, la esegue, quindi installa ed esegue una versione precedente."  
+  },  
+  "downgrade-warning.message": {  
+    "string": "Stai utilizzando una versione precedente di {APP_NAME} dopo aver utilizzato una versione successiva. Esci e scarica l'ultima versione da {website}.\n\nSe continui, è MOLTO PROBABILE che perderai PERMANENTEMENTE tutte le tue impostazioni e il tuo zaino. NON saremo in grado di recuperare i tuoi dati.\n\n(Informazioni di debug: {debugInfo})",  
+    "developer_comment": "Appare quando qualcuno installa l'ultima versione dell'app desktop, la esegue, quindi installa ed esegue una versione precedente. {APP_NAME} diventa 'TurboWarp Desktop'. {website} diventa un URL come 'desktop.turbowarp.org'. {debugInfo} diventa alcune informazioni interne che non dovrebbero interessare. Questo dovrebbe essere un avviso molto spaventoso."  
+  },  
+  "downgrade-warning.exit": {  
+    "string": "Esci e Aggiorna",  
+    "developer_comment": "Appare quando qualcuno installa l'ultima versione dell'app desktop, la esegue, quindi installa ed esegue una versione precedente. Questo pulsante esce dall'app e apre il sito web per consentire a qualcuno di scaricare l'ultima versione."  
+  },  
+  "downgrade-warning.continue-anyways": {  
+    "string": "Continua Comunque (NON SICURO)",  
+    "developer_comment": "Appare quando qualcuno installa l'ultima versione dell'app desktop, la esegue, quindi installa ed esegue una versione precedente. Questo pulsante ignora l'avviso e continuerà comunque, potenzialmente eliminando i dati dell'utente, ed è quindi molto pericoloso."  
+  },  
+  "update.window-title": {  
+    "string": "Aggiornamento Disponibile",  
+    "developer_comment": "Titolo della finestra di aggiornamento disponibile"  
+  },  
+  "update.normal-title": {  
+    "string": "È disponibile un aggiornamento",  
+    "developer_comment": "Intestazione della finestra di aggiornamento disponibile per l'aggiornamento normale"  
+  },  
+  "update.security-title": {  
+    "string": "È disponibile un aggiornamento di sicurezza",  
+    "developer_comment": "Intestazione della finestra di aggiornamento disponibile per gli aggiornamenti di sicurezza"  
+  },  
+  "update.normal-description": {  
+    "string": "{appNameVersion} è ora disponibile.",  
+    "developer_comment": "Descrizione della finestra di aggiornamento disponibile per l'aggiornamento normale. {appNameVersion} verrà sostituito con qualcosa come 'TurboWarp Desktop v1.2.3'."  
+  },  
+  "update.security-description": {  
+    "string": "{appNameVersion} è ora disponibile. Questa versione contiene correzioni di sicurezza. L'aggiornamento è vivamente consigliato.",  
+    "developer_comment": "Descrizione della finestra di aggiornamento disponibile per l'aggiornamento di sicurezza. {appNameVersion} verrà sostituito con qualcosa come 'TurboWarp Desktop v1.2.3'."  
+  },  
+  "update.loading": {  
+    "string": "Caricamento...",  
+    "developer_comment": "Appare nella finestra di aggiornamento disponibile mentre il changelog è ancora in caricamento"  
+  },  
+  "update.download-button": {  
+    "string": "Scarica Aggiornamento",  
+    "developer_comment": "Appare nella finestra di aggiornamento disponibile. Pulsante per scaricare l'aggiornamento."  
+  },  
+  "update.ignore-button": {  
+    "string": "Ricordamelo più tardi",  
+    "developer_comment": "Appare nella finestra di aggiornamento disponibile. Pulsante per ignorare temporaneamente questo aggiornamento."  
+  },  
+  "update.permanently-ignore": {  
+    "string": "Ignora questo aggiornamento",  
+    "developer_comment": "Appare nella finestra di aggiornamento disponibile. Casella di controllo per ignorare questo aggiornamento in modo permanente."  
+  },  
+  "update.not-available": {  
+    "string": "Changelog non ancora disponibile.",  
+    "developer_comment": "Appare nella finestra di aggiornamento disponibile quando, per qualche motivo, non sono disponibili note di rilascio dettagliate."  
+  },  
+  "update.changelog-error": {  
+    "string": "Errore durante il caricamento del changelog: {error}",  
+    "developer_comment": "Appare nella finestra di aggiornamento disponibile quando il changelog non può essere caricato, ad esempio perché il sito web non è attivo."  
+  },  
+  "files.svg": {  
+    "string": "Immagine SVG",  
+    "developer_comment": "Appare nella finestra di dialogo di salvataggio del file quando si esporta un costume vettoriale"  
+  },  
+  "files.png": {  
+    "string": "Immagine PNG",  
+    "developer_comment": "Appare nella finestra di dialogo di salvataggio del file quando si esporta un costume bitmap"  
+  },  
+  "files.wav": {  
+    "string": "Suono WAV",  
+    "developer_comment": "Appare nella finestra di dialogo di salvataggio del file quando si esporta un suono"  
+  },  
+  "files.sprite3": {  
+    "string": "Sprite Scratch 3",  
+    "developer_comment": "Appare nella finestra di dialogo di salvataggio del file quando si esporta uno sprite"  
+  },  
+  "files.txt": {  
+    "string": "Documento di Testo",  
+    "developer_comment": "Appare nella finestra di dialogo di salvataggio del file quando si esporta un elenco"  
+  },  
+  "files.webm": {  
+    "string": "Video WebM",  
+    "developer_comment": "Appare nella finestra di dialogo di salvataggio del file quando si esporta un video con un addon"  
+  },  
+  "files.html": {  
+    "string": "File HTML",  
+    "developer_comment": "Appare nella finestra di dialogo di salvataggio del file quando si salvano alcuni tipi di progetti in pacchetto"  
+  },  
+  "files.zip": {  
+    "string": "File Zip",  
+    "developer_comment": "Appare nella finestra di dialogo di salvataggio del file quando si salvano alcuni tipi di progetti in pacchetto"  
+  },  
+  "security-prompt.title": {  
+    "string": "Sicurezza Estensione",  
+    "developer_comment": "Titolo della finestra di prompt di sicurezza dell'estensione"  
+  },  
+  "security-prompt.allow": {  
+    "string": "Consenti",  
+    "developer_comment": "Titolo della finestra di prompt di sicurezza dell'estensione. Questo pulsante consente l'autorizzazione."  
+  },  
+  "security-prompt.deny": {  
+    "string": "Nega",  
+    "developer_comment": "Titolo della finestra di prompt di sicurezza dell'estensione. Questo pulsante nega l'autorizzazione."  
+  },  
+  "security-prompt.read-clipboard1": {  
+    "string": "Il progetto vuole leggere i dati dagli appunti.",  
+    "developer_comment": "Parte della finestra di prompt di sicurezza dell'estensione"  
+  },  
+  "security-prompt.read-clipboard2": {  
+    "string": "Se gli appunti contengono elementi come password, il progetto potrebbe essere in grado di condividerli con altri utenti o server.",  
+    "developer_comment": "Parte della finestra di prompt di sicurezza dell'estensione"  
+  },  
+  "security-prompt.read-clipboard3": {  
+    "string": "L'accesso agli appunti potrebbe non funzionare su alcuni sistemi. Se consentito, le successive letture degli appunti verranno automaticamente consentite.",  
+    "developer_comment": "Parte della finestra di prompt di sicurezza dell'estensione"  
+  },  
+  "security-prompt.notifications1": {  
+    "string": "Il progetto vuole visualizzare le notifiche.",  
+    "developer_comment": "Parte della finestra di prompt di sicurezza dell'estensione"  
+  },  
+  "security-prompt.notifications2": {  
+    "string": "Se consentito, potrebbe essere richiesto di abilitare le notifiche dal sistema operativo e le successive notifiche verranno automaticamente consentite.",  
+    "developer_comment": "Parte della finestra di prompt di sicurezza dell'estensione"  
+  },  
+  "unsafe-path.title": {  
+    "string": "Percorso File Non Valido",  
+    "developer_comment": "Titolo dell'avviso che appare quando qualcuno tenta di salvare il progetto in un luogo 'non sicuro' dove il proprio lavoro finirebbe per essere eliminato."  
+  },  
+  "unsafe-path.details": {  
+    "string": "Il file selezionato ({file}) si trova in una cartella utilizzata internamente da {APP_NAME}. Non è sicuro salvare i progetti qui, poiché possono essere eliminati quando l'app si aggiorna. È necessario scegliere una cartella diversa.",  
+    "developer_comment": "Messaggio di avviso che appare quando qualcuno tenta di salvare il progetto in una cartella utilizzata internamente dall'app. {file} viene sostituito con il percorso e {APP_NAME} con il nome dell'app."  
+  },  
+  "rich-presence.untitled": {  
+    "string": "Progetto Senza Titolo",  
+    "developer_comment": "Appare in Discord rich presence quando il progetto corrente non ha un nome."  
+  },  
+  "file-access.window-title": {  
+    "string": "Impossibile Accedere ai File",  
+    "developer_comment": "Titolo della finestra che appare quando l'utente cerca di trascinare e rilasciare un file a cui l'app non può accedere a causa di una sandbox di sicurezza."  
+  },  
+  "file-access.flatpak": {  
+    "string": "La sandbox Flatpak potrebbe impedire a {APP_NAME} di accedere ai file che hai provato a trascinare e rilasciare:",  
+    "developer_comment": "Parte della finestra che appare quando l'utente cerca di trascinare e rilasciare un file a cui l'app non può accedere. Seguito da un elenco di percorsi. Lascia 'Flatpak' in inglese."  
+  },  
+  "file-access.how-to-fix": {  
+    "string": "Utilizza i selettori di file nell'app invece di trascinare e rilasciare, oppure esegui il seguente comando in un terminale e riavvia l'app per concedere l'accesso:",  
+    "developer_comment": "Parte della finestra che appare quando l'utente cerca di trascinare e rilasciare un file a cui l'app non può accedere. Seguito da un comando del terminale."  
+  },  
+  "data-preview.title": {  
+    "string": "anteprima data:",  
+    "developer_comment": "Titolo della finestra quando un progetto apre un URL data:. data: è un termine tecnico, probabilmente non è necessario tradurlo."  
+  },  
+  "extension-documentation.title": {  
+    "string": "Documentazione Estensioni {APP_NAME}",  
+    "developer_comment": "Titolo della finestra in-app per la visualizzazione della documentazione delle estensioni."  
+  }  
+}  
