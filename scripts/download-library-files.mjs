@@ -2,7 +2,7 @@ import * as fs from 'node:fs';
 import * as fsPromises from 'node:fs/promises';
 import * as pathUtil from 'node:path';
 import { brotliCompress, brotliDecompress } from 'node:zlib';
-import { computeMD5, computeSHA256, persistentFetch } from './lib.js';
+import { computeMD5, computeSHA256, persistentFetch } from './lib.mjs';
 
 /**
  * @typedef AssetMetadata

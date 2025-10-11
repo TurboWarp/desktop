@@ -26,9 +26,9 @@ jobs:
       run: npm run webpack:prod
     - name: Package
       run: |
-        node release-automation/build.js --debian --tarball --appimage --x64 --armv7l --arm64
+        node release-automation/build.mjs --debian --tarball --appimage --x64 --armv7l --arm64
     - name: Print file tree
-      run: node scripts/print-file-tree.js dist
+      run: node scripts/print-file-tree.mjs dist
     - name: Upload artifacts to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
@@ -58,10 +58,10 @@ jobs:
       run: npm run webpack:prod
     - name: Package
       run: |
-        node release-automation/build.js --mac --universal
-        node release-automation/build.js --mac-legacy-10.13-10.14 --mac-legacy-10.15 --x64
+        node release-automation/build.mjs --mac --universal
+        node release-automation/build.mjs --mac-legacy-10.13-10.14 --mac-legacy-10.15 --x64
     - name: Print file tree
-      run: node scripts/print-file-tree.js dist
+      run: node scripts/print-file-tree.mjs dist
     - name: Upload artifacts to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
@@ -112,12 +112,12 @@ jobs:
     - name: Package
       working-directory: D:\repo
       run: |
-        node release-automation/build.js --windows --microsoft-store --x64 --ia32 --arm64
-        node release-automation/build.js --windows-portable --x64
-        node release-automation/build.js --windows-legacy --ia32 --x64
+        node release-automation/build.mjs --windows --microsoft-store --x64 --ia32 --arm64
+        node release-automation/build.mjs --windows-portable --x64
+        node release-automation/build.mjs --windows-legacy --ia32 --x64
     - name: Print file tree
       working-directory: D:\repo
-      run: node scripts/print-file-tree.js dist
+      run: node scripts/print-file-tree.mjs dist
     - name: Upload artifacts to GitHub Actions
       uses: actions/upload-artifact@v4
       with:

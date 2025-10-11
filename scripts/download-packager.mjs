@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 import * as pathUtil from 'node:path';
-import { computeSHA256, persistentFetch } from './lib.js';
+import { computeSHA256, persistentFetch } from './lib.mjs';
 import packagerInfo from './packager.json' with { type: 'json' };
 
 const path = pathUtil.join(import.meta.dirname, '../src-renderer/packager/standalone.html');

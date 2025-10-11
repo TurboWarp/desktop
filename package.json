@@ -7,9 +7,9 @@
     "email": "contact@turbowarp.org",
     "name": "Thomas Weber"
   },
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
-    "fetch": "node scripts/download-library-files.js && node scripts/download-packager.js && node scripts/prepare-extensions.js",
+    "fetch": "node scripts/download-library-files.mjs && node scripts/download-packager.mjs && node scripts/prepare-extensions.mjs",
     "webpack:compile": "webpack",
     "webpack:watch": "webpack --watch",
     "webpack:prod": "cross-env NODE_ENV=production webpack",

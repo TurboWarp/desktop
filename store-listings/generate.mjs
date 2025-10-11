@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'node:fs';
+import path from 'node:path';
 
 const NUMBER_OF_ADDONS = 50;
 const CHANGELOG_LINK = 'https://desktop.turbowarp.org/?changelog';
@@ -147,6 +147,6 @@ const generateStoreListings = (rows) => {
   return rows;
 };
 
-const csvRows = parseCSV(fs.readFileSync(path.join(__dirname, 'from-microsoft.csv'), 'utf8'));
+const csvRows = parseCSV(fs.readFileSync(path.join(import.meta.dirname, 'from-microsoft.csv'), 'utf8'));
 const parsedStoreListings = generateStoreListings(csvRows);
 fs.writeFileSync('import-to-microsoft.csv', generateCSV(parsedStoreListings));
