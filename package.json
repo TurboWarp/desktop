@@ -32,7 +32,7 @@
     "cross-env": "^10.1.0",
     "css-loader": "^1.0.1",
     "electron": "^38.2.2",
-    "electron-builder": "^26.0.20",
+    "electron-builder": "^26.1.0",
     "file-loader": "^6.2.0",
     "postcss": "^8.4.13",
     "postcss-import": "^14.0.0",
