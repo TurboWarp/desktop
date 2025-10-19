@@ -75,6 +75,7 @@
           <li>Added face sensing extension. It uses a machine learning model that runs on your computer, so it works offline. Your webcam feed is never uploaded to any server</li>
           <li>Local storage extension no longer requires manually configuring namespace</li>
           <li>Newgrounds extension significantly improved</li>
+          <li>Fixed "Unexpected status 503" errors when packaging certain projects</li>
           <li>If you use a Wayland compositor, the app will now use native Wayland instead of the Xwayland compatibility layer</li>
           <li>Changed executable name back to "turbowarp-desktop" after unintentional change in previous update</li>
         </ul>
