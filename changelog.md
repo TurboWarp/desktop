@@ -2,11 +2,10 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.15.0 (2025-10-12)
+# 1.15.0 (2025-10-19)
 
  - New compiler runs some projects twice as fast
- - Added face sensing extension, compatible with Scratch
- - If your computer does not support hardware-accelerated WebGL, you will be forced to open Desktop Settings and disable graphics acceleration. Previously the CPU fallback would be automatically used, but a manual toggle is now required as it is very slow and is less secure
+ - Added face sensing extension. It uses a machine learning model that runs on your computer, so it works offline and your webcam feed is never uploaded to any server.
  - Windows: Fixed broken text boxes after choosing "Stay" in the unsaved changes confirmation dialog
  - macOS: Fixed poor performance on macOS 26
  - macOS: macOS 11 users now have to use a special legacy version of the app which is slower and less secure than the regular version
