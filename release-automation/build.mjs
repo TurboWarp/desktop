@@ -180,8 +180,7 @@ const build = async ({
   platformType, // Passed as first argument into platform.createTarget(...)
   manageUpdates = false,
   legacy = false,
-  extraConfig = {},
-  prepare = (archName) => Promise.resolve({})
+  extraConfig = {}
 }) => {
   const buildForArch = async (archName) => {
     if (!Object.prototype.hasOwnProperty.call(Arch, archName)) {
@@ -213,8 +212,7 @@ const build = async ({
       },
       afterPack: arch === Arch.universal ? afterPackForUniversalMac : afterPack,
       afterSign,
-      ...extraConfig,
-      ...await prepare(archName)
+      ...extraConfig
     };
 
     return builder.build({
