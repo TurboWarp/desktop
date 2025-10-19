@@ -5,7 +5,9 @@ Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **form
 # 1.15.0 (2025-10-19)
 
  - New compiler runs some projects twice as fast
- - Added face sensing extension. It uses a machine learning model that runs on your computer, so it works offline and your webcam feed is never uploaded to any server.
+ - Added face sensing extension. It uses a machine learning model that runs on your computer, so it works offline. Your webcam feed is never uploaded to any server
+ - Local storage extension no longer requires manually configuring namespace
+ - Newgrounds extension significantly improved
  - Windows: Fixed broken text boxes after choosing "Stay" in the unsaved changes confirmation dialog
  - macOS: Fixed poor performance on macOS 26
  - macOS: macOS 11 users now have to use a special legacy version of the app which is slower and less secure than the regular version
