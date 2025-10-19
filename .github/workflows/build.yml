@@ -58,7 +58,10 @@ jobs:
       run: npm run webpack:prod
     - name: Package
       run: |
-        node release-automation/build.mjs --mac --mac-legacy-11 --universal
+        # Need to run the universal builds as separate commands or it breaks when @electron/universal
+        # diffs the ASARs and finds spurious differences. Not clear why.
+        node release-automation/build.mjs --mac --universal --production
+        node release-automation/build.mjs --mac-legacy-11 --universal --production
         node release-automation/build.mjs --mac-legacy-10.13-10.14 --mac-legacy-10.15 --x64
     - name: Print file tree
       run: node scripts/print-file-tree.mjs dist

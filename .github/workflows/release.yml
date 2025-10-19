@@ -76,7 +76,10 @@ jobs:
         python3 -c "import os; open(os.getenv('APPLE_API_KEY_NAME'), 'w').write(os.getenv('APPLE_API_KEY_DATA'))" >/dev/null 2>&1
         # @electron/notaraize documentation says key should be an absolute path
         export APPLE_API_KEY="$(pwd)/$APPLE_API_KEY_NAME"
-        node release-automation/build.mjs --mac --mac-legacy-11 --universal --production
+        # Need to run the universal builds as separate commands or it breaks when @electron/universal
+        # diffs the ASARs and finds spurious differences. Not clear why.
+        node release-automation/build.mjs --mac --universal --production
+        node release-automation/build.mjs --mac-legacy-11 --universal --production
         # These macOS versions never ran on an Apple Silicon device, so only need x64
         node release-automation/build.mjs --mac-legacy-10.13-10.14 --mac-legacy-10.15 --x64 --production
         # for safety
