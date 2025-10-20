@@ -130,7 +130,7 @@
       "extendInfo": {
         "ITSAppUsesNonExemptEncryption": false,
         "LSMultipleInstancesProhibited": true,
-        "NSCameraUsageDescription": "This app requires camera access when using the video sensing blocks.",
+        "NSCameraUsageDescription": "This app requires camera access when using the video sensing or face sensing blocks.",
         "NSMicrophoneUsageDescription": "This app requires microphone access when recording sounds or detecting loudness."
       },
       "target": [
