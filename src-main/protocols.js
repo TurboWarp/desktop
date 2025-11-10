@@ -149,6 +149,7 @@ const createErrorPageHTML = (request, errorMessage) => `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Protocol handler error</title>
   </head>
   <body bgcolor="white" text="black">
