@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.view.ViewGroup
+import android.webkit.JavascriptInterface
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
@@ -18,12 +19,9 @@ import androidx.webkit.WebViewAssetLoader
 import androidx.webkit.WebViewCompat
 import java.io.IOException
 import java.net.URLConnection
-
-private fun readAssetAsString(context: Context, path: String): String {
-    val stream = context.assets.open(path)
-    val reader = stream.bufferedReader()
-    return reader.readText()
-}
+import androidx.core.net.toUri
+import org.json.JSONArray
+import org.json.JSONObject
 
 private class ServeAsset(
     private val context: Context,
@@ -88,7 +86,26 @@ private class TurboWarpWebViewClient(
     }
 }
 
-private class WebViewIPC : WebViewCompat.WebMessageListener {
+interface IpcHandler {
+    fun handleSync(method: String, args: JSONArray): Any?
+}
+
+private class IpcSync(private val ipcHandler: IpcHandler) {
+    // Android's JavaScript interface apparently only supports the primitive types.
+    // So we have to pass around JSON strings. Real fun.
+    @JavascriptInterface
+    fun sendSync(jsonRequestString: String): String {
+        val jsonRequest = JSONObject(jsonRequestString)
+        val method = jsonRequest.getString("method")
+        val args = jsonRequest.getJSONArray("args")
+
+        val jsonResponse = ipcHandler.handleSync(method, args)
+        return jsonResponse?.toString() ?: "null"
+    }
+}
+
+private class IpcAsync(private val ipcHandler: IpcHandler) : WebViewCompat.WebMessageListener {
+    @SuppressLint("RequiresFeature")
     override fun onPostMessage(
         view: WebView,
         message: WebMessageCompat,
@@ -96,26 +113,26 @@ private class WebViewIPC : WebViewCompat.WebMessageListener {
         isMainFrame: Boolean,
         replyProxy: JavaScriptReplyProxy
     ) {
-
+        replyProxy.postMessage("e")
     }
 }
 
 private fun getOrigin(url: String): String {
-    val uri = Uri.parse(url)
+    val uri = url.toUri()
     val sb = StringBuilder()
     sb.append(uri.scheme)
     sb.append("://")
     sb.append(uri.host)
-    sb.append(uri.host)
     return sb.toString()
 }
 
-@SuppressLint("SetJavaScriptEnabled")
+@SuppressLint("SetJavaScriptEnabled", "RequiresFeature")
 @Composable
 fun TurboWarpWebView(
     url: String,
     modifier: Modifier = Modifier,
     preloads: List<String> = emptyList(),
+    ipcHandler: IpcHandler? = null
 ) {
     AndroidView(
         modifier = modifier,
@@ -135,14 +152,26 @@ fun TurboWarpWebView(
                 settings.allowFileAccess = false
                 settings.allowContentAccess = false
 
-                WebViewCompat.addWebMessageListener(
-                    this,
-                    "AndroidIPC",
-                    setOf(getOrigin(url)),
-                    WebViewIPC()
-                )
+                // Easier debugging
+                val version = BuildConfig.VERSION_NAME
+                settings.userAgentString += " org.turbowarp.android/$version"
 
-                webViewClient = TurboWarpWebViewClient(context, preloads)
+                if (ipcHandler != null) {
+                    val origin = getOrigin(url)
+                    WebViewCompat.addWebMessageListener(
+                        this,
+                        "AndroidIpcAsync",
+                        setOf(origin),
+                        IpcAsync(ipcHandler)
+                    )
+                    addJavascriptInterface(IpcSync(ipcHandler), "AndroidIpcSync")
+                }
+
+                webViewClient = TurboWarpWebViewClient(context, if (ipcHandler == null) {
+                    preloads
+                } else {
+                    listOf("ipc-init.js").plus(preloads)
+                })
             }
         },
         update = { webView ->
