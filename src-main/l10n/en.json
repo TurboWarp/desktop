@@ -416,7 +416,7 @@
     "developer_comment": "Appears in file saving dialog when exporting a video with an addon"
   },
   "files.html": {
-    "stirng": "HTML File",
+    "string": "HTML File",
     "developer_comment": "Appears in file saving dialog when saving some types of packaged projects"
   },
   "files.zip": {
