@@ -9,7 +9,6 @@ object L10N {
     private fun stringsWithDescriptionToMap(jsonObject: JSONObject): Map<String, String> {
         val map = mutableMapOf<String, String>()
         for (id in jsonObject.keys()) {
-            println(id)
             val infoObject = jsonObject.getJSONObject(id)
             map[id] = infoObject.getString("string")
         }

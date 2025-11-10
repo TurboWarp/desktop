@@ -1,5 +1,6 @@
 [versions]
 agp = "8.13.0"
+brotlidec = "0.1.2"
 kotlin = "2.0.21"
 coreKtx = "1.10.1"
 junit = "4.13.2"
@@ -17,6 +18,7 @@ webkit = "1.14.0"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-webkit = { module = "androidx.webkit:webkit", version.ref = "webkit" }
+brotlidec = { module = "org.brotli:dec", version.ref = "brotlidec" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
