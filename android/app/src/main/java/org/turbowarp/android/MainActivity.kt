@@ -4,6 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import androidx.webkit.WebViewFeature
 import org.turbowarp.android.ui.theme.TurboWarpTheme
 
@@ -19,7 +23,9 @@ class MainActivity : ComponentActivity() {
         L10N.setup(applicationContext)
         setContent {
             TurboWarpTheme {
-                EditorView()
+                Box(modifier = Modifier.safeDrawingPadding()) {
+                    EditorView()
+                }
             }
         }
     }

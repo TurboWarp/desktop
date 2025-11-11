@@ -85,7 +85,7 @@ private class ServeBrotliAsset(
             val stream = readBrotliAssetAsStream(context, compressedAssetPath)
             makeFetchableResponse(stream, pathWithIndex)
         } catch (_: IOException) {
-            // TODO: does this fall-through to remote or fallthrough?
+            // TODO: does this fall-through to remote or error?
             null
         }
     }
