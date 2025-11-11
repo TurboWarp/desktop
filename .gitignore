@@ -5,10 +5,10 @@ node_modules/
 .vscode
 
 # Built files
-dist
-dist-renderer-webpack
-dist-library-files
-dist-extensions
+/dist
+/dist-renderer-webpack
+/dist-library-files
+/dist-extensions
 src-renderer/packager/standalone.html
 
 # Debian release scripts create files that shouldn't be committed
