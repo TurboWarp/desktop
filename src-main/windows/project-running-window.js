@@ -131,6 +131,23 @@ class ProjectRunningWindow extends AbtractWindow {
     super.onBeforeRequest(details, callback);
   }
 
+  onBeforeSendHeaders (details, callback) {
+    const parsed = new URL(details.url);
+
+    if (WEB_PROTOCOLS.includes(parsed.protocol)) {
+      // Some third-party APIs (eg. YouTube embeds) require a non-empty referer header.
+      // The website being contacted already receives "turbowarp-desktop/x.y.z" in the user-agent so this isn't
+      // revealing any metadata that they couldn't already have access to.
+      return callback({
+        requestHeaders: {
+          'referer': 'https://docs.turbowarp.org/desktop/referer'
+        }
+      });
+    }
+
+    callback({});
+  }
+
   onHeadersReceived (details, callback) {
     if (
       settings.bypassCORS &&

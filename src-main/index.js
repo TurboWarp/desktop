@@ -87,6 +87,21 @@ app.on('session-created', (session) => {
     window.onBeforeRequest(details, callback);
   });
 
+  session.webRequest.onBeforeSendHeaders((details, callback) => {
+    const url = details.url.toLowerCase();
+    if (url.startsWith('devtools:')) {
+      return callback({});
+    }
+
+    const webContents = details.webContents;
+    const window = AbstractWindow.getWindowByWebContents(webContents);
+    if (!webContents || !window) {
+      return callback({});
+    }
+
+    window.onBeforeSendHeaders(details, callback);
+  });
+
   session.webRequest.onHeadersReceived((details, callback) => {
     const window = AbstractWindow.getWindowByWebContents(details.webContents);
     if (!window) {

@@ -347,6 +347,15 @@ class AbstractWindow {
   }
 
   /**
+   * @param {Electron.OnBeforeSendHeadersListenerDetails} details
+   * @param {(response: Electron.BeforeSendResponse) => void} callback 
+   */
+  onBeforeSendHeaders (details, callback) {
+    // to be overridden
+    callback({});
+  }
+
+  /**
    * @param {Electron.OnHeadersReceivedListenerDetails} details
    * @param {(response: Electron.HeadersReceivedResponse) => void} callback
    */
