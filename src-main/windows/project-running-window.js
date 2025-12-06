@@ -140,7 +140,7 @@ class ProjectRunningWindow extends AbtractWindow {
       // revealing any metadata that they couldn't already have access to.
       return callback({
         requestHeaders: {
-          referer: 'https://docs.turbowarp.org/desktop/referer'
+          referer: 'https://desktop.turbowarp.org/referer.html'
         }
       });
     }
