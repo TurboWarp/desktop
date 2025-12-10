@@ -164,6 +164,13 @@ class Settings {
     this.data.spellchecker = spellchecker;
   }
 
+  get resumeSession () {
+    return this.data.resumeSession !== false;
+  }
+  set resumeSession (resumeSession) {
+    this.data.resumeSession = resumeSession;
+  }
+
   get exitFullscreenOnEscape () {
     return this.data.exitFullscreenOnEscape !== false;
   }
