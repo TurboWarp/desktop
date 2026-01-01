@@ -242,10 +242,21 @@ app.whenReady().then(() => {
     isMigrating = false;
 
     const commandLineOptions = parseCommandLine(process.argv);
-    EditorWindow.openFiles([
+    let filesToOpen = [
       ...filesQueuedToOpen,
       ...commandLineOptions.files
-    ], commandLineOptions.fullscreen, process.cwd());
+    ];
+
+    // If no files specified and resumeSession is enabled, try to open lastOpenedFile
+    if (
+      filesToOpen.length === 0 &&
+      settings.resumeSession &&
+      settings.lastOpenedFile
+    ) {
+      filesToOpen = [settings.lastOpenedFile];
+    }
+
+    EditorWindow.openFiles(filesToOpen, commandLineOptions.fullscreen, process.cwd());
 
     if (AbstractWindow.getAllWindows().length === 0) {
       // No windows were successfully opened. Let's just quit.
