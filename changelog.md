@@ -2,6 +2,16 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.15.1 (2025-12-31)
+
+ - Fixed various new compiler bugs
+ - Improved frame pacing on Windows
+ - Optimized list monitors
+ - Optimized middle click popup on large projects
+ - Fixed local storage extension
+ - Fixed camera extension not updating hidden sprites
+ - Fixed YouTube error 153 in iframe extension
+
 # 1.15.0 (2025-10-19)
 
  - New compiler runs some projects twice as fast
