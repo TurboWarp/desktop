@@ -551,7 +551,7 @@
     <script type="generated-locale-names">{"en":"English","ca":"Català","de":"Deutsch","es":"Español (España)","fi":"Suomi","it":"Italiano","ja":"日本語","ko":"한국어","nb":"Norsk Bokmål","nl":"Nederlands","pt-br":"Português Brasileiro","ru":"Русский","sl":"Slovenščina","sv":"Svenska","tr":"Türkçe","uk":"Українська","zh-cn":"简体中文"}</script>
 
     <script>
-      const VERSION = '1.15.0';
+      const VERSION = '1.15.1';
 
       // OS-specific styles
       const getOS = () => {
@@ -919,6 +919,19 @@
       <h2 l10n="changelog">Changelog</h2>
       <div lang="en">
         <!-- CHANGELOG_START -->
+        <div data-version="1.15.1">
+          <h3>v1.15.1 (January 1 2026)</h3>
+          <ul>
+            <li>Fixed various bugs in new compiler</li>
+            <li>Improved frame pacing on Windows</li>
+            <li>Optimized list monitors</li>
+            <li>Optimized middle click popup on large projects</li>
+            <li>Fixed local storage extension</li>
+            <li>Fixed camera extension not updating hidden sprites</li>
+            <li>Fixed iframe extension showing error 153 in YouTube embeds</li>
+            <li>Linux: Fixed title bar icons on Ubuntu</li>
+          </ul>
+        </div>
         <div data-version="1.15.0">
           <h3>v1.15.0 (October 19 2025)</h3>
           <ul>
@@ -1394,15 +1407,6 @@
     <div class="manual-installation section" id="linux">
       <h2 l10n="lin">Install on Linux</h2>
       <p l10n="lin2">Try searching for "TurboWarp" in your distribution's software manager and choose the first option that appears. If it doesn't appear or if you're an advanced user, choose one of these installation methods:</p>
-
-      <div class="warning">
-        <p>TurboWarp Desktop now uses native Wayland if available. For most people, there will be no noticeable change, but there are some known issues and limitations:</p>
-        <ul>
-          <li>On Ubuntu, title bar icons display on the wrong side. This will be fixed in the next update.</li>
-          <li>Some graphics cards experience GPU process crashes. We are looking into it.</li>
-        </ul>
-        <p>You can work around these by starting the app with the <code>XDG_SESSION_TYPE</code> environment variable set to <code>x11</code> to force using Xwayland as before.</p>
-      </div>
 
       <h3>Debian, Ubuntu, Raspberry Pi OS, Linux Mint</h3>
       <p l10n="deb" l10n-description="apt refers to a Linux command line tool">Install our repository to receive updates through apt by running these commands:</p>
