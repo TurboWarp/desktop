@@ -1,5 +1,19 @@
 [
   {
+    "version": "1.15.1",
+    "date": "2026-1-1",
+    "notes": [
+      "Fixed various bugs in new compiler",
+      "Improved frame pacing on Windows",
+      "Optimized list monitors",
+      "Optimized middle click popup on large projects",
+      "Fixed local storage extension",
+      "Fixed camera extension not updating hidden sprites",
+      "Fixed iframe extension showing error 153 in YouTube embeds",
+      "Linux: Fixed title bar icons on Ubuntu"
+    ]
+  },
+  {
     "version": "1.15.0",
     "date": "2025-10-19",
     "notes": [
