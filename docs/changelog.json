@@ -1,11 +1,11 @@
 [
   {
-    "version": "1.15.1",
-    "date": "2026-1-1",
+    "version": "1.15.2",
+    "date": "2026-1-17",
     "notes": [
       "Fixed various bugs in new compiler",
       "Improved frame pacing on Windows",
-      "Optimized list monitors",
+      "Optimized variable and list monitors",
       "Optimized middle click popup on large projects",
       "Fixed local storage extension",
       "Fixed camera extension not updating hidden sprites",

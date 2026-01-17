@@ -2,11 +2,11 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.15.1 (2026-01-01)
+# 1.15.2 (2026-01-17)
 
  - Fixed various bugs in new compiler
  - Improved frame pacing on Windows
- - Optimized list monitors
+ - Optimized variable and list monitors
  - Optimized middle click popup on large projects
  - Fixed local storage extension
  - Fixed camera extension not updating hidden sprites
