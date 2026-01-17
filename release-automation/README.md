@@ -139,10 +139,41 @@ For rclone configuration, see [Debian scripts README](../debian/README.md).
 
 ## Mac App Store
 
-Creating builds for the Mac App Store is also a separate build:
+Some notes related to building for MAS:
+
+Keychain Access.app > Menu bar > Certificate Assistant > Request a certificate from a CA. Email and CN don't seem to matter.
+
+[Certificates](https://developer.apple.com/account/resources/certificates/list). Probably need at least:
+
+ * Software > Apple Development
+ * Software > Apple Distribution
+ * Software > Mac App Distribution
+ * Software > Mac Installer Distribution
+ * Software > Developer ID Installer
+
+[Apple PKI](https://www.apple.com/certificateauthority/). Probably need at least need:
+
+ * Apple Root CA - G3 Root
+ * Worldwide Developer Relations - G3 (Expiring 02/20/2030 00:00:00 UTC)
+
+[Provisioning profiles](https://developer.apple.com/account/resources/profiles/list). Need:
+
+| Type | Notes | Download and save at |
+|-|-|-|
+| Development > macOS App Development | Use all certs, devices | build/development.provisionprofile |
+| Distribution > Mac App Store Connect | Use Distribution cert (not "Mac App ...") | build/distribution.provisionprofile |
 
 ```bash
-./mas.sh
+npm ci
+rm -rf dist* # might need to do this manually in finder ...
+npm run fetch
+npm run webpack:prod
+npx electron-builder --mac mas --universal --config.extraMetadata.tw_dist=prod-mas
 ```
 
-as is uploading those builds to App Store Connect using Transporter.
+Upload dist/mas-universal/... to App Store Connect with [Transporter](https://apps.apple.com/us/app/transporter/id1450874784).
+
+Troubleshooting:
+
+ * electron-builder error `  ⨯ Cannot find valid "3rd Party Mac Developer Installer" identity to sign MAS installer, please see https://electron.build/code-signing` - see if that exists in Keychain Access AND is trusted. If not trusted, get PKI roots.
+ * Transporter error `Validation failed (409) Invalid Code Signing. The executable 'org.turbowarp.desktop.pkg/Payload/TurboWarp.app/Contents/MacOS/TurboWarp' must be signed with the certificate that is contained in the provisioning profile.` - adjust the distribution provisioning profile to use whatever certificate the executable got signed with
