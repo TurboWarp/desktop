@@ -14,7 +14,10 @@
     "webpack:watch": "webpack --watch",
     "webpack:prod": "cross-env NODE_ENV=production webpack",
     "electron:start": "electron src-main/entrypoint.js",
-    "electron:package:dir": "electron-builder --dir"
+    "electron:package:dir": "electron-builder --dir",
+    "start": "webpack-dev-server --mode development",
+    "build": "webpack --mode production",
+    "test": "jest"
   },
   "dependencies": {
     "semver": "^7.7.3"
