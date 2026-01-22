@@ -37,6 +37,7 @@
     "electron": "^40.0.0",
     "electron-builder": "^26.3.5",
     "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^4.5.2",
     "postcss": "^8.4.13",
     "postcss-import": "^14.0.0",
     "postcss-loader": "^4.2.0",
