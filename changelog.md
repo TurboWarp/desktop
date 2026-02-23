@@ -2,6 +2,11 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.15.3 (2026-02-28)
+
+ - Fixed text to speech extension
+ - Fixed packager being unable to package projects with non-Scratch extensions without an internet connection
+
 # 1.15.2 (2026-01-17)
 
  - Fixed various bugs in new compiler
