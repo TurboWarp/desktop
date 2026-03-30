@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.15.3",
+    "date": "2026-3-29",
+    "notes": [
+      "Added \"online?\" block, like the new Scratch block with the same name",
+      "Fixed text to speech extension",
+      "Fixed packager being unable to package projects with non-Scratch extensions without an internet connection",
+      "Fixed text to speech extension and others in packager or when \"Allow extensions to access any website\" is enabled"
+    ]
+  },
+  {
     "version": "1.15.2",
     "date": "2026-1-17",
     "notes": [

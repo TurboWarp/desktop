@@ -2,10 +2,12 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
-# 1.15.3 (2026-02-28)
+# 1.15.3 (2026-03-29)
 
+ - Added "online?" block, like the new Scratch block with the same name
  - Fixed text to speech extension
  - Fixed packager being unable to package projects with non-Scratch extensions without an internet connection
+ - Fixed text to speech extension and others in packager or when "Allow extensions to access any website" is enabled
 
 # 1.15.2 (2026-01-17)
 
