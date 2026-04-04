@@ -1,7 +1,7 @@
 [
   {
-    "version": "1.15.3",
-    "date": "2026-3-29",
+    "version": "1.15.5",
+    "date": "2026-3-30",
     "notes": [
       "Added \"online?\" block, like the new Scratch block with the same name",
       "Fixed text to speech extension",
