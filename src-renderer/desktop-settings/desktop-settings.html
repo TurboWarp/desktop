@@ -289,6 +289,19 @@
       </script>
 
       <label>
+        <input type="checkbox" class="resume-session-checkbox" autocomplete="off">
+        <span class="resume-session-label"></span>
+      </label>
+      <script>
+        const resumeSession = document.querySelector('.resume-session-checkbox');
+        resumeSession.onchange = () => {
+          DesktopSettingsPreload.setResumeSession(resumeSession.checked);
+        };
+        resumeSession.checked = settings.resumeSession;
+        document.querySelector('.resume-session-label').textContent = strings['desktop-settings.resume-session'];
+      </script>
+
+      <label>
         <input type="checkbox" class="exit-fullscreen-on-escape-checkbox" autocomplete="off">
         <span class="exit-fullscreen-on-escape-label"></span>
       </label>
