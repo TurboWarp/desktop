@@ -16,7 +16,7 @@ const base = {
                 }
             },
             {
-                test: /\.(svg|png|wav|gif|jpg|mp3|woff2|hex)$/,
+                test: /\.(svg|png|wav|gif|jpg|mp3|woff2|woff|ttf|hex)$/,
                 loader: 'file-loader',
                 options: {
                     outputPath: 'static/assets/',
@@ -25,6 +25,19 @@ const base = {
             },
             {
                 test: /\.css$/,
+                include: /node_modules[\\/]monaco-editor/,
+                use: [
+                    {
+                        loader: 'style-loader'
+                    },
+                    {
+                        loader: 'css-loader'
+                    }
+                ]
+            },
+            {
+                test: /\.css$/,
+                exclude: /node_modules[\\/]monaco-editor/,
                 use: [
                     {
                         loader: 'style-loader'
