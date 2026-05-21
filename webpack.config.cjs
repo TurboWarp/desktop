@@ -74,7 +74,9 @@ module.exports = [
         ...base,
         output: {
             path: path.resolve(__dirname, 'dist-renderer-webpack/editor/gui'),
-            filename: 'index.js'
+            filename: 'index.js',
+            chunkFilename: '[name].js',
+            publicPath: ''
         },
         entry: './src-renderer-webpack/editor/gui/index.jsx',
         plugins: [

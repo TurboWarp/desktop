@@ -38,4 +38,5 @@ jobs:
           git config user.email "action@github.com"
           git add package-lock.json
           git commit -m "chore: update ${{ github.event.client_payload.source }}"
+          git pull --rebase origin master
           git push origin master
