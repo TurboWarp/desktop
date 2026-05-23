@@ -1,3 +1,4 @@
+const fsPromises = require('fs/promises');
 const {app, shell} = require('electron');
 const AbstractWindow = require('./abstract');
 const {translate, getStrings, getLocale} = require('../l10n');
@@ -29,13 +30,19 @@ class DesktopSettingsWindow extends AbstractWindow {
           spellchecker: settings.spellchecker,
           exitFullscreenOnEscape: settings.exitFullscreenOnEscape,
           richPresenceAvailable: RichPresence.isAvailable(),
-          richPresence: settings.richPresence
+          richPresence: settings.richPresence,
+          crashDumps: settings.crashDumps
         }
       };
     });
 
     this.ipc.handle('set-update-checker', async (event, updateChecker) => {
       settings.updateChecker = updateChecker;
+      await settings.save();
+    });
+
+    this.ipc.handle('set-crash-dumps', async (event, crashDumps) => {
+      settings.crashDumps = crashDumps;
       await settings.save();
     });
 
@@ -99,6 +106,15 @@ class DesktopSettingsWindow extends AbstractWindow {
 
     this.ipc.handle('open-user-data', async () => {
       shell.showItemInFolder(app.getPath('userData'));
+    });
+
+    this.ipc.handle('open-crash-dumps', async () => {
+      const crashDumps = app.getPath('crashDumps');
+      // folder may not exist yet if setting was just turned on but app not restarted yet
+      await fsPromises.mkdir(crashDumps, {
+        recursive: true
+      });
+      shell.showItemInFolder(crashDumps);
     });
 
     this.loadURL('tw-desktop-settings://./desktop-settings.html');

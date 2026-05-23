@@ -279,6 +279,22 @@
     "string": "Open User Data",
     "developer_comment": "Button in desktop settings to open the user data folder"
   },
+  "desktop-settings.crash-dumps": {
+    "string": "Crash dump logging (requires restart)",
+    "developer_comment": "Label for a dropdown in desktop settings controlling whether crash dumps are saved. Requires a restart to apply."
+  },
+  "desktop-settings.open-crash-dumps": {
+    "string": "Open Crash Dumps",
+    "developer_comment": "Button in desktop settings to open the folder where crash dumps are saved."
+  },
+  "desktop-settings.crash-dumps-none": {
+    "string": "Disabled",
+    "developer_comment": "Option in crash dump logging dropdown for not collecting them at all."
+  },
+  "desktop-settings.crash-dumps-local": {
+    "string": "Store on my computer (makes app start slightly slower)",
+    "developer_comment": "Option in crash dump logging dropdown for storing them on the user's computer, to be found later using the open crash dumps button. Setting up this logging takes a bit of time every time the app opens."
+  },
   "migrate.title": {
     "string": "Finishing update...",
     "developer_comment": "Title of window that does various things to finish an update"

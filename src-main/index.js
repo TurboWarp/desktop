@@ -1,4 +1,4 @@
-const {app} = require('electron');
+const {app, crashReporter} = require('electron');
 
 // requestSingleInstanceLock() crashes the app in signed MAS builds
 // https://github.com/electron/electron/issues/15958
@@ -36,6 +36,12 @@ if (!settings.hardwareAcceleration) {
   // https://chromestatus.com/feature/5166674414927872
   // https://chromium.googlesource.com/chromium/src/+/main/docs/gpu/swiftshader.md
   app.commandLine.appendSwitch('enable-unsafe-swiftshader');
+}
+
+if (settings.crashDumps === 'local') {
+  crashReporter.start({
+    uploadToServer: false
+  });
 }
 
 app.on('session-created', (session) => {

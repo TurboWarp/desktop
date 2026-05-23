@@ -101,6 +101,13 @@ class Settings {
     this.data.updateChecker = updateChecker;
   }
 
+  get crashDumps () {
+    return this.data.crashDumps || 'none';
+  }
+  set crashDumps (crashDumps) {
+    this.data.crashDumps = crashDumps;
+  }
+
   get ignoredUpdate () {
     return this.data.ignoredUpdate || null;
   }

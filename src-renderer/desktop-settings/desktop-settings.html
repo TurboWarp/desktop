@@ -40,6 +40,15 @@
         font: inherit;
         margin: 0.5rem 0;
       }
+      .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 0.5rem 0;
+      }
+      .button-row button {
+        margin: 0;
+      }
       .warning {
         background-color: yellow;
         color: black;
@@ -325,14 +334,40 @@
         richPresenceMoreInformation.textContent = strings['desktop-settings.more-information'];
       </script>
 
-      <button class="open-user-data"></button>
+      <label>
+        <div class="label crash-dumps-label"></div>
+        <select class="crash-dumps-select" autocomplete="off">
+          <option value="none"></option>
+          <option value="local"></option>
+        </select>
+      </label>
+      <script>
+        const crashDumpsSelect = document.querySelector('.crash-dumps-select');
+        crashDumpsSelect.onchange = () => {
+          DesktopSettingsPreload.setCrashDumps(crashDumpsSelect.value);
+        };
+        crashDumpsSelect.value = settings.crashDumps;
+        document.querySelector('.crash-dumps-label').textContent = strings['desktop-settings.crash-dumps'];
+        crashDumpsSelect.querySelector('[value=none]').textContent = strings['desktop-settings.crash-dumps-none'];
+        crashDumpsSelect.querySelector('[value=local]').textContent = strings['desktop-settings.crash-dumps-local'];
+      </script>
+
+      <div class="button-row">
+        <button class="open-user-data"></button>
+        <button class="open-crash-dumps"></button>
+      </div>
       <script>
         const openUserData = document.querySelector('.open-user-data');
         openUserData.addEventListener('click', () => {
           DesktopSettingsPreload.openUserData();
         });
-
         openUserData.textContent = strings['desktop-settings.open-user-data'];
+
+        const openCrashDumps = document.querySelector('.open-crash-dumps');
+        openCrashDumps.addEventListener('click', () => {
+          DesktopSettingsPreload.openCrashDumps();
+        });
+        openCrashDumps.textContent = strings['desktop-settings.open-crash-dumps'];
       </script>
     </main>
   </body>
