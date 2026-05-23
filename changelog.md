@@ -6,6 +6,7 @@ Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **form
 
  - Fixed compatibility issues opening projects from the latest version of Scratch
  - Fixed very slow compilation in projects with a large number of custom blocks
+ - Added option to store crash dumps on your computer (disabled by default) to help us troubleshoot crashes
  - New extension: DECTalk Text to Speech, a TTS engine that works offline
  - New extension: Tune Shark, a more advanced audio engine
  - New extension: Webhook, a better way to manage and make requests to webhooks
@@ -14,7 +15,8 @@ Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **form
  - Fixed HTML encoding extension swapping single and double quotes
  - Fixed canvas effects extension canvas size when display scale is not 100%
  - Fixed variable monitor errors when using custom extensions
- - Fix a couple low-severity security issues
+ - Fixed migrating user data from versions before v1.9.0
+ - Fixed a couple low-severity security issues
 
 # 1.15.5 (2026-03-30)
 

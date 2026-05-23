@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; frame-ancestors file:">
   </head>
   <body>
     <script>
@@ -44,11 +44,13 @@
         };
       });
 
-      const PARENT_ORIGIN = 'file://';
+      // Don't filter by origin in postMessage/onmessage - different Electron versions set the origin
+      // of the parent window as either "file://" or "null" (string, not literal null). To support both,
+      // we just shouldn't check. CSP frame-ancestors keeps this secure.
 
       window.addEventListener('message', async (e) => {
         try {
-          if (e.origin !== PARENT_ORIGIN) {
+          if (e.source !== window.parent) {
             return;
           }
 
@@ -79,25 +81,25 @@
             e.source.postMessage({
               type: 'backpack',
               key: key
-            }, PARENT_ORIGIN);
+            }, '*');
           } else {
             // We're done
             e.source.postMessage({
               type: 'done'
-            }, PARENT_ORIGIN);
+            }, '*');
           }
         } catch (error) {
           console.error(error);
           e.source.postMessage({
             type: 'error',
             error: `${error}`
-          }, PARENT_ORIGIN);
+          }, '*');
         }
       });
 
       window.parent.postMessage({
         type: 'start'
-      }, PARENT_ORIGIN);
+      }, '*');
     </script>
   </body>
 </html>
