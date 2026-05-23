@@ -9,6 +9,7 @@ const packageJSON = require('../package.json');
  * @typedef Metadata
  * @property {string} root
  * @property {boolean} [standard] Defaults to false
+ * @property {boolean} [cors] Defaults to false
  * @property {boolean} [supportFetch] Defaults to false
  * @property {boolean} [secure] Defaults to false
  * @property {boolean} [brotli] Defaults to false
@@ -49,12 +50,14 @@ const FILE_SCHEMES = {
   'tw-library': {
     root: path.resolve(__dirname, '../dist-library-files'),
     supportFetch: true,
+    cors: true,
     brotli: true,
     csp: "default-src 'none';"
   },
   'tw-extensions': {
     root: path.resolve(__dirname, '../dist-extensions'),
     supportFetch: true,
+    cors: true,
     brotli: true,
     embeddable: true,
     stream: true,
@@ -107,6 +110,7 @@ protocol.registerSchemesAsPrivileged(Object.entries(FILE_SCHEMES).map(([scheme, 
   privileges: {
     standard: !!metadata.standard,
     supportFetchAPI: !!metadata.supportFetch,
+    corsEnabled: !!metadata.cors,
     secure: !!metadata.secure,
     stream: !!metadata.stream
   }
