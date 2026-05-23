@@ -1,5 +1,20 @@
 [
   {
+    "version": "1.16.0",
+    "date": "2026-5-24",
+    "notes": [
+      "Fixed compatibility issues opening projects from the latest version of Scratch",
+      "New extension: DECTalk Text to Speech, a TTS engine that works offline",
+      "New extension: Tune Shark, a more advanced audio engine",
+      "New extension: Webhook, a better way to manage and make requests to webhooks",
+      "Added block to HTTP extension to view response as data: URL",
+      "Fixed animated text extension outline color not working sometimes",
+      "Fixed HTML encoding extension swapping single and double quotes",
+      "Fixed canvas effects pixelated rendering when using display scaling",
+      "Fix a couple low-severity security issues"
+    ]
+  },
+  {
     "version": "1.15.5",
     "date": "2026-3-30",
     "notes": [

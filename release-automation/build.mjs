@@ -19,8 +19,7 @@ const ELECTRON_26_FINAL = '26.6.10';
 const ELECTRON_32_FINAL = '32.3.3';
 
 // Electron 37 is the last version to support macOS 11
-// TODO: 37 is still being updates, we should keep bumping this
-const ELECTRON_37_FINAL = '37.8.0';
+const ELECTRON_37_FINAL = '37.10.3';
 
 /**
  * @returns {Date}

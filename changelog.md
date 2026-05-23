@@ -2,6 +2,20 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.16.0 (2026-05-24)
+
+ - Fixed compatibility issues opening projects from the latest version of Scratch
+ - Fixed very slow compilation in projects with a large number of custom blocks
+ - New extension: DECTalk Text to Speech, a TTS engine that works offline
+ - New extension: Tune Shark, a more advanced audio engine
+ - New extension: Webhook, a better way to manage and make requests to webhooks
+ - Added block to HTTP extension to view response as data: URL
+ - Fixed animated text extension outline color not working sometimes
+ - Fixed HTML encoding extension swapping single and double quotes
+ - Fixed canvas effects extension canvas size when display scale is not 100%
+ - Fixed variable monitor errors when using custom extensions
+ - Fix a couple low-severity security issues
+
 # 1.15.5 (2026-03-30)
 
  - Added "online?" block, like the new Scratch block with the same name
