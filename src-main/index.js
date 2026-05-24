@@ -1,4 +1,12 @@
 const {app, crashReporter} = require('electron');
+const settings = require('./settings');
+
+// Enable crash reporting as early as possible to detect as many crashes as possible.
+if (settings.crashDumps === 'local') {
+  crashReporter.start({
+    uploadToServer: false
+  });
+}
 
 // requestSingleInstanceLock() crashes the app in signed MAS builds
 // https://github.com/electron/electron/issues/15958
@@ -12,7 +20,6 @@ const EditorWindow = require('./windows/editor');
 const {checkForUpdates} = require('./update-checker');
 const {tranlateOrNull} = require('./l10n');
 const migrate = require('./migrate');
-const settings = require('./settings');
 require('./protocols');
 require('./context-menu');
 require('./menu-bar');
@@ -36,12 +43,6 @@ if (!settings.hardwareAcceleration) {
   // https://chromestatus.com/feature/5166674414927872
   // https://chromium.googlesource.com/chromium/src/+/main/docs/gpu/swiftshader.md
   app.commandLine.appendSwitch('enable-unsafe-swiftshader');
-}
-
-if (settings.crashDumps === 'local') {
-  crashReporter.start({
-    uploadToServer: false
-  });
 }
 
 app.on('session-created', (session) => {
