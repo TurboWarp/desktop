@@ -8,7 +8,7 @@
       "New extension: DECTalk Text to Speech, a TTS engine that works offline",
       "New extension: Tune Shark, a more advanced audio engine",
       "New extension: Webhook, an alternative way to manage webhooks and send requests",
-      "Added polygon mode to Box 2D Physics extension, allowing more complex shapes to work",
+      "Added polygon mode to Box 2D Physics extension, allowing using physics with complex shapes",
       "Added block to HTTP extension to view response as data: URL",
       "Fixed animated text extension outline color not working sometimes",
       "Fixed HTML encoding extension swapping single and double quotes",
