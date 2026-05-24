@@ -72,14 +72,20 @@
       <description>
         <ul>
           <li>Fixed compatibility issues opening projects from the latest version of Scratch</li>
+          <li>New extension: Video Sprites, displaying video on sprites, compatible with the Scratch Lab experiment</li>
           <li>New extension: DECTalk Text to Speech, a TTS engine that works offline</li>
           <li>New extension: Tune Shark, a more advanced audio engine</li>
-          <li>New extension: Webhook, a better way to manage and make requests to webhooks</li>
+          <li>New extension: Webhook, an alternative way to manage webhooks and send requests</li>
+          <li>Added polygon mode to Box 2D Physics extension, allowing more complex shapes to work</li>
           <li>Added block to HTTP extension to view response as data: URL</li>
           <li>Fixed animated text extension outline color not working sometimes</li>
           <li>Fixed HTML encoding extension swapping single and double quotes</li>
-          <li>Fixed canvas effects pixelated rendering when using display scaling</li>
-          <li>Fix a couple low-severity security issues</li>
+          <li>Fixed canvas effects extension canvas size when display scale is not 100%</li>
+          <li>Fixed variable monitor errors when using custom extensions</li>
+          <li>Fixed very slow compilation in projects with a large number of custom blocks</li>
+          <li>Fixed migrating user data from versions before v1.9.0</li>
+          <li>Added option to store crash dumps on your computer (disabled by default) to help debug crashes</li>
+          <li>Fixed a couple low-severity security issues</li>
         </ul>
       </description>
     </release>

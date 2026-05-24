@@ -5,17 +5,19 @@ Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **form
 # 1.16.0 (2026-05-24)
 
  - Fixed compatibility issues opening projects from the latest version of Scratch
- - Fixed very slow compilation in projects with a large number of custom blocks
- - Added option to store crash dumps on your computer (disabled by default) to help us troubleshoot crashes
+ - New extension: Video Sprites, displaying video on sprites, compatible with the Scratch Lab experiment
  - New extension: DECTalk Text to Speech, a TTS engine that works offline
  - New extension: Tune Shark, a more advanced audio engine
- - New extension: Webhook, a better way to manage and make requests to webhooks
+ - New extension: Webhook, an alternative way to manage webhooks and send requests
+ - Added polygon mode to Box 2D Physics extension, allowing using physics with complex shapes
  - Added block to HTTP extension to view response as data: URL
  - Fixed animated text extension outline color not working sometimes
  - Fixed HTML encoding extension swapping single and double quotes
  - Fixed canvas effects extension canvas size when display scale is not 100%
  - Fixed variable monitor errors when using custom extensions
+ - Fixed very slow compilation in projects with a large number of custom blocks
  - Fixed migrating user data from versions before v1.9.0
+ - Added option to store crash dumps on your computer (disabled by default) to help debug crashes
  - Fixed a couple low-severity security issues
 
 # 1.15.5 (2026-03-30)
