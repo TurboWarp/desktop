@@ -45,7 +45,7 @@ class MigrateWindow extends AbstractWindow {
       app.exit(1);
     });
 
-    this.window.setTitle(translate('migrate.title'));
+    this.window.setTitle(`${translate('migrate.title')} - ${APP_NAME}`);
     this.window.webContents.setBackgroundThrottling(false);
     this.window.loadFile(path.join(__dirname, '../../src-renderer/migrate/migrate.html'));
     this.show();
