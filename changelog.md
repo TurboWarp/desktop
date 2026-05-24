@@ -381,4 +381,194 @@ Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **form
  - When you right click on a misspelled word detected by the spellchecker, you will now see some suggested replacements
  - Updated integrated packager
  - Various bug fixes
- - Updated translations
+
+# 0.14.0 (2021-12-19)
+
+ - New addon: Snap scripts to grid
+ - New addon: Keep block comment connections straight
+ - Significantly improved compiler performance in some projects
+ - Using ctrl+z in the script editor or costume editor will no longer also undo unrelated text input changes
+ - Added ctrl+y as shortcut for redo in addition to ctrl+shift+z
+ - Improved performance of onion skinning addon
+ - Fixed compatibility between auto-hiding block palette and two-column category menu addons
+ - Improved responsiveness of color pickers
+ - Updated packager: new options, improved progress bars, various bug fixes
+ - Various bug fixes
+
+# 0.13.0 (2021-11-28)
+
+ - Added offline version of the TurboWarp Packager for converting your projects to formats such as HTML, Zip, or executable files
+ - New addon: Two-column category menu
+ - New addon: Running block border
+ - Updated addon settings window
+ - Fixed bugs in the enabled-by-default Grab single block with Ctrl key addon
+ - Fixed bugs in the Switch variables between "For all sprites" and "For this sprite only" addon
+ - Fixed bugs in confirmation dialogs and alert boxes
+ - Windows: Scrollbars are now dark in dark mode
+ - Linux: Scrollbars are now dark in dark mode
+
+# 0.12.0 (2021-11-18)
+
+ - Improved dark mode
+ - New addon: Editor comment previews
+ - New addon: Switch variables between "For all sprites" and "For this sprite only"
+ - New addon: Disable compiler in editor
+ - Update checker can now be disabled in (?) > Desktop Settings
+
+# 0.11.0 (2021-10-18)
+
+ - Now available on the Microsoft Store
+ - New addon: Duplicate script with Alt key
+ - New addon: Do not shift pasted items
+ - Added File > New window button
+ - Added custom extensions
+ - Many addon bug fixes
+
+# 0.10.1 (2021-09-23)
+
+ - Fixed corruption bug from previous release
+ - Fixed translation extension
+
+# 0.10.0 (2021-09-19)
+
+ - New addon: Grab single block with control key
+ - New addon: Hide new variables
+ - New addon: Extra key support
+ - Added zooming when pressing ctrl+equals, ctrl+minus, ctrl+zero
+ - Added fullscreen when pressing F11
+
+# 0.9.0 (2021-08-29)
+
+ - New addon: Paint costume by default
+ - New addon: Hide delete button
+ - New addon: Do not automatically space overlapping scripts
+ - Windows: Added support for 32-bit systems
+ - Allow creating cloud variables, but they will not work yet
+ - Various bug fixes
+
+# 0.8.1 (2021-07-30)
+
+ - Fix backpack
+ - Fix dropdowns breaking when, for example, the selected costume was deleted
+ - Fix a few other bugs
+
+# 0.8.0 (2021-07-21)
+
+ - Improved performance in some projects by 40%
+ - Significantly reduced idle power consumption and CPU usage
+ - Various addon updates
+ - Various bug fixes
+
+# 0.7.0 (2021-06-22)
+
+ - New addon: Debugger
+ - Fixed possible crash and data loss when clicking on certain buttons, such as links in the toolbox
+ - Added confirmation prompt to "load restore point" button
+ - Fixed startup crash on some systems
+ - Improved addon settings search
+ - Significant updates to the "Gamepad support" addon
+ - Simplified the default project
+ - Various bug fixes and optimizations
+
+# 0.6.0 (2021-06-01)
+
+ - New addon: Block transparency
+ - New features in the costume editor: hold middle click to pan, hotkeys for tools
+ - New feature: Advanced > Store settings in project (Experimental)
+ - Various bug fixes, performance improvements
+
+# 0.5.0 (2021-05-12)
+
+ - New addon: Editor sound effects
+ - New addon: Remove curved stage borders
+ - Addon enabled by default: Drag and drop files
+ - Significantly optimized editor on large projects
+ - Fixed duplicating a script running the script it's dropped on
+ - Fixed comments not saving position properly when moved
+ - Various other bug fixes and optimizations
+ - Added userscript/userstyle support for advanced users
+
+# 0.4.0 (2021-04-25)
+
+ - New addon: Cat blocks
+ - New addon: Gamepad support
+ - New addon: Custom scripts area zoom settings
+ - New addon: Change new sprite default position
+ - New addon: Save blocks as image
+ - Various optimizations
+ - Various bug fixes
+
+# 0.3.1 (2021-04-04)
+
+ - Changed default sprite from empty to a dango
+ - Fixed extremely poor performance caused by folders addon
+ - Fixed numerous prompts working incorrectly
+ - Fixed window focus breaking after some alerts
+
+# 0.3.0 (2021-03-30)
+
+ - Added advanced settings menu
+ - Added backpack support
+ - Added custom stage size
+ - Added new addons
+ - Fixed potential sandbox escape vulnerability (thanks apple502j)
+
+# 0.2.1 (2021-03-10)
+
+ - Fixed addon bugs
+
+# 0.2.0 (2021-03-09)
+
+ - Improved sandboxing and security
+ - Added interpolation
+ - Added new addons
+ - Fixed music and text to speech extensions
+
+# 0.1.0 (2021-02-16)
+
+ - Changed warp timer to be enabled by default. This reduces performance, but greatly reduces the risk of crashes. It can be disabled in the Advanced menu
+ - Added app icon
+ - Added translation support to more parts of the app
+ - Various bug fixes and improvements
+ - Linux: Added x86 32-bit support
+ - Linux: Added AppImage support
+ - Linux: Added Snap store support
+ - Linux: Fixed icon
+
+# 0.0.4 (2021-01-27)
+
+ - Added Dark mode
+ - Fixed many bugs
+ - Linux: Builds for ARM systems are now available
+
+# 0.0.3 (2021-01-18)
+
+ - Added addons button
+ - Added support for translating addons
+ - New addon: Onion skinning
+ - New addon: Hex color picker (enabled by default)
+ - New addon: Data category tweaks
+ - New addon: Bitmap images copying (enabled by default)
+ - New addon: Display stage on left side
+ - New addon: Confirm sprite deletion
+ - New addon: Record project video
+ - New addon: Customizable block colors
+ - New addon: Auto-hide block palette
+ - New addon: Colored context menus
+ - New addon: Clone counter
+ - New addon: Mouse position
+ - Fixed automatic restore points
+ - Fixed fullscreen resizing
+ - Windows: Removed menu bar. Developer tools can still be accessed with Ctrl+Shift+I
+ - macOS: Allow opening multiple windows through File > New Window or with Command+N
+
+# 0.0.2 (2021-01-11)
+
+ - Added macOS build
+ - Added file association for sb3 files (lets you double click files to open)
+ - Added ctrl+s to save project
+ - Various bug fixes and improvements
+
+# 0.0.1 (2021-01-06)
+
+ - Initial release
