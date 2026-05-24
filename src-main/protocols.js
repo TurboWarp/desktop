@@ -56,6 +56,7 @@ const FILE_SCHEMES = {
   },
   'tw-extensions': {
     root: path.resolve(__dirname, '../dist-extensions'),
+    standard: true,
     supportFetch: true,
     cors: true,
     brotli: true,
