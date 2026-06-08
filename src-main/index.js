@@ -31,6 +31,21 @@ app.enableSandbox();
 // https://github.com/LLK/scratch-desktop/blob/4b462212a8e406b15bcf549f8523645602b46064/src/main/index.js#L45
 app.commandLine.appendSwitch('host-resolver-rules', 'MAP device-manager.scratch.mit.edu 127.0.0.1');
 
+// Disable Chromium's "defer renderer tasks after input" to mitigate platform bug
+// that causes significant lag when processing key events in projects with many
+// SVGs.
+//
+// Every <img> with an SVG internally creates a full Chromium PageScheduler that
+// registers several task queues into the renderer-wide scheduler. For projects
+// with thousands of vector costumes, this is thousands of task queues that
+// must be updated every time the scheduler policy changes. Disabling this feature
+// prevents key events from causing these policy changes.
+//
+// The underlying issue of inert <img> creating excessive task queues remains,
+// so we can still get some stutters occasionally, but this reduces it a fair bit.
+// The possible loss in input latency is tolerable due to the performance impact.
+app.commandLine.appendSwitch('disable-features', 'DeferRendererTasksAfterInput');
+
 if (!settings.hardwareAcceleration) {
   app.disableHardwareAcceleration();
 
