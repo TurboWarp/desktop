@@ -1,12 +1,5 @@
-const {app, crashReporter} = require('electron');
+const {app} = require('electron');
 const settings = require('./settings');
-
-// Enable crash reporting as early as possible to detect as many crashes as possible.
-if (settings.crashDumps === 'local') {
-  crashReporter.start({
-    uploadToServer: false
-  });
-}
 
 // requestSingleInstanceLock() crashes the app in signed MAS builds
 // https://github.com/electron/electron/issues/15958
