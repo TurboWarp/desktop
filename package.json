@@ -155,6 +155,7 @@
     "linux": {
       "executableName": "nitrobolt-desktop",
       "artifactName": "${productName}-${os}-${arch}-${version}.${ext}",
+      "maintainer": "Cubester <contact@nitrobolt.org>",
       "icon": "./build/",
       "synopsis": "Mod of Scratch with a compiler and more features.",
       "description": "NitroBolt is a mod of TurboWarp with tons of new features, and a haven for developers who don't want to be restricted by \"compatibility\".",
