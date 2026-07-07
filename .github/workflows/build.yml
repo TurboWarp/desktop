@@ -2,6 +2,7 @@ name: Build (Manual)
 
 on:
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   build-linux:
@@ -132,6 +133,7 @@ jobs:
           if-no-files-found: ignore
 
   create-release:
+    if: github.event_name == 'workflow_dispatch'
     needs: [build-linux, build-mac, build-windows]
     runs-on: ubuntu-latest
     permissions:
