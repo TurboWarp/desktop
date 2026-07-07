@@ -3,111 +3,125 @@ name: Release
 on:
   push:
     tags:
-    - 'v*'
+      - "v*"
 
 permissions:
   # required to modify releases
   contents: write
 
 jobs:
-  release-linux:
+  create-release:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-        persist-credentials: false
-    - name: Install strip-nondeterminism
-      run: sudo apt-get install strip-nondeterminism
-    - name: Install Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 24
-    - name: Install dependencies
-      run: npm ci --loglevel=info
-    - name: Fetch
-      run: npm run fetch
-    - name: Compile
-      run: npm run webpack:prod
-    - name: Package
-      run: |
-        node release-automation/build.mjs --debian --tarball --appimage --x64 --armv7l --arm64 --production
-    - name: Print file tree
-      run: node scripts/print-file-tree.mjs dist
-    - name: Upload artifacts to GitHub Actions
-      uses: actions/upload-artifact@v4
-      with:
-        name: linux
-        path: |
-          dist/*.deb
-          dist/*.tar.gz
-          dist/*.AppImage
-    - name: Upload artifacts to tag
-      run: |
-        node scripts/upload-to-github-releases.mjs TurboWarp desktop "dist/*.deb"
-        node scripts/upload-to-github-releases.mjs TurboWarp desktop "dist/*.tar.gz"
-        node scripts/upload-to-github-releases.mjs TurboWarp desktop "dist/*.AppImage"
-      env:
-        GH_TOKEN: "${{ github.token }}"
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            --title "${{ github.ref_name }}" \
+            --generate-notes
+
+  release-linux:
+    needs: [create-release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - name: Install strip-nondeterminism
+        run: sudo apt-get install strip-nondeterminism
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install dependencies
+        run: npm ci --loglevel=info
+      - name: Fetch
+        run: npm run fetch
+      - name: Compile
+        run: npm run webpack:prod
+      - name: Package
+        run: |
+          node release-automation/build.mjs --debian --tarball --appimage --x64 --armv7l --arm64 --production
+      - name: Print file tree
+        run: node scripts/print-file-tree.mjs dist
+      - name: Upload artifacts to GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux
+          path: |
+            dist/*.deb
+            dist/*.tar.gz
+            dist/*.AppImage
+      - name: Upload artifacts to tag
+        run: |
+          node scripts/upload-to-github-releases.mjs Nitro-Bolt desktop "dist/*.deb"
+          node scripts/upload-to-github-releases.mjs Nitro-Bolt desktop "dist/*.tar.gz"
+          node scripts/upload-to-github-releases.mjs Nitro-Bolt desktop "dist/*.AppImage"
+        env:
+          GH_TOKEN: "${{ github.token }}"
 
   release-mac:
+    needs: [create-release]
     runs-on: macos-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-        persist-credentials: false
-    - name: Install Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 24
-    - name: Install dependencies
-      run: npm ci --loglevel=info
-    - name: Fetch
-      run: npm run fetch
-    - name: Compile
-      run: npm run webpack:prod
-    - name: Package
-      run: |
-        # I don't trust GitHub Actions to not accidentally log shell substitutions somewhere, so we
-        # use Python instead of "echo $SECRET >" to write the private key to a file as needed by notarytool.
-        python3 -c "import os; open(os.getenv('APPLE_API_KEY_NAME'), 'w').write(os.getenv('APPLE_API_KEY_DATA'))" >/dev/null 2>&1
-        # @electron/notaraize documentation says key should be an absolute path
-        export APPLE_API_KEY="$(pwd)/$APPLE_API_KEY_NAME"
-        # Need to run the universal builds as separate commands or it breaks when @electron/universal
-        # diffs the ASARs and finds spurious differences. Not clear why.
-        node release-automation/build.mjs --mac --universal --production
-        node release-automation/build.mjs --mac-legacy-11 --universal --production
-        # These macOS versions never ran on an Apple Silicon device, so only need x64
-        node release-automation/build.mjs --mac-legacy-10.13-10.14 --mac-legacy-10.15 --x64 --production
-        # for safety
-        rm "$APPLE_API_KEY_NAME"
-      env:
-        APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
-        APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-        APPLE_API_KEY_NAME: ${{ secrets.APPLE_API_KEY_NAME }}
-        APPLE_API_KEY_DATA: ${{ secrets.APPLE_API_KEY_DATA }}
-        # base64 -i Certificates.p12
-        CSC_LINK: ${{ secrets.APPLE_CSC_LINK }}
-        # electron-builder documentation says password won't be escaped, so don't use any
-        # special characters that the shell will mess with
-        CSC_KEY_PASSWORD: ${{ secrets.APPLE_CSC_KEY_PASSWORD }}
-    - name: Print file tree
-      run: node scripts/print-file-tree.mjs dist
-    - name: Upload artifacts to GitHub Actions
-      uses: actions/upload-artifact@v4
-      with:
-        name: mac
-        path: dist/*.dmg
-    - name: Upload artifacts to tag
-      run: |
-        node scripts/upload-to-github-releases.mjs TurboWarp desktop "dist/*.dmg"
-      env:
-        GH_TOKEN: "${{ github.token }}"
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install dependencies
+        run: npm ci --loglevel=info
+      - name: Fetch
+        run: npm run fetch
+      - name: Compile
+        run: npm run webpack:prod
+      - name: Package
+        run: |
+          # I don't trust GitHub Actions to not accidentally log shell substitutions somewhere, so we
+          # use Python instead of "echo $SECRET >" to write the private key to a file as needed by notarytool.
+          python3 -c "import os; open(os.getenv('APPLE_API_KEY_NAME'), 'w').write(os.getenv('APPLE_API_KEY_DATA'))" >/dev/null 2>&1
+          # @electron/notaraize documentation says key should be an absolute path
+          export APPLE_API_KEY="$(pwd)/$APPLE_API_KEY_NAME"
+          # Need to run the universal builds as separate commands or it breaks when @electron/universal
+          # diffs the ASARs and finds spurious differences. Not clear why.
+          node release-automation/build.mjs --mac --universal --production
+          node release-automation/build.mjs --mac-legacy-11 --universal --production
+          # These macOS versions never ran on an Apple Silicon device, so only need x64
+          node release-automation/build.mjs --mac-legacy-10.13-10.14 --mac-legacy-10.15 --x64 --production
+          # for safety
+          rm "$APPLE_API_KEY_NAME"
+        env:
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_KEY_NAME: ${{ secrets.APPLE_API_KEY_NAME }}
+          APPLE_API_KEY_DATA: ${{ secrets.APPLE_API_KEY_DATA }}
+          # base64 -i Certificates.p12
+          CSC_LINK: ${{ secrets.APPLE_CSC_LINK }}
+          # electron-builder documentation says password won't be escaped, so don't use any
+          # special characters that the shell will mess with
+          CSC_KEY_PASSWORD: ${{ secrets.APPLE_CSC_KEY_PASSWORD }}
+      - name: Print file tree
+        run: node scripts/print-file-tree.mjs dist
+      - name: Upload artifacts to GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac
+          path: dist/*.dmg
+      - name: Upload artifacts to tag
+        run: |
+          node scripts/upload-to-github-releases.mjs Nitro-Bolt desktop "dist/*.dmg"
+        env:
+          GH_TOKEN: "${{ github.token }}"
 
   release-windows:
+    needs: [create-release]
     # GitHub's Windows runners have a C: drive and a D: drive.
     # C: is for the OS and has good read performance but awful write performance.
     # D: has much better faster write performance (>20x faster than C:)
@@ -115,88 +129,88 @@ jobs:
     # drive has been observed to take over an hour!
     runs-on: windows-latest
     steps:
-    # actions/checkout can only clone to paths in $GITHUB_WORKSPACE which is on the C: drive,
-    # so we have to clone to C: then copy to D: after. This repository itself isn't huge so
-    # this is plenty fast.
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-        persist-credentials: false
-        path: repo
-    - name: "Move repository to D: drive"
-      run: |
-        Copy-Item -Path repo -Destination D:\repo -Recurse
-        Remove-Item -Path repo -Recurse -Force
-    - name: Install Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 24
-    # The repository being on D: means that node_modules IO will be fast, but npm still downloads
-    # packages to a temporary folder for caching which is on C: by default. We need to make sure
-    # npm uses the D: drive instead otherwise we still get bottlenecked by C:.
-    - name: "Configure npm to use D: drive"
-      run: |
-        npm config set cache D:\npm-cache
-        npm config set prefix D:\npm-prefix
-    - name: Install dependencies
-      working-directory: D:\repo
-      run: npm ci --loglevel=info
-    - name: Fetch
-      working-directory: D:\repo
-      run: npm run fetch
-    - name: Compile
-      working-directory: D:\repo
-      run: npm run webpack:prod
-    - name: Package
-      working-directory: D:\repo
-      run: |
-        node release-automation/build.mjs --windows --microsoft-store --x64 --ia32 --arm64 --production
-        node release-automation/build.mjs --windows-portable --x64 --production
-        node release-automation/build.mjs --windows-legacy --ia32 --x64 --production
-    - name: Print file tree
-      working-directory: D:\repo
-      run: node scripts/print-file-tree.mjs dist
-    - name: Upload unsigned artifacts to GitHub Actions
-      uses: actions/upload-artifact@v4
-      with:
-        name: windows-unsigned
-        path: D:\repo\dist\*.exe
-    - name: Upload Microsoft Store artifact to GitHub Actions
-      uses: actions/upload-artifact@v4
-      with:
-        name: appx
-        path: D:\repo\dist\*.appx
-    - name: Upload unsigned artifacts for SignPath
-      uses: actions/upload-artifact@v4
-      id: signpath-unsigned
-      with:
-        name: artifact-for-signpath
-        # keep this list in sync with the signed artifiact upload below
-        path: |
-          D:\repo\dist\TurboWarp-Setup*x64.exe
-    - name: Sign executables with SignPath
-      uses: signpath/github-action-submit-signing-request@4f13d373e8f0cd8d3c0465ff4877feff27aed2ae
-      with:
-        api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
-        organization-id: 04444052-261e-46eb-8168-ed0eee93c57c
-        project-slug: desktop_
-        signing-policy-slug: release-signing
-        github-artifact-id: ${{ steps.signpath-unsigned.outputs.artifact-id }}
-        artifact-configuration-slug: sign_installers
-        wait-for-completion: true
-        # overwrite the unsigned files
-        output-artifact-directory: D:\repo\dist
-    - name: Upload signed artifacts to GitHub Actions
-      uses: actions/upload-artifact@v4
-      with:
-        name: windows-signed
-        # keep this list in sync with the signpath artifact upload above
-        path: |
-          D:\repo\dist\TurboWarp-Setup*x64.exe
-    - name: Upload signed artifacts to tag
-      working-directory: D:\repo
-      run: |
-        node scripts/upload-to-github-releases.mjs TurboWarp desktop "dist/*.exe"
-      env:
-        GH_TOKEN: "${{ github.token }}"
+      # actions/checkout can only clone to paths in $GITHUB_WORKSPACE which is on the C: drive,
+      # so we have to clone to C: then copy to D: after. This repository itself isn't huge so
+      # this is plenty fast.
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+          path: repo
+      - name: "Move repository to D: drive"
+        run: |
+          Copy-Item -Path repo -Destination D:\repo -Recurse
+          Remove-Item -Path repo -Recurse -Force
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      # The repository being on D: means that node_modules IO will be fast, but npm still downloads
+      # packages to a temporary folder for caching which is on C: by default. We need to make sure
+      # npm uses the D: drive instead otherwise we still get bottlenecked by C:.
+      - name: "Configure npm to use D: drive"
+        run: |
+          npm config set cache D:\npm-cache
+          npm config set prefix D:\npm-prefix
+      - name: Install dependencies
+        working-directory: D:\repo
+        run: npm ci --loglevel=info
+      - name: Fetch
+        working-directory: D:\repo
+        run: npm run fetch
+      - name: Compile
+        working-directory: D:\repo
+        run: npm run webpack:prod
+      - name: Package
+        working-directory: D:\repo
+        run: |
+          node release-automation/build.mjs --windows --microsoft-store --x64 --ia32 --arm64 --production
+          node release-automation/build.mjs --windows-portable --x64 --production
+          node release-automation/build.mjs --windows-legacy --ia32 --x64 --production
+      - name: Print file tree
+        working-directory: D:\repo
+        run: node scripts/print-file-tree.mjs dist
+      - name: Upload unsigned artifacts to GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-unsigned
+          path: D:\repo\dist\*.exe
+      - name: Upload Microsoft Store artifact to GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: appx
+          path: D:\repo\dist\*.appx
+      - name: Upload unsigned artifacts for SignPath
+        uses: actions/upload-artifact@v4
+        id: signpath-unsigned
+        with:
+          name: artifact-for-signpath
+          # keep this list in sync with the signed artifiact upload below
+          path: |
+            D:\repo\dist\NitroBolt-Setup*x64.exe
+      - name: Sign executables with SignPath
+        uses: signpath/github-action-submit-signing-request@4f13d373e8f0cd8d3c0465ff4877feff27aed2ae
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: 04444052-261e-46eb-8168-ed0eee93c57c
+          project-slug: desktop_
+          signing-policy-slug: release-signing
+          github-artifact-id: ${{ steps.signpath-unsigned.outputs.artifact-id }}
+          artifact-configuration-slug: sign_installers
+          wait-for-completion: true
+          # overwrite the unsigned files
+          output-artifact-directory: D:\repo\dist
+      - name: Upload signed artifacts to GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-signed
+          # keep this list in sync with the signpath artifact upload above
+          path: |
+            D:\repo\dist\NitroBolt-Setup*x64.exe
+      - name: Upload signed artifacts to tag
+        working-directory: D:\repo
+        run: |
+          node scripts/upload-to-github-releases.mjs Nitro-Bolt desktop "dist/*.exe"
+        env:
+          GH_TOKEN: "${{ github.token }}"

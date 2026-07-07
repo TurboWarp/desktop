@@ -7,69 +7,70 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-        persist-credentials: false
-    - name: Install strip-nondeterminism
-      run: sudo apt-get install strip-nondeterminism
-    - name: Install Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 24
-    - name: Install dependencies
-      run: npm ci --loglevel=info
-    - name: Fetch
-      run: npm run fetch
-    - name: Compile
-      run: npm run webpack:prod
-    - name: Package
-      run: |
-        node release-automation/build.mjs --debian --tarball --appimage --x64 --armv7l --arm64
-    - name: Print file tree
-      run: node scripts/print-file-tree.mjs dist
-    - name: Upload artifacts to GitHub Actions
-      uses: actions/upload-artifact@v4
-      with:
-        name: linux
-        path: |
-          dist/*.deb
-          dist/*.tar.gz
-          dist/*.AppImage
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - name: Install strip-nondeterminism
+        run: sudo apt-get install strip-nondeterminism
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install dependencies
+        run: npm ci --loglevel=info
+      - name: Fetch
+        run: npm run fetch
+      - name: Compile
+        run: npm run webpack:prod
+      - name: Package
+        run: |
+          node release-automation/build.mjs --debian --tarball --appimage --x64 --armv7l --arm64
+      - name: Print file tree
+        run: node scripts/print-file-tree.mjs dist
+      - name: Upload artifacts to GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux
+          path: |
+            dist/*.deb
+            dist/*.tar.gz
+            dist/*.AppImage
+          if-no-files-found: ignore
 
   build-mac:
     runs-on: macos-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-        persist-credentials: false
-    - name: Install Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 24
-    - name: Install dependencies
-      run: npm ci --loglevel=info
-    - name: Fetch
-      run: npm run fetch
-    - name: Compile
-      run: npm run webpack:prod
-    - name: Package
-      run: |
-        # Need to run the universal builds as separate commands or it breaks when @electron/universal
-        # diffs the ASARs and finds spurious differences. Not clear why.
-        node release-automation/build.mjs --mac --universal --production
-        node release-automation/build.mjs --mac-legacy-11 --universal --production
-        node release-automation/build.mjs --mac-legacy-10.13-10.14 --mac-legacy-10.15 --x64
-    - name: Print file tree
-      run: node scripts/print-file-tree.mjs dist
-    - name: Upload artifacts to GitHub Actions
-      uses: actions/upload-artifact@v4
-      with:
-        name: mac
-        path: dist/*.dmg
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install dependencies
+        run: npm ci --loglevel=info
+      - name: Fetch
+        run: npm run fetch
+      - name: Compile
+        run: npm run webpack:prod
+      - name: Package
+        run: |
+          # Need to run the universal builds as separate commands or it breaks when @electron/universal
+          # diffs the ASARs and finds spurious differences. Not clear why.
+          node release-automation/build.mjs --mac --universal --production
+          node release-automation/build.mjs --mac-legacy-11 --universal --production
+          node release-automation/build.mjs --mac-legacy-10.13-10.14 --mac-legacy-10.15 --x64
+      - name: Print file tree
+        run: node scripts/print-file-tree.mjs dist
+      - name: Upload artifacts to GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac
+          path: dist/*.dmg
 
   build-windows:
     # GitHub's Windows runners have a C: drive and a D: drive.
@@ -79,52 +80,83 @@ jobs:
     # drive has been observed to take over an hour!
     runs-on: windows-latest
     steps:
-    # actions/checkout can only clone to paths in $GITHUB_WORKSPACE which is on the C: drive,
-    # so we have to clone to C: then copy to D: after. This repository itself isn't huge so
-    # this is plenty fast.
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-        persist-credentials: false
-        path: repo
-    - name: "Move repository to D: drive"
-      run: |
-        Copy-Item -Path repo -Destination D:\repo -Recurse
-        Remove-Item -Path repo -Recurse -Force
-    - name: Install Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 24
-    # The repository being on D: means that node_modules IO will be fast, but npm still downloads
-    # packages to a temporary folder for caching which is on C: by default. We need to make sure
-    # npm uses the D: drive instead otherwise we still get bottlenecked by C:.
-    - name: "Configure npm to use D: drive"
-      run: |
-        npm config set cache D:\npm-cache
-        npm config set prefix D:\npm-prefix
-    - name: Install dependencies
-      working-directory: D:\repo
-      run: npm ci --loglevel=info
-    - name: Fetch
-      working-directory: D:\repo
-      run: npm run fetch
-    - name: Compile
-      working-directory: D:\repo
-      run: npm run webpack:prod
-    - name: Package
-      working-directory: D:\repo
-      run: |
-        node release-automation/build.mjs --windows --microsoft-store --x64 --ia32 --arm64
-        node release-automation/build.mjs --windows-portable --x64
-        node release-automation/build.mjs --windows-legacy --ia32 --x64
-    - name: Print file tree
-      working-directory: D:\repo
-      run: node scripts/print-file-tree.mjs dist
-    - name: Upload artifacts to GitHub Actions
-      uses: actions/upload-artifact@v4
-      with:
-        name: windows
-        path: |
-          D:\repo\dist\*.exe
-          D:\repo\dist\*.appx
+      # actions/checkout can only clone to paths in $GITHUB_WORKSPACE which is on the C: drive,
+      # so we have to clone to C: then copy to D: after. This repository itself isn't huge so
+      # this is plenty fast.
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+          path: repo
+      - name: "Move repository to D: drive"
+        run: |
+          Copy-Item -Path repo -Destination D:\repo -Recurse
+          Remove-Item -Path repo -Recurse -Force
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      # The repository being on D: means that node_modules IO will be fast, but npm still downloads
+      # packages to a temporary folder for caching which is on C: by default. We need to make sure
+      # npm uses the D: drive instead otherwise we still get bottlenecked by C:.
+      - name: "Configure npm to use D: drive"
+        run: |
+          npm config set cache D:\npm-cache
+          npm config set prefix D:\npm-prefix
+      - name: Install dependencies
+        working-directory: D:\repo
+        run: npm ci --loglevel=info
+      - name: Fetch
+        working-directory: D:\repo
+        run: npm run fetch
+      - name: Compile
+        working-directory: D:\repo
+        run: npm run webpack:prod
+      - name: Package
+        working-directory: D:\repo
+        run: |
+          node release-automation/build.mjs --windows --microsoft-store --x64 --ia32 --arm64
+          node release-automation/build.mjs --windows-portable --x64
+          node release-automation/build.mjs --windows-legacy --ia32 --x64
+      - name: Print file tree
+        working-directory: D:\repo
+        run: node scripts/print-file-tree.mjs dist
+      - name: Upload artifacts to GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: |
+            D:\repo\dist\*.exe
+            D:\repo\dist\*.appx
+          if-no-files-found: ignore
+
+  create-release:
+    needs: [build-linux, build-mac, build-windows]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+      - name: Create Draft Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v$VERSION-build-$(date +%s)"
+          shopt -s nullglob
+          FILES=(linux/*.deb linux/*.tar.gz linux/*.AppImage mac/*.dmg windows/*.exe windows/*.appx)
+          if [ ${#FILES[@]} -gt 0 ]; then
+            gh release create "$TAG" "${FILES[@]}" \
+              --title "Manual Build v$VERSION" \
+              --notes "Manually triggered build from GitHub Actions." \
+              --draft
+            echo "Created draft release: $TAG"
+          else
+            echo "No files found to upload"
+            exit 1
+          fi
