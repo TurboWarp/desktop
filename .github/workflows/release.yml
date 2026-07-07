@@ -13,7 +13,10 @@ jobs:
   create-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Create GitHub Release
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+    - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
