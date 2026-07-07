@@ -114,7 +114,7 @@ const generateMetainfo = (releases) => {
     xml += '    </release>\n';
   }
 
-  const path = pathUtil.join(import.meta.dirname, '../linux-files/org.turbowarp.TurboWarp.metainfo.xml');
+  const path = pathUtil.join(import.meta.dirname, '../linux-files/org.nitrobolt.NitroBolt.metainfo.xml');
   let source = fs.readFileSync(path, 'utf-8');
   source = source.replace(
     /<releases>[\s\S]*<\/releases>/m,
