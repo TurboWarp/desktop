@@ -4,7 +4,10 @@
   "version": "1.0.0",
   "license": "GPL-3.0",
   "type": "commonjs",
-  "author": "Cubester <contact@nitrobolt.org>",
+  "author": {
+    "name": "Cubester",
+    "email": "contact@nitrobolt.org"
+  },
   "scripts": {
     "fetch": "node scripts/download-library-files.mjs && node scripts/download-packager.mjs && node scripts/prepare-extensions.mjs",
     "webpack:compile": "webpack",
