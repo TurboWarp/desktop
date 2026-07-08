@@ -29,3 +29,21 @@ a {
 p {
   margin: 0;
 }
+
+/* Prevent horizontal overflow on mobile and make media scale */
+html, body {
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure children don't overflow the viewport */
+:global(#app) * {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+img, svg, canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
