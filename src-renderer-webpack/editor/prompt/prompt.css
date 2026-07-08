@@ -13,6 +13,7 @@
 
 .inner {
   width: 360px;
+  max-width: calc(100% - 32px);
   margin: 100px auto 0 auto;
   background-color: var(--ui-modal-background);
   color: var(--ui-modal-foreground);
@@ -24,6 +25,26 @@
   gap: 1rem;
   padding: 1.5rem 2.25rem;
   box-sizing: border-box;
+}
+
+/* Mobile-friendly modal */
+@media (max-width: 480px) {
+  .inner {
+    width: auto;
+    max-width: calc(100% - 24px);
+    margin: 24px auto;
+    padding: 1rem;
+    border-radius: 0.5rem;
+  }
+  .button-row {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .button-row button {
+    width: auto;
+    min-width: 90px;
+  }
 }
 
 .label {

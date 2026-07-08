@@ -4,8 +4,19 @@
   left: 0;
   width: 100%;
   height: 100%;
-  min-width: 1024px;
-  min-height: 640px;
+  /* Removed large fixed minimums to allow mobile layouts */
+  min-width: 320px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Mobile tweaks: make app layout flow on small screens */
+@media (max-width: 480px) {
+  :global(#app) {
+    position: relative;
+    min-width: 0;
+    height: auto;
+  }
 }
 a {
   color: #25d;
