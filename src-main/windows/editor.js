@@ -660,6 +660,10 @@ class EditorWindow extends ProjectRunningWindow {
         new EditorWindow(parseOpenedFile(file, workingDirectory), fullscreen);
       }
     }
+    if (files && files.length > 0) {
+      settings.lastOpenedFile = files[0];
+      settings.save();
+    }
   }
 
   /**
