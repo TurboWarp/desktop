@@ -107,6 +107,22 @@
     "string": "Process crashed: {type}: {reason} ({code})",
     "developer_comment": "Appears when a process crashes"
   },
+  "crash.reporting-disabled": {
+    "string": "Crash reporting is disabled by default. You can help us fix bugs like this by enabling crash reports in the \"Desktop Settings\" menu. Click \"Learn More\" for known causes and fixes for this kind of error.",
+    "developer_comment": "Appears in the crash dialog when crash log collection is disabled, to explain how to turn it on."
+  },
+  "crash.reporting-enabled": {
+    "string": "A crash dump may have been created. You can help us fix bugs like this by sending those logs to us. Click \"Learn More\" for known causes and fixes for this kind of error.",
+    "developer_comment": "Appears in the crash dialog when crash log collection is enabled, to ask the user to send us their logs. \"Learn More\" refers to the crash.learn-more button in the same dialog."
+  },
+  "crash.open-desktop-settings": {
+    "string": "Open Desktop Settings",
+    "developer_comment": "Button in the crash dialog, shown when crash log collection is disabled, that opens the desktop settings window so the user can turn it on."
+  },
+  "crash.learn-more": {
+    "string": "Learn More",
+    "developer_comment": "Button in the crash dialog that opens a documentation page about crash reporting."
+  },
   "prompt.ok": {
     "string": "OK",
     "developer_comment": "Appears in alert boxes, confirmation messages, and text prompts"
