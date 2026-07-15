@@ -216,7 +216,7 @@ const parseCommandLine = (argv) => {
     .slice(process.defaultApp ? 2 : 1);
 
   const fullscreen = argv.includes('--fullscreen');
-  const nodeIntegration = argv.includes('--give-projects-full-access-to-my-computer-including-ability-to-install-malware');
+  const nodeIntegration = argv.includes('--node-integration');
 
   return {
     files,
