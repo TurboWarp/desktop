@@ -83,8 +83,11 @@
         "to": "icon.svg"
       }
     ],
+
+
+
     "win": {
-      "artifactName": "${productName} Portable ${version} ${arch}.${ext}",
+      "artifactName": "${productName}-Win-${version}-${arch}.${ext}",
       "icon": "build/icon.ico",
       "target": [
         {
@@ -97,31 +100,20 @@
         }
       ]
     },
-    "appx": {
-      "artifactName": "${productName}-MS-Store-${version}-${arch}.${ext}",
-      "applicationId": "TurboWarp",
-      "displayName": "TurboWarp",
-      "identityName": "45747ThomasWeber.TurboWarpDesktop",
-      "publisher": "CN=18FA7D4F-01BF-49F2-BF56-782DCEA49C69",
-      "publisherDisplayName": "Thomas Weber",
-      "backgroundColor": "#4c97ff",
-      "showNameOnTiles": true,
-      "languages": [
-        "en-US",
-        "nl",
-        "de",
-        "it",
-        "ko"
-      ]
-    },
     "nsis": {
-      "artifactName": "${productName}-Setup-${version}-${arch}.${ext}",
       "oneClick": false,
       "deleteAppDataOnUninstall": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "${productName}-Win-Installer-${version}-${arch}.${ext}"
     },
+    "portable": {
+      "artifactName": "${productName}-Win-Portable-${version}-${arch}.${ext}"
+    },
+
+
+
     "mac": {
-      "artifactName": "${productName}-Setup-${version}.${ext}",
+      "artifactName": "${productName}-Mac-${version}.${ext}",
       "icon": "build/icon.icns",
       "category": "public.app-category.education",
       "darkModeSupport": true,
@@ -152,9 +144,12 @@
       "type": "development",
       "provisioningProfile": "build/development.provisionprofile"
     },
+
+
+
     "linux": {
       "executableName": "nitrobolt-desktop",
-      "artifactName": "${productName}-${os}-${arch}-${version}.${ext}",
+      "artifactName": "${productName}-Linux-${version}-${arch}.${ext}",
       "maintainer": "Cubester <contact@nitrobolt.org>",
       "icon": "./build/",
       "synopsis": "Mod of Scratch with a compiler and more features.",
@@ -177,6 +172,9 @@
           "target": "appimage"
         },
         {
+          "target": "rpm"
+        },
+        {
           "target": "tar.gz"
         }
       ]
@@ -184,6 +182,7 @@
     "snap": {
       "summary": "A mod of TurboWarp with tons of new features, and a haven for developers who don't want to be restricted by \"compatibility\".",
       "allowNativeWayland": true,
+      "artifactName": "${productName}-Linux-Snap-${version}-${arch}.${ext}",
       "plugs": [
         "default",
         "camera",
@@ -193,8 +192,21 @@
       ]
     },
     "appImage": {
-      "license": null
+      "license": null,
+      "artifactName": "${productName}-Linux-Portable-${version}-${arch}.${ext}"
     },
+    "deb": {
+      "artifactName": "${productName}-Linux-Installer-${version}-${arch}.${ext}"
+    },
+    "rpm": {
+      "artifactName": "${productName}-Linux-Installer-${version}-${arch}.${ext}"
+    },
+    "flatpak": {
+      "artifactName": "${productName}-Linux-Flatpak-${version}-${arch}.${ext}"
+    },
+
+
+
     "fileAssociations": [
       {
         "ext": "sb3",
