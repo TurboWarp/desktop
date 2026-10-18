@@ -20,6 +20,7 @@ const EditorWindow = require('./windows/editor');
 const {checkForUpdates} = require('./update-checker');
 const {tranlateOrNull} = require('./l10n');
 const migrate = require('./migrate');
+const framelessPermissions = require('./frameless-permissions');
 require('./protocols');
 require('./context-menu');
 require('./menu-bar');
@@ -64,6 +65,9 @@ app.on('session-created', (session) => {
   // Permission requests are delegated to AbstractWindow
 
   session.setPermissionCheckHandler((webContents, permission, requestingOrigin, details) => {
+    if (!webContents) {
+      return framelessPermissions.check(permission, requestingOrigin, details);
+    }
     if (!details.isMainFrame) {
       return false;
     }
@@ -76,6 +80,10 @@ app.on('session-created', (session) => {
   });
 
   session.setPermissionRequestHandler((webContents, permission, callback, details) => {
+    if (!webContents) {
+      callback(framelessPermissions.request(permission, details));
+      return;
+    }
     if (!details.isMainFrame) {
       callback(false);
       return;
