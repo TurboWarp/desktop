@@ -16,8 +16,9 @@ const packageJSON = require('../package.json');
  * @property {boolean} [embeddable] Defaults to false
  * @property {boolean} [stream] Defaults to false
  * @property {string} [directoryIndex] Defaults to none
- * @property {string} [defaultExtension] Defaults to n one
+ * @property {string} [defaultExtension] Defaults to none
  * @property {string} [csp] Defaults to none
+ * @property {string} [sharedArrayBuffer] Defaults to false
  */
 
 /** @type {Record<string, Metadata>} */
@@ -28,6 +29,7 @@ const FILE_SCHEMES = {
     supportFetch: true,
     secure: true,
     embeddable: true, // migration helper
+    sharedArrayBuffer: true,
   },
   'tw-desktop-settings': {
     root: path.resolve(__dirname, '../src-renderer/desktop-settings'),
@@ -186,9 +188,15 @@ const getBaseProtocolHeaders = metadata => {
     result['content-security-policy'] = metadata.csp;
   }
 
-  // Don't allow things like extensiosn to embed custom protocols
+  // Don't allow things like extensions to embed custom protocols
   if (!metadata.embeddable) {
     result['x-frame-options'] = 'DENY';
+  }
+
+  // Isolation policy grants SharedArrayBuffer access in least-invasive way possible
+  // Shipped in desktop Chromium 137
+  if (metadata.sharedArrayBuffer) {
+    result['document-isolation-policy'] = 'isolate-and-credentialless';
   }
 
   return result;
