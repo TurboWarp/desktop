@@ -30,6 +30,11 @@ const loadTranslations = (locale) => {
 };
 
 const updateLocale = (locale) => {
+  // don't let weird invalid settings break the app from starting
+  if (typeof locale !== 'string') {
+    locale = 'en';
+  }
+
   currentLocale = locale;
   currentStrings = loadTranslations(locale);
 };

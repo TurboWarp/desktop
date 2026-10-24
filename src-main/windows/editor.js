@@ -322,7 +322,7 @@ class EditorWindow extends ProjectRunningWindow {
     });
 
     this.ipc.on('set-locale', async (event, locale) => {
-      if (settings.locale !== locale) {
+      if (typeof locale === 'string' && settings.locale !== locale) {
         settings.locale = locale;
         updateLocale(locale);
 
