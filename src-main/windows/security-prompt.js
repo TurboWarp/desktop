@@ -7,8 +7,25 @@ class SecurityState {
     this.allowedReadClipboard = false;
     this.allowedNotifications = false;
 
+    // Incremented each time the window chose to drop permissions.
+    this.generation = 0;
+
+    /** @type {SecurityPromptWindow|null} */
+    this.activePrompt = null;
+
     this._isPromptLocked = false;
     this._queuedPromptCallbacks = [];
+  }
+
+  dropPermissions () {
+    this.generation++;
+
+    this.allowedReadClipboard = false;
+    this.allowedNotifications = false;
+
+    if (this.activePrompt) {
+      this.activePrompt.window.close();
+    }
   }
 
   acquirePromptLock () {
@@ -130,24 +147,53 @@ class SecurityPromptWindow extends AbstractWindow {
     return this.promptPromise;
   }
 
+  /**
+   * @param {Electron.BrowserWindow} window
+   * @param {string} type
+   * @returns {Promise<boolean>}
+   */
+  static async _prompt (window, type) {
+    const state = SecurityState.forWindow(window);
+    const generation = state.generation;
+    const {releaseLock} = await state.acquirePromptLock();
+    if (generation !== state.generation) {
+      // Request is from a previous project.
+      releaseLock();
+      return false;
+    }
+    const prompt = new SecurityPromptWindow(window, type);
+    state.activePrompt = prompt;
+    const allowed = await prompt.done();
+    state.activePrompt = null;
+    releaseLock();
+    return allowed && generation === state.generation;
+  }
+
   static async requestReadClipboard (window) {
     const state = SecurityState.forWindow(window);
-    if (!state.allowedReadClipboard) {
-      const {releaseLock} = await state.acquirePromptLock();
-      state.allowedReadClipboard = await new SecurityPromptWindow(window, 'read-clipboard').done();
-      releaseLock();
+    if (!state.allowedReadClipboard && await SecurityPromptWindow._prompt(window, 'read-clipboard')) {
+      state.allowedReadClipboard = true;
     }
-    return state.allowedReadClipboard;  
+    return state.allowedReadClipboard;
   }
 
   static async requestNotifications (window) {
     const state = SecurityState.forWindow(window);
-    if (!state.allowedNotifications) {
-      const {releaseLock} = await state.acquirePromptLock();
-      state.allowedNotifications = await new SecurityPromptWindow(window, 'notifications').done();
-      releaseLock();
+    if (!state.allowedNotifications && await SecurityPromptWindow._prompt(window, 'notifications')) {
+      state.allowedNotifications = true;
     }
-    return state.allowedNotifications;  
+    return state.allowedNotifications;
+  }
+
+  /**
+   * Voluntarily drop permissions granted to the project in a window. The renderer asks for this, so
+   * this is not a security boundary: if malicious unsandboxed code already ran in the renderer, it
+   * can simply not call this. It only protects the next project from permissions granted to the
+   * previous one when nothing in the renderer has been compromised.
+   * @param {Electron.BrowserWindow} window
+   */
+  static dropPermissions (window) {
+    SecurityState.forWindow(window).dropPermissions();
   }
 }
 

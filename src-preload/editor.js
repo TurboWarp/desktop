@@ -6,6 +6,7 @@ contextBridge.exposeInMainWorld('EditorPreload', {
   getFile: (id) => ipcRenderer.invoke('get-file', id),
   openedFile: (id) => ipcRenderer.invoke('opened-file', id),
   closedFile: () => ipcRenderer.invoke('closed-file'),
+  dropPermissions: () => ipcRenderer.invoke('drop-permissions'),
   showSaveFilePicker: (suggestedName) => ipcRenderer.invoke('show-save-file-picker', suggestedName),
   showOpenFilePicker: () => ipcRenderer.invoke('show-open-file-picker'),
   setLocale: (locale) => ipcRenderer.sendSync('set-locale', locale),

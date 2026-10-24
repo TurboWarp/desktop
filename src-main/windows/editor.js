@@ -19,6 +19,7 @@ const privilegedFetch = require('../fetch');
 const RichPresence = require('../rich-presence.js');
 const FileAccessWindow = require('./file-access-window.js');
 const ExtensionDocumentationWindow = require('./extension-documentation.js');
+const SecurityPromptWindow = require('./security-prompt');
 
 const TYPE_FILE = 'file';
 const TYPE_URL = 'url';
@@ -354,6 +355,10 @@ class EditorWindow extends ProjectRunningWindow {
     this.ipc.handle('closed-file', () => {
       this.activeFileId = null;
       this.window.setRepresentedFilename('');
+    });
+
+    this.ipc.handle('drop-permissions', () => {
+      SecurityPromptWindow.dropPermissions(this.window);
     });
 
     this.ipc.handle('show-open-file-picker', async () => {

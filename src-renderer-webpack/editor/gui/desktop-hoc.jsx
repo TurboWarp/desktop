@@ -84,6 +84,7 @@ const DesktopHOC = function (WrappedComponent) {
         title: ''
       };
       this.handleUpdateProjectTitle = this.handleUpdateProjectTitle.bind(this);
+      this.handleRuntimeDisposed = this.handleRuntimeDisposed.bind(this);
 
       // Changing locale always re-mounts this component
       const stateFromMain = EditorPreload.setLocale(this.props.locale);
@@ -106,6 +107,8 @@ const DesktopHOC = function (WrappedComponent) {
           name: this.state.title,
           data: buffer
         })));
+
+      this.props.vm.runtime.on('RUNTIME_DISPOSED', this.handleRuntimeDisposed);
 
       // This component is re-mounted when the locale changes, but we only want to load
       // the initial project once.
@@ -175,6 +178,12 @@ const DesktopHOC = function (WrappedComponent) {
       if (this.props.isFullScreen !== prevProps.isFullScreen) {
         EditorPreload.setIsFullScreen(this.props.isFullScreen);
       }
+    }
+    componentWillUnmount () {
+      this.props.vm.runtime.off('RUNTIME_DISPOSED', this.handleRuntimeDisposed);
+    }
+    handleRuntimeDisposed () {
+      EditorPreload.dropPermissions();
     }
     handleUpdateProjectTitle (newTitle) {
       this.setState({
@@ -252,7 +261,11 @@ const DesktopHOC = function (WrappedComponent) {
     onSetReduxUsername: PropTypes.func.isRequired,
     onShowErrorModal: PropTypes.func.isRequired,
     vm: PropTypes.shape({
-      loadProject: PropTypes.func.isRequired
+      loadProject: PropTypes.func.isRequired,
+      runtime: PropTypes.shape({
+        on: PropTypes.func.isRequired,
+        off: PropTypes.func.isRequired
+      }).isRequired
     }).isRequired
   };
 
