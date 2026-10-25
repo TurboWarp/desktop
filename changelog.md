@@ -2,6 +2,17 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.17.0 (2026-10-25)
+
+- Significantly improved performance: projects are now 1.37x as fast on average, and many projects are over twice as fast
+- Updated the debugger addon, featuring a new profiling tab that shows which blocks your project spends the most time executing
+- Improved frame pacing for packaged projects on Android
+- Costumes, sounds, and sprites deleted via extensions are now fully deleted, and do not leak memory
+- New extension: Messaging Plus
+- Fixed various compiler errors
+- Fixed around 100 bugs in the extension library
+- Security fixes
+
 # 1.16.0 (2026-05-24)
 
  - Fixed compatibility issues opening projects from the latest version of Scratch
