@@ -180,7 +180,10 @@
     },
     "snap": {
       "summary": "Scratch mod with a compiler, dark mode, a bunch of addons, and more.",
-      "allowNativeWayland": true,
+      "allowNativeWayland": false,
+      "executableArgs": [
+        "--ozone-platform=x11"
+      ],
       "plugs": [
         "default",
         "camera",
