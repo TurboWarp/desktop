@@ -47,6 +47,11 @@ app.commandLine.appendSwitch('host-resolver-rules', 'MAP device-manager.scratch.
 // The possible loss in input latency is tolerable due to the performance impact.
 app.commandLine.appendSwitch('disable-features', 'DeferRendererTasksAfterInput');
 
+// Enable SharedArrayBuffer even without cross-origin isolation. Document-Isolation-Policy
+// would be less invasive, but it makes any data: iframe crash the entire app due to
+// an Electron/Chromium bug (https://github.com/TurboWarp/desktop/issues/1446).
+app.commandLine.appendSwitch('enable-features', 'SharedArrayBuffer');
+
 if (!settings.hardwareAcceleration) {
   app.disableHardwareAcceleration();
 

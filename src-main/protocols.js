@@ -18,7 +18,6 @@ const packageJSON = require('../package.json');
  * @property {string} [directoryIndex] Defaults to none
  * @property {string} [defaultExtension] Defaults to none
  * @property {string} [csp] Defaults to none
- * @property {string} [sharedArrayBuffer] Defaults to false
  */
 
 /** @type {Record<string, Metadata>} */
@@ -29,7 +28,6 @@ const FILE_SCHEMES = {
     supportFetch: true,
     secure: true,
     embeddable: true, // migration helper
-    sharedArrayBuffer: true,
   },
   'tw-desktop-settings': {
     root: path.resolve(__dirname, '../src-renderer/desktop-settings'),
@@ -191,12 +189,6 @@ const getBaseProtocolHeaders = metadata => {
   // Don't allow things like extensions to embed custom protocols
   if (!metadata.embeddable) {
     result['x-frame-options'] = 'DENY';
-  }
-
-  // Isolation policy grants SharedArrayBuffer access in least-invasive way possible
-  // Shipped in desktop Chromium 137
-  if (metadata.sharedArrayBuffer) {
-    result['document-isolation-policy'] = 'isolate-and-credentialless';
   }
 
   return result;
