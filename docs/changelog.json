@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.17.1",
+    "date": "2026-10-29",
+    "notes": [
+      "Fixed iframe extension causing entire app to crash",
+      "Additional security fixes",
+      "We consider all versions prior to 1.17.0 as unsafe for use due to a variety of recent security issues discovered outside of TurboWarp's own code (e.g. CVE-2026-115570 and CVE-2026-111497)"
+    ]
+  },
+  {
     "version": "1.17.0",
     "date": "2026-10-25",
     "notes": [

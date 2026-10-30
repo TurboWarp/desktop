@@ -2,6 +2,12 @@ This document is the authoritative source for TurboWarp's changelogs. Everything
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
 
+# 1.17.1 (2026-10-29)
+
+- Fixed iframe extension causing entire app to crash
+- Additional security fixes
+- We consider all versions prior to 1.17.0 as unsafe for use due to a variety of recent security issues discovered outside of TurboWarp's own code (e.g. CVE-2026-115570 and CVE-2026-111497)
+
 # 1.17.0 (2026-10-25)
 
 - Significantly improved performance: projects are now 1.37x as fast on average, and many projects are over twice as fast
